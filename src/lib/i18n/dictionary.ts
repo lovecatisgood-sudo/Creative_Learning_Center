@@ -221,6 +221,64 @@ export const dict = {
   creditsConsumed: { th: "ใช้สิทธิ์", en: "credits consumed" },
   noTransactions: { th: "ไม่มีรายการในช่วงนี้", en: "No transactions in this period." },
   printSummary: { th: "พิมพ์สรุป", en: "Print summary" },
+
+  // ── Landing page ──
+  landingTagline: {
+    th: "สนามเด็กเล่นสร้างสรรค์ในร่ม ใจกลางกรุงเทพฯ",
+    en: "A creative indoor playroom for kids, in the heart of Bangkok",
+  },
+  landingHeroCue: { th: "เลื่อนลงเพื่อสำรวจ", en: "Scroll to explore" },
+  landingHeroAlt: {
+    th: "หน้าร้าน Siamese Cat Creative Club กรุงเทพฯ",
+    en: "Siamese Cat Creative Club shop front in Bangkok",
+  },
+  landingPlayroomTitle: { th: "สนามเด็กเล่นในร่มที่ปลอดภัย", en: "A safe, supervised indoor playroom" },
+  landingPlayroomBody: {
+    th: "พื้นที่เล่นสะอาดและปลอดภัย มีพี่เลี้ยงดูแลตลอดเวลา เลือกเข้าเล่นแบบรายชั่วโมงได้ตามสะดวก — 1 ชั่วโมง 199 บาท หรือ 2 ชั่วโมง 300 บาท",
+    en: "A clean, safe play space with staff supervising at all times. Drop in by the hour — 1 hour ฿199 or 2 hours ฿300.",
+  },
+  landingPlayroomAlt: {
+    th: "เด็ก ๆ กำลังเล่นในสนามเด็กเล่นในร่มที่มีพี่เลี้ยงดูแล",
+    en: "Children playing in the supervised indoor playroom",
+  },
+  landingCozyTitle: { th: "มุมพักผ่อนสบายสำหรับครอบครัว", en: "A cozy corner for the whole family" },
+  landingCozyBody: {
+    th: "มุมนั่งเล่นแสนสบายให้คุณพ่อคุณแม่ได้พักผ่อน จิบเครื่องดื่ม และมองเห็นลูก ๆ เล่นได้อย่างสบายใจ",
+    en: "A comfortable lounge where parents can relax, enjoy a drink, and keep an easy eye on the kids.",
+  },
+  landingCozyAlt: { th: "มุมพักผ่อนสบาย ๆ สำหรับครอบครัว", en: "Cozy family lounge area" },
+  landingStudioTitle: { th: "ห้องศิลปะและระบายสี", en: "The art & crayon studio" },
+  landingStudioBody: {
+    th: "ปลดปล่อยจินตนาการกับกิจกรรมศิลปะและระบายสีเทียน เหมาะสำหรับเสริมสร้างพัฒนาการและความคิดสร้างสรรค์ เริ่มต้นเพียง 59 บาท",
+    en: "Spark imagination with art and crayon activities that build creativity and fine motor skills. From just ฿59.",
+  },
+  landingStudioAlt: { th: "ห้องกิจกรรมศิลปะและระบายสีสำหรับเด็ก", en: "Kids art and crayon creative studio" },
+  landingClayTitle: { th: "กิจกรรมปั้นดินเบา", en: "Make your own soft-clay statue" },
+  landingClayBody: {
+    th: "กิจกรรมปั้นดินเบาสุดพิเศษ ให้เด็ก ๆ สร้างสรรค์ผลงานชิ้นเล็ก ๆ และนำกลับบ้านเป็นของที่ระลึก ราคา 150 บาทต่อชิ้น",
+    en: "Our signature hands-on clay activity — kids sculpt a little masterpiece and take it home as a keepsake. ฿150 per statue.",
+  },
+  landingClayAlt: { th: "ผลงานปั้นดินเบาของเด็ก ๆ", en: "Children's soft-clay statue creations" },
+  landingPassesTitle: { th: "แพ็กเกจและบัตรสมาชิกครอบครัว", en: "Hour passes & family membership" },
+  landingPassesBody: {
+    th: "มาเล่นบ่อยคุ้มกว่า! เลือกแพ็กเกจชั่วโมงที่ใช้ได้หลายครั้ง พร้อมกิจกรรมสร้างสรรค์รวมอยู่ในแพ็กเกจ",
+    en: "Come often and save. Multi-visit hour passes that bundle in creative activities.",
+  },
+  landingPass30: { th: "แพ็กเกจ 30 ชั่วโมง — 3,599 บาท", en: "30-Hour Creative Play Pass — ฿3,599" },
+  landingPass60: {
+    th: "แพ็กเกจครอบครัว 60 ชั่วโมง — 5,999 บาท (แชร์กันได้ทั้งครอบครัว)",
+    en: "60-Hour Family Pass — ฿5,999 (shareable across the family)",
+  },
+  landingPassesAlt: { th: "ห้องกิจกรรมสร้างสรรค์สำหรับเด็ก", en: "Children's creative activity room" },
+  landingLogoAlt: { th: "โลโก้ Siamese Cat Creative Club", en: "Siamese Cat Creative Club logo" },
+  landingMetaTitle: {
+    th: "Siamese Cat Creative Club — สนามเด็กเล่นและกิจกรรมสร้างสรรค์ในร่ม กรุงเทพฯ",
+    en: "Siamese Cat Creative Club — Indoor Kids Playroom & Creative Studio, Bangkok",
+  },
+  landingMetaDescription: {
+    th: "สนามเด็กเล่นในร่มที่ปลอดภัย พร้อมกิจกรรมศิลปะ ระบายสี และปั้นดินเบาสำหรับเด็ก ใจกลางกรุงเทพฯ มีพี่เลี้ยงดูแล เข้าเล่นรายชั่วโมงหรือซื้อแพ็กเกจครอบครัว",
+    en: "A safe supervised indoor children's playroom with art, crayon and soft-clay activities in central Bangkok. Drop in by the hour or buy a family pass.",
+  },
 } satisfies Record<string, Record<Lang, string>>;
 
 export type DictKey = keyof typeof dict;
