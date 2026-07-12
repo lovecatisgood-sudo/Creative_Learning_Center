@@ -32,7 +32,7 @@ export function CheckoutView({
   );
   const total = lines.reduce((s, l) => s + l.product.priceThb * l.qty, 0);
 
-  const [method, setMethod] = useState<Method>(paymentInfo.promptpayConfigured ? "promptpay" : "cash");
+  const [method, setMethod] = useState<Method>("promptpay");
   const [proofKey, setProofKey] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -129,22 +129,21 @@ export function CheckoutView({
 
       {/* Method body */}
       <div className="px-4 py-5">
-        {method === "promptpay" &&
-          (paymentInfo.promptpayConfigured ? (
-            <div className="flex flex-col items-center gap-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={`/api/admin/promptpay?amount=${total}`}
-                alt="PromptPay QR"
-                className="h-64 w-64 rounded-xl bg-white p-2"
-              />
-              <p className="text-[15px] font-semibold text-meta">
-                {t("scanToPay")} {total} ฿
-              </p>
-            </div>
-          ) : (
-            <p className="py-8 text-center text-[15px] text-warn">{t("promptpayNotConfigured")}</p>
-          ))}
+        {method === "promptpay" && (
+          <div className="flex flex-col items-center gap-3">
+            {/* Static shop PromptPay QR (public/promptpay.jpg). Amount shown below;
+                customer enters it when scanning. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/promptpay.jpg"
+              alt="PromptPay QR"
+              className="h-72 w-72 rounded-xl bg-white object-contain p-2"
+            />
+            <p className="text-[15px] font-semibold text-meta">
+              {t("scanToPay")} {total} ฿
+            </p>
+          </div>
+        )}
 
         {method === "bank" && (
           <div className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4">
