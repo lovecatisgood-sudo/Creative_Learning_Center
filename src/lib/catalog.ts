@@ -22,6 +22,7 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
 export function getPaymentInfo() {
   return {
     promptpayConfigured: Boolean(process.env.PROMPTPAY_ID),
+    bankConfigured: Boolean(process.env.BANK_ACCOUNT_NUMBER || process.env.BANK_NAME),
     bankName: process.env.BANK_NAME || "",
     bankAccountName: process.env.BANK_ACCOUNT_NAME || "",
     bankAccountNumber: process.env.BANK_ACCOUNT_NUMBER || "",

@@ -113,7 +113,7 @@ export function CheckoutView({
 
       {/* Method tabs */}
       <div className="flex border-b border-line">
-        {(["promptpay", "bank", "cash"] as Method[]).map((m) => (
+        {(["promptpay", ...(paymentInfo.bankConfigured ? (["bank"] as Method[]) : []), "cash"] as Method[]).map((m) => (
           <button
             key={m}
             onClick={() => setMethod(m)}
