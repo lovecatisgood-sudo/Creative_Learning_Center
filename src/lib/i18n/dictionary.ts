@@ -206,6 +206,21 @@ export const dict = {
   crayonCredit: { th: "สิทธิ์สีเทียน", en: "Crayon credit" },
   clayCredit: { th: "สิทธิ์ดินปั้น", en: "Clay credit" },
   extraHourCredit: { th: "สิทธิ์ +1 ชั่วโมง", en: "+1 Hour credit" },
+
+  // ── Overview (A11) ──
+  unitDay: { th: "วัน", en: "Day" },
+  unitWeek: { th: "สัปดาห์", en: "Week" },
+  unitMonth: { th: "เดือน", en: "Month" },
+  today: { th: "วันนี้", en: "Today" },
+  yesterday: { th: "เมื่อวาน", en: "Yesterday" },
+  thisWeek: { th: "สัปดาห์นี้", en: "This week" },
+  thisMonth: { th: "เดือนนี้", en: "This month" },
+  totalLabel: { th: "รวม", en: "Total" },
+  ordersCount: { th: "ออเดอร์", en: "orders" },
+  sessionsStarted: { th: "เริ่มเซสชัน", en: "sessions started" },
+  creditsConsumed: { th: "ใช้สิทธิ์", en: "credits consumed" },
+  noTransactions: { th: "ไม่มีรายการในช่วงนี้", en: "No transactions in this period." },
+  printSummary: { th: "พิมพ์สรุป", en: "Print summary" },
 } satisfies Record<string, Record<Lang, string>>;
 
 export type DictKey = keyof typeof dict;

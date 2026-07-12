@@ -74,4 +74,12 @@ body {
   .no-print {
     display: none !important;
   }
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* Hidden on screen; revealed only when printing (e.g. Overview summary header). */
+.print-only {
+  display: none;
 }

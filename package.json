@@ -10,7 +10,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
-    "create-admin": "tsx scripts/create-admin.ts"
+    "create-admin": "tsx scripts/create-admin.ts",
+    "signup-qr": "tsx scripts/signup-qr.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",

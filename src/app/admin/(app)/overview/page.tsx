@@ -1,6 +1,10 @@
-import { ScreenStub } from "@/components/ScreenStub";
+import { getOverview } from "@/lib/overview";
+import { OverviewClient } from "./OverviewClient";
 
-// A11 — Overview. Built in M5.
-export default function OverviewPage() {
-  return <ScreenStub titleKey="navOverview" note="Day/Week/Month totals arrive in M5." />;
+// A11 — Overview. Server-renders Day/today; the client switches unit + period.
+export const dynamic = "force-dynamic";
+
+export default async function OverviewPage() {
+  const initial = await getOverview("day", 0);
+  return <OverviewClient initial={initial} />;
 }
