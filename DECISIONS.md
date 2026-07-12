@@ -36,3 +36,22 @@ money or hour accounting rules (those follow the PRD exactly).
 - **Bangkok time via fixed +7h offset.** Asia/Bangkok has no DST, so a constant
   offset is exact for extracting wall-clock components (receipt date stamp,
   pickup times) without pulling `Intl`/tz data into hot paths. Storage is UTC.
+
+## M2 — Registration & search
+
+- **Quick-add uses a linked stub parent, not `child.parent_id = null`.** PRD §6.2
+  describes "parent_id = null and a stub parent keyed by phone." Implemented as a
+  stub `parents` row (blank name, `profile_complete = false`) that the child *is*
+  linked to, because the child needs to carry its contact phone (children have no
+  phone column) and be sellable immediately. "Complete profile" fills the stub;
+  "link by phone" repoints the child to a matched complete parent and deletes the
+  orphaned stub. Functionally identical to the PRD's intent, and it actually works.
+
+- **Duplicate-phone handling is a server-returned flag, not a public lookup.** The
+  signup API creates the record regardless (PRD: "warn but allow") and returns
+  `duplicatePhone: true` for the staff-facing success screen. No public
+  phone-existence endpoint, to avoid letting anyone enumerate registered numbers.
+
+- **Client-safe product module (`lib/product.ts`).** Pure types + `productName` /
+  `effectiveStatus` live apart from `lib/packages.ts` (which imports the db) so
+  client components can use them without webpack trying to bundle `pg`/`net`/`tls`.

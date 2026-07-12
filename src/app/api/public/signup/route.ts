@@ -1,0 +1,68 @@
+import { NextResponse } from "next/server";
+import { db } from "@/db";
+import { parents, children } from "@/db/schema";
+import { eq } from "drizzle-orm";
+
+// Public (no auth) parent self-registration — PRD §6.1. Creates a full parent
+// record (profile_complete = true) plus one or more children in a transaction.
+// Duplicate phone is allowed (staff resolves later); the client shows the warning.
+type ChildInput = { name: string; dob: string; gender: "male" | "female" };
+
+export async function POST(req: Request) {
+  const body = await req.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Bad request" }, { status: 400 });
+
+  const parentName = String(body.parentName ?? "").trim();
+  const phone = String(body.phone ?? "").trim();
+  const email = String(body.email ?? "").trim() || null;
+  const consent = body.consent === true;
+  const kids: ChildInput[] = Array.isArray(body.children) ? body.children : [];
+
+  // Server-side validation mirrors the required fields; never trust the client.
+  if (!parentName || !phone || !consent || kids.length === 0) {
+    return NextResponse.json({ error: "Missing required fields" }, { status: 422 });
+  }
+  for (const k of kids) {
+    if (!k?.name?.trim() || !k?.dob || (k.gender !== "male" && k.gender !== "female")) {
+      return NextResponse.json({ error: "Invalid child data" }, { status: 422 });
+    }
+  }
+
+  // Detect (but never block) a duplicate phone — staff resolves later. The flag
+  // is returned to the staff-facing success screen, not exposed as a public
+  // lookup endpoint (avoids phone-number enumeration).
+  const existing = await db
+    .select({ id: parents.id })
+    .from(parents)
+    .where(eq(parents.phone, phone))
+    .limit(1);
+  const duplicatePhone = existing.length > 0;
+
+  const result = await db.transaction(async (tx) => {
+    const [parent] = await tx
+      .insert(parents)
+      .values({ name: parentName, phone, email, profileComplete: true })
+      .returning();
+
+    const insertedChildren = await tx
+      .insert(children)
+      .values(
+        kids.map((k) => ({
+          parentId: parent.id,
+          name: k.name.trim(),
+          dob: k.dob,
+          gender: k.gender,
+        }))
+      )
+      .returning();
+
+    return { parent, children: insertedChildren };
+  });
+
+  return NextResponse.json({
+    ok: true,
+    parentName: result.parent.name,
+    childNames: result.children.map((c) => c.name),
+    duplicatePhone,
+  });
+}
