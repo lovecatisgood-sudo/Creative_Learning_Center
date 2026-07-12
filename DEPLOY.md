@@ -74,6 +74,12 @@ run it now with `DATABASE_URL` set.)
 
 ## 6. Build & start under PM2
 
+`public/landing/*` (the landing page's responsive WebP images) is committed to the repo, so a
+normal deploy needs no image-generation step. Only if you change source images under `assets/`
+do you need to run `pnpm images:landing` (regenerates `public/landing/*` + the typed manifest
+`src/lib/landing/images.ts`) before building — it needs the `sharp` devDependency, which
+`pnpm install` already provides.
+
 ```bash
 pnpm build
 pm2 start ecosystem.config.js

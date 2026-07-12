@@ -22,6 +22,7 @@ pnpm db:migrate               # apply migrations
 pnpm db:seed                  # seed/refresh the 11 products (idempotent)
 pnpm create-admin <email> <pw>  # print bcrypt hash + upsert the admin row
 pnpm signup-qr <https://domain> # write signup-qr.png
+pnpm images:landing            # regenerate responsive landing WebP + manifest from assets/
 ```
 
 There are no unit tests; verification is done by driving the running app's HTTP
@@ -36,6 +37,7 @@ verify against a real DB — don't trust the build alone.
 Single Next.js 14 App Router app (TypeScript, Tailwind, Thai-default i18n).
 
 ```
+src/app/(landing)/            public marketing page at / (six showcase sections)
 src/app/signup/*              public parent registration (P1/P2), no auth
 src/app/admin/login/          login (A0)
 src/app/admin/(app)/          authed shell (bottom nav): sessions, search, sell,
@@ -89,6 +91,12 @@ via `lib/*` and hand off to a `*Client.tsx` for interactivity.
   it corrupts chunks and `pnpm start` then 500s with "Cannot find module './NNN.js'".
   Fix: `rm -rf .next && pnpm build`.
 - **Never use broad `pkill -f next`** — it can hit unrelated processes; kill by PID.
+- **Landing page (`/`) is a separate app frame.** `src/app/(landing)/*` renders full-width,
+  outside the 480px `.app-frame` column; that column now lives in `src/app/signup/layout.tsx`
+  and `src/app/admin/layout.tsx` (not the root layout), so the marketing page and the POS can
+  size independently. Landing images are pre-generated responsive WebP files committed to
+  `public/landing/`, referenced through the typed manifest `src/lib/landing/images.ts` — run
+  `pnpm images:landing` after changing anything under `assets/` to regenerate both.
 
 ## Deploying
 
