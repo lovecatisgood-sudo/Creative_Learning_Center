@@ -6,11 +6,15 @@ import {
   payments,
   packageInstances,
   children,
+  sessions,
+  addonRedemptions,
   type ProductGrants,
 } from "@/db/schema";
 import { eq, inArray, like } from "drizzle-orm";
 import { writeAudit } from "@/lib/audit";
 import { bkkDateStamp } from "@/lib/time";
+
+const HOUR_MS = 60 * 60 * 1000;
 
 export type CartLine = { sku: string; qty: number };
 export type PaymentMethod = "promptpay" | "bank" | "cash";
@@ -76,8 +80,11 @@ export async function createPaidOrder(opts: {
   lines: CartLine[];
   method: PaymentMethod;
   proofPhotoPath: string;
+  // When set (from the session "+ Add 1 hour" shortcut), each EXTRA_1H bought
+  // is consumed immediately against this running session, extending pickup by 1h.
+  extendSessionId?: number | null;
 }): Promise<CreateOrderResult> {
-  const { adminId, childId, lines, method, proofPhotoPath } = opts;
+  const { adminId, childId, lines, method, proofPhotoPath, extendSessionId } = opts;
   if (lines.length === 0) throw new OrderError("Empty cart");
   if (!proofPhotoPath) throw new OrderError("Proof photo required");
 
@@ -165,6 +172,34 @@ export async function createPaidOrder(opts: {
           entityId: inst.id,
           detail: { sku: product.sku, orderId: order.id, credits, expiresAt },
         });
+
+        // EXTRA_1H bought from the session screen: consume immediately, extend
+        // the running session's pickup time by 1h in the same transaction.
+        if (grants.extendOnly && extendSessionId) {
+          const [sess] = await tx.select().from(sessions).where(eq(sessions.id, extendSessionId)).limit(1);
+          if (sess && sess.status === "running" && sess.childId === child.id) {
+            const extended = new Date(sess.plannedEndAt.getTime() + HOUR_MS);
+            await tx.update(sessions).set({ plannedEndAt: extended }).where(eq(sessions.id, sess.id));
+            await tx
+              .update(packageInstances)
+              .set({ extraHoursRemaining: 0, status: "consumed" })
+              .where(eq(packageInstances.id, inst.id));
+            await tx.insert(addonRedemptions).values({
+              packageInstanceId: inst.id,
+              childId: child.id,
+              type: "extra_hour",
+              sessionId: sess.id,
+              adminId: adminId > 0 ? adminId : null,
+            });
+            await writeAudit(tx, {
+              adminId,
+              action: "extra_hour_extended",
+              entity: "session",
+              entityId: sess.id,
+              detail: { instanceId: inst.id, newPlannedEnd: extended.toISOString() },
+            });
+          }
+        }
       }
     }
 

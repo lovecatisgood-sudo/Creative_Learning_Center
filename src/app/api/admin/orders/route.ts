@@ -23,6 +23,9 @@ export async function POST(req: Request) {
   const childId = Number(body?.childId);
   const method = body?.method as PaymentMethod;
   const proofKey = String(body?.proofKey ?? "");
+  const extendSessionId = Number.isInteger(Number(body?.extendSessionId))
+    ? Number(body.extendSessionId)
+    : null;
   const items: CartLine[] = Array.isArray(body?.items)
     ? body.items.map((i: { sku: unknown; qty: unknown }) => ({ sku: String(i.sku), qty: Number(i.qty) }))
     : [];
@@ -46,6 +49,7 @@ export async function POST(req: Request) {
       lines: items,
       method,
       proofPhotoPath: proofKey,
+      extendSessionId,
     });
     return NextResponse.json({ ok: true, ...result });
   } catch (e) {

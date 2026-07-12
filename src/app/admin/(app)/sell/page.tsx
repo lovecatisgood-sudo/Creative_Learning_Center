@@ -9,12 +9,15 @@ import { SellClient } from "./SellClient";
 export default async function SellPage({
   searchParams,
 }: {
-  searchParams: { childId?: string };
+  searchParams: { childId?: string; extendSession?: string };
 }) {
   const catalog = await getCatalog();
   const paymentInfo = getPaymentInfo();
 
   const childId = Number(searchParams.childId);
+  const extendSessionId = Number.isInteger(Number(searchParams.extendSession))
+    ? Number(searchParams.extendSession)
+    : null;
   let child = null;
   let hasRunningSession = false;
   if (Number.isInteger(childId)) {
@@ -30,6 +33,7 @@ export default async function SellPage({
         child ? { id: child.id, name: child.name, parentName: child.parent?.name ?? "" } : null
       }
       initialHasRunningSession={hasRunningSession}
+      extendSessionId={extendSessionId}
     />
   );
 }

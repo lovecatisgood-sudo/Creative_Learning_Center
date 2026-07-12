@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { sessions, packageInstances, products, children } from "@/db/schema";
 import { eq, and, asc } from "drizzle-orm";
+import { getChildPackages } from "@/lib/packages";
 
 export type ActiveSession = {
   id: number;
@@ -85,4 +86,46 @@ export async function getRunningSessions(): Promise<ActiveSession[]> {
     .where(eq(sessions.status, "running"))
     .orderBy(asc(sessions.plannedEndAt));
   return rows.map(mapRow);
+}
+
+export type Consumable = {
+  instanceId: number;
+  type: "crayon" | "clay" | "extra_hour";
+  remaining: number;
+  nameEn: string;
+  nameTh: string;
+};
+
+export type SessionDetail = {
+  session: ActiveSession;
+  consumables: Consumable[];
+};
+
+// Session detail + the "Consumables during this session" strip (A9): every
+// credit the child holds — own add-ons, bundle/pass credits, family-pass credits.
+export async function getSessionDetail(sessionId: number): Promise<SessionDetail | null> {
+  const [row] = await db
+    .select(baseSelect)
+    .from(sessions)
+    .innerJoin(packageInstances, eq(sessions.packageInstanceId, packageInstances.id))
+    .innerJoin(products, eq(packageInstances.productId, products.id))
+    .innerJoin(children, eq(sessions.childId, children.id))
+    .where(eq(sessions.id, sessionId))
+    .limit(1);
+  if (!row) return null;
+
+  const session = mapRow(row);
+  const packages = await getChildPackages(session.childId);
+
+  const consumables: Consumable[] = [];
+  for (const p of packages) {
+    if (p.status === "expired" || p.status === "consumed") continue;
+    if (p.crayonCreditsRemaining > 0)
+      consumables.push({ instanceId: p.id, type: "crayon", remaining: p.crayonCreditsRemaining, nameEn: p.nameEn, nameTh: p.nameTh });
+    if (p.clayCreditsRemaining > 0)
+      consumables.push({ instanceId: p.id, type: "clay", remaining: p.clayCreditsRemaining, nameEn: p.nameEn, nameTh: p.nameTh });
+    if (p.extraHoursRemaining > 0)
+      consumables.push({ instanceId: p.id, type: "extra_hour", remaining: p.extraHoursRemaining, nameEn: p.nameEn, nameTh: p.nameTh });
+  }
+  return { session, consumables };
 }

@@ -158,6 +158,54 @@ export const dict = {
   paymentProof: { th: "หลักฐานการชำระเงิน", en: "Payment proof" },
   done: { th: "เสร็จสิ้น", en: "Done" },
   thankYou: { th: "ขอบคุณค่ะ", en: "Thank you" },
+
+  // ── Sessions dashboard (A1) ──
+  sessionsEmpty: { th: "ยังไม่มีเด็กเช็คอิน เริ่มแพ็กเกจจากหน้าเด็ก", en: "No children checked in. Start a package from a child's page." },
+  start: { th: "เริ่ม", en: "Start" },
+  pickup: { th: "รับกลับ", en: "Pickup" },
+  overdue: { th: "เกินเวลา", en: "OVERDUE" },
+
+  // ── Start config (A7) ──
+  startTitle: { th: "เริ่มแพ็กเกจ", en: "Start package" },
+  startConfirmTimed: { th: "เริ่มเซสชันสำหรับ", en: "Start session for" },
+  pickupAt: { th: "รับกลับเวลา", en: "Pickup at" },
+  hoursToUse: { th: "จำนวนชั่วโมงที่จะใช้", en: "Hours to use" },
+  willRemain: { th: "จะเหลือ", en: "will remain" },
+  chooseSibling: { th: "เลือกเด็กที่จะใช้บัตร", en: "Choose which child will use the pass" },
+  startSession: { th: "เริ่มเซสชัน", en: "Start session" },
+
+  // ── Pickup slip (A8) ──
+  sessionStarted: { th: "เริ่มเซสชันแล้ว", en: "Session started" },
+  pickupSlip: { th: "สลิปรับกลับ", en: "Pickup slip" },
+  printSlip: { th: "พิมพ์สลิป", en: "Print pickup slip" },
+  hoursRemaining: { th: "ชั่วโมงคงเหลือ", en: "Hours remaining" },
+
+  // ── Session detail & end (A9) ──
+  sessionDetail: { th: "รายละเอียดเซสชัน", en: "Session detail" },
+  consumablesTitle: { th: "ใช้ระหว่างเซสชันนี้", en: "Consumables during this session" },
+  consume: { th: "ใช้", en: "Consume" },
+  left: { th: "เหลือ", en: "left" },
+  addOneHour: { th: "เพิ่ม 1 ชั่วโมง", en: "Add 1 hour" },
+  endSession: { th: "จบเซสชัน", en: "End session" },
+  endConfirmTitle: { th: "จบเซสชัน?", en: "End session?" },
+  endConfirmTimed: { th: "จบเซสชันสำหรับ", en: "End session for" },
+  refundTitle: { th: "คืนชั่วโมง", en: "Refund hours" },
+  refundQuestion: { th: "คืนชั่วโมงที่ไม่ได้ใช้เข้าบัตร?", en: "Refund unused hour(s) to the pass?" },
+  booked: { th: "จอง", en: "Booked" },
+  used: { th: "ใช้ไป", en: "used" },
+  confirmEndRefund: { th: "ยืนยันจบและคืนชั่วโมง", en: "Confirm end + refund" },
+  hoursRemainingOnPass: { th: "ชั่วโมงคงเหลือในบัตร", en: "hrs remaining on pass" },
+  overdueBanner: { th: "เซสชันเกินเวลา — อาจขายเพิ่ม 1 ชั่วโมง", en: "Session ran over — consider selling Additional 1 Hour" },
+
+  // ── Redeem sheet (A10) ──
+  redeemTitle: { th: "ใช้สิทธิ์", en: "Redeem credit" },
+  redeemCrayon: { th: "ใช้สิทธิ์สีเทียน", en: "Use crayon credit" },
+  redeemClay: { th: "ใช้สิทธิ์ดินปั้น", en: "Use clay credit" },
+  noActiveSessionWarn: { th: "ไม่มีเซสชันที่กำลังเล่น — ปกติใช้ระหว่างเวลาเล่น", en: "No active session — add-ons are normally used during play time" },
+  redeemAnyway: { th: "ใช้เลย", en: "Redeem anyway" },
+  crayonCredit: { th: "สิทธิ์สีเทียน", en: "Crayon credit" },
+  clayCredit: { th: "สิทธิ์ดินปั้น", en: "Clay credit" },
+  extraHourCredit: { th: "สิทธิ์ +1 ชั่วโมง", en: "+1 Hour credit" },
 } satisfies Record<string, Record<Lang, string>>;
 
 export type DictKey = keyof typeof dict;

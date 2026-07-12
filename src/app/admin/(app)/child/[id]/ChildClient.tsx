@@ -18,11 +18,13 @@ export function ChildClient({
   packages,
   activeSession,
   history,
+  siblings,
 }: {
   child: ChildDetail;
   packages: ChildPackage[];
   activeSession: ActiveSession | null;
   history: HistoryItem[];
+  siblings: { id: number; name: string }[];
 }) {
   const { t, lang } = useLang();
   const router = useRouter();
@@ -96,7 +98,13 @@ export function ChildClient({
           ) : (
             <ul className="flex flex-col gap-2">
               {packages.map((p) => (
-                <PackageRow key={p.id} pkg={p} />
+                <PackageRow
+                  key={p.id}
+                  pkg={p}
+                  childId={child.id}
+                  siblings={siblings}
+                  activeSessionId={activeSession?.id ?? null}
+                />
               ))}
             </ul>
           )}

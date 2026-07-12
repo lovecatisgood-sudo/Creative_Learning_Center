@@ -18,11 +18,13 @@ export function SellClient({
   paymentInfo,
   initialChild,
   initialHasRunningSession,
+  extendSessionId,
 }: {
   catalog: CatalogProduct[];
   paymentInfo: PaymentInfo;
   initialChild: SelectedChild | null;
   initialHasRunningSession: boolean;
+  extendSessionId: number | null;
 }) {
   const { t } = useLang();
   const router = useRouter();
@@ -30,7 +32,10 @@ export function SellClient({
   const [child, setChild] = useState<SelectedChild | null>(initialChild);
   const [hasRunningSession, setHasRunningSession] = useState(initialHasRunningSession);
   const [changing, setChanging] = useState(!initialChild);
-  const [cart, setCart] = useState<Map<string, number>>(new Map());
+  // From the session "+ Add 1 hour" shortcut: preload EXTRA_1H.
+  const [cart, setCart] = useState<Map<string, number>>(
+    () => (extendSessionId ? new Map([["EXTRA_1H", 1]]) : new Map())
+  );
   const [step, setStep] = useState<"cart" | "checkout">("cart");
 
   const totalItems = Array.from(cart.values()).reduce((a, b) => a + b, 0);
@@ -95,6 +100,7 @@ export function SellClient({
           cart={cart}
           catalog={catalog}
           paymentInfo={paymentInfo}
+          extendSessionId={extendSessionId}
           onConfirmed={(orderId) => router.push(`/admin/receipt/${orderId}?justPaid=1`)}
         />
       </div>

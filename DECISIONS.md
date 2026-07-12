@@ -79,3 +79,31 @@ money or hour accounting rules (those follow the PRD exactly).
   payment" is wired in M4 where sessions exist.
 
 - **qty N → N independent package_instances** (PRD §7.8).
+
+## M4 — Sessions engine
+
+- **Refund = booked − whole elapsed hours, not `floor(booked − elapsed)`.** The
+  PRD formula text and its own examples disagree: `floor(4 − 3.033)` = 0, but the
+  owner example (booked 4h, used 3h02m) and PRD §8 both want **1**. Read
+  "elapsed_hours" as *whole* hours elapsed, so refund = `booked − floor(elapsed)`,
+  clamped ≥0 — a partial hour counts as used. Matches every example. Server and
+  client compute it identically.
+
+- **Refund path is HOUR_PASS-only, asserted server-side.** `endSession` only ever
+  adds hours back for a pass; timed/bundle sessions just complete (instance →
+  consumed). A `refundHours` sent for a non-pass is ignored.
+
+- **Instance lifecycle.** available → active (session running) → for a pass, back
+  to available while hours/credits remain (multi-visit) else consumed; for
+  timed/bundle, straight to consumed. À la carte credit instances flip to
+  consumed when all their credits hit 0.
+
+- **EXTRA_1H immediate extension is atomic with payment.** When bought via the
+  session "+ Add 1 hour" shortcut (`?extendSession=<id>`), the order transaction
+  consumes it in place — extends the running session's pickup by 1h, marks the
+  instance consumed, writes an addon_redemption + audit — so payment and
+  extension can't diverge. Plain Sell-tab EXTRA_1H creates a +1h credit instead.
+
+- **Dashboard: server-render + 30s poll + 1s client tick.** Initial running
+  sessions render server-side; a 30s poll refreshes the set (check-ins elsewhere)
+  while countdowns tick every second client-side and flip red past pickup.

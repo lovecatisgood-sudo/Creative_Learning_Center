@@ -30,6 +30,20 @@ export function ageFromDob(dob: string | null, now = new Date()): number | null 
   return age >= 0 ? age : null;
 }
 
+// Siblings sharing the same parent (for the family-pass child selector, A7/V7).
+export async function getSiblings(childId: number): Promise<{ id: number; name: string }[]> {
+  const [self] = await db
+    .select({ parentId: children.parentId })
+    .from(children)
+    .where(eq(children.id, childId))
+    .limit(1);
+  if (!self?.parentId) return [];
+  return db
+    .select({ id: children.id, name: children.name })
+    .from(children)
+    .where(eq(children.parentId, self.parentId));
+}
+
 // Core child + parent record (packages/sessions/history are layered on in M3/M4).
 export async function getChildCore(id: number): Promise<ChildDetail | null> {
   const [row] = await db

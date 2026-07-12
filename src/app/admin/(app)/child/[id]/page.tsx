@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getChildCore } from "@/lib/children";
+import { getChildCore, getSiblings } from "@/lib/children";
 import { getChildPackages, getChildHistory } from "@/lib/packages";
 import { getActiveSessionForChild } from "@/lib/sessions";
 import { ChildClient } from "./ChildClient";
@@ -13,13 +13,20 @@ export default async function ChildPage({ params }: { params: { id: string } }) 
   const child = await getChildCore(id);
   if (!child) notFound();
 
-  const [packages, activeSession, history] = await Promise.all([
+  const [packages, activeSession, history, siblings] = await Promise.all([
     getChildPackages(id),
     getActiveSessionForChild(id),
     getChildHistory(id),
+    getSiblings(id),
   ]);
 
   return (
-    <ChildClient child={child} packages={packages} activeSession={activeSession} history={history} />
+    <ChildClient
+      child={child}
+      packages={packages}
+      activeSession={activeSession}
+      history={history}
+      siblings={siblings}
+    />
   );
 }

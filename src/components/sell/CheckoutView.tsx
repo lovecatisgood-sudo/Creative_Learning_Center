@@ -14,12 +14,14 @@ export function CheckoutView({
   cart,
   catalog,
   paymentInfo,
+  extendSessionId,
   onConfirmed,
 }: {
   childId: number;
   cart: Map<string, number>;
   catalog: CatalogProduct[];
   paymentInfo: PaymentInfo;
+  extendSessionId?: number | null;
   onConfirmed: (orderId: number, receiptNo: string) => void;
 }) {
   const { t, lang } = useLang();
@@ -71,6 +73,7 @@ export function CheckoutView({
         childId,
         method,
         proofKey,
+        extendSessionId: extendSessionId ?? null,
         items: lines.map((l) => ({ sku: l.product.sku, qty: l.qty })),
       }),
     });
