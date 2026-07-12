@@ -34,3 +34,6 @@ yarn-error.log*
 
 # Claude Code local settings
 /.claude
+/dist-landing/
+/creative-club-landing.zip
+/landing-preview.html
