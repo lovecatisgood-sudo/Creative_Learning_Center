@@ -1,8 +1,8 @@
 import { SITE_URL, OG_IMAGE } from "@/lib/landing/site";
 
 // LocalBusiness structured data. address/geo/openingHours/telephone are
-// PLACEHOLDERS — fill them when the owner provides Google Business Profile
-// details (tracked in the design spec §10).
+// intentionally omitted until the owner provides real Google Business Profile
+// details (tracked in the design spec §10) — never ship placeholder data.
 export function Jsonld() {
   const data = {
     "@context": "https://schema.org",
@@ -15,17 +15,14 @@ export function Jsonld() {
     logo: `${SITE_URL}/landing/siamese-cat-creative-club-logo-512.webp`,
     priceRange: "฿฿",
     areaServed: "Bangkok",
-    // TODO(owner): replace placeholders once Google Business Profile is live.
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "PLACEHOLDER — shop address",
-      addressLocality: "Bangkok",
-      addressCountry: "TH",
-    },
-    // telephone: "+66-PLACEHOLDER",
+    // TODO(owner): add address/telephone/openingHours once the Google Business
+    // Profile is live — omit them entirely until then so no placeholder data ships.
+    // address: { "@type": "PostalAddress", streetAddress: "…", addressLocality: "Bangkok", addressCountry: "TH" },
+    // telephone: "+66-…",
     // openingHours: "Mo-Su 10:00-19:00",
   };
+  const json = JSON.stringify(data).replace(/</g, "\\u003c");
   return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />
   );
 }
