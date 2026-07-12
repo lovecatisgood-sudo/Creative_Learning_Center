@@ -5,17 +5,19 @@ export function ResponsiveImage({
   alt,
   priority = false,
   className = "",
+  sizes = "100vw",
 }: {
   image: LandingImage;
   alt: string;
   priority?: boolean;
   className?: string;
+  sizes?: string;
 }) {
   return (
     <img
       src={image.src}
       srcSet={image.srcset}
-      sizes="100vw"
+      sizes={sizes}
       width={image.width}
       height={image.height}
       alt={alt}

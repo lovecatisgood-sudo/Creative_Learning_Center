@@ -30,7 +30,7 @@ export function RevealOnScroll({
   }, []);
 
   return (
-    <div ref={ref} className={`landing-reveal ${visible ? "is-visible" : ""} ${className}`}>
+    <div ref={ref} className={`reveal ${visible ? "on" : ""} ${className}`}>
       {children}
     </div>
   );

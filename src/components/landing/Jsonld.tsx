@@ -15,6 +15,14 @@ export function Jsonld() {
     logo: `${SITE_URL}/landing/siamese-cat-creative-club-logo-512.webp`,
     priceRange: "฿฿",
     areaServed: "Bangkok",
+    makesOffer: [
+      { "@type": "Offer", name: "1 Hour of Play", price: "199", priceCurrency: "THB" },
+      { "@type": "Offer", name: "2 Hours of Play", price: "300", priceCurrency: "THB" },
+      { "@type": "Offer", name: "Crayon Drawing Session", price: "59", priceCurrency: "THB" },
+      { "@type": "Offer", name: "Soft-Clay Statue", price: "150", priceCurrency: "THB" },
+      { "@type": "Offer", name: "30-Hour Creative Play Pass", price: "3599", priceCurrency: "THB" },
+      { "@type": "Offer", name: "60-Hour Creative Family Pass", price: "5999", priceCurrency: "THB" },
+    ],
     // TODO(owner): add address/telephone/openingHours once the Google Business
     // Profile is live — omit them entirely until then so no placeholder data ships.
     // address: { "@type": "PostalAddress", streetAddress: "…", addressLocality: "Bangkok", addressCountry: "TH" },

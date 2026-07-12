@@ -223,61 +223,107 @@ export const dict = {
   printSummary: { th: "พิมพ์สรุป", en: "Print summary" },
 
   // ── Landing page ──
-  landingTagline: {
-    th: "สนามเด็กเล่นสร้างสรรค์ในร่ม ใจกลางกรุงเทพฯ",
-    en: "A creative indoor playroom for kids, in the heart of Bangkok",
-  },
-  landingHeroCue: { th: "เลื่อนลงเพื่อสำรวจ", en: "Scroll to explore" },
-  landingHeroAlt: {
-    th: "หน้าร้าน Siamese Cat Creative Club กรุงเทพฯ",
-    en: "Siamese Cat Creative Club shop front in Bangkok",
-  },
-  landingPlayroomTitle: { th: "สนามเด็กเล่นในร่มที่ปลอดภัย", en: "A safe, supervised indoor playroom" },
-  landingPlayroomBody: {
-    th: "พื้นที่เล่นสะอาดและปลอดภัย มีพี่เลี้ยงดูแลตลอดเวลา เลือกเข้าเล่นแบบรายชั่วโมงได้ตามสะดวก — 1 ชั่วโมง 199 บาท หรือ 2 ชั่วโมง 300 บาท",
-    en: "A clean, safe play space with staff supervising at all times. Drop in by the hour — 1 hour ฿199 or 2 hours ฿300.",
-  },
-  landingPlayroomAlt: {
-    th: "เด็ก ๆ กำลังเล่นในสนามเด็กเล่นในร่มที่มีพี่เลี้ยงดูแล",
-    en: "Children playing in the supervised indoor playroom",
-  },
-  landingCozyTitle: { th: "มุมพักผ่อนสบายสำหรับครอบครัว", en: "A cozy corner for the whole family" },
-  landingCozyBody: {
-    th: "มุมนั่งเล่นแสนสบายให้คุณพ่อคุณแม่ได้พักผ่อน จิบเครื่องดื่ม และมองเห็นลูก ๆ เล่นได้อย่างสบายใจ",
-    en: "A comfortable lounge where parents can relax, enjoy a drink, and keep an easy eye on the kids.",
-  },
-  landingCozyAlt: { th: "มุมพักผ่อนสบาย ๆ สำหรับครอบครัว", en: "Cozy family lounge area" },
-  landingStudioTitle: { th: "ห้องศิลปะและระบายสี", en: "The art & crayon studio" },
-  landingStudioBody: {
-    th: "ปลดปล่อยจินตนาการกับกิจกรรมศิลปะและระบายสีเทียน เหมาะสำหรับเสริมสร้างพัฒนาการและความคิดสร้างสรรค์ เริ่มต้นเพียง 59 บาท",
-    en: "Spark imagination with art and crayon activities that build creativity and fine motor skills. From just ฿59.",
-  },
-  landingStudioAlt: { th: "ห้องกิจกรรมศิลปะและระบายสีสำหรับเด็ก", en: "Kids art and crayon creative studio" },
-  landingClayTitle: { th: "กิจกรรมปั้นดินเบา", en: "Make your own soft-clay statue" },
-  landingClayBody: {
-    th: "กิจกรรมปั้นดินเบาสุดพิเศษ ให้เด็ก ๆ สร้างสรรค์ผลงานชิ้นเล็ก ๆ และนำกลับบ้านเป็นของที่ระลึก ราคา 150 บาทต่อชิ้น",
-    en: "Our signature hands-on clay activity — kids sculpt a little masterpiece and take it home as a keepsake. ฿150 per statue.",
-  },
-  landingClayAlt: { th: "ผลงานปั้นดินเบาของเด็ก ๆ", en: "Children's soft-clay statue creations" },
-  landingPassesTitle: { th: "แพ็กเกจและบัตรสมาชิกครอบครัว", en: "Hour passes & family membership" },
-  landingPassesBody: {
-    th: "มาเล่นบ่อยคุ้มกว่า! เลือกแพ็กเกจชั่วโมงที่ใช้ได้หลายครั้ง พร้อมกิจกรรมสร้างสรรค์รวมอยู่ในแพ็กเกจ",
-    en: "Come often and save. Multi-visit hour passes that bundle in creative activities.",
-  },
-  landingPass30: { th: "แพ็กเกจ 30 ชั่วโมง — 3,599 บาท", en: "30-Hour Creative Play Pass — ฿3,599" },
-  landingPass60: {
-    th: "แพ็กเกจครอบครัว 60 ชั่วโมง — 5,999 บาท (แชร์กันได้ทั้งครอบครัว)",
-    en: "60-Hour Family Pass — ฿5,999 (shareable across the family)",
-  },
-  landingPassesAlt: { th: "ห้องกิจกรรมสร้างสรรค์สำหรับเด็ก", en: "Children's creative activity room" },
   landingLogoAlt: { th: "โลโก้ Siamese Cat Creative Club", en: "Siamese Cat Creative Club logo" },
   landingMetaTitle: {
-    th: "Siamese Cat Creative Club — สนามเด็กเล่นและกิจกรรมสร้างสรรค์ในร่ม กรุงเทพฯ",
-    en: "Siamese Cat Creative Club — Indoor Kids Playroom & Creative Studio, Bangkok",
+    th: "Siamese Cat Creative Club — สนามเด็กเล่นในร่มและกิจกรรมสร้างสรรค์สำหรับเด็ก กรุงเทพฯ",
+    en: "Siamese Cat Creative Club — Indoor Playroom & Creative Activities for Kids, Bangkok",
   },
   landingMetaDescription: {
-    th: "สนามเด็กเล่นในร่มที่ปลอดภัย พร้อมกิจกรรมศิลปะ ระบายสี และปั้นดินเบาสำหรับเด็ก ใจกลางกรุงเทพฯ มีพี่เลี้ยงดูแล เข้าเล่นรายชั่วโมงหรือซื้อแพ็กเกจครอบครัว",
-    en: "A safe supervised indoor children's playroom with art, crayon and soft-clay activities in central Bangkok. Drop in by the hour or buy a family pass.",
+    th: "สนามเด็กเล่นในร่มที่ปลอดภัยพร้อมพี่เลี้ยงดูแล และกิจกรรมสร้างสรรค์สำหรับเด็ก ใจกลางกรุงเทพฯ เข้าเล่นรายชั่วโมง (เริ่ม 199 บาท) กิจกรรมระบายสีและปั้นดินเบา แพ็กเกจและบัตรสมาชิกครอบครัว",
+    en: "A safe, supervised indoor playroom and creative activities for kids in central Bangkok. Hourly play from ฿199, crayon & soft-clay activities, family passes & membership.",
+  },
+
+  // Hero
+  landingHeroLead: {
+    th: "สนามเด็กเล่นในร่มและสตูดิโอสร้างสรรค์สำหรับเด็ก ใจกลางกรุงเทพฯ",
+    en: "An indoor playroom & creative studio for children, in the heart of Bangkok",
+  },
+  landingHeroBody: {
+    th: "พื้นที่ปลอดภัยและอบอุ่นที่เด็ก ๆ ได้เล่นอย่างอิสระ ลงมือทำงานศิลปะและงานปั้นกลับบ้าน โดยมีพี่เลี้ยงดูแลตลอดเวลา ส่วนคุณพ่อคุณแม่ก็พักผ่อนได้อย่างสบายใจในบริเวณเดียวกัน",
+    en: "A safe, welcoming space where kids play freely and make art and clay creations to take home — supervised by our staff at all times, while parents relax comfortably nearby.",
+  },
+  landingHeroCue: { th: "เลื่อนลงเพื่อดูบริการของเรา ↓", en: "Scroll for our services ↓" },
+
+  // Our Space
+  landingSpaceKicker: { th: "สถานที่", en: "The place" },
+  landingSpaceTitle: { th: "พื้นที่ของเรา", en: "Our Space" },
+  landingSpaceIntro: {
+    th: "พื้นที่เดียวที่สว่าง สะอาด และออกแบบมาเพื่อเด็ก ๆ และครอบครัว — โซนเล่นที่มีพี่เลี้ยงดูแล มุมพักผ่อนแสนสบายสำหรับผู้ปกครอง และสตูดิโอสำหรับกิจกรรมศิลปะและงานปั้นโดยเฉพาะ",
+    en: "One bright, clean space designed around children and the families who bring them — a supervised play zone, a cozy lounge for parents, and a dedicated studio for art and clay.",
+  },
+  landingGalleryPlayroom: { th: "โซนเล่นที่มีพี่เลี้ยงดูแล", en: "Supervised play area" },
+  landingGalleryCozy: { th: "มุมพักผ่อนสำหรับผู้ปกครอง", en: "Cozy parent lounge" },
+  landingGalleryStudio: { th: "สตูดิโอศิลปะและงานฝีมือ", en: "Art & craft studio" },
+  landingGalleryActivity: { th: "ห้องกิจกรรมสร้างสรรค์", en: "Creative activity room" },
+
+  // Our Services
+  landingServicesKicker: { th: "สิ่งที่เรามีให้", en: "What we offer" },
+  landingServicesTitle: { th: "บริการของเรา", en: "Our Services" },
+  landingServicesIntro: {
+    th: "มาเล่นได้บ่อยเท่าที่ต้องการ — จ่ายตามครั้งที่มา เพิ่มกิจกรรมสร้างสรรค์ หรือเลือกแพ็กเกจที่รวมทั้งสองอย่างไว้ด้วยกัน",
+    en: "Come as often as you like — pay per visit, add a creative activity, or choose a bundle that combines both.",
+  },
+  svcPlayTitle: { th: "เข้าเล่นแบบมีพี่เลี้ยงดูแล", en: "Supervised Play" },
+  svcPlayBody: {
+    th: "เข้ามาเล่นในสนามเด็กเล่นในร่มที่ปลอดภัยและมีพี่เลี้ยงดูแล ไม่ต้องสมัครสมาชิก จ่ายตามชั่วโมงและอยู่ได้นานตามต้องการ",
+    en: "Drop in to our safe, supervised indoor playroom — no membership needed. Pay by the hour and stay as long as you like.",
+  },
+  priceHour1Name: { th: "เข้าเล่น 1 ชั่วโมง", en: "1 Hour of Play" },
+  priceHour1Value: { th: "฿199", en: "฿199" },
+  priceHour2Name: { th: "เข้าเล่น 2 ชั่วโมง", en: "2 Hours of Play" },
+  priceHour2Value: { th: "฿300", en: "฿300" },
+  priceExtraHourName: { th: "เพิ่มเวลา 1 ชั่วโมง", en: "Add an extra hour" },
+  priceExtraHourValue: { th: "฿100", en: "฿100" },
+  svcCreativeTitle: { th: "กิจกรรมสร้างสรรค์", en: "Creative Activities" },
+  svcCreativeBody: {
+    th: "กิจกรรมลงมือทำที่เพิ่มเข้ากับการเข้าเล่นครั้งใดก็ได้ เด็ก ๆ ทำตามพี่เลี้ยงและได้นำผลงานกลับบ้านเป็นของที่ระลึก",
+    en: "Hands-on sessions you can add to any visit. Kids create alongside our staff and take their work home as a keepsake.",
+  },
+  actCrayonName: { th: "ระบายสีเทียน", en: "Crayon Drawing" },
+  actCrayonValue: { th: "฿59", en: "฿59" },
+  actCrayonDesc: { th: "กิจกรรมระบายสีและวาดภาพแบบมีผู้ดูแล", en: "A guided coloring & drawing session" },
+  actClayName: { th: "ปั้นดินเบา", en: "Soft-Clay Statue" },
+  actClayValue: { th: "฿150", en: "฿150" },
+  actClayDesc: { th: "ปั้นและตกแต่งตุ๊กตาดินเบาเป็นของที่ระลึก", en: "Mold & decorate a soft-clay figure to keep" },
+  bundleTitle: { th: "แพ็กเกจเล่น + สร้างสรรค์", en: "Play + Create Bundles" },
+  bundleBody: {
+    th: "เวลาเล่นพร้อมกิจกรรมสร้างสรรค์ รวมไว้ในแพ็กเกจเดียวในราคาที่คุ้มค่ากว่า",
+    en: "Play time plus a creative activity, paired together for better value.",
+  },
+  bundle1Name: { th: "1 ชั่วโมง + ระบายสีเทียน", en: "1 Hour + Crayon" },
+  bundle1Value: { th: "฿239", en: "฿239" },
+  bundle2Name: { th: "1 ชั่วโมง + ปั้นดินเบา 2 ชิ้น", en: "1 Hour + 2 Clay Statues" },
+  bundle2Value: { th: "฿349", en: "฿349" },
+  bundle3Name: { th: "2 ชั่วโมง + ระบายสีเทียน", en: "2 Hours + Crayon" },
+  bundle3Value: { th: "฿329", en: "฿329" },
+  bundle4Name: { th: "2 ชั่วโมง + ปั้นดินเบา 4 ชิ้น", en: "2 Hours + 4 Clay Statues" },
+  bundle4Value: { th: "฿599", en: "฿599" },
+
+  // Passes & Family Membership
+  landingPassesKicker: { th: "มาเป็นประจำ", en: "For regulars" },
+  landingPassesTitle: { th: "แพ็กเกจชั่วโมงและบัตรสมาชิกครอบครัว", en: "Passes & Family Membership" },
+  landingPassesIntro: {
+    th: "มาเล่นบ่อยคุ้มกว่า ซื้อชั่วโมงแบบเหมารวมพร้อมกิจกรรมสร้างสรรค์ในตัว ใช้ได้ภายใน 6 เดือน",
+    en: "Visit often and save. Buy hours in bulk with creative activities included — valid for 6 months.",
+  },
+  pass1Title: { th: "แพ็กเกจ 30 ชั่วโมง", en: "30-Hour Creative Play Pass" },
+  pass1Price: { th: "฿3,599", en: "฿3,599" },
+  pass1Desc: {
+    th: "เล่น 30 ชั่วโมง พร้อมกิจกรรมระบายสีเทียน 5 ครั้ง และปั้นดินเบา 3 ชิ้น สำหรับเด็ก 1 คน",
+    en: "30 hours of play, plus 5 crayon sessions and 3 clay statues. For one child.",
+  },
+  pass2Tag: { th: "แชร์ทั้งครอบครัว", en: "Shareable" },
+  pass2Title: { th: "แพ็กเกจครอบครัว 60 ชั่วโมง", en: "60-Hour Creative Family Pass" },
+  pass2Price: { th: "฿5,999", en: "฿5,999" },
+  pass2Desc: {
+    th: "เล่น 60 ชั่วโมง พร้อมกิจกรรมระบายสีเทียน 10 ครั้ง และปั้นดินเบา 6 ชิ้น แชร์กันได้ทั้งครอบครัว",
+    en: "60 hours of play, plus 10 crayon sessions and 6 clay statues. Shareable across the whole family.",
+  },
+
+  // Footer
+  landingFooterTagline: {
+    th: "สนามเด็กเล่นในร่มและกิจกรรมสร้างสรรค์สำหรับเด็ก · กรุงเทพฯ",
+    en: "Indoor kids playroom & creative activities · Bangkok",
   },
 } satisfies Record<string, Record<Lang, string>>;
 

@@ -2,14 +2,7 @@ import type { Metadata } from "next";
 import { dict } from "@/lib/i18n/dictionary";
 import { SITE_URL, OG_IMAGE } from "@/lib/landing/site";
 import { Jsonld } from "@/components/landing/Jsonld";
-import { LandingHeader } from "@/components/landing/LandingHeader";
-import { ProgressDots } from "@/components/landing/ProgressDots";
-import { HeroSection } from "@/components/landing/sections/HeroSection";
-import { PlayroomSection } from "@/components/landing/sections/PlayroomSection";
-import { CozyAreaSection } from "@/components/landing/sections/CozyAreaSection";
-import { StudioSection } from "@/components/landing/sections/StudioSection";
-import { ClaySection } from "@/components/landing/sections/ClaySection";
-import { PassesSection } from "@/components/landing/sections/PassesSection";
+import { LandingClient } from "@/components/landing/LandingClient";
 
 // Metadata is Thai (the default/indexed language).
 export const metadata: Metadata = {
@@ -43,16 +36,7 @@ export default function LandingPage() {
   return (
     <>
       <Jsonld />
-      <LandingHeader />
-      <ProgressDots count={6} />
-      <main className="landing-scroll">
-        <HeroSection />
-        <PlayroomSection />
-        <CozyAreaSection />
-        <StudioSection />
-        <ClaySection />
-        <PassesSection />
-      </main>
+      <LandingClient />
     </>
   );
 }
