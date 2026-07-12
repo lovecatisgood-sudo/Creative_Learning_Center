@@ -55,3 +55,27 @@ money or hour accounting rules (those follow the PRD exactly).
 - **Client-safe product module (`lib/product.ts`).** Pure types + `productName` /
   `effectiveStatus` live apart from `lib/packages.ts` (which imports the db) so
   client components can use them without webpack trying to bundle `pg`/`net`/`tls`.
+
+## M3 — Sell / payment / receipt
+
+- **No draft-order persistence.** The cart lives in client state; the order,
+  items, single payment, and all package_instances are created in one atomic
+  transaction only at "Confirm payment received." Nothing half-created if the
+  admin backs out.
+
+- **Receipt number computed in JS, unique constraint as backstop.** `SCCC-
+  YYYYMMDD-####` per Bangkok day: read the day's existing numbers in the
+  transaction, take max+1. The `orders.receipt_no` unique index guards races;
+  `createPaidOrder` retries the transaction on a 23505 collision.
+
+- **Proof photo: upload-then-reference, server-enforced.** The client compresses
+  (≤1600px/~500KB) and uploads to `/api/admin/upload` → opaque key. Confirmation
+  re-reads that key from disk before creating the order, so a payment can't be
+  confirmed without a real stored photo. Photos are served only through an
+  authenticated route (401 for anon), never the public folder.
+
+- **EXTRA_1H in the Sell grid is gated on a running session.** À la carte it
+  creates a +1h credit instance; "extend the running timer immediately on
+  payment" is wired in M4 where sessions exist.
+
+- **qty N → N independent package_instances** (PRD §7.8).
