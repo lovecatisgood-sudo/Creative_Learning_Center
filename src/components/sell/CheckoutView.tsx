@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { productName, type CatalogProduct } from "@/lib/product";
 import type { PaymentInfo } from "@/lib/catalog";
@@ -40,7 +40,17 @@ export function CheckoutView({
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState("");
+  const [qrOpen, setQrOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!qrOpen) return;
+    const h = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setQrOpen(false);
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [qrOpen]);
 
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -140,11 +150,13 @@ export function CheckoutView({
             <img
               src="/promptpay.jpg"
               alt="PromptPay QR"
-              className="h-72 w-72 rounded-xl bg-white object-contain p-2"
+              onClick={() => setQrOpen(true)}
+              className="w-[min(80vw,380px)] aspect-square cursor-pointer rounded-xl bg-white object-contain p-2"
             />
             <p className="text-[15px] font-semibold text-meta">
               {t("scanToPay")} {total} ฿
             </p>
+            <p className="text-[13px] text-meta">{t("tapToEnlarge")}</p>
           </div>
         )}
 
@@ -242,6 +254,23 @@ export function CheckoutView({
             {confirming ? t("loading") : t("confirm")}
           </button>
         </Sheet>
+      )}
+
+      {qrOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+          onClick={() => setQrOpen(false)}
+          role="dialog"
+          aria-modal="true"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/promptpay.jpg"
+            alt="PromptPay QR"
+            className="max-h-[90vh] max-w-[90vw] rounded-2xl bg-white p-3"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
       )}
     </div>
   );

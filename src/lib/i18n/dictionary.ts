@@ -127,6 +127,7 @@ export const dict = {
   methodBank: { th: "โอนธนาคาร", en: "Bank transfer" },
   methodCash: { th: "เงินสด", en: "Cash" },
   scanToPay: { th: "สแกนเพื่อจ่าย", en: "Scan to pay" },
+  tapToEnlarge: { th: "แตะเพื่อขยายเต็มจอ", en: "Tap to enlarge" },
   bankNameLabel: { th: "ธนาคาร", en: "Bank" },
   accountName: { th: "ชื่อบัญชี", en: "Account name" },
   accountNumber: { th: "เลขที่บัญชี", en: "Account number" },
