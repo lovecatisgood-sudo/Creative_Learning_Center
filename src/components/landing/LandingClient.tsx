@@ -302,7 +302,7 @@ export function LandingClient() {
             <div className="visit-map">
               <iframe
                 title={t("visitMapTitle")}
-                src="https://maps.google.com/maps?q=46%2F27%20Bang%20Na-Trat%20Frontage%20Rd%2C%20Bang%20Kaeo%2C%20Samut%20Prakan%2010540&z=16&output=embed"
+                src="https://maps.google.com/maps?q=13.6427544,100.6691261&z=17&output=embed"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />

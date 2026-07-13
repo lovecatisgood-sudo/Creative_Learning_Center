@@ -32,6 +32,12 @@ export function Jsonld() {
       addressCountry: "TH",
     },
     telephone: "+66804803802",
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 13.6427544,
+      longitude: 100.6691261,
+    },
+    hasMap: "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA",
     // openingHours intentionally omitted until the owner confirms them.
   };
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
