@@ -12,6 +12,22 @@ function emptyChild(): ChildForm {
   return { name: "", dob: "", gender: "" };
 }
 
+const PHONE_RE = /^[0-9+\-\s]{6,20}$/;
+function isPlausiblePhone(phone: string): boolean {
+  if (!PHONE_RE.test(phone)) return false;
+  return (phone.match(/\d/g) ?? []).length >= 6;
+}
+
+// Today's date as YYYY-MM-DD in the browser's local time — good enough for a
+// same-day DOB check (the server re-checks against Bangkok time).
+function todayISO(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export default function SignupPage() {
   const { t, lang } = useLang();
   const router = useRouter();
@@ -35,9 +51,12 @@ export default function SignupPage() {
     const e: Record<string, string> = {};
     if (!parentName.trim()) e.parentName = t("required");
     if (!phone.trim()) e.phone = t("required");
+    else if (!isPlausiblePhone(phone.trim())) e.phone = t("invalidPhone");
+    const today = todayISO();
     kids.forEach((k, i) => {
       if (!k.name.trim()) e[`child_${i}_name`] = t("required");
       if (!k.dob) e[`child_${i}_dob`] = t("required");
+      else if (k.dob > today) e[`child_${i}_dob`] = t("dobFuture");
       if (!k.gender) e[`child_${i}_gender`] = t("required");
     });
     if (!consent) e.consent = t("required");
@@ -49,11 +68,18 @@ export default function SignupPage() {
     ev.preventDefault();
     if (!validate()) return;
     setBusy(true);
-    const res = await fetch("/api/public/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ parentName, phone, email, consent, children: kids }),
-    });
+    let res: Response;
+    try {
+      res = await fetch("/api/public/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ parentName, phone, email, consent, children: kids }),
+      });
+    } catch {
+      setBusy(false);
+      setErrors((prev) => ({ ...prev, form: t("signupFailed") }));
+      return;
+    }
     setBusy(false);
     if (res.ok) {
       const data = await res.json();
@@ -68,7 +94,8 @@ export default function SignupPage() {
       );
       router.push("/signup/success");
     } else {
-      setErrors({ form: t("required") });
+      const body = await res.json().catch(() => null);
+      setErrors((prev) => ({ ...prev, form: (body?.error as string) || t("signupFailed") }));
     }
   }
 
@@ -195,7 +222,7 @@ export default function SignupPage() {
             onChange={(e) => setConsent(e.target.checked)}
             className="mt-0.5 h-5 w-5 shrink-0 accent-teal"
           />
-          <span className="text-[11px] leading-tight text-ink">
+          <span className="text-[12px] leading-snug text-ink">
             {label("ข้าพเจ้ายอมรับ", "I acknowledge the")}{" "}
             <a href={termsUrl} target="_blank" rel="noreferrer" className="font-semibold text-tealdeep underline">
               {t("termsLink")}
@@ -204,9 +231,18 @@ export default function SignupPage() {
             <a href={privacyUrl} target="_blank" rel="noreferrer" className="font-semibold text-tealdeep underline">
               {t("privacyLink")}
             </a>
-            {errors.consent && <span className="mt-1 block font-semibold text-danger">{errors.consent}</span>}
+            {errors.consent && <span className="mt-1 block text-[13px] font-semibold text-danger">{errors.consent}</span>}
           </span>
         </label>
+
+        {errors.form && (
+          <div
+            role="alert"
+            className="rounded-xl border border-danger/40 bg-dangerbg p-2 text-[13px] font-semibold text-danger"
+          >
+            ⚠ {errors.form}
+          </div>
+        )}
       </form>
 
       <div className="fixed inset-x-0 bottom-0 mx-auto max-w-app border-t border-line bg-paper/95 p-2 backdrop-blur">
@@ -231,12 +267,12 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-0.5 block text-[11px] font-semibold leading-tight text-meta">
+      <label className="mb-0.5 block text-[13px] font-semibold leading-tight text-meta">
         {label}
         {required && <span className="text-danger"> *</span>}
       </label>
       {children}
-      {error && <p className="mt-0.5 text-[11px] font-semibold text-danger">{error}</p>}
+      {error && <p className="mt-0.5 text-[13px] font-semibold text-danger">{error}</p>}
     </div>
   );
 }

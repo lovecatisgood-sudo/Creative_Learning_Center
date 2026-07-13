@@ -15,6 +15,9 @@ export const dict = {
   back: { th: "กลับ", en: "Back" },
   loading: { th: "กำลังโหลด…", en: "Loading…" },
   required: { th: "จำเป็นต้องกรอก", en: "This field is required" },
+  signupFailed: { th: "ลงทะเบียนไม่สำเร็จ กรุณาลองใหม่", en: "Registration failed, please try again" },
+  invalidPhone: { th: "เบอร์โทรไม่ถูกต้อง", en: "Invalid phone number" },
+  dobFuture: { th: "วันเกิดต้องไม่เป็นอนาคต", en: "Date of birth can't be in the future" },
 
   // ── Bottom nav ──
   navSessions: { th: "เซสชัน", en: "Sessions" },
