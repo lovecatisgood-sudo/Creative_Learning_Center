@@ -58,10 +58,10 @@ export function OverviewClient({ initial }: { initial: OverviewData }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={t("navOverview")} right={<LogoutButton />} />
 
-      <div className="flex-1 px-4 py-3">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 py-3">
         {/* Unit switcher */}
         <div className="mb-3 flex rounded-xl border border-line bg-card p-1">
           {(["day", "week", "month"] as Unit[]).map((u) => (
@@ -144,8 +144,8 @@ export function OverviewClient({ initial }: { initial: OverviewData }) {
         {loading && <p className="mt-3 text-center text-[13px] text-meta">{t("loading")}</p>}
       </div>
 
-      {/* Footer */}
-      <div className="no-print sticky bottom-0 border-t border-line bg-paper/95 p-4 backdrop-blur">
+      {/* Footer — last flex child, sits directly above the BottomNav */}
+      <div className="no-print border-t border-line bg-paper/95 p-4 backdrop-blur">
         <button className="btn-ghost" onClick={() => window.print()}>
           🖨 {t("printSummary")}
         </button>

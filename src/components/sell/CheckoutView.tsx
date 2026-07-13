@@ -103,135 +103,140 @@ export function CheckoutView({
 
   return (
     // Checkout stays a focused single column even on tablet — centered at the
-    // same width as its fixed confirm footer below, rather than stretching
-    // the payment tabs/QR edge-to-edge inside the wider .admin-frame shell.
-    <div className="mx-auto flex w-full max-w-app flex-col pb-28">
-      {/* Order summary */}
-      <div className="border-b border-line px-4 py-3">
-        <div className="flex flex-col gap-1">
-          {lines.map((l) => (
-            <div key={l.product.sku} className="flex justify-between text-[13px] text-ink">
-              <span>
-                {productName(l.product, lang)} × {l.qty}
-              </span>
-              <span>{l.product.priceThb * l.qty}</span>
-            </div>
+    // same width as its confirm footer below, rather than stretching the
+    // payment tabs/QR edge-to-edge inside the wider .admin-frame shell. Fills
+    // the remaining height handed down by SellClient; the middle scrolls, the
+    // confirm footer is a plain flex child so it never overlaps the BottomNav.
+    <div className="mx-auto flex w-full max-w-app flex-1 flex-col min-h-0">
+      <div className="flex-1 overflow-y-auto min-h-0">
+        {/* Order summary */}
+        <div className="border-b border-line px-4 py-3">
+          <div className="flex flex-col gap-1">
+            {lines.map((l) => (
+              <div key={l.product.sku} className="flex justify-between text-[13px] text-ink">
+                <span>
+                  {productName(l.product, lang)} × {l.qty}
+                </span>
+                <span>{l.product.priceThb * l.qty}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-2 flex items-baseline justify-between border-t border-line pt-2">
+            <span className="text-base font-bold text-ink">{t("total")}</span>
+            <span className="text-[40px] font-extrabold leading-none text-ink">{total}</span>
+          </div>
+        </div>
+
+        {/* Method tabs */}
+        <div className="flex border-b border-line">
+          {(["promptpay", ...(paymentInfo.bankConfigured ? (["bank"] as Method[]) : []), "cash"] as Method[]).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMethod(m)}
+              className={
+                "flex-1 border-b-2 py-3 text-[15px] font-bold transition " +
+                (method === m ? "border-teal text-ink" : "border-transparent text-meta")
+              }
+            >
+              {methodLabel(m)}
+            </button>
           ))}
         </div>
-        <div className="mt-2 flex items-baseline justify-between border-t border-line pt-2">
-          <span className="text-base font-bold text-ink">{t("total")}</span>
-          <span className="text-[40px] font-extrabold leading-none text-ink">{total}</span>
+
+        {/* Method body */}
+        <div className="px-4 py-5">
+          {method === "promptpay" && (
+            <div className="flex flex-col items-center gap-3">
+              {/* Static shop PromptPay QR (public/promptpay.jpg). Amount shown below;
+                  customer enters it when scanning. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/promptpay.jpg"
+                alt="PromptPay QR"
+                onClick={() => setQrOpen(true)}
+                className="w-[min(80vw,380px)] aspect-square cursor-pointer rounded-xl bg-white object-contain p-2"
+              />
+              <p className="text-[15px] font-semibold text-meta">
+                {t("scanToPay")} {total} ฿
+              </p>
+              <p className="text-[13px] text-meta">{t("tapToEnlarge")}</p>
+            </div>
+          )}
+
+          {method === "bank" && (
+            <div className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4">
+              <Detail label={t("bankNameLabel")} value={paymentInfo.bankName} />
+              <Detail label={t("accountName")} value={paymentInfo.bankAccountName} />
+              <div>
+                <div className="text-[13px] font-semibold text-meta">{t("accountNumber")}</div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-2xl font-extrabold tracking-wide text-ink">
+                    {paymentInfo.bankAccountNumber}
+                  </span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(paymentInfo.bankAccountNumber);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 1500);
+                    }}
+                    className="rounded-lg bg-brown px-3 py-1.5 text-[13px] font-bold text-cream"
+                  >
+                    {copied ? t("copied") : t("copy")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {method === "cash" && (
+            <div className="py-6 text-center">
+              <div className="text-[15px] font-semibold text-meta">{t("collect")}</div>
+              <div className="text-[56px] font-extrabold leading-none text-ink">{total} ฿</div>
+            </div>
+          )}
+        </div>
+
+        {/* Proof step */}
+        <div className="px-4">
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={onFile}
+          />
+          {preview ? (
+            <div className="relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={preview} alt="proof" className="max-h-56 w-full rounded-xl object-contain" />
+              <button
+                onClick={() => {
+                  setProofKey(null);
+                  setPreview(null);
+                  if (fileRef.current) fileRef.current.value = "";
+                }}
+                className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-[13px] font-bold text-white"
+              >
+                ✕ {t("retake")}
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading}
+              className="flex min-h-[96px] w-full items-center justify-center rounded-xl border-2 border-dashed border-line bg-card text-[15px] font-semibold text-meta"
+            >
+              {uploading ? t("uploading") : t("takePhoto")}
+            </button>
+          )}
+          {error && <p className="mt-2 text-[13px] font-semibold text-danger">{error}</p>}
         </div>
       </div>
 
-      {/* Method tabs */}
-      <div className="flex border-b border-line">
-        {(["promptpay", ...(paymentInfo.bankConfigured ? (["bank"] as Method[]) : []), "cash"] as Method[]).map((m) => (
-          <button
-            key={m}
-            onClick={() => setMethod(m)}
-            className={
-              "flex-1 border-b-2 py-3 text-[15px] font-bold transition " +
-              (method === m ? "border-teal text-ink" : "border-transparent text-meta")
-            }
-          >
-            {methodLabel(m)}
-          </button>
-        ))}
-      </div>
-
-      {/* Method body */}
-      <div className="px-4 py-5">
-        {method === "promptpay" && (
-          <div className="flex flex-col items-center gap-3">
-            {/* Static shop PromptPay QR (public/promptpay.jpg). Amount shown below;
-                customer enters it when scanning. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/promptpay.jpg"
-              alt="PromptPay QR"
-              onClick={() => setQrOpen(true)}
-              className="w-[min(80vw,380px)] aspect-square cursor-pointer rounded-xl bg-white object-contain p-2"
-            />
-            <p className="text-[15px] font-semibold text-meta">
-              {t("scanToPay")} {total} ฿
-            </p>
-            <p className="text-[13px] text-meta">{t("tapToEnlarge")}</p>
-          </div>
-        )}
-
-        {method === "bank" && (
-          <div className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-4">
-            <Detail label={t("bankNameLabel")} value={paymentInfo.bankName} />
-            <Detail label={t("accountName")} value={paymentInfo.bankAccountName} />
-            <div>
-              <div className="text-[13px] font-semibold text-meta">{t("accountNumber")}</div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-2xl font-extrabold tracking-wide text-ink">
-                  {paymentInfo.bankAccountNumber}
-                </span>
-                <button
-                  onClick={() => {
-                    navigator.clipboard?.writeText(paymentInfo.bankAccountNumber);
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 1500);
-                  }}
-                  className="rounded-lg bg-brown px-3 py-1.5 text-[13px] font-bold text-cream"
-                >
-                  {copied ? t("copied") : t("copy")}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {method === "cash" && (
-          <div className="py-6 text-center">
-            <div className="text-[15px] font-semibold text-meta">{t("collect")}</div>
-            <div className="text-[56px] font-extrabold leading-none text-ink">{total} ฿</div>
-          </div>
-        )}
-      </div>
-
-      {/* Proof step */}
-      <div className="px-4">
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          className="hidden"
-          onChange={onFile}
-        />
-        {preview ? (
-          <div className="relative">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={preview} alt="proof" className="max-h-56 w-full rounded-xl object-contain" />
-            <button
-              onClick={() => {
-                setProofKey(null);
-                setPreview(null);
-                if (fileRef.current) fileRef.current.value = "";
-              }}
-              className="absolute right-2 top-2 rounded-full bg-black/60 px-3 py-1 text-[13px] font-bold text-white"
-            >
-              ✕ {t("retake")}
-            </button>
-          </div>
-        ) : (
-          <button
-            onClick={() => fileRef.current?.click()}
-            disabled={uploading}
-            className="flex min-h-[96px] w-full items-center justify-center rounded-xl border-2 border-dashed border-line bg-card text-[15px] font-semibold text-meta"
-          >
-            {uploading ? t("uploading") : t("takePhoto")}
-          </button>
-        )}
-        {error && <p className="mt-2 text-[13px] font-semibold text-danger">{error}</p>}
-      </div>
-
-      {/* Confirm footer */}
-      <div className="fixed inset-x-0 bottom-0 mx-auto max-w-app border-t border-line bg-paper/95 p-4 backdrop-blur">
+      {/* Confirm footer — plain flex child (not fixed), so it sits directly
+          above the BottomNav and never overlaps it. */}
+      <div className="border-t border-line bg-paper/95 p-4 backdrop-blur">
         <button
           disabled={!proofKey || uploading}
           onClick={() => setShowConfirm(true)}

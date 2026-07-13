@@ -51,14 +51,14 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={t("receipt")} right={<LogoutButton />} />
 
       {/* On-screen wrapper only — kept as a centered, phone-width column even
           inside the wider tablet shell, since the ticket itself stays a fixed
           80mm-proportioned card. The .receipt-ticket contents + @media print
           rules are untouched (Task 10 owns the ticket content). */}
-      <div className="mx-auto flex w-full max-w-app flex-1 flex-col px-4 py-4">
+      <div className="mx-auto flex w-full max-w-app flex-1 flex-col overflow-y-auto min-h-0 px-4 py-4">
         {/* 80mm ticket */}
         <div
           ref={ticketRef}
@@ -108,8 +108,8 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
         )}
       </div>
 
-      {/* Actions */}
-      <div className="no-print sticky bottom-0 mx-auto flex w-full max-w-app flex-col gap-2 border-t border-line bg-paper/95 p-4 backdrop-blur">
+      {/* Actions — last flex child, sits directly above the BottomNav */}
+      <div className="no-print mx-auto flex w-full max-w-app flex-col gap-2 border-t border-line bg-paper/95 p-4 backdrop-blur">
         {justPaid && data.hasStartable && data.childId && (
           <button className="btn-primary" onClick={() => router.push(`/admin/child/${data.childId}`)}>
             {t("startNow")} ▶

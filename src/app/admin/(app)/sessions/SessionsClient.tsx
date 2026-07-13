@@ -39,10 +39,10 @@ export function SessionsClient({ initialSessions }: { initialSessions: ActiveSes
   const pageItems = sorted.slice((clampedPage - 1) * PAGE_SIZE, clampedPage * PAGE_SIZE);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={t("navSessions")} right={<LogoutButton />} />
 
-      <div className="flex-1 px-4 py-3 sm:px-6 md:px-8">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 py-3 sm:px-6 md:px-8">
         {sorted.length === 0 ? (
           <div className="flex flex-col items-center gap-2 px-6 py-24 text-center">
             <span className="text-4xl">😺</span>

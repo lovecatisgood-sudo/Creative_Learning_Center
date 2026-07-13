@@ -59,10 +59,12 @@ export function SearchClient() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={t("directoryTitle")} right={<LogoutButton />} />
 
-      <div className="sticky top-[56px] z-10 bg-paper px-4 py-3 sm:px-6 md:px-8">
+      {/* Search bar sits above the scrollable list below, so it never needs to
+          stick — it simply isn't part of the scrolling region. */}
+      <div className="bg-paper px-4 py-3 sm:px-6 md:px-8">
         <input
           ref={inputRef}
           className="field"
@@ -72,7 +74,7 @@ export function SearchClient() {
         />
       </div>
 
-      <div className="flex-1 px-4 pb-24 sm:px-6 md:px-8">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 pb-4 sm:px-6 md:px-8">
         {!data && loading && (
           <p className="py-10 text-center text-[13px] text-meta">{t("loading")}</p>
         )}
@@ -98,7 +100,8 @@ export function SearchClient() {
         {data && <Pagination page={data.page} totalPages={data.totalPages} onPage={setPage} />}
       </div>
 
-      <div className="sticky bottom-0 border-t border-line bg-paper/95 p-4 backdrop-blur sm:px-6 md:px-8">
+      {/* Last flex child, sits directly above the BottomNav */}
+      <div className="border-t border-line bg-paper/95 p-4 backdrop-blur sm:px-6 md:px-8">
         <button className="btn-primary" onClick={() => setShowQuickAdd(true)}>
           ＋ {t("quickAddChild")}
         </button>

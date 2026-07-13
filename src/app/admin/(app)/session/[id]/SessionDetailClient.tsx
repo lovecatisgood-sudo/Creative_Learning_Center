@@ -55,10 +55,10 @@ export function SessionDetailClient({ detail, justStarted }: { detail: SessionDe
   const consumeIcon = (type: Consumable["type"]) => (type === "crayon" ? "🖍" : type === "clay" ? "🗿" : "⏱");
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={t("sessionDetail")} right={<LogoutButton />} />
 
-      <div className="flex-1 px-4 py-4 sm:px-6 md:px-8 md:flex md:items-start md:gap-6">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 py-4 sm:px-6 md:px-8 md:flex md:items-start md:gap-6">
         <div className="md:w-[22rem] md:shrink-0">
           {/* Pickup slip / hero (also the printable A8 slip) */}
           <div
@@ -144,8 +144,8 @@ export function SessionDetailClient({ detail, justStarted }: { detail: SessionDe
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="no-print sticky bottom-0 flex flex-col gap-2 border-t border-line bg-paper/95 p-4 backdrop-blur">
+      {/* Actions — last flex child, sits directly above the BottomNav */}
+      <div className="no-print flex flex-col gap-2 border-t border-line bg-paper/95 p-4 backdrop-blur">
         <button
           className="btn-ghost"
           onClick={() => router.push(`/admin/sell?childId=${s.childId}&extendSession=${s.id}`)}

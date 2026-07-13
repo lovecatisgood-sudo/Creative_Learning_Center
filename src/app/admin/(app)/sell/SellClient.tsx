@@ -75,10 +75,12 @@ export function SellClient({
   // ── Child not chosen yet, or changing ──
   if (!child || changing) {
     return (
-      <div className="flex min-h-screen flex-col">
+      <div className="flex flex-1 flex-col min-h-0">
         <AppBar title={t("navSell")} right={<LogoutButton />} />
-        <p className="px-4 pt-4 text-center text-[15px] text-meta sm:px-6 md:px-8">{t("chooseChild")}</p>
-        <ChildPicker onPick={pickChild} />
+        <div className="flex-1 overflow-y-auto min-h-0">
+          <p className="px-4 pt-4 text-center text-[15px] text-meta sm:px-6 md:px-8">{t("chooseChild")}</p>
+          <ChildPicker onPick={pickChild} />
+        </div>
       </div>
     );
   }
@@ -86,7 +88,7 @@ export function SellClient({
   // ── Checkout step ──
   if (step === "checkout") {
     return (
-      <div className="flex min-h-screen flex-col">
+      <div className="flex flex-1 flex-col min-h-0">
         <AppBar
           title={t("checkout")}
           right={
@@ -109,7 +111,7 @@ export function SellClient({
 
   // ── Cart step ──
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={t("navSell")} right={<LogoutButton />} />
 
       {/* Selected-child bar */}
@@ -123,7 +125,7 @@ export function SellClient({
         </button>
       </div>
 
-      <div className="flex-1 px-4 pb-24 sm:px-6 md:flex md:items-start md:gap-6 md:px-8 md:pb-8">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 pb-4 sm:px-6 md:flex md:items-start md:gap-6 md:px-8 md:pb-8">
         <div className="md:min-w-0 md:flex-1">
           <ProductGrid
             catalog={catalog}
@@ -135,9 +137,9 @@ export function SellClient({
         </div>
 
         {/* Cart summary — sits beside the grid from tablet width up, replacing
-            the sticky bottom bar once there's room for it. */}
+            the footer below once there's room for it. */}
         {totalItems > 0 && (
-          <aside className="sticky top-20 hidden shrink-0 md:block md:w-72">
+          <aside className="sticky top-0 hidden shrink-0 md:block md:w-72">
             <div className="rounded-2xl border-2 border-teal bg-tealbg p-4">
               <div className="text-[13px] font-bold text-tealdeep">
                 {totalItems} {t("itemsCount")}
@@ -151,9 +153,10 @@ export function SellClient({
         )}
       </div>
 
-      {/* Sticky cart footer — phone/portrait only; the sidebar above takes over on tablet. */}
+      {/* Cart footer — phone/portrait only (sidebar above takes over on tablet);
+          last flex child, sits directly above the BottomNav. */}
       {totalItems > 0 && (
-        <div className="sticky bottom-0 border-t border-line bg-paper/95 p-4 backdrop-blur md:hidden">
+        <div className="border-t border-line bg-paper/95 p-4 backdrop-blur md:hidden">
           <button className="btn-primary" onClick={() => setStep("checkout")}>
             {totalItems} {t("itemsCount")} · {total} ฿ — {t("checkout")} ▶
           </button>

@@ -33,10 +33,10 @@ export function ChildClient({
   const incomplete = !child.parent || !child.parent.profileComplete;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={child.name} right={<LogoutButton />} />
 
-      <div className="flex-1 px-4 pb-24 sm:px-6 md:px-8">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 pb-4 sm:px-6 md:px-8">
         {/* Header block */}
         <div className="py-3">
           <div className="flex items-baseline gap-2">
@@ -141,8 +141,8 @@ export function ChildClient({
         </div>
       </div>
 
-      {/* Sticky Sell footer */}
-      <div className="sticky bottom-0 border-t border-line bg-paper/95 p-4 backdrop-blur">
+      {/* Sell footer — last flex child, sits directly above the BottomNav */}
+      <div className="border-t border-line bg-paper/95 p-4 backdrop-blur">
         <button className="btn-primary" onClick={() => router.push(`/admin/sell?childId=${child.id}`)}>
           {t("sell")}
         </button>

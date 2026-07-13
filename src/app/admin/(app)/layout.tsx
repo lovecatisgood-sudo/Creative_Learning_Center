@@ -8,9 +8,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const adminId = await getAdminId();
   if (!adminId) redirect("/admin/login");
 
+  // Exactly one viewport tall: `main` gets the remaining height after the
+  // (fixed-height, sticky) BottomNav and is itself a flex column, so each page
+  // client below only needs `flex-1 min-h-0` to fill it — no page should ever
+  // force document-level scroll for short content.
   return (
-    <div className="flex min-h-screen flex-col">
-      <main className="flex-1 pb-2">{children}</main>
+    <div className="flex h-dvh flex-col overflow-hidden">
+      <main className="flex flex-1 flex-col overflow-hidden">{children}</main>
       <BottomNav />
     </div>
   );

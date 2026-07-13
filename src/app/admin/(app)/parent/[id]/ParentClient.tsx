@@ -15,10 +15,10 @@ export function ParentClient({ detail }: { detail: ParentDetail }) {
   const multiChild = kids.length > 1;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex flex-1 flex-col min-h-0">
       <AppBar title={t("parentPageTitle")} right={<LogoutButton />} />
 
-      <div className="flex-1 px-4 pb-24 sm:px-6 md:px-8">
+      <div className="flex-1 overflow-y-auto min-h-0 px-4 pb-4 sm:px-6 md:px-8">
         {/* Header card */}
         <div className="my-3 rounded-xl border border-line bg-card p-4">
           <div className="flex items-start justify-between gap-3">
