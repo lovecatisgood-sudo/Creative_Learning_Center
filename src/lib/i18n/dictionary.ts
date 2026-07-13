@@ -233,6 +233,8 @@ export const dict = {
   parentPageTitle: { th: "ข้อมูลผู้ปกครอง", en: "Parent" },
   childrenLabel: { th: "บุตร", en: "Children" },
   historyLabel: { th: "ประวัติการซื้อ", en: "Purchase history" },
+  profileCompleteChip: { th: "ข้อมูลครบ", en: "PROFILE COMPLETE" },
+  noChildrenYet: { th: "ยังไม่มีบุตร", en: "No children yet" },
 
   // ── Landing page ──
   landingLogoAlt: { th: "โลโก้ Siamese Cat Creative Club", en: "Siamese Cat Creative Club logo" },

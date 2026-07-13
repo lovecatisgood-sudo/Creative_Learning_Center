@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { children, parents, sessions } from "@/db/schema";
-import { sql, ilike, or, isNull, asc } from "drizzle-orm";
+import { sql, ilike, or, isNull, asc, and, eq, inArray } from "drizzle-orm";
 
 export type DirChild = { id: number; name: string; hasRunningSession: boolean };
 export type DirGroup =
@@ -8,9 +8,20 @@ export type DirGroup =
   | { kind: "parent"; parentId: number; parentName: string; phone: string; profileComplete: boolean; children: DirChild[] };
 export type DirectoryPage = { groups: DirGroup[]; page: number; totalPages: number; totalGroups: number };
 
-const runningExists = sql<boolean>`exists (
-  select 1 from ${sessions} s where s.child_id = ${children.id} and s.status = 'running'
-)`;
+// Batched membership check rather than a per-row correlated EXISTS subquery:
+// a `sql` template referencing ${children.id} inside a nested subquery
+// compiles to an unqualified "id" column, which collides with sessions' own
+// "id" PK and silently breaks the correlation (every row then gets the same
+// answer, driven by unrelated rows elsewhere in `sessions`). IN-list + Set
+// is unambiguous and just as cheap for the small per-page id lists here.
+async function runningSessionChildIds(childIds: number[]): Promise<Set<number>> {
+  if (!childIds.length) return new Set();
+  const rows = await db
+    .select({ childId: sessions.childId })
+    .from(sessions)
+    .where(and(inArray(sessions.childId, childIds), eq(sessions.status, "running")));
+  return new Set(rows.map((r) => r.childId));
+}
 
 // Parent-grouped directory. Orphan children (no parent) are collapsed into ONE
 // group pinned first; parent groups follow, alphabetical by parent name.
@@ -23,11 +34,13 @@ export async function getDirectory({
   const term = q.trim() ? `%${q.trim()}%` : null;
 
   // 1) Orphan children (parentId null). Filter by child name when searching.
-  const orphanRows = await db
-    .select({ id: children.id, name: children.name, hasRunningSession: runningExists })
+  const orphanRowsRaw = await db
+    .select({ id: children.id, name: children.name })
     .from(children)
     .where(term ? sql`${children.parentId} is null and ${ilike(children.name, term)}` : isNull(children.parentId))
     .orderBy(asc(children.name));
+  const orphanRunning = await runningSessionChildIds(orphanRowsRaw.map((c) => c.id));
+  const orphanRows: DirChild[] = orphanRowsRaw.map((c) => ({ ...c, hasRunningSession: orphanRunning.has(c.id) }));
   const orphanGroup: DirGroup | null = orphanRows.length
     ? { kind: "orphans", children: orphanRows }
     : null;
@@ -62,14 +75,15 @@ export async function getDirectory({
   const parentIdsOnPage = pageSlice.filter((g: any) => g.kind === "parentRef").map((g: any) => g.id as number);
   const kidsByParent = new Map<number, DirChild[]>();
   if (parentIdsOnPage.length) {
-    const kids = await db
-      .select({ id: children.id, name: children.name, parentId: children.parentId, hasRunningSession: runningExists })
+    const kidsRaw = await db
+      .select({ id: children.id, name: children.name, parentId: children.parentId })
       .from(children)
       .where(sql`${children.parentId} in (${sql.join(parentIdsOnPage.map((i) => sql`${i}`), sql`, `)})`)
       .orderBy(asc(children.name));
-    for (const k of kids) {
+    const kidsRunning = await runningSessionChildIds(kidsRaw.map((k) => k.id));
+    for (const k of kidsRaw) {
       const arr = kidsByParent.get(k.parentId!) ?? [];
-      arr.push({ id: k.id, name: k.name, hasRunningSession: k.hasRunningSession });
+      arr.push({ id: k.id, name: k.name, hasRunningSession: kidsRunning.has(k.id) });
       kidsByParent.set(k.parentId!, arr);
     }
   }
