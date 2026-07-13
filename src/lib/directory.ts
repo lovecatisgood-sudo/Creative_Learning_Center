@@ -96,7 +96,9 @@ export async function getDirectory({
           parentId: g.id,
           parentName: g.name,
           phone: g.phone,
-          profileComplete: g.profileComplete,
+          // A stub parent (name blank) is treated as incomplete regardless, same
+          // rule as getChildCore in lib/children.ts and getParent in lib/parents.ts.
+          profileComplete: Boolean(g.profileComplete) && Boolean(g.name?.trim()),
           children: kidsByParent.get(g.id) ?? [],
         }
   );

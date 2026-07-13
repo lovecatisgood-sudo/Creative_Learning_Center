@@ -35,7 +35,7 @@ export const dict = {
 
   // ── Signup (P1/P2) ──
   signupTitle: { th: "ลงทะเบียนสมาชิก", en: "Member registration" },
-  signupSubtitle: { th: "Member registration", en: "ลงทะเบียนสมาชิก" },
+  signupSubtitle: { th: "ลงทะเบียนสมาชิก", en: "Member registration" },
   parentSection: { th: "ข้อมูลผู้ปกครอง", en: "Parent details" },
   parentName: { th: "ชื่อผู้ปกครอง", en: "Parent's name" },
   contactNumber: { th: "เบอร์ติดต่อ", en: "Contact number" },
