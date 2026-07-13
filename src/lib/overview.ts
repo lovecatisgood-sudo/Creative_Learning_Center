@@ -108,8 +108,7 @@ export async function getOverview(unit: Unit, offset: number): Promise<OverviewD
     .innerJoin(orders, eq(payments.orderId, orders.id))
     .leftJoin(children, eq(orders.childId, children.id))
     .where(inRange(payments.confirmedAt))
-    .orderBy(desc(payments.confirmedAt))
-    .limit(200);
+    .orderBy(desc(payments.confirmedAt));
 
   // Item summaries per order (small volumes; one grouped query).
   const orderIds = orderRows.map((o) => o.orderId);
