@@ -17,13 +17,16 @@ export async function POST(req: Request) {
   const packageInstanceId = Number(body?.packageInstanceId);
   const childId = Number(body?.childId);
   const type = body?.type;
-  const sessionId = body?.sessionId != null ? Number(body.sessionId) : null;
   if (!Number.isInteger(packageInstanceId) || !Number.isInteger(childId)) {
     return NextResponse.json({ error: "Bad request" }, { status: 422 });
   }
   if (type !== "crayon" && type !== "clay" && type !== "extra_hour") {
     return NextResponse.json({ error: "Bad type" }, { status: 422 });
   }
+  if (body?.sessionId != null && !Number.isInteger(Number(body.sessionId))) {
+    return NextResponse.json({ error: "Bad sessionId" }, { status: 422 });
+  }
+  const sessionId = body?.sessionId != null ? Number(body.sessionId) : null;
 
   try {
     const result = await redeemCredit({ adminId, packageInstanceId, childId, type, sessionId });

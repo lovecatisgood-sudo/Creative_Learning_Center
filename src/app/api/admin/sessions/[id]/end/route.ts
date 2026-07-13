@@ -15,6 +15,9 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   if (!Number.isInteger(sessionId)) return NextResponse.json({ error: "Bad id" }, { status: 400 });
 
   const body = await req.json().catch(() => ({}));
+  if (body?.refundHours != null && !Number.isFinite(Number(body.refundHours))) {
+    return NextResponse.json({ error: "Bad refundHours" }, { status: 422 });
+  }
   const refundHours = body?.refundHours != null ? Number(body.refundHours) : undefined;
 
   try {

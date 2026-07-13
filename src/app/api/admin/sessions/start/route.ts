@@ -14,10 +14,13 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
   const packageInstanceId = Number(body?.packageInstanceId);
   const childId = Number(body?.childId);
-  const hours = body?.hours != null ? Number(body.hours) : undefined;
   if (!Number.isInteger(packageInstanceId) || !Number.isInteger(childId)) {
     return NextResponse.json({ error: "Bad request" }, { status: 422 });
   }
+  if (body?.hours != null && !Number.isFinite(Number(body.hours))) {
+    return NextResponse.json({ error: "Bad hours" }, { status: 422 });
+  }
+  const hours = body?.hours != null ? Number(body.hours) : undefined;
 
   try {
     const result = await startSession({ adminId, packageInstanceId, childId, hours });
