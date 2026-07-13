@@ -107,3 +107,35 @@ money or hour accounting rules (those follow the PRD exactly).
 - **Dashboard: server-render + 30s poll + 1s client tick.** Initial running
   sessions render server-side; a 30s poll refreshes the set (check-ins elsewhere)
   while countdowns tick every second client-side and flip red past pickup.
+
+## Responsive-UI + directory redesign
+
+- **Admin app is fluid, per explicit owner request — overriding the UI/UX spec's
+  fixed-width column.** `sccc-uiux-spec-v1.md` specs the whole POS as a single
+  phone-width (480px) column, same as the public signup form. The owner asked for
+  the admin app (used on tablets at the front desk as well as phones) to actually
+  use the extra width instead of sitting in a centered 480px strip with wasted
+  space either side. `src/app/admin/layout.tsx` now wraps the admin app (login +
+  authed shell) in `.admin-frame` — fluid, `max-width: 1120px`, phone through
+  tablet, both orientations — while `src/app/signup/layout.tsx` keeps the
+  original fixed `.app-frame` (480px) for the public, phone-only registration
+  flow, which the spec's layout still governs unchanged. Every screen under
+  `admin/(app)/*` (sessions grid, product grid, overview totals, directory list)
+  was rebuilt with responsive Tailwind breakpoints so it visibly uses tablet
+  width rather than just not breaking at it.
+
+- **`/admin/search` is a browsable, parent-grouped directory, not a
+  search-only-when-typed screen.** The UI/UX spec describes A2 as a search box
+  that returns results once the staff types a query. In practice the front-desk
+  need is closer to "browse who's here / who's incomplete," so `/admin/search`
+  now loads non-empty by default: `src/lib/directory.ts` +
+  `/api/admin/directory` return every parent (grouped, with their children
+  nested) plus a synthetic "orphans" group for stub parents / incomplete
+  profiles, sorted with incomplete/orphan records pinned first (they're the ones
+  staff most need to notice and fix), paginated via the shared
+  `src/components/Pagination.tsx`. Typing still filters the same endpoint by
+  name/phone (`?q=`); it narrows the directory rather than being the only way to
+  see anything. A new `/admin/parent/[id]` (`src/lib/parents.ts`) gives a single
+  parent's header, children, and full purchase history in one place, since the
+  directory's job is now navigation into that page rather than the destination
+  itself.
