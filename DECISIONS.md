@@ -139,3 +139,6 @@ money or hour accounting rules (those follow the PRD exactly).
   parent's header, children, and full purchase history in one place, since the
   directory's job is now navigation into that page rather than the destination
   itself.
+
+## 2026-07-13 — Product-review fixes + a11y
+Post-launch audit fixes (branch fix/review-findings): orders route returns proper JSON 500 (not bodyless) + hardened receipt-no retry (6x + jitter); signup surfaces server errors and validates phone/DOB (client+server) with legibility ≥12px; admin routes reject non-finite numeric inputs with 422 (refundHours/redemptions/start); Overview prints the full period (dropped 200-row list cap); PromptPay QR keyboard-openable; product tile is one tap target; **foreground text tokens (meta/warn/danger/ok/tealdeep) darkened to meet WCAG AA ≥4.5:1** (same hue); `<html lang>` syncs with the TH/EN toggle; AppBar controls + qty stepper bumped to ≥44px; branded :focus-visible. No business-logic/money/schema changes. EXCLUDED as working-as-designed (owner to confirm if desired): parent-grouped directory, family-view siblings, EXTRA_1H API-level gating, quick-add stub parents.
