@@ -14,7 +14,7 @@ export type DirectoryPage = { groups: DirGroup[]; page: number; totalPages: numb
 // "id" PK and silently breaks the correlation (every row then gets the same
 // answer, driven by unrelated rows elsewhere in `sessions`). IN-list + Set
 // is unambiguous and just as cheap for the small per-page id lists here.
-async function runningSessionChildIds(childIds: number[]): Promise<Set<number>> {
+export async function runningSessionChildIds(childIds: number[]): Promise<Set<number>> {
   if (!childIds.length) return new Set();
   const rows = await db
     .select({ childId: sessions.childId })

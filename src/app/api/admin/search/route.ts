@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { children, parents, sessions } from "@/db/schema";
-import { sql, or, ilike, eq, desc } from "drizzle-orm";
+import { children, parents } from "@/db/schema";
+import { or, ilike, eq, desc } from "drizzle-orm";
 import { requireAdminId, UnauthorizedError } from "@/lib/auth";
+import { runningSessionChildIds } from "@/lib/directory";
 
 // A2 — live search across child name / parent name / phone. ILIKE on UTF-8 text
 // handles Thai script with no special collation (PRD §5). Returns child rows
@@ -19,10 +20,6 @@ export async function GET(req: Request) {
   if (q.length < 2) return NextResponse.json({ results: [] });
 
   const term = `%${q}%`;
-  const runningExists = sql<boolean>`exists (
-    select 1 from ${sessions} s
-    where s.child_id = ${children.id} and s.status = 'running'
-  )`;
 
   const rows = await db
     .select({
@@ -32,7 +29,6 @@ export async function GET(req: Request) {
       parentName: parents.name,
       phone: parents.phone,
       profileComplete: parents.profileComplete,
-      hasRunningSession: runningExists,
     })
     .from(children)
     .leftJoin(parents, eq(children.parentId, parents.id))
@@ -46,10 +42,13 @@ export async function GET(req: Request) {
     .orderBy(desc(children.createdAt))
     .limit(50);
 
+  const running = await runningSessionChildIds(rows.map((r) => r.childId));
+
   // A fast-created child has no parent row yet → profile is incomplete.
   const results = rows.map((r) => ({
     ...r,
     profileComplete: r.parentId ? r.profileComplete : false,
+    hasRunningSession: running.has(r.childId),
   }));
 
   return NextResponse.json({ results });

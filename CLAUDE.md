@@ -121,16 +121,13 @@ via `lib/*` and hand off to a `*Client.tsx` for interactivity.
   fixed shop QR) is shown large in Sell → Checkout; tapping it opens a full-screen lightbox
   (`CheckoutView.tsx`, `qrOpen` state) closable via backdrop click or Escape. The customer
   enters the amount manually when scanning — there's no per-transaction QR payload.
-- **Known pre-existing layout quirk (not fixed, tracked here):** every `admin/(app)/**/
-  *Client.tsx` wraps its own content in `<div className="flex min-h-screen flex-col">`,
-  which is already nested inside `admin/(app)/layout.tsx`'s own `flex min-h-screen flex-col`
-  (main + sticky `BottomNav`). The inner `min-h-screen` forces a second full viewport height
-  on top of the space already reserved for `BottomNav`, so every admin screen has ~65px of
-  forced scroll even when content is short (measured identically at 360/390/810/1080px
-  viewports — confirmed present on `main` before the responsive redesign, so it's not a
-  regression from this branch). Fix direction: drop `min-h-screen` from the per-page wrapper
-  divs (they only need `flex flex-col`/`flex-1`); left unfixed here since it touches 8 files
-  and needs its own review.
+- **Admin pages fill exactly one viewport, no forced scroll.** `admin/(app)/layout.tsx` uses
+  `flex h-dvh flex-col overflow-hidden` with `main` as `flex flex-1 flex-col overflow-hidden`
+  (the sticky `BottomNav` takes the rest). Each page's `*Client.tsx` follows the same model:
+  outer wrapper `flex flex-1 flex-col min-h-0`, an inner `flex-1 overflow-y-auto min-h-0`
+  region for the scrollable content, and any footer as the last flex child (sits above the
+  nav, never pushed off-screen). Long lists scroll within their own region instead of the
+  whole page.
 
 ## Deploying
 
