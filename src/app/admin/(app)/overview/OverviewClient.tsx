@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppBar } from "@/components/AppBar";
 import { LogoutButton } from "@/components/LogoutButton";
+import { Pagination } from "@/components/Pagination";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { productName } from "@/lib/product";
+import type { Lang } from "@/lib/i18n/dictionary";
 import type { OverviewData, Unit } from "@/lib/overview";
 
 const SHOP = process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club";
+const PAGE_SIZE = 12;
 
 export function OverviewClient({ initial }: { initial: OverviewData }) {
   const { t, lang } = useLang();
@@ -17,6 +20,7 @@ export function OverviewClient({ initial }: { initial: OverviewData }) {
   const [offset, setOffset] = useState(initial.offset);
   const [data, setData] = useState<OverviewData>(initial);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     // Skip the redundant fetch for the initial Day/0 already rendered on the server.
@@ -33,9 +37,20 @@ export function OverviewClient({ initial }: { initial: OverviewData }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unit, offset]);
 
+  // Switching period/unit (new data) always resets the on-screen list to page 1.
+  useEffect(() => {
+    setPage(1);
+  }, [data]);
+
   const locale = lang === "th" ? "th-TH" : "en-GB";
   const label = periodLabel(data, locale, { today: t("today"), yesterday: t("yesterday"), thisWeek: t("thisWeek"), thisMonth: t("thisMonth") });
   const atCurrent = offset >= 0;
+
+  const totalPages = Math.max(1, Math.ceil(data.orders.length / PAGE_SIZE));
+  const pageOrders = useMemo(
+    () => data.orders.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [data.orders, page]
+  );
 
   function switchUnit(u: Unit) {
     setUnit(u);
@@ -85,8 +100,8 @@ export function OverviewClient({ initial }: { initial: OverviewData }) {
             <div className="text-[12px]">{label}</div>
           </div>
 
-          {/* Totals strip */}
-          <div className="mb-3 grid grid-cols-2 gap-2">
+          {/* Totals strip — 2-col on phone, single row from tablet up */}
+          <div className="mb-2 grid grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-2">
             <TotalTile label={t("methodCash")} value={data.totals.cash} />
             <TotalTile label={t("methodPromptpay")} value={data.totals.promptpay} />
             <TotalTile label={t("methodBank")} value={data.totals.bank} />
@@ -94,46 +109,37 @@ export function OverviewClient({ initial }: { initial: OverviewData }) {
           </div>
 
           {/* Counts row */}
-          <div className="mb-4 text-center text-[13px] text-meta">
+          <div className="mb-3 text-center text-[13px] text-meta">
             {data.counts.orders} {t("ordersCount")} · {data.counts.sessions} {t("sessionsStarted")} ·{" "}
             {data.counts.credits} {t("creditsConsumed")}
           </div>
 
-          {/* Order list */}
-          {data.orders.length === 0 ? (
-            <p className="py-8 text-center text-[15px] text-meta">{t("noTransactions")}</p>
-          ) : (
-            <ul className="flex flex-col gap-2">
-              {data.orders.map((o) => {
-                const showDate = unit !== "day";
-                const when = new Date(o.at).toLocaleString(locale, {
-                  timeZone: "Asia/Bangkok",
-                  ...(showDate ? { day: "numeric", month: "short" } : {}),
-                  hour: "2-digit",
-                  minute: "2-digit",
-                });
-                const summary = o.items.map((i) => `${productName(i, lang)}${i.qty > 1 ? `×${i.qty}` : ""}`).join(", ");
-                return (
-                  <li key={o.orderId}>
-                    <button
-                      onClick={() => router.push(`/admin/receipt/${o.orderId}`)}
-                      className="flex w-full items-center justify-between gap-2 rounded-xl border border-line bg-card p-3 text-left"
-                    >
-                      <div className="min-w-0">
-                        <div className="truncate text-[15px] font-semibold text-ink">
-                          {o.childName ?? "—"} · <span className="text-meta">{summary}</span>
-                        </div>
-                        <div className="text-[13px] text-meta">
-                          {when} · {methodIcon(o.method)}
-                        </div>
-                      </div>
-                      <span className="shrink-0 text-base font-bold text-ink">{o.amountThb} ฿</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+          {/* Order list — on-screen view, paginated (page {PAGE_SIZE} at a time) */}
+          <div className="no-print">
+            {data.orders.length === 0 ? (
+              <p className="py-8 text-center text-[15px] text-meta">{t("noTransactions")}</p>
+            ) : (
+              <>
+                <OrderList
+                  orders={pageOrders}
+                  unit={unit}
+                  lang={lang}
+                  locale={locale}
+                  onOpen={(id) => router.push(`/admin/receipt/${id}`)}
+                />
+                <Pagination page={page} totalPages={totalPages} onPage={setPage} />
+              </>
+            )}
+          </div>
+
+          {/* Order list — print view, always the FULL period (never truncated to a page) */}
+          <div className="print-only">
+            {data.orders.length === 0 ? (
+              <p className="py-8 text-center text-[15px] text-meta">{t("noTransactions")}</p>
+            ) : (
+              <OrderList orders={data.orders} unit={unit} lang={lang} locale={locale} />
+            )}
+          </div>
         </div>
         {loading && <p className="mt-3 text-center text-[13px] text-meta">{t("loading")}</p>}
       </div>
@@ -150,10 +156,61 @@ export function OverviewClient({ initial }: { initial: OverviewData }) {
 
 function TotalTile({ label, value, strong }: { label: string; value: number; strong?: boolean }) {
   return (
-    <div className={"rounded-xl border p-3 " + (strong ? "border-teal bg-tealbg" : "border-line bg-card")}>
-      <div className="text-[13px] font-semibold text-meta">{label}</div>
-      <div className={"font-extrabold text-ink " + (strong ? "text-2xl" : "text-xl")}>{value} ฿</div>
+    <div className={"rounded-xl border p-2.5 " + (strong ? "border-teal bg-tealbg" : "border-line bg-card")}>
+      <div className="truncate text-[11px] font-semibold uppercase tracking-wide text-meta">{label}</div>
+      <div className={"truncate font-extrabold text-ink " + (strong ? "text-xl sm:text-2xl" : "text-lg sm:text-xl")}>
+        {value} ฿
+      </div>
     </div>
+  );
+}
+
+// Shared order-list renderer: used both for the paginated on-screen view and
+// the always-full print view, so print never shows a truncated page.
+function OrderList({
+  orders,
+  unit,
+  lang,
+  locale,
+  onOpen,
+}: {
+  orders: OverviewData["orders"];
+  unit: Unit;
+  lang: Lang;
+  locale: string;
+  onOpen?: (orderId: number) => void;
+}) {
+  return (
+    <ul className="flex flex-col gap-2">
+      {orders.map((o) => {
+        const showDate = unit !== "day";
+        const when = new Date(o.at).toLocaleString(locale, {
+          timeZone: "Asia/Bangkok",
+          ...(showDate ? { day: "numeric", month: "short" } : {}),
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const summary = o.items.map((i) => `${productName(i, lang)}${i.qty > 1 ? `×${i.qty}` : ""}`).join(", ");
+        return (
+          <li key={o.orderId}>
+            <button
+              onClick={() => onOpen?.(o.orderId)}
+              className="flex w-full items-center justify-between gap-2 rounded-xl border border-line bg-card p-3 text-left"
+            >
+              <div className="min-w-0">
+                <div className="truncate text-[15px] font-semibold text-ink">
+                  {o.childName ?? "—"} · <span className="text-meta">{summary}</span>
+                </div>
+                <div className="text-[13px] text-meta">
+                  {when} · {methodIcon(o.method)}
+                </div>
+              </div>
+              <span className="shrink-0 text-base font-bold text-ink">{o.amountThb} ฿</span>
+            </button>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
