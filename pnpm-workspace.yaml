@@ -4,9 +4,15 @@
 #    tsx/drizzle-kit (dev tooling); sharp is our optional build-time image dep.
 #  - overrides: pin fast-moving transitive deps to well-aged versions so managed
 #    hosts with a minimumReleaseAge supply-chain policy accept the lockfile.
+# esbuild/sharp are native binaries only used by local dev tooling (tsx,
+# drizzle-kit) and the image script — never by `next build` or `server.js`.
+# Hostinger's build sandbox forbids executing binaries in node_modules
+# (esbuild's postinstall does `spawnSync esbuild --version` -> EACCES), so we
+# DISABLE these build scripts (false = reviewed, do not run). Nothing the
+# deployed app needs is affected.
 allowBuilds:
-  esbuild: true
-  sharp: true
+  esbuild: false
+  sharp: false
 overrides:
   browserslist: 4.24.4
   caniuse-lite: 1.0.30001692
