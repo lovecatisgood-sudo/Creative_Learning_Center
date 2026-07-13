@@ -36,7 +36,7 @@ export function ChildClient({
     <div className="flex min-h-screen flex-col">
       <AppBar title={child.name} right={<LogoutButton />} />
 
-      <div className="flex-1 px-4 pb-24">
+      <div className="flex-1 px-4 pb-24 sm:px-6 md:px-8">
         {/* Header block */}
         <div className="py-3">
           <div className="flex items-baseline gap-2">
@@ -91,53 +91,54 @@ export function ChildClient({
           </Section>
         )}
 
-        {/* Packages */}
-        <Section title={t("sectionPackages")}>
-          {packages.length === 0 ? (
-            <Empty text={t("noPackages")} />
-          ) : (
-            <ul className="flex flex-col gap-2">
-              {packages.map((p) => (
-                <PackageRow
-                  key={p.id}
-                  pkg={p}
-                  childId={child.id}
-                  siblings={siblings}
-                  activeSessionId={activeSession?.id ?? null}
-                />
-              ))}
-            </ul>
-          )}
-        </Section>
+        {/* Packages + History — side by side from tablet width up */}
+        <div className="md:grid md:grid-cols-2 md:gap-6">
+          <Section title={t("sectionPackages")}>
+            {packages.length === 0 ? (
+              <Empty text={t("noPackages")} />
+            ) : (
+              <ul className="flex flex-col gap-2">
+                {packages.map((p) => (
+                  <PackageRow
+                    key={p.id}
+                    pkg={p}
+                    childId={child.id}
+                    siblings={siblings}
+                    activeSessionId={activeSession?.id ?? null}
+                  />
+                ))}
+              </ul>
+            )}
+          </Section>
 
-        {/* History */}
-        <Section title={t("sectionHistory")}>
-          {history.length === 0 ? (
-            <Empty text={t("noHistory")} />
-          ) : (
-            <ul className="flex flex-col gap-2">
-              {history.map((h) => (
-                <li key={`${h.kind}-${h.id}`}>
-                  {h.kind === "receipt" ? (
-                    <button
-                      onClick={() => router.push(`/admin/receipt/${h.id}`)}
-                      className="flex w-full items-center justify-between rounded-xl border border-line bg-card p-3 text-left"
-                    >
-                      <span className="text-[13px] font-semibold text-ink">
-                        🧾 {h.receiptNo ?? `#${h.id}`}
-                      </span>
-                      <span className="text-[13px] text-meta">{h.totalThb} ฿</span>
-                    </button>
-                  ) : (
-                    <div className="rounded-xl border border-line bg-card p-3 text-[13px] text-meta">
-                      ⏱ {new Date(h.at).toLocaleString(lang === "th" ? "th-TH" : "en-GB")}
-                    </div>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </Section>
+          <Section title={t("sectionHistory")}>
+            {history.length === 0 ? (
+              <Empty text={t("noHistory")} />
+            ) : (
+              <ul className="flex flex-col gap-2">
+                {history.map((h) => (
+                  <li key={`${h.kind}-${h.id}`}>
+                    {h.kind === "receipt" ? (
+                      <button
+                        onClick={() => router.push(`/admin/receipt/${h.id}`)}
+                        className="flex w-full items-center justify-between rounded-xl border border-line bg-card p-3 text-left"
+                      >
+                        <span className="text-[13px] font-semibold text-ink">
+                          🧾 {h.receiptNo ?? `#${h.id}`}
+                        </span>
+                        <span className="text-[13px] text-meta">{h.totalThb} ฿</span>
+                      </button>
+                    ) : (
+                      <div className="rounded-xl border border-line bg-card p-3 text-[13px] text-meta">
+                        ⏱ {new Date(h.at).toLocaleString(lang === "th" ? "th-TH" : "en-GB")}
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Section>
+        </div>
       </div>
 
       {/* Sticky Sell footer */}

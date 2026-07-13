@@ -64,15 +64,15 @@ export function ChildPicker({ onPick }: { onPick: (c: PickedChild) => void }) {
   }
 
   return (
-    <div className="px-4 py-3">
+    <div className="px-4 py-3 sm:px-6 md:px-8">
       <input
         ref={inputRef}
-        className="field"
+        className="field sm:max-w-sm"
         placeholder={t("searchPlaceholder")}
         value={q}
         onChange={(e) => setQ(e.target.value)}
       />
-      <ul className="mt-2 flex flex-col gap-2">
+      <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {results.map((r) => (
           <li key={r.childId}>
             <button
@@ -91,7 +91,7 @@ export function ChildPicker({ onPick }: { onPick: (c: PickedChild) => void }) {
           </li>
         ))}
       </ul>
-      <button className="btn-ghost mt-3 border-dashed" onClick={() => setShowQuickAdd(true)}>
+      <button className="btn-ghost mt-3 border-dashed sm:w-auto sm:px-6" onClick={() => setShowQuickAdd(true)}>
         ＋ {t("quickAddChild")}
       </button>
 

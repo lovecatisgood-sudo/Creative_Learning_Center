@@ -58,63 +58,65 @@ export function SessionDetailClient({ detail, justStarted }: { detail: SessionDe
     <div className="flex min-h-screen flex-col">
       <AppBar title={t("sessionDetail")} right={<LogoutButton />} />
 
-      <div className="flex-1 px-4 py-4">
-        {/* Pickup slip / hero (also the printable A8 slip) */}
-        <div
-          ref={slipRef}
-          className="receipt-ticket rounded-2xl border-2 border-teal bg-tealbg p-5 text-center"
-        >
-          {justStarted && <div className="mb-1 text-[13px] font-bold text-tealdeep">{t("sessionStarted")}</div>}
-          <div className="text-2xl font-extrabold text-ink">{s.childName}</div>
-          <div className="mt-0.5 text-[13px] text-meta">{lang === "th" ? s.nameTh : s.nameEn}</div>
-          <div className="mt-3 text-[13px] text-meta">
-            {t("start")} {bkkTimeHm(new Date(s.startedAt))}
+      <div className="flex-1 px-4 py-4 sm:px-6 md:px-8 md:flex md:items-start md:gap-6">
+        <div className="md:w-[22rem] md:shrink-0">
+          {/* Pickup slip / hero (also the printable A8 slip) */}
+          <div
+            ref={slipRef}
+            className="receipt-ticket rounded-2xl border-2 border-teal bg-tealbg p-5 text-center"
+          >
+            {justStarted && <div className="mb-1 text-[13px] font-bold text-tealdeep">{t("sessionStarted")}</div>}
+            <div className="text-2xl font-extrabold text-ink">{s.childName}</div>
+            <div className="mt-0.5 text-[13px] text-meta">{lang === "th" ? s.nameTh : s.nameEn}</div>
+            <div className="mt-3 text-[13px] text-meta">
+              {t("start")} {bkkTimeHm(new Date(s.startedAt))}
+            </div>
+            <div className="mt-1 text-[13px] font-semibold text-meta">{t("pickup")}</div>
+            <div className="text-[44px] font-extrabold leading-none text-tealdeep">
+              {bkkTimeHm(new Date(s.plannedEndAt))}
+            </div>
+            {s.isHourPass && (
+              <div className="mt-2 text-[13px] text-meta">
+                {t("hoursRemaining")}: <span className="font-bold text-ink">{s.hoursRemaining}</span>
+              </div>
+            )}
+            <div className="mt-3">
+              <Countdown
+                plannedEndAt={s.plannedEndAt}
+                now={now}
+                overdueLabel={t("overdue")}
+                className="text-3xl font-extrabold tabular-nums"
+              />
+            </div>
           </div>
-          <div className="mt-1 text-[13px] font-semibold text-meta">{t("pickup")}</div>
-          <div className="text-[44px] font-extrabold leading-none text-tealdeep">
-            {bkkTimeHm(new Date(s.plannedEndAt))}
-          </div>
-          {s.isHourPass && (
-            <div className="mt-2 text-[13px] text-meta">
-              {t("hoursRemaining")}: <span className="font-bold text-ink">{s.hoursRemaining}</span>
+
+          {justStarted && (
+            <div className="no-print mt-3 flex gap-2">
+              <button className="btn-ghost" onClick={() => window.print()}>
+                🖨 {t("printSlip")}
+              </button>
+              <button className="btn-ghost" onClick={saveSlip}>
+                ⬇ {t("saveImage")}
+              </button>
             </div>
           )}
-          <div className="mt-3">
-            <Countdown
-              plannedEndAt={s.plannedEndAt}
-              now={now}
-              overdueLabel={t("overdue")}
-              className="text-3xl font-extrabold tabular-nums"
-            />
-          </div>
+
+          {over && (
+            <div className="no-print mt-3 rounded-xl bg-warnbg px-4 py-3 text-[13px] font-semibold text-warn">
+              {t("overdueBanner")}
+            </div>
+          )}
         </div>
 
-        {justStarted && (
-          <div className="no-print mt-3 flex gap-2">
-            <button className="btn-ghost" onClick={() => window.print()}>
-              🖨 {t("printSlip")}
-            </button>
-            <button className="btn-ghost" onClick={saveSlip}>
-              ⬇ {t("saveImage")}
-            </button>
-          </div>
-        )}
-
-        {over && (
-          <div className="no-print mt-3 rounded-xl bg-warnbg px-4 py-3 text-[13px] font-semibold text-warn">
-            {t("overdueBanner")}
-          </div>
-        )}
-
         {/* Consumables strip */}
-        <div className="no-print mt-5">
+        <div className="no-print mt-5 md:mt-0 md:min-w-0 md:flex-1">
           <h3 className="mb-2 text-[13px] font-bold uppercase tracking-wide text-meta">{t("consumablesTitle")}</h3>
           {detail.consumables.length === 0 ? (
             <p className="rounded-xl border border-dashed border-line bg-card/50 p-3 text-center text-[13px] text-meta">
               —
             </p>
           ) : (
-            <ul className="flex flex-col gap-2">
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
               {detail.consumables.map((c) => (
                 <li
                   key={`${c.instanceId}-${c.type}`}

@@ -40,14 +40,16 @@ export function ProductGrid({
     items: catalog.filter((p) => sectionForProduct(p) === section),
   })).filter((g) => g.items.length > 0);
 
+  // Horizontal padding is owned by the caller (SellClient), so this grid sits
+  // flush inside a sidebar-aware wrapper on tablet/landscape.
   return (
-    <div className="flex flex-col gap-5 px-4 py-3">
+    <div className="flex flex-col gap-5 py-3">
       {grouped.map(({ section, items }) => (
         <div key={section}>
           <h3 className="mb-2 text-[13px] font-bold uppercase tracking-wide text-meta">
             {t(SECTION_LABEL[section])}
           </h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4">
             {items.map((p) => {
               const qty = cart.get(p.sku) ?? 0;
               const caption = addonCaption(p.sku);

@@ -92,7 +92,10 @@ export function CheckoutView({
     m === "promptpay" ? t("methodPromptpay") : m === "bank" ? t("methodBank") : t("methodCash");
 
   return (
-    <div className="flex flex-col pb-28">
+    // Checkout stays a focused single column even on tablet — centered at the
+    // same width as its fixed confirm footer below, rather than stretching
+    // the payment tabs/QR edge-to-edge inside the wider .admin-frame shell.
+    <div className="mx-auto flex w-full max-w-app flex-col pb-28">
       {/* Order summary */}
       <div className="border-b border-line px-4 py-3">
         <div className="flex flex-col gap-1">
