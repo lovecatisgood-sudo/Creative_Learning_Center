@@ -5,11 +5,17 @@ import { useRouter } from "next/navigation";
 import { AppBar } from "@/components/AppBar";
 import { LogoutButton } from "@/components/LogoutButton";
 import { useLang } from "@/lib/i18n/LanguageProvider";
-import { productName } from "@/lib/product";
 import type { ReceiptData } from "@/lib/receipt";
 import { toPng } from "html-to-image";
+import { dict } from "@/lib/i18n/dictionary";
 
 const SHOP = process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club";
+const COMPANY = process.env.NEXT_PUBLIC_COMPANY_NAME || "Siamese Cat Cafe Co., Ltd.";
+
+// The printed ticket always shows Thai + English together, independent of the
+// app's language toggle (`lang`), which only affects on-screen chrome (AppBar,
+// buttons) via `t()`.
+const bi = (k: keyof typeof dict) => `${dict[k].th} / ${dict[k].en}`;
 
 export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid: boolean }) {
   const { t, lang } = useLang();
@@ -25,10 +31,10 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
   });
   const methodLabel =
     data.method === "promptpay"
-      ? t("methodPromptpay")
+      ? bi("methodPromptpay")
       : data.method === "bank"
-        ? t("methodBank")
-        : t("methodCash");
+        ? bi("methodBank")
+        : bi("methodCash");
 
   async function saveAsImage() {
     if (!ticketRef.current) return;
@@ -60,18 +66,21 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
         >
           <div className="text-center">
             <div className="font-display text-base font-extrabold">{SHOP}</div>
-            <div className="mt-1 text-[12px]">{t("receipt")}</div>
+            <div className="text-[11px] text-black/70">{COMPANY}</div>
+            <div className="mt-1 text-[12px]">{bi("receipt")}</div>
           </div>
           <Divider />
-          <Row label={t("receiptNo")} value={data.receiptNo ?? `#${data.orderId}`} />
-          <Row label={t("dateTime")} value={dt} />
-          {data.childName && <Row label={t("childName")} value={data.childName} />}
-          {data.parentName && <Row label={t("parentLabel")} value={data.parentName} />}
+          <Row label={bi("receiptNo")} value={data.receiptNo ?? `#${data.orderId}`} />
+          <Row label={bi("dateTime")} value={dt} stack />
+          {data.childName && <Row label={bi("childName")} value={data.childName} stack />}
+          {data.parentName && <Row label={bi("parentLabel")} value={data.parentName} stack />}
           <Divider />
           {data.items.map((it, i) => (
             <div key={i} className="mb-1">
               <div className="flex justify-between">
-                <span className="pr-2">{productName(it, lang)}</span>
+                <span className="pr-2">
+                  {it.nameTh} / {it.nameEn}
+                </span>
                 <span>{it.lineTotalThb}</span>
               </div>
               <div className="text-[11px] text-black/60">
@@ -81,12 +90,12 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
           ))}
           <Divider />
           <div className="flex justify-between text-base font-extrabold">
-            <span>{t("total")}</span>
+            <span>{bi("total")}</span>
             <span>{data.totalThb} ฿</span>
           </div>
-          <Row label={t("paymentMethod")} value={methodLabel} />
+          <Row label={bi("paymentMethod")} value={methodLabel} stack />
           <Divider />
-          <div className="text-center text-[12px]">{t("thankYou")} · {SHOP}</div>
+          <div className="text-center text-[12px]">{bi("thankYou")} · {SHOP}</div>
         </div>
 
         {/* Proof thumbnail (not printed) */}
@@ -133,7 +142,18 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+// `stack` puts the (now-bilingual, longer) label on its own line above the
+// value instead of side-by-side, so rows with a long Thai/English label pair
+// don't overflow the 72mm ticket width.
+function Row({ label, value, stack }: { label: string; value: string; stack?: boolean }) {
+  if (stack) {
+    return (
+      <div className="mb-1">
+        <div className="text-black/60">{label}</div>
+        <div className="text-right font-semibold">{value}</div>
+      </div>
+    );
+  }
   return (
     <div className="flex justify-between gap-2">
       <span className="text-black/60">{label}</span>
