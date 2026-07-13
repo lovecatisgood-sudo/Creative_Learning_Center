@@ -10,7 +10,7 @@ export function AppBar({
   right?: React.ReactNode;
 }) {
   return (
-    <header className="sticky top-0 z-20 flex items-center gap-3 bg-brown px-4 py-3 text-cream">
+    <header className="sticky top-0 z-20 flex items-center gap-3 bg-brown px-4 py-3 text-cream sm:px-6 md:px-8">
       <Logo size={32} />
       <h1 className="flex-1 truncate text-xl font-bold text-cream">{title}</h1>
       {right}

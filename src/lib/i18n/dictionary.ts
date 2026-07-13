@@ -222,6 +222,18 @@ export const dict = {
   noTransactions: { th: "ไม่มีรายการในช่วงนี้", en: "No transactions in this period." },
   printSummary: { th: "พิมพ์สรุป", en: "Print summary" },
 
+  // ── Pagination / directory ──
+  pagePrev: { th: "ก่อนหน้า", en: "Prev" },
+  pageNext: { th: "ถัดไป", en: "Next" },
+  pageOf: { th: "หน้า {a}/{b}", en: "Page {a}/{b}" },
+  directoryTitle: { th: "รายชื่อ", en: "Directory" },
+  noParentGroup: { th: "ยังไม่มีผู้ปกครอง", en: "No parent registered yet" },
+  searchPlaceholder2: { th: "ค้นหาชื่อผู้ปกครอง / บุตร / เบอร์โทร", en: "Search parent / child / phone" },
+  emptyDirectory: { th: "ยังไม่มีข้อมูล", en: "No records yet" },
+  parentPageTitle: { th: "ข้อมูลผู้ปกครอง", en: "Parent" },
+  childrenLabel: { th: "บุตร", en: "Children" },
+  historyLabel: { th: "ประวัติการซื้อ", en: "Purchase history" },
+
   // ── Landing page ──
   landingLogoAlt: { th: "โลโก้ Siamese Cat Creative Club", en: "Siamese Cat Creative Club logo" },
   landingMetaTitle: {

@@ -32,6 +32,17 @@ body {
   position: relative;
 }
 
+/* Admin app: fluid on all screens (phone → tablet, both orientations). Unlike
+   the 480px .app-frame used by public signup, this grows with the viewport. */
+.admin-frame {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  min-height: 100%;
+  background: var(--paper);
+  position: relative;
+}
+
 /* Inputs sized for thumbs (min 48px targets per UI/UX spec §1). */
 .field {
   @apply w-full rounded-xl border border-line bg-card px-4 py-3 text-base text-ink outline-none;
