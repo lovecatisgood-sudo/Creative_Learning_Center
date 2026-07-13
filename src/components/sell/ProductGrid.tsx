@@ -58,46 +58,53 @@ export function ProductGrid({
                 <div
                   key={p.sku}
                   className={
-                    "relative flex min-h-[84px] flex-col justify-between rounded-xl border-2 p-3 " +
+                    "relative min-h-[84px] rounded-xl border-2 " +
                     (qty > 0 ? "border-teal bg-tealbg" : "border-line bg-card") +
                     (disabled ? " opacity-40" : "")
                   }
                 >
+                  {/* Full-card tap target: an absolutely-positioned button behind the
+                      visual content so the whole tile (including the price row) adds
+                      to cart. The qty stepper re-enables pointer events to sit above it. */}
                   <button
                     type="button"
                     disabled={disabled}
                     onClick={() => onAdd(p.sku)}
-                    className="flex-1 text-left"
-                  >
-                    <div className="text-[15px] font-bold leading-tight text-ink">{productName(p, lang)}</div>
-                    {caption && (
-                      <div className="mt-0.5 text-[11px] text-meta">
-                        {disabled ? t("extraNeedsSession") : t(caption === "timer" ? "captionTimer" : "captionPlay")}
-                      </div>
-                    )}
-                  </button>
-                  <div className="mt-1 flex items-center justify-between">
-                    <span className="text-[15px] font-extrabold text-amber-ink">{p.priceThb}</span>
-                    {qty > 0 && (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => onStep(p.sku, -1)}
-                          className="flex h-7 w-7 items-center justify-center rounded-full bg-brown text-cream"
-                          aria-label="decrease"
-                        >
-                          −
-                        </button>
-                        <span className="min-w-[18px] text-center text-base font-bold text-ink">{qty}</span>
-                        <button
-                          onClick={() => onStep(p.sku, 1)}
-                          disabled={disabled}
-                          className="flex h-7 w-7 items-center justify-center rounded-full bg-brown text-cream"
-                          aria-label="increase"
-                        >
-                          +
-                        </button>
-                      </div>
-                    )}
+                    aria-label={`${productName(p, lang)}, ${p.priceThb}`}
+                    className="absolute inset-0 z-0 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-card disabled:cursor-not-allowed"
+                  />
+                  <div className="pointer-events-none relative z-10 flex h-full min-h-[84px] flex-col justify-between p-3">
+                    <div>
+                      <div className="text-[15px] font-bold leading-tight text-ink">{productName(p, lang)}</div>
+                      {caption && (
+                        <div className="mt-0.5 text-[11px] text-meta">
+                          {disabled ? t("extraNeedsSession") : t(caption === "timer" ? "captionTimer" : "captionPlay")}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-1 flex items-center justify-between">
+                      <span className="text-[15px] font-extrabold text-amber-ink">{p.priceThb}</span>
+                      {qty > 0 && (
+                        <div className="pointer-events-auto flex items-center gap-2">
+                          <button
+                            onClick={() => onStep(p.sku, -1)}
+                            className="flex h-7 w-7 items-center justify-center rounded-full bg-brown text-cream"
+                            aria-label="decrease"
+                          >
+                            −
+                          </button>
+                          <span className="min-w-[18px] text-center text-base font-bold text-ink">{qty}</span>
+                          <button
+                            onClick={() => onStep(p.sku, 1)}
+                            disabled={disabled}
+                            className="flex h-7 w-7 items-center justify-center rounded-full bg-brown text-cream"
+                            aria-label="increase"
+                          >
+                            +
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               );

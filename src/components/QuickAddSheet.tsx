@@ -36,7 +36,8 @@ export function QuickAddSheet({
       const data = await res.json();
       onCreated(data.childId);
     } else {
-      setError(t("required"));
+      const d = await res.json().catch(() => ({}));
+      setError(d.error || t("quickAddFailed"));
     }
   }
 

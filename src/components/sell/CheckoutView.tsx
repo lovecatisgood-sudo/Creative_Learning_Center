@@ -160,13 +160,14 @@ export function CheckoutView({
             <div className="flex flex-col items-center gap-3">
               {/* Static shop PromptPay QR (public/promptpay.jpg). Amount shown below;
                   customer enters it when scanning. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/promptpay.jpg"
-                alt="PromptPay QR"
+              <button
+                type="button"
                 onClick={() => setQrOpen(true)}
-                className="w-[min(80vw,380px)] aspect-square cursor-pointer rounded-xl bg-white object-contain p-2"
-              />
+                className="w-[min(80vw,380px)] aspect-square rounded-xl bg-white p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/promptpay.jpg" alt="PromptPay QR" className="h-full w-full object-contain" />
+              </button>
               <p className="text-[15px] font-semibold text-meta">
                 {t("scanToPay")} {total} ฿
               </p>
@@ -223,6 +224,7 @@ export function CheckoutView({
               <img src={preview} alt="proof" className="max-h-56 w-full rounded-xl object-contain" />
               <button
                 onClick={() => {
+                  if (preview) URL.revokeObjectURL(preview);
                   setProofKey(null);
                   setPreview(null);
                   if (fileRef.current) fileRef.current.value = "";
