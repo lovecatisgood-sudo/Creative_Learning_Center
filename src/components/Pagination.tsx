@@ -19,7 +19,7 @@ export function Pagination({
     (n) => n >= 1 && n <= totalPages
   );
   const btn =
-    "min-h-[40px] min-w-[40px] rounded-lg border border-line px-3 text-sm font-bold disabled:opacity-40";
+    "min-h-[44px] min-w-[44px] rounded-lg border border-line px-3 text-sm font-bold disabled:opacity-40";
   return (
     <nav className="flex items-center justify-center gap-1 py-3" aria-label={t("pageOf").replace("{a}", String(page)).replace("{b}", String(totalPages))}>
       <button className={btn} disabled={page <= 1} onClick={() => onPage(page - 1)}>‹ {t("pagePrev")}</button>
