@@ -29,6 +29,8 @@ The frontend-design skill guides the visual execution during implementation.
 - New **Parent detail page** (`/admin/parent/[id]`).
 - **Signup form** compacted to fit one phone screen at 1 child.
 - **Tighten + paginate** the remaining admin pages: Sessions, Sell, Overview, Child, Session, Receipt.
+- **PromptPay QR:** display larger on the payment screen; tap → full-screen lightbox for the parent to scan; tap outside to close.
+- **Receipt:** show the legal entity **Siamese Cat Cafe Co., Ltd.** (the company behind Siamese Cat Creative Club), and make the receipt **bilingual (Thai + English together)** so both readers can read it regardless of the app-language toggle.
 
 ### Out of scope
 - No change to business logic, money/hours/credits rules, DB schema (except read-only query additions; no column changes anticipated).
@@ -88,6 +90,14 @@ For **Sessions, Sell, Overview, Child, Session, Receipt**:
   - **Overview:** the order list — paginated (period totals/counts stay pinned above).
 - Use responsive grids on tablets (e.g. session cards 2–3 across) collapsing to one column on phones.
 - No change to the underlying data/logic; presentation + a client-side (or server `?page=`) pagination layer only.
+
+### 4.6 PromptPay QR — larger + full-screen lightbox
+- On the payment screen (`src/components/sell/CheckoutView.tsx`), the shop QR (`public/promptpay.jpg`) currently renders at `h-72 w-72` — too small. Enlarge it (e.g. up to ~min(80vw, 380px)) so it's comfortably scannable, amount still shown beneath.
+- **Tap the QR → full-screen lightbox** (dark backdrop, QR centered large, like opening an image in a chat app) so staff can hand/turn the device to the parent. **Tap the backdrop (outside the QR) → close.** Also close on Esc. Lightbox is a client overlay; no new dependency.
+
+### 4.7 Receipt — entity name + bilingual
+- **Entity name:** add **Siamese Cat Cafe Co., Ltd.** to the receipt header (under the "Siamese Cat Creative Club" brand line). Source it from a new `NEXT_PUBLIC_COMPANY_NAME` env var (default `"Siamese Cat Cafe Co., Ltd."`), mirroring how `NEXT_PUBLIC_SHOP_NAME` is used, so it's configurable. Add it to `.env` / docs. (If the company later has a registered Thai name, it can be added the same way.)
+- **Bilingual receipt:** the printed/saved receipt must show **both Thai and English together**, independent of the app-language toggle — every label as a `TH / EN` pair (e.g. `เลขที่ / No.`, `รายการ / Items`, `รวม / Total`, `ชำระโดย / Paid by`, `ขอบคุณ / Thank you`), and product lines show **both** `name_th` and `name_en`. Keep it compact for the 72mm print width. This affects `ReceiptClient.tsx` and the receipt strings only; the `.receipt-ticket` print CSS structure stays intact (it may need minor width/size tuning for the extra text).
 
 ## 5. Visual / frontend-design principles
 - **Reuse the existing brand system** (tokens in `tailwind.config.ts`, Baloo 2, existing `.field`/`.btn-*`/`.chip`). This is a responsive reshape, not a rebrand.

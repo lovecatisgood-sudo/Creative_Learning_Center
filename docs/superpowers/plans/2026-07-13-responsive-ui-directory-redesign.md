@@ -472,11 +472,106 @@ git commit -m "Tighten Sell/Child/Session/Receipt for the responsive shell"
 
 ---
 
-### Task 9: Final regression + docs
+### Task 9: PromptPay QR — larger + full-screen lightbox
+
+**Files:**
+- Modify: `src/components/sell/CheckoutView.tsx`
+- Modify: `src/lib/i18n/dictionary.ts` (add `tapToEnlarge`)
+
+- [ ] **Step 1: Enlarge the QR + add a tap hint**
+
+In the `method === "promptpay"` branch of `CheckoutView.tsx`, the QR is `<img src="/promptpay.jpg" className="h-72 w-72 ...">`. Enlarge it to be comfortably scannable — e.g. `className="w-[min(80vw,380px)] aspect-square object-contain rounded-xl bg-white p-2 cursor-pointer"` — and add a small hint line under the amount: `t("tapToEnlarge")`. Add to `dictionary.ts`:
+```ts
+  tapToEnlarge: { th: "แตะเพื่อขยายเต็มจอ", en: "Tap to enlarge" },
+```
+
+- [ ] **Step 2: Full-screen lightbox**
+
+Add lightbox state `const [qrOpen, setQrOpen] = useState(false);`. Make the QR `<img onClick={() => setQrOpen(true)}>`. Render an overlay when open:
+```tsx
+{qrOpen && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
+    onClick={() => setQrOpen(false)}
+    role="dialog"
+    aria-modal="true"
+  >
+    {/* stopPropagation so tapping the QR itself doesn't close; tapping the backdrop does */}
+    <img
+      src="/promptpay.jpg"
+      alt="PromptPay QR"
+      className="max-h-[90vh] max-w-[90vw] rounded-2xl bg-white p-3"
+      onClick={(e) => e.stopPropagation()}
+    />
+  </div>
+)}
+```
+Add an Esc-to-close effect: `useEffect(() => { if(!qrOpen) return; const h=(e:KeyboardEvent)=>{if(e.key==="Escape")setQrOpen(false)}; window.addEventListener("keydown",h); return ()=>window.removeEventListener("keydown",h); }, [qrOpen]);`. The amount text stays on the payment screen; the lightbox is just the QR.
+
+- [ ] **Step 3: Verify**
+
+`pnpm build`, `pnpm dev`. In Sell → checkout → PromptPay tab: QR is large; tapping it opens a full-screen dark overlay with the big QR; tapping the dark area (outside the QR) closes it; Esc closes; the amount + proof/confirm flow still work. Build passes.
+
+- [ ] **Step 4: Commit**
+```bash
+git add src/components/sell/CheckoutView.tsx src/lib/i18n/dictionary.ts
+git commit -m "PromptPay QR: larger + full-screen tap-to-enlarge lightbox"
+```
+
+---
+
+### Task 10: Receipt — entity name + bilingual (Thai + English together)
+
+**Files:**
+- Modify: `src/app/admin/(app)/receipt/[id]/ReceiptClient.tsx`
+- Modify: `.env` (add `NEXT_PUBLIC_COMPANY_NAME`) + note in `CLAUDE.md`/`.env.example` if present
+- Possibly modify: `src/app/globals.css` (minor print-width tuning only)
+
+**Interfaces:**
+- Consumes: `dict` from `@/lib/i18n/dictionary` (plain data object, client-safe — import it to render BOTH languages), the item shape from `@/lib/receipt` (`ReceiptData` items carry `nameTh` + `nameEn`; confirm by reading `src/lib/product.ts`/`src/lib/receipt.ts`).
+
+- [ ] **Step 1: Entity name env**
+
+Add to `.env`:
+```
+NEXT_PUBLIC_COMPANY_NAME="Siamese Cat Cafe Co., Ltd."
+```
+In `ReceiptClient.tsx`, add `const COMPANY = process.env.NEXT_PUBLIC_COMPANY_NAME || "Siamese Cat Cafe Co., Ltd.";` and render it in the header block under the brand line, e.g.:
+```tsx
+<div className="font-display text-base font-extrabold">{SHOP}</div>
+<div className="text-[11px] text-black/70">{COMPANY}</div>
+```
+
+- [ ] **Step 2: Make the receipt bilingual (both languages, toggle-independent)**
+
+The receipt must show Thai AND English together regardless of `lang`. Read `ReceiptClient.tsx` fully. Replace single-language `t("key")` labels in the ticket with bilingual pairs using the dictionary's both fields. Add a tiny helper at top of the file:
+```tsx
+import { dict } from "@/lib/i18n/dictionary";
+const bi = (k: keyof typeof dict) => `${dict[k].th} / ${dict[k].en}`;
+```
+Then in the ticket use `bi("receiptNo")`, `bi("dateTime")`, `bi("childName")`, `bi("parentLabel")`, `bi("total")`, `bi("paymentMethod")`, `bi("thankYou")`, and the header `bi("receipt")`. For the **payment method value**, show both languages too (e.g. build a small map: promptpay → `พร้อมเพย์ / PromptPay`, bank → `โอนธนาคาร / Bank`, cash → `เงินสด / Cash`, using the `method*` dict keys' th+en). For **product lines**, show both names:
+```tsx
+<span className="pr-2">{it.nameTh} / {it.nameEn}</span>
+```
+(confirm the item field names via `productName` in `src/lib/product.ts`). Keep it compact for 72mm — allow the label/value rows to wrap or stack if needed; the `Row` component may need a stacked variant for the longer bilingual labels. Do NOT change amounts, receipt number logic, or the print/hide structure.
+
+- [ ] **Step 3: Verify**
+
+`pnpm build`, `pnpm dev`. Open a receipt (`/admin/receipt/[id]`): header shows **Siamese Cat Creative Club** + **Siamese Cat Cafe Co., Ltd.**; every label shows `ไทย / English`; product lines show both names; amounts unchanged. Toggle TH/EN — the receipt stays bilingual either way. Print preview (`window.print()`) and Save-as-image both still produce the ticket cleanly at 72mm (tune print font-size/width in the `@media print` block only if the extra text overflows). Build passes.
+
+- [ ] **Step 4: Commit**
+```bash
+git add "src/app/admin/(app)/receipt/[id]/ReceiptClient.tsx" src/lib/i18n/dictionary.ts src/app/globals.css .env 2>/dev/null; git add -A
+git commit -m "Receipt: add entity name (Siamese Cat Cafe Co., Ltd.) + bilingual Thai/English"
+```
+
+---
+
+### Task 11: Final regression + docs
 
 - [ ] **Step 1: Full regression sweep**
 
-`rm -rf .next && pnpm build`, then `pnpm start`. Against the DB, walk: register (`/signup`, 1-child fits phone) → login → directory (`/admin/search`, orphans-first, paginate, filter) → parent page → child page → sell → pay → session → overview. Confirm at phone (~390), tablet portrait (~810), landscape (~1080): no wasted-space scroll on short pages; long lists paginate; TH+EN fit. Cross-check WALKTHROUGH.md acceptance items still hold.
+`rm -rf .next && pnpm build`, then `pnpm start`. Against the DB, walk: register (`/signup`, 1-child fits phone) → login → directory (`/admin/search`, orphans-first, paginate, filter) → parent page → child page → sell → **PromptPay QR large + tap-to-fullscreen** → pay → **receipt (entity name + bilingual)** → session → overview. Confirm at phone (~390), tablet portrait (~810), landscape (~1080): no wasted-space scroll on short pages; long lists paginate; TH+EN fit. Cross-check WALKTHROUGH.md acceptance items still hold.
 
 - [ ] **Step 2: Update docs + memory**
 
@@ -492,7 +587,7 @@ git commit -m "Docs: responsive admin shell + directory/parent additions"
 
 ## Self-Review
 
-**Spec coverage:** §4.0 shell → Task 1; §4.1 directory API → Task 2; §4.2 search → Task 3; §4.3 parent page → Task 4; §4.4 signup → Task 5; §4.5 tighten+paginate → Tasks 6–8; §6 verification → each task + Task 9. ✓
+**Spec coverage:** §4.0 shell → Task 1; §4.1 directory API → Task 2; §4.2 search → Task 3; §4.3 parent page → Task 4; §4.4 signup → Task 5; §4.5 tighten+paginate → Tasks 6–8; §4.6 PromptPay QR → Task 9; §4.7 receipt entity+bilingual → Task 10; §6 verification → each task + Task 11. ✓
 
 **Placeholder scan:** No "TBD/implement later". The two intentionally under-specified areas are the *visual* details of UI tasks (deliberately deferred to the frontend-design skill at build time, with explicit acceptance criteria + responsive breakpoints given) and the exact page-size constants (stated as tunable, default 12) — both flagged, neither a code placeholder. Deterministic code (directory lib/API, Pagination) is given in full.
 
