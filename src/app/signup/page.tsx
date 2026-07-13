@@ -74,43 +74,65 @@ export default function SignupPage() {
 
   const label = (th: string, en: string) => (lang === "th" ? `${th} / ${en}` : `${en} / ${th}`);
 
+  // Inputs default to a 48px-tall .field (shared, app-wide class); trimming to
+  // the 44px touch-target floor here via inline style (not by editing .field,
+  // which other screens rely on) buys back vertical rhythm for this one form.
+  const compactField = { paddingTop: 10, paddingBottom: 10 };
+
   return (
-    <div className="min-h-screen bg-paper pb-24">
-      <header className="flex items-center justify-between px-5 py-4">
-        <div className="flex items-center gap-3">
-          <Logo size={44} />
+    <div className="min-h-screen bg-paper pb-16">
+      <header className="flex items-center justify-between px-4 py-1">
+        <div className="flex items-center gap-2">
+          <Logo size={28} />
           <div>
-            <div className="text-lg font-extrabold leading-tight text-ink">
+            <div className="text-[13px] font-extrabold leading-tight text-ink">
               {process.env.NEXT_PUBLIC_SHOP_NAME || t("shopName")}
             </div>
-            <div className="text-[13px] text-meta">{label("ลงทะเบียนสมาชิก", "Member registration")}</div>
+            <div className="text-[10px] leading-tight text-meta">{label("ลงทะเบียนสมาชิก", "Member registration")}</div>
           </div>
         </div>
         <LangToggle />
       </header>
 
-      <form onSubmit={submit} className="flex flex-col gap-5 px-5">
+      <form onSubmit={submit} className="flex flex-col gap-1.5 px-4">
         {/* Parent card */}
-        <section className="rounded-2xl border border-line bg-card p-4">
-          <h2 className="mb-3 text-base font-bold text-ink">{t("parentSection")}</h2>
-          <div className="flex flex-col gap-3">
+        <section className="rounded-xl border border-line bg-card p-2">
+          <h2 className="mb-1 text-[13px] font-bold text-ink">{t("parentSection")}</h2>
+          <div className="flex flex-col gap-1.5">
             <Field label={label("ชื่อผู้ปกครอง", "Parent's name")} error={errors.parentName} required>
-              <input className="field" value={parentName} onChange={(e) => setParentName(e.target.value)} />
+              <input
+                className="field"
+                style={compactField}
+                value={parentName}
+                onChange={(e) => setParentName(e.target.value)}
+              />
             </Field>
             <Field label={label("เบอร์ติดต่อ", "Contact number")} error={errors.phone} required>
-              <input className="field" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+              <input
+                className="field"
+                style={compactField}
+                inputMode="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </Field>
             <Field label={label("อีเมล", "Email")}>
-              <input className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <input
+                className="field"
+                style={compactField}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </Field>
           </div>
         </section>
 
         {/* Child cards */}
         {kids.map((kid, i) => (
-          <section key={i} className="rounded-2xl border border-line bg-card p-4">
-            <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-base font-bold text-ink">
+          <section key={i} className="rounded-xl border border-line bg-card p-2">
+            <div className="mb-1 flex items-center justify-between">
+              <h2 className="text-[13px] font-bold text-ink">
                 {t("childSection")} {kids.length > 1 ? i + 1 : ""}
               </h2>
               {kids.length > 1 && (
@@ -123,15 +145,28 @@ export default function SignupPage() {
                 </button>
               )}
             </div>
-            <div className="flex flex-col gap-3">
-              <Field label={label("ชื่อบุตร", "Child's name")} error={errors[`child_${i}_name`]} required>
-                <input className="field" value={kid.name} onChange={(e) => setKid(i, { name: e.target.value })} />
-              </Field>
-              <Field label={label("วันเกิด", "Date of birth")} error={errors[`child_${i}_dob`]} required>
-                <input className="field" type="date" value={kid.dob} onChange={(e) => setKid(i, { dob: e.target.value })} />
-              </Field>
+            <div className="flex flex-col gap-1.5">
+              <div className="grid grid-cols-2 gap-2">
+                <Field label={label("ชื่อบุตร", "Child's name")} error={errors[`child_${i}_name`]} required>
+                  <input
+                    className="field"
+                    style={compactField}
+                    value={kid.name}
+                    onChange={(e) => setKid(i, { name: e.target.value })}
+                  />
+                </Field>
+                <Field label={label("วันเกิด", "Date of birth")} error={errors[`child_${i}_dob`]} required>
+                  <input
+                    className="field"
+                    style={compactField}
+                    type="date"
+                    value={kid.dob}
+                    onChange={(e) => setKid(i, { dob: e.target.value })}
+                  />
+                </Field>
+              </div>
               <Field label={label("เพศ", "Gender")} error={errors[`child_${i}_gender`]} required>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   <GenderButton active={kid.gender === "male"} onClick={() => setKid(i, { gender: "male" })}>
                     {label("ชาย", "Male")}
                   </GenderButton>
@@ -147,20 +182,20 @@ export default function SignupPage() {
         <button
           type="button"
           onClick={() => setKids((prev) => [...prev, emptyChild()])}
-          className="btn-ghost border-dashed"
+          className="btn-ghost border-dashed !min-h-[44px]"
         >
           ＋ {label("เพิ่มบุตร", "Add another child")}
         </button>
 
         {/* Consent */}
-        <label className="flex items-start gap-3 rounded-2xl border border-line bg-card p-4">
+        <label className="flex items-start gap-2 rounded-xl border border-line bg-card p-2">
           <input
             type="checkbox"
             checked={consent}
             onChange={(e) => setConsent(e.target.checked)}
-            className="mt-1 h-5 w-5 shrink-0 accent-teal"
+            className="mt-0.5 h-5 w-5 shrink-0 accent-teal"
           />
-          <span className="text-[13px] leading-relaxed text-ink">
+          <span className="text-[11px] leading-tight text-ink">
             {label("ข้าพเจ้ายอมรับ", "I acknowledge the")}{" "}
             <a href={termsUrl} target="_blank" rel="noreferrer" className="font-semibold text-tealdeep underline">
               {t("termsLink")}
@@ -174,8 +209,8 @@ export default function SignupPage() {
         </label>
       </form>
 
-      <div className="fixed inset-x-0 bottom-0 mx-auto max-w-app border-t border-line bg-paper/95 p-4 backdrop-blur">
-        <button onClick={submit} disabled={busy} className="btn-primary">
+      <div className="fixed inset-x-0 bottom-0 mx-auto max-w-app border-t border-line bg-paper/95 p-2 backdrop-blur">
+        <button onClick={submit} disabled={busy} className="btn-primary !min-h-[44px]">
           {busy ? t("loading") : label("ลงทะเบียน", "Register")}
         </button>
       </div>
@@ -196,12 +231,12 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-[13px] font-semibold text-meta">
+      <label className="mb-0.5 block text-[11px] font-semibold leading-tight text-meta">
         {label}
         {required && <span className="text-danger"> *</span>}
       </label>
       {children}
-      {error && <p className="mt-1 text-[13px] font-semibold text-danger">{error}</p>}
+      {error && <p className="mt-0.5 text-[11px] font-semibold text-danger">{error}</p>}
     </div>
   );
 }
@@ -220,7 +255,7 @@ function GenderButton({
       type="button"
       onClick={onClick}
       className={
-        "flex min-h-[48px] items-center justify-center rounded-xl border-2 px-3 text-base font-semibold transition " +
+        "flex min-h-[44px] items-center justify-center rounded-xl border-2 px-2 text-[13px] font-semibold transition " +
         (active ? "border-teal bg-tealbg text-tealdeep" : "border-line bg-card text-ink")
       }
     >
