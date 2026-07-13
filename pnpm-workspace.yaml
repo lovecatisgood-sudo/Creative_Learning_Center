@@ -1,0 +1,13 @@
+# pnpm 11 settings (Hostinger runs pnpm 11.12). Two things here:
+#  - allowBuilds: approve the native build scripts pnpm 11 blocks by default,
+#    so install doesn't fail with ERR_PNPM_IGNORED_BUILDS. esbuild is pulled by
+#    tsx/drizzle-kit (dev tooling); sharp is our optional build-time image dep.
+#  - overrides: pin fast-moving transitive deps to well-aged versions so managed
+#    hosts with a minimumReleaseAge supply-chain policy accept the lockfile.
+allowBuilds:
+  esbuild: true
+  sharp: true
+overrides:
+  browserslist: 4.24.4
+  caniuse-lite: 1.0.30001692
+  postcss: 8.4.49
