@@ -88,7 +88,7 @@ export function ProductGrid({
                         <div className="pointer-events-auto flex items-center gap-2">
                           <button
                             onClick={() => onStep(p.sku, -1)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full bg-brown text-cream"
+                            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-brown text-xl font-bold leading-none text-cream"
                             aria-label="decrease"
                           >
                             −
@@ -97,7 +97,7 @@ export function ProductGrid({
                           <button
                             onClick={() => onStep(p.sku, 1)}
                             disabled={disabled}
-                            className="flex h-7 w-7 items-center justify-center rounded-full bg-brown text-cream"
+                            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-brown text-xl font-bold leading-none text-cream"
                             aria-label="increase"
                           >
                             +

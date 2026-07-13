@@ -11,7 +11,7 @@ export function LangToggle({ dark = false }: { dark?: boolean }) {
       onClick={toggle}
       aria-label="Toggle language"
       className={
-        "rounded-full border px-3 py-1 text-[13px] font-bold " +
+        "inline-flex min-h-[44px] items-center justify-center rounded-full border px-4 text-[13px] font-bold " +
         (dark
           ? "border-cream/40 text-cream"
           : "border-line text-ink bg-card")

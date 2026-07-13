@@ -14,7 +14,7 @@ export function LogoutButton() {
   return (
     <button
       onClick={logout}
-      className="rounded-full border border-cream/40 px-3 py-1 text-[13px] font-semibold text-cream"
+      className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-cream/40 px-4 text-[13px] font-semibold text-cream"
     >
       {t("logOut")}
     </button>

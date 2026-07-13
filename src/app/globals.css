@@ -58,6 +58,21 @@ body {
   @apply flex min-h-[48px] w-full items-center justify-center rounded-xl border border-line bg-card px-4 text-base font-semibold text-ink;
 }
 
+/* Branded keyboard focus (a11y): a teal ring, the same accent used by
+   .field:focus above. :focus-visible only fires for keyboard/AT navigation,
+   so mouse/touch taps stay ring-free. A native `outline` (not box-shadow) is
+   used so it reads cleanly on every background these controls sit on — cream
+   paper, cards, and the brown AppBar — without needing a per-context
+   ring-offset color; modern browsers already clip it to the element's own
+   border-radius. */
+.btn-primary:focus-visible,
+.btn-ghost:focus-visible,
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  @apply outline outline-2 outline-teal outline-offset-2;
+}
+
 .chip {
   @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[13px] font-semibold;
 }

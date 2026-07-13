@@ -22,6 +22,15 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (saved === "en" || saved === "th") setLangState(saved);
   }, []);
 
+  // Keep <html lang> in sync with the active language (a11y: screen readers /
+  // browser translation use this attribute) — on mount-from-storage and on
+  // every subsequent change, whether via setLang or toggle.
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = lang;
+    }
+  }, [lang]);
+
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
     localStorage.setItem(STORAGE_KEY, l);
