@@ -3,7 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { QuickAddSheet } from "@/components/QuickAddSheet";
-import type { SearchResult } from "@/app/admin/(app)/search/SearchClient";
+
+// Shape returned by /api/admin/search (legacy flat search, still used here).
+type SearchResult = {
+  childId: number;
+  childName: string;
+  parentId: number | null;
+  parentName: string | null;
+  phone: string | null;
+  profileComplete: boolean;
+  hasRunningSession: boolean;
+};
 
 export type PickedChild = {
   id: number;
