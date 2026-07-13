@@ -40,6 +40,7 @@ export function CheckoutView({
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState("");
+  const [note, setNote] = useState("");
   const [qrOpen, setQrOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -76,6 +77,7 @@ export function CheckoutView({
   async function confirm() {
     setConfirming(true);
     setError("");
+    setNote("");
     const res = await fetch("/api/admin/orders", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -91,7 +93,16 @@ export function CheckoutView({
     setShowConfirm(false);
     if (res.ok) {
       const data = await res.json();
-      onConfirmed(data.orderId, data.receiptNo);
+      // Money/credit is unaffected either way — this is purely a staff heads-up
+      // when the "+1h" extend couldn't apply (session already ended) so the
+      // purchase landed as an unconsumed credit instead. Non-blocking: give the
+      // note a beat on screen before moving on to the receipt.
+      if (extendSessionId && data.extendRequested && data.extendApplied === false) {
+        setNote(t("extendNotApplied"));
+        setTimeout(() => onConfirmed(data.orderId, data.receiptNo), 1400);
+      } else {
+        onConfirmed(data.orderId, data.receiptNo);
+      }
     } else {
       const d = await res.json().catch(() => ({}));
       setError(d.error || t("proofRequired"));
@@ -231,6 +242,7 @@ export function CheckoutView({
             </button>
           )}
           {error && <p className="mt-2 text-[13px] font-semibold text-danger">{error}</p>}
+          {note && <p className="mt-2 text-[13px] font-semibold text-amber-ink">{note}</p>}
         </div>
       </div>
 

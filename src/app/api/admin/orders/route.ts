@@ -54,6 +54,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, ...result });
   } catch (e) {
     if (e instanceof OrderError) return NextResponse.json({ error: e.message }, { status: 422 });
-    throw e;
+    console.error("createPaidOrder failed:", e);
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
 }

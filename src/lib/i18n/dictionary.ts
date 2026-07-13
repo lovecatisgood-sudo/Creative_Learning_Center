@@ -137,6 +137,10 @@ export const dict = {
   takePhoto: { th: "📷 ถ่ายรูปสลิป / เงินสด", en: "📷 Take photo of slip / cash" },
   retake: { th: "ถ่ายใหม่", en: "Retake" },
   proofRequired: { th: "ต้องแนบรูปหลักฐานก่อนยืนยัน", en: "A proof photo is required before confirming" },
+  extendNotApplied: {
+    th: "ไม่สามารถต่อเวลาได้ (เซสชันสิ้นสุดแล้ว) — เพิ่มเป็นเครดิตแทน",
+    en: "Couldn't extend (session ended) — added as a credit instead",
+  },
   confirmPayment: { th: "ยืนยันรับชำระเงิน", en: "Confirm payment received" },
   confirmSheetTitle: { th: "ยืนยันการชำระเงิน", en: "Confirm payment" },
   via: { th: "ผ่าน", en: "via" },

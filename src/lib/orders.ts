@@ -69,7 +69,12 @@ async function nextReceiptNo(tx: typeof db, now: Date): Promise<string> {
   return `${prefix}${String(maxSeq + 1).padStart(4, "0")}`;
 }
 
-export type CreateOrderResult = { orderId: number; receiptNo: string };
+export type CreateOrderResult = {
+  orderId: number;
+  receiptNo: string;
+  extendRequested: boolean;
+  extendApplied: boolean;
+};
 
 // Turns a validated cart into a paid order: order + items + one payment +
 // N package_instances (qty expands to N independent instances), all with audit
@@ -102,15 +107,20 @@ export async function createPaidOrder(opts: {
   }
 
   const total = lines.reduce((sum, l) => sum + bySku.get(l.sku)!.priceThb * l.qty, 0);
+  const extendRequested = extendSessionId != null;
 
   // Retry the whole transaction if two confirms race to the same receipt number
-  // (unique violation, Postgres code 23505). Single-admin makes this rare.
+  // (unique violation, Postgres code 23505). Single-admin makes this rare, but a
+  // jittered backoff between attempts de-collides concurrent double-taps.
   for (let attempt = 0; ; attempt++) {
     try {
       return await runOrderTx();
     } catch (err) {
       const code = (err as { code?: string })?.code;
-      if (code === "23505" && attempt < 3) continue;
+      if (code === "23505" && attempt < 6) {
+        await new Promise((r) => setTimeout(r, 15 + Math.floor(Math.random() * 40)));
+        continue;
+      }
       throw err;
     }
   }
@@ -119,6 +129,7 @@ export async function createPaidOrder(opts: {
     return db.transaction(async (tx) => {
     const now = new Date();
     const receiptNo = await nextReceiptNo(tx as unknown as typeof db, now);
+    let extendApplied = false;
 
     const [order] = await tx
       .insert(orders)
@@ -178,6 +189,7 @@ export async function createPaidOrder(opts: {
         if (grants.extendOnly && extendSessionId) {
           const [sess] = await tx.select().from(sessions).where(eq(sessions.id, extendSessionId)).limit(1);
           if (sess && sess.status === "running" && sess.childId === child.id) {
+            extendApplied = true;
             const extended = new Date(sess.plannedEndAt.getTime() + HOUR_MS);
             await tx.update(sessions).set({ plannedEndAt: extended }).where(eq(sessions.id, sess.id));
             await tx
@@ -223,7 +235,7 @@ export async function createPaidOrder(opts: {
       detail: { receiptNo, method, total, paymentId: payment.id, lines },
     });
 
-    return { orderId: order.id, receiptNo };
+    return { orderId: order.id, receiptNo, extendRequested, extendApplied };
     });
   }
 }
