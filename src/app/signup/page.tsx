@@ -40,8 +40,10 @@ export default function SignupPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
-  const termsUrl = process.env.NEXT_PUBLIC_TERMS_URL || "#";
-  const privacyUrl = process.env.NEXT_PUBLIC_PRIVACY_URL || "#";
+  // Point at the app's own public policy pages (publicly reachable — middleware
+  // only gates /admin). Opened in a new tab so the in-progress form isn't lost.
+  const termsUrl = "/terms";
+  const privacyUrl = "/privacy";
 
   function setKid(i: number, patch: Partial<ChildForm>) {
     setKids((prev) => prev.map((k, idx) => (idx === i ? { ...k, ...patch } : k)));

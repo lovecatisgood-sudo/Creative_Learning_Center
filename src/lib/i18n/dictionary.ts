@@ -343,11 +343,44 @@ export const dict = {
     en: "60 hours of play, plus 10 crayon sessions and 6 clay statues. Shareable across the whole family.",
   },
 
+  // Visit us / contact
+  visitKicker: { th: "แวะมาหาเรา", en: "Visit us" },
+  visitTitle: { th: "มาหาเราได้ที่นี่", en: "Come find us" },
+  visitIntro: {
+    th: "แวะมาทักทาย โทรสอบถาม หรือดูเส้นทางไปยังสตูดิโอของเราได้เลย",
+    en: "Drop by, give us a call, or get directions to our studio.",
+  },
+  visitPhoneLabel: { th: "โทรศัพท์", en: "Phone" },
+  visitEmailLabel: { th: "อีเมล", en: "Email" },
+  visitAddressLabel: { th: "ที่อยู่", en: "Address" },
+  visitPhoneValue: { th: "+66-0804803802", en: "+66-0804803802" },
+  visitEmailValue: { th: "Cafe@siamesecat.cafe", en: "Cafe@siamesecat.cafe" },
+  visitAddressValue: {
+    th: "46/27, 46/27 ถนนบางนา-ตราด (คู่ขนาน) ต.บางแก้ว อ.บางพลี จ.สมุทรปราการ 10540",
+    en: "46/27, 46/27 Bang Na-Trat Frontage Rd, Bang Kaeo, Samut Prakan 10540",
+  },
+  visitMapTitle: {
+    th: "แผนที่ Google แสดงที่ตั้งของ Siamese Cat Creative Club",
+    en: "Google Map showing the location of Siamese Cat Creative Club",
+  },
+  visitOpenMap: { th: "เปิดใน Google Maps", en: "Open in Google Maps" },
+
   // Footer
   landingFooterTagline: {
     th: "สนามเด็กเล่นในร่มและกิจกรรมสร้างสรรค์สำหรับเด็ก · กรุงเทพฯ",
     en: "Indoor kids playroom & creative activities · Bangkok",
   },
+  footerTerms: { th: "ข้อกำหนดและเงื่อนไข", en: "Terms of Service" },
+  footerPrivacy: { th: "นโยบายความเป็นส่วนตัว", en: "Privacy Policy" },
+
+  // Legal pages (chrome only — policy body is English, as provided by the owner)
+  legalBackToHome: { th: "กลับหน้าหลัก", en: "Back to home" },
+  legalThaiNote: {
+    th: "เอกสารฉบับนี้จัดทำเป็นภาษาอังกฤษ ฉบับภาษาไทยกำลังจัดเตรียม",
+    en: "This document is provided in English. A Thai version is coming soon.",
+  },
+  termsPageTitle: { th: "ข้อกำหนดและเงื่อนไข", en: "Terms of Service" },
+  privacyPageTitle: { th: "นโยบายความเป็นส่วนตัว", en: "Privacy Policy" },
 } satisfies Record<string, Record<Lang, string>>;
 
 export type DictKey = keyof typeof dict;

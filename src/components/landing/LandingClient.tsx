@@ -252,6 +252,65 @@ export function LandingClient() {
         </RevealOnScroll>
       </section>
 
+      <section className="block visit" id="visit">
+        <RevealOnScroll className="wrap">
+          <div className="kicker">{t("visitKicker")}</div>
+          <h2 className="sec">
+            <span>{t("visitTitle")}</span>
+          </h2>
+          <p className="intro">
+            <span>{t("visitIntro")}</span>
+          </p>
+
+          <div className="visit-grid">
+            <ul className="visit-info">
+              <li>
+                <span className="vi-label">{t("visitPhoneLabel")}</span>
+                <a className="vi-value" href="tel:+66804803802">
+                  {t("visitPhoneValue")}
+                </a>
+              </li>
+              <li>
+                <span className="vi-label">{t("visitEmailLabel")}</span>
+                <a className="vi-value" href="mailto:Cafe@siamesecat.cafe">
+                  {t("visitEmailValue")}
+                </a>
+              </li>
+              <li>
+                <span className="vi-label">{t("visitAddressLabel")}</span>
+                <a
+                  className="vi-value"
+                  href="https://maps.app.goo.gl/XpYHkxenRu6gLvnFA"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t("visitAddressValue")}
+                </a>
+              </li>
+              <li className="visit-cta-row">
+                <a
+                  className="visit-map-btn"
+                  href="https://maps.app.goo.gl/XpYHkxenRu6gLvnFA"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t("visitOpenMap")} <span aria-hidden>↗</span>
+                </a>
+              </li>
+            </ul>
+
+            <div className="visit-map">
+              <iframe
+                title={t("visitMapTitle")}
+                src="https://maps.google.com/maps?q=46%2F27%20Bang%20Na-Trat%20Frontage%20Rd%2C%20Bang%20Kaeo%2C%20Samut%20Prakan%2010540&z=16&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          </div>
+        </RevealOnScroll>
+      </section>
+
       <footer>
         <span className="fbrand">
           <ResponsiveImage image={landingImages.logo} alt="" sizes="34px" />
@@ -260,6 +319,11 @@ export function LandingClient() {
         <div>
           <small>{t("landingFooterTagline")}</small>
         </div>
+        <nav className="flinks" aria-label={t("shopName")}>
+          <a href="/terms">{t("footerTerms")}</a>
+          <span aria-hidden>·</span>
+          <a href="/privacy">{t("footerPrivacy")}</a>
+        </nav>
       </footer>
     </div>
   );

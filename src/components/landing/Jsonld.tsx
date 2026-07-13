@@ -1,8 +1,8 @@
 import { SITE_URL, OG_IMAGE } from "@/lib/landing/site";
 
-// LocalBusiness structured data. address/geo/openingHours/telephone are
-// intentionally omitted until the owner provides real Google Business Profile
-// details (tracked in the design spec §10) — never ship placeholder data.
+// LocalBusiness structured data. Address + telephone are the owner's real
+// details; openingHours is intentionally omitted until confirmed (never ship
+// placeholder hours).
 export function Jsonld() {
   const data = {
     "@context": "https://schema.org",
@@ -23,11 +23,16 @@ export function Jsonld() {
       { "@type": "Offer", name: "30-Hour Creative Play Pass", price: "3599", priceCurrency: "THB" },
       { "@type": "Offer", name: "60-Hour Creative Family Pass", price: "5999", priceCurrency: "THB" },
     ],
-    // TODO(owner): add address/telephone/openingHours once the Google Business
-    // Profile is live — omit them entirely until then so no placeholder data ships.
-    // address: { "@type": "PostalAddress", streetAddress: "…", addressLocality: "Bangkok", addressCountry: "TH" },
-    // telephone: "+66-…",
-    // openingHours: "Mo-Su 10:00-19:00",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "46/27 Bang Na-Trat Frontage Rd",
+      addressLocality: "Bang Kaeo",
+      addressRegion: "Samut Prakan",
+      postalCode: "10540",
+      addressCountry: "TH",
+    },
+    telephone: "+66804803802",
+    // openingHours intentionally omitted until the owner confirms them.
   };
   const json = JSON.stringify(data).replace(/</g, "\\u003c");
   return (

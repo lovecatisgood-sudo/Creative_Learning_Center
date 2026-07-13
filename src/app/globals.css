@@ -111,6 +111,107 @@ a:focus-visible,
   display: none;
 }
 
+/* ─── Legal prose (/terms, /privacy) ─────────────────────────────────────────
+   Scoped to .legal-prose so the injected owner HTML (h1/h2/h3/p/ul/blockquote)
+   reads as a proper document on the cream/brown brand palette — a calm reading
+   column, not a raw markdown dump. Deliberately restrained: one accent (amber
+   rule under the title, teal links), generous line-height, a tinted card for
+   the "Business details / Data Controller" blockquote. */
+.legal-prose {
+  color: #4a2f16;
+  font-size: 1rem;
+  line-height: 1.72;
+  overflow-wrap: break-word;
+}
+.legal-prose > h1 {
+  font-size: clamp(1.7rem, 5vw, 2.3rem);
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  color: var(--brown, #5f2b00);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 3px solid var(--amber, #e98c1d);
+}
+.legal-prose h2 {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--brown, #5f2b00);
+  margin-top: 2.4rem;
+  margin-bottom: 0.6rem;
+}
+.legal-prose h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 1.5rem;
+  margin-bottom: 0.4rem;
+}
+.legal-prose p {
+  margin-bottom: 1rem;
+}
+.legal-prose strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+.legal-prose ul,
+.legal-prose ol {
+  margin: 0 0 1.1rem 0;
+  padding-left: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.legal-prose li {
+  padding-left: 0.25rem;
+}
+.legal-prose ul > li {
+  list-style: none;
+  position: relative;
+}
+.legal-prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: -0.9rem;
+  top: 0.72em;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: var(--amber, #e98c1d);
+}
+.legal-prose ol > li {
+  list-style: decimal;
+}
+.legal-prose a {
+  color: var(--tealdeep, #1c7c60);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal-prose blockquote {
+  margin: 1.4rem 0;
+  padding: 1.1rem 1.3rem;
+  background: var(--card, #fffaf0);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--teal, #1c7c60);
+  border-radius: 0.9rem;
+  color: #5c4326;
+}
+.legal-prose blockquote p {
+  margin-bottom: 0;
+}
+.legal-prose hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2rem 0;
+}
+.legal-prose h1 + p,
+.legal-prose h2 + p,
+.legal-prose h3 + p {
+  margin-top: 0;
+}
+
 /* ─── Landing page (marketing) ───────────────────────────────────────────── */
 /* Ported from the approved dist-landing/index.html static mock; every selector
    is scoped under .landing-v2 (the root wrapper in LandingClient.tsx) so it
@@ -484,6 +585,96 @@ a:focus-visible,
   color: #5c4326;
 }
 
+/* visit / contact */
+.landing-v2 section.visit {
+  background: var(--tealbg);
+}
+.landing-v2 .visit-grid {
+  display: grid;
+  gap: 1.4rem;
+}
+@media (min-width: 820px) {
+  .landing-v2 .visit-grid {
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: stretch;
+  }
+}
+.landing-v2 .visit-info {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+}
+.landing-v2 .visit-info > li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  padding: 0.85rem 1rem;
+}
+.landing-v2 .vi-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.landing-v2 .vi-value {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  word-break: break-word;
+}
+.landing-v2 .vi-value:hover {
+  text-decoration: underline;
+}
+.landing-v2 .visit-cta-row {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0.2rem 0 0 !important;
+}
+.landing-v2 .visit-map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 48px;
+  padding: 0 1.3rem;
+  border-radius: 999px;
+  background: var(--brown);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.landing-v2 .visit-map-btn:hover {
+  background: #4a2100;
+}
+.landing-v2 .visit-map {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 22px rgba(51, 32, 13, 0.12);
+  background: var(--card);
+}
+.landing-v2 .visit-map iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 /* footer */
 .landing-v2 footer {
   background: var(--brown);
@@ -491,6 +682,29 @@ a:focus-visible,
   text-align: center;
   padding: 2rem 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.landing-v2 footer .flinks {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.landing-v2 footer .flinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #fad290;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.landing-v2 footer .flinks a:hover {
+  text-decoration: underline;
+}
+.landing-v2 footer .flinks span {
+  color: #c9b48f;
 }
 .landing-v2 footer .fbrand {
   display: inline-flex;
