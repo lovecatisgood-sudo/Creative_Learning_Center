@@ -28,7 +28,7 @@ An internal point-of-sale and session-management web app for a supervised childr
 | Styling | Tailwind CSS, mobile-first |
 | Auth (admin) | Single admin credential (email + password from env), iron-session or NextAuth credentials provider, httpOnly session cookie |
 | File storage | Payment-proof photos → `UPLOAD_DIR` on server disk (Hostinger VPS), served via an authenticated API route. Abstract behind a `storage.ts` module so S3 can swap in later. Client-side compress images to ≤ 1600px / ~500KB before upload. |
-| PromptPay QR | `promptpay-qr` npm package → EMVCo payload with amount embedded → render with `qrcode` package |
+| PromptPay QR | **Static** shop PromptPay QR — a fixed image (`public/promptpay.jpg`) the owner uploads once; shown large at checkout. The customer scans it and enters the displayed amount manually. No per-order/amount-embedded QR generation. |
 | Receipt print | Browser `window.print()` with dedicated 80mm print CSS + "Save as image" via `html-to-image` |
 | Deployment | Hostinger VPS: Node 20+, `next build && next start` under PM2, Nginx reverse proxy + HTTPS (certbot). Must also run unchanged on Vercel as fallback (hence storage abstraction). |
 
@@ -38,7 +38,7 @@ DATABASE_URL=            # Neon
 ADMIN_EMAIL=
 ADMIN_PASSWORD_HASH=     # bcrypt
 SESSION_SECRET=
-PROMPTPAY_ID=            # phone number or citizen ID for QR generation
+# PromptPay: a static shop QR image (public/promptpay.jpg) is displayed — no PROMPTPAY_ID / QR generation needed
 BANK_NAME=
 BANK_ACCOUNT_NAME=
 BANK_ACCOUNT_NUMBER=
@@ -152,7 +152,7 @@ Single search box → live results grouped as **Child (under Parent, phone)**. T
 ### 6.4 Sell (cart → payment → receipt)
 1. **Cart:** pick child (search or quick-add), tap products from a grid (the 11 SKUs), adjust qty, running total. `EXTRA_1H` only enabled when the child has a running/just-ended session.
 2. **Checkout — choose method (tabs):**
-   - **PromptPay:** full-screen QR generated with exact total embedded. Admin shows phone to parent.
+   - **PromptPay:** the shop's **static** PromptPay QR (fixed uploaded image) shown large / full-screen (tap to enlarge). The customer scans it and keys in the amount shown below it. Admin shows phone to parent.
    - **Bank transfer:** full-screen card with bank name / account name / account number (from env) in large copyable text.
    - **Cash:** amount due displayed large.
 3. **Proof:** all three methods then require a photo — `<input type="file" accept="image/*" capture="environment">` → compress → upload. PromptPay/bank = slip photo; cash = photo of cash received.
@@ -204,7 +204,7 @@ Tab renamed from "Today" to **Overview**. Two controls at the top: a **Day / Wee
 
 - [ ] Parent completes `/signup` on a phone via QR **in Thai by default**, sees success screen; record visible in admin search within seconds.
 - [ ] Quick-add child + full checkout (cash) completable in under 60 seconds on a phone.
-- [ ] PromptPay QR scans in a Thai banking app with the exact amount pre-filled.
+- [ ] The shop's static PromptPay QR displays at checkout and scans in a Thai banking app; the customer enters the amount shown.
 - [ ] All three payment methods block confirmation until a proof photo is uploaded; photo viewable from the receipt afterward.
 - [ ] Receipt prints correctly on 80mm paper via the phone's native print dialog; Save-as-image produces a legible PNG.
 - [ ] Buying 2 × PKG_2H_CRAYON yields two independent instances; starting one leaves the other available.
@@ -223,7 +223,7 @@ Tab renamed from "Today" to **Overview**. Two controls at the top: a **Day / Wee
 
 ## 9. Owner-supplied config checklist (Eri, before deploy)
 
-- [ ] PromptPay ID (phone or citizen ID)
+- [ ] PromptPay QR image — the shop's static PromptPay QR (`public/promptpay.jpg`) to display at checkout
 - [ ] Bank name, account name, account number
 - [ ] Terms & Conditions URL, Privacy Policy URL
 - [ ] Admin email + password

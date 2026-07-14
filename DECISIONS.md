@@ -165,10 +165,24 @@ place to match; this entry records the reversal and where the code changed.
 - The family-pass UI (`StartSheet` sibling selector, `PackageRow`/`StatusChip`
   `FAMILY` chip, `getSiblings`) is now **inert** — all guarded by `isFamily`,
   which is always false. Left in place (harmless); can be stripped later.
-- **Owner to update, NOT changed here (marketing copy is the owner's):** the
-  landing page still advertises the 60h as *"Shareable across the whole family"*
-  (`dictionary.ts` `pass2Tag`/`pass2Desc`) and the product name is still
-  *"…Family Pass"*. These now misstate the rule — owner to revise the copy/name.
+- **Landing copy revised at owner request:** the 60h card no longer says
+  "Shareable across the whole family". `pass2Desc` now mirrors the 30h card's
+  "For one child" (สำหรับเด็ก 1 คน) and the `pass2Tag` badge changed
+  "Shareable/แชร์ทั้งครอบครัว" → "Best value/คุ้มค่าที่สุด" (the 60h is the
+  lowest ฿/hour). Owner may reword. The product NAME "…Family Pass" was kept
+  (owner's product name; the meta description's "family passes" refers to it,
+  not to sharing).
+
+## 2026-07-14 — PRD corrected: PromptPay QR is static, not generated
+
+Owner confirmed the PromptPay QR was always a **static shop QR image**
+(`public/promptpay.jpg`) shown at checkout — the customer keys in the amount —
+not a per-order amount-embedded QR. The PRD originally specced a generated
+EMVCo QR (`promptpay-qr`/`qrcode`, `PROMPTPAY_ID`). Updated the PRD in place:
+§2 tech-stack row, the env block (`PROMPTPAY_ID` dropped), §6.4 step 2, §8 #3
+acceptance criterion, and §9 config checklist all now describe the static image.
+Code already matched (`CheckoutView` shows `/promptpay.jpg`); the `promptpay-qr`
+route/deps are vestigial. `bankConfigured` still gates the bank tab from env.
 
 ## 2026-07-13 — Product-review fixes + a11y
 Post-launch audit fixes (branch fix/review-findings): orders route returns proper JSON 500 (not bodyless) + hardened receipt-no retry (6x + jitter); signup surfaces server errors and validates phone/DOB (client+server) with legibility ≥12px; admin routes reject non-finite numeric inputs with 422 (refundHours/redemptions/start); Overview prints the full period (dropped 200-row list cap); PromptPay QR keyboard-openable; product tile is one tap target; **foreground text tokens (meta/warn/danger/ok/tealdeep) darkened to meet WCAG AA ≥4.5:1** (same hue); `<html lang>` syncs with the TH/EN toggle; AppBar controls + qty stepper bumped to ≥44px; branded :focus-visible. No business-logic/money/schema changes. EXCLUDED as working-as-designed (owner to confirm if desired): parent-grouped directory, family-view siblings, EXTRA_1H API-level gating, quick-add stub parents.

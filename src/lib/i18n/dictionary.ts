@@ -335,12 +335,12 @@ export const dict = {
     th: "เล่น 30 ชั่วโมง พร้อมกิจกรรมระบายสีเทียน 5 ครั้ง และปั้นดินเบา 3 ชิ้น สำหรับเด็ก 1 คน",
     en: "30 hours of play, plus 5 crayon sessions and 3 clay statues. For one child.",
   },
-  pass2Tag: { th: "แชร์ทั้งครอบครัว", en: "Shareable" },
+  pass2Tag: { th: "คุ้มค่าที่สุด", en: "Best value" },
   pass2Title: { th: "แพ็กเกจครอบครัว 60 ชั่วโมง", en: "60-Hour Creative Family Pass" },
   pass2Price: { th: "฿5,999", en: "฿5,999" },
   pass2Desc: {
-    th: "เล่น 60 ชั่วโมง พร้อมกิจกรรมระบายสีเทียน 10 ครั้ง และปั้นดินเบา 6 ชิ้น แชร์กันได้ทั้งครอบครัว",
-    en: "60 hours of play, plus 10 crayon sessions and 6 clay statues. Shareable across the whole family.",
+    th: "เล่น 60 ชั่วโมง พร้อมกิจกรรมระบายสีเทียน 10 ครั้ง และปั้นดินเบา 6 ชิ้น สำหรับเด็ก 1 คน",
+    en: "60 hours of play, plus 10 crayon sessions and 6 clay statues. For one child.",
   },
 
   // Visit us / contact
