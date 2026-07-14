@@ -81,13 +81,13 @@ Products are seeded via a migration/seed script and are **config, not code**. Ea
 | PKG_2H_CRAYON | 2 Hours + Crayon Session | BUNDLE | 329 | `{hours: 2, crayonSessions: 1}` |
 | PKG_2H_4CLAY | 2 Hours + 4 Small Statues | BUNDLE | 599 | `{hours: 2, claySessions: 4}` |
 | PASS_30H | 30-Hour Creative Play Pass | HOUR_PASS | 3599 | `{hours: 30, crayonSessions: 5, claySessions: 3, shareable: false}` |
-| PASS_60H | 60-Hour Creative Family Pass | HOUR_PASS | 5999 | `{hours: 60, crayonSessions: 10, claySessions: 6, shareable: true}` |
+| PASS_60H | 60-Hour Creative Family Pass | HOUR_PASS | 5999 | `{hours: 60, crayonSessions: 10, claySessions: 6, shareable: false}` |
 
 **Rules encoded in catalog:**
 - `EXTRA_1H` never starts a standalone session. It is sellable at any time and creates an **extra-hour credit** on the child; consuming the credit extends the child's currently running session by 1 hour (`planned_end += 1h`). When sold via the session screen's "+ Add 1 hour" shortcut, it is consumed immediately on payment confirmation. Consuming requires a running session.
 - À la carte `ADDON` purchases (CRAYON, CLAY) create **credit records** on the child — they are not fire-and-forget line items. Credits are consumed during a running session (soft-enforced) via the session screen or child page, decrementing the credit and writing an `addon_redemptions` + audit row.
 - HOUR_PASS validity: `expires_at = purchased_at + 6 months` set automatically at purchase confirmation.
-- PASS_30H is bound to **one child**. PASS_60H is bound to the **parent** and usable by any of that parent's registered children (siblings).
+- PASS_30H and PASS_60H are **each bound to the one child they are sold for** and usable only by that child. There is no parent-level ownership and no cross-sibling sharing. *(Owner decision 2026-07-14 — this reverses the original family/shareable-pass rule; every purchase now stays with a single child.)*
 - Only HOUR_PASS instances support hour refunds on early pickup. Everything else is consumed once started.
 
 ---
@@ -173,7 +173,7 @@ Admin taps **End session** on a running session:
 
 ### 6.7 Consume credits (crayon / clay / extra hour)
 Credits come from passes, bundles, and à la carte add-on purchases. Two entry points:
-- **Session detail (primary):** a "Consumables during this session" strip lists every credit the child (or their family pass) holds — crayon, clay, and +1 Hour — each with a `Consume` button. Consuming crayon/clay decrements the credit; consuming +1 Hour extends `planned_end` by 1 hour and updates the dashboard countdown. Each consumption writes `addon_redemptions` (with `session_id`) + audit log.
+- **Session detail (primary):** a "Consumables during this session" strip lists every credit the child holds — crayon, clay, and +1 Hour — each with a `Consume` button. Consuming crayon/clay decrements the credit; consuming +1 Hour extends `planned_end` by 1 hour and updates the dashboard countdown. Each consumption writes `addon_redemptions` (with `session_id`) + audit log.
 - **Child page:** each credit-holding instance shows `Redeem` (crayon/clay) or `Consume +1h`. Extra-hour consumption is hard-blocked without a running session; crayon/clay is soft-enforced (warn, allow override — matches "must be used during active entry time").
 When an à la carte addon/extra instance reaches 0 credits its status becomes `consumed` and it displays as CONSUMED on the child page. No payment screen is involved in consumption.
 
@@ -191,7 +191,7 @@ Tab renamed from "Today" to **Overview**. Two controls at the top: a **Day / Wee
 2. TIMED_ENTRY and BUNDLE sessions are consumed once started — no partial refunds ever.
 2b. Add-on purchases (CRAYON, CLAY, EXTRA_1H) always create trackable credits; nothing paid-for is untracked. Extra-hour credits require a running session to consume; consumption extends that session's planned end.
 3. Only PASS_30H and PASS_60H support early-pickup hour refunds, whole hours, admin-confirmed, capped at the system suggestion.
-4. PASS_30H → one child. PASS_60H → parent-level, any sibling; each session still records which child used it.
+4. PASS_30H and PASS_60H → **each bound to the single child they are sold for**; a sibling cannot use either. *(Owner decision 2026-07-14, reversing the original parent-level family-pass rule.)*
 5. Passes expire 6 months after purchase; expired instances show `expired` and cannot start sessions or redeem credits (data retained).
 6. All payments require photo proof before confirmation.
 7. Every state change touching money, hours, or credits → audit log.
@@ -213,7 +213,7 @@ Tab renamed from "Today" to **Overview**. Two controls at the top: a **Day / Wee
 - [ ] EXTRA_1H sold from the session screen extends pickup time by 1h immediately on payment; EXTRA_1H sold from the Sell tab creates a +1 Hour credit that, when consumed from the session screen, extends the running timer by 1h.
 - [ ] À la carte CRAYON/CLAY purchase creates a consumable credit visible on the child page and in the running session's consumables strip; consuming decrements it, and the instance shows CONSUMED at 0 credits.
 - [ ] Consuming a +1 Hour credit is blocked when the child has no running session.
-- [ ] 60h pass purchased under a parent is startable for either of two registered siblings; 30h pass only for its bound child.
+- [ ] 30h and 60h passes are **each startable only for the one child they were sold for**; a sibling cannot start or spend either pass.
 - [ ] Sessions dashboard shows live countdowns and turns overdue cards red without a manual refresh (poll every 30s is acceptable).
 - [ ] Overview (Day, today) totals match the sum of the day's confirmed payments per method; switching to Week and Month re-aggregates correctly, ◀ navigates to past periods (yesterday, last week, last month) and ▶ is blocked beyond the current period.
 - [ ] The app loads in Thai by default on both /signup and /admin; the TH/EN toggle switches every label (including product names and Overview period labels) instantly and persists across reloads on the same device.

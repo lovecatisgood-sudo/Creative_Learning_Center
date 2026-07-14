@@ -140,5 +140,35 @@ money or hour accounting rules (those follow the PRD exactly).
   directory's job is now navigation into that page rather than the destination
   itself.
 
+## 2026-07-14 — Passes are child-bound (family sharing removed)
+
+Owner (Eri) decided that **every purchased package/credit is tied to the one
+child it is sold for and spendable only by that child — PASS_60H included.**
+This **reverses the original PRD family-pass rule** (§4/§7.4/§8, which made the
+60h pass parent-level and usable by any sibling). The PRD text was updated in
+place to match; this entry records the reversal and where the code changed.
+
+- `orders.ts` — every `package_instance` (passes included) is now created with
+  `ownerChildId = child.id`, `ownerParentId = null`. The old `isFamilyPass`
+  (`grants.shareable`) branch that assigned parent ownership is gone.
+- `sessionOps.ts` `startSession` — the parent-level ownership branch is removed;
+  a pass can only be started for its `ownerChildId`. Siblings get the existing
+  "Package bound to another child" error (was already correct for the 30h).
+- `packages.ts` `getChildPackages` — now filters on `ownerChildId = childId`
+  only (dropped the `or(ownerParentId = parentId)` clause), so a pass no longer
+  appears on siblings' child pages; `isFamily` is hard-`false`.
+- `seed.ts` / products — `PASS_60H.grants.shareable` flipped `true → false`
+  (re-seed applied; the flag is now inert — nothing reads it).
+- Existing parent-owned instances were remapped to their purchasing child
+  (`owner_child_id = orders.child_id`, `owner_parent_id = null`); production had
+  none.
+- The family-pass UI (`StartSheet` sibling selector, `PackageRow`/`StatusChip`
+  `FAMILY` chip, `getSiblings`) is now **inert** — all guarded by `isFamily`,
+  which is always false. Left in place (harmless); can be stripped later.
+- **Owner to update, NOT changed here (marketing copy is the owner's):** the
+  landing page still advertises the 60h as *"Shareable across the whole family"*
+  (`dictionary.ts` `pass2Tag`/`pass2Desc`) and the product name is still
+  *"…Family Pass"*. These now misstate the rule — owner to revise the copy/name.
+
 ## 2026-07-13 — Product-review fixes + a11y
 Post-launch audit fixes (branch fix/review-findings): orders route returns proper JSON 500 (not bodyless) + hardened receipt-no retry (6x + jitter); signup surfaces server errors and validates phone/DOB (client+server) with legibility ≥12px; admin routes reject non-finite numeric inputs with 422 (refundHours/redemptions/start); Overview prints the full period (dropped 200-row list cap); PromptPay QR keyboard-openable; product tile is one tap target; **foreground text tokens (meta/warn/danger/ok/tealdeep) darkened to meet WCAG AA ≥4.5:1** (same hue); `<html lang>` syncs with the TH/EN toggle; AppBar controls + qty stepper bumped to ≥44px; branded :focus-visible. No business-logic/money/schema changes. EXCLUDED as working-as-designed (owner to confirm if desired): parent-grouped directory, family-view siblings, EXTRA_1H API-level gating, quick-add stub parents.

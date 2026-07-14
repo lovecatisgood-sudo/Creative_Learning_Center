@@ -1,25 +1,14 @@
 import { db } from "@/db";
-import { packageInstances, products, children, orders, sessions } from "@/db/schema";
-import { eq, or, and, desc, isNotNull } from "drizzle-orm";
+import { packageInstances, products, orders, sessions } from "@/db/schema";
+import { eq, and, desc, isNotNull } from "drizzle-orm";
 import { effectiveStatus, type ChildPackage, type HistoryItem } from "@/lib/product";
 
 export type { ChildPackage, HistoryItem, InstanceStatus } from "@/lib/product";
 export { effectiveStatus, productName } from "@/lib/product";
 
-// Instances usable by this child: owned directly, or a shareable pass owned by
-// the child's parent (family 60h pass appears on every sibling's page).
+// Instances usable by this child: every package/credit is bound to the one
+// child it was sold to (owner decision 2026-07-14; no parent-level sharing).
 export async function getChildPackages(childId: number): Promise<ChildPackage[]> {
-  const [child] = await db
-    .select({ parentId: children.parentId })
-    .from(children)
-    .where(eq(children.id, childId))
-    .limit(1);
-  const parentId = child?.parentId ?? null;
-
-  const ownerFilter = parentId
-    ? or(eq(packageInstances.ownerChildId, childId), eq(packageInstances.ownerParentId, parentId))
-    : eq(packageInstances.ownerChildId, childId);
-
   const rows = await db
     .select({
       id: packageInstances.id,
@@ -35,11 +24,10 @@ export async function getChildPackages(childId: number): Promise<ChildPackage[]>
       clayCreditsRemaining: packageInstances.clayCreditsRemaining,
       extraHoursRemaining: packageInstances.extraHoursRemaining,
       expiresAt: packageInstances.expiresAt,
-      ownerParentId: packageInstances.ownerParentId,
     })
     .from(packageInstances)
     .innerJoin(products, eq(packageInstances.productId, products.id))
-    .where(ownerFilter)
+    .where(eq(packageInstances.ownerChildId, childId))
     .orderBy(desc(packageInstances.createdAt));
 
   const now = new Date();
@@ -56,7 +44,7 @@ export async function getChildPackages(childId: number): Promise<ChildPackage[]>
     clayCreditsRemaining: r.clayCreditsRemaining,
     extraHoursRemaining: r.extraHoursRemaining,
     expiresAt: r.expiresAt ? r.expiresAt.toISOString() : null,
-    isFamily: Boolean(r.ownerParentId) && Boolean(r.grants?.shareable),
+    isFamily: false, // family sharing removed 2026-07-14; every instance is child-bound
   }));
 }
 

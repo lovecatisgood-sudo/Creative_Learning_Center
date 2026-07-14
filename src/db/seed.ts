@@ -26,7 +26,7 @@ const CATALOG: SeedProduct[] = [
   { sku: "PKG_2H_CRAYON", nameEn: "2 Hours + Crayon Session", nameTh: "2 ชั่วโมง + ระบายสีเทียน", type: "BUNDLE", priceThb: 329, grants: { hours: 2, crayonSessions: 1 } },
   { sku: "PKG_2H_4CLAY", nameEn: "2 Hours + 4 Small Statues", nameTh: "2 ชั่วโมง + ปั้นดินเบา 4 ชิ้น", type: "BUNDLE", priceThb: 599, grants: { hours: 2, claySessions: 4 } },
   { sku: "PASS_30H", nameEn: "30-Hour Creative Play Pass", nameTh: "แพ็กเกจ 30 ชั่วโมง", type: "HOUR_PASS", priceThb: 3599, grants: { hours: 30, crayonSessions: 5, claySessions: 3, shareable: false } },
-  { sku: "PASS_60H", nameEn: "60-Hour Creative Family Pass", nameTh: "แพ็กเกจครอบครัว 60 ชั่วโมง", type: "HOUR_PASS", priceThb: 5999, grants: { hours: 60, crayonSessions: 10, claySessions: 6, shareable: true } },
+  { sku: "PASS_60H", nameEn: "60-Hour Creative Family Pass", nameTh: "แพ็กเกจครอบครัว 60 ชั่วโมง", type: "HOUR_PASS", priceThb: 5999, grants: { hours: 60, crayonSessions: 10, claySessions: 6, shareable: false } },
 ];
 
 async function main() {

@@ -51,13 +51,12 @@ export async function startSession(opts: {
     const grants = (product.grants ?? {}) as ProductGrants;
     if (grants.extendOnly || inst.hoursTotal <= 0) throw new SessionError("This item cannot start a session");
 
-    // Family (shareable, parent-owned) pass may be started for any sibling; a
-    // child-bound instance only for its owner child.
+    // Every instance is bound to the child it was sold to (owner decision
+    // 2026-07-14; no parent-level / family sharing). A pass can only be started
+    // for that child — siblings cannot use it.
     const [child] = await tx.select().from(children).where(eq(children.id, childId)).limit(1);
     if (!child) throw new SessionError("Child not found");
-    if (inst.ownerParentId) {
-      if (child.parentId !== inst.ownerParentId) throw new SessionError("Child not on this family pass");
-    } else if (inst.ownerChildId && inst.ownerChildId !== childId) {
+    if (inst.ownerChildId && inst.ownerChildId !== childId) {
       throw new SessionError("Package bound to another child");
     }
 

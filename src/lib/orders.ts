@@ -158,18 +158,19 @@ export async function createPaidOrder(opts: {
 
       const grants = (product.grants ?? {}) as ProductGrants;
       const credits = instanceCreditsFor(product.type, grants);
-      const isFamilyPass = product.type === "HOUR_PASS" && grants.shareable === true;
       const expiresAt = product.type === "HOUR_PASS" ? plusSixMonths(now) : null;
 
-      // qty N → N independent instances (PRD §5, §7.8).
+      // qty N → N independent instances (PRD §5, §7.8). Every instance — passes
+      // included — is bound to the purchasing child and spendable only by that
+      // child (owner decision 2026-07-14; no parent-level / family sharing).
       for (let i = 0; i < line.qty; i++) {
         const [inst] = await tx
           .insert(packageInstances)
           .values({
             orderItemId: item.id,
             productId: product.id,
-            ownerChildId: isFamilyPass ? null : child.id,
-            ownerParentId: isFamilyPass ? child.parentId ?? null : null,
+            ownerChildId: child.id,
+            ownerParentId: null,
             status: "available",
             expiresAt,
             ...credits,
