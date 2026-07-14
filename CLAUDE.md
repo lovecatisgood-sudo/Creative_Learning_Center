@@ -11,6 +11,31 @@ prototype are `chmod 444` read-only; don't edit them. `DECISIONS.md` records
 where the implementation interprets an ambiguous spec point — read it before
 changing money/hours/credits logic.
 
+## Working style (read first)
+
+This is a small internal app. Bias toward **shipping the simple thing**, not
+process ceremony. Adapted from Karpathy's LLM-coding guidelines.
+
+- **Simplicity first.** Write the minimum code that solves the asked problem —
+  no speculative features, no abstractions for single-use code, no "flexibility"
+  nobody requested, no error handling for impossible states. If it's 200 lines
+  and could be 50, rewrite it. Ask: "would a senior engineer call this
+  overcomplicated?"
+- **Surgical changes.** Touch only what the request needs. Don't refactor,
+  reformat, or "improve" adjacent code; match existing style. Every changed line
+  should trace to the ask. Remove only the orphans your own change created;
+  mention pre-existing dead code, don't delete it unasked.
+- **Think, then ask — briefly.** State assumptions in a line; if genuinely
+  ambiguous (esp. money/hours/credits), ask before coding. Don't turn a
+  one-liner into a discussion.
+- **Verify by driving the app, not by writing tests.** There are no unit tests
+  here (see below) — "done" means the HTTP API/DB behaves correctly, per
+  WALKTHROUGH.md. Skip the test-first framing.
+- **Process skills are opt-in for small work.** Use judgment: reach for
+  brainstorming / TDD / systematic-debugging only when a task is genuinely large
+  or risky. For a small, clear feature or fix, just do it. CLAUDE.md instructions
+  take precedence over reflexive skill invocation.
+
 ## Commands
 
 ```bash
