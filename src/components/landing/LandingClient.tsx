@@ -6,23 +6,29 @@ import { landingImages } from "@/lib/landing/images";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { RevealOnScroll } from "./RevealOnScroll";
 
+type LandingClientProps = {
+  showChrome?: boolean;
+};
+
 // Full v2 landing page markup, ported 1:1 from the approved dist-landing/index.html
 // static mock. Class names (wrap, hero, kicker, sec, gallery, g-card, svc, pass, …)
 // match the ported CSS in globals.css under the `.landing-v2` scope. Every
 // user-visible string goes through t() — no hardcoded display text.
-export function LandingClient() {
+export function LandingClient({ showChrome = true }: LandingClientProps) {
   const { t } = useLang();
   const gallerySizes = "(min-width:900px) 540px, 90vw";
 
   return (
     <div className="landing-v2">
-      <header>
-        <span className="brand">
-          <ResponsiveImage image={landingImages.logo} alt={t("landingLogoAlt")} sizes="38px" />
-          <b>{t("shopName")}</b>
-        </span>
-        <LangToggle />
-      </header>
+      {showChrome ? (
+        <header>
+          <span className="brand">
+            <ResponsiveImage image={landingImages.logo} alt={t("landingLogoAlt")} sizes="38px" />
+            <b>{t("shopName")}</b>
+          </span>
+          <LangToggle />
+        </header>
+      ) : null}
 
       <section className="hero">
         <ResponsiveImage
@@ -311,20 +317,22 @@ export function LandingClient() {
         </RevealOnScroll>
       </section>
 
-      <footer>
-        <span className="fbrand">
-          <ResponsiveImage image={landingImages.logo} alt="" sizes="34px" />
-          <span>{t("shopName")}</span>
-        </span>
-        <div>
-          <small>{t("landingFooterTagline")}</small>
-        </div>
-        <nav className="flinks" aria-label={t("shopName")}>
-          <a href="/terms">{t("footerTerms")}</a>
-          <span aria-hidden>·</span>
-          <a href="/privacy">{t("footerPrivacy")}</a>
-        </nav>
-      </footer>
+      {showChrome ? (
+        <footer>
+          <span className="fbrand">
+            <ResponsiveImage image={landingImages.logo} alt="" sizes="34px" />
+            <span>{t("shopName")}</span>
+          </span>
+          <div>
+            <small>{t("landingFooterTagline")}</small>
+          </div>
+          <nav className="flinks" aria-label={t("shopName")}>
+            <a href="/terms">{t("footerTerms")}</a>
+            <span aria-hidden>·</span>
+            <a href="/privacy">{t("footerPrivacy")}</a>
+          </nav>
+        </footer>
+      ) : null}
     </div>
   );
 }

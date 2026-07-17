@@ -3,6 +3,7 @@ import { dict } from "@/lib/i18n/dictionary";
 import { CREATIVE_URL, OG_IMAGE } from "@/lib/landing/site";
 import { Jsonld } from "@/components/landing/Jsonld";
 import { LandingClient } from "@/components/landing/LandingClient";
+import { MainSiteShell } from "@/components/main-site/MainSiteShell";
 
 // Metadata is Thai (the default/indexed language).
 export const metadata: Metadata = {
@@ -36,7 +37,9 @@ export default function LandingPage() {
   return (
     <>
       <Jsonld />
-      <LandingClient />
+      <MainSiteShell>
+        <LandingClient showChrome={false} />
+      </MainSiteShell>
     </>
   );
 }

@@ -3,6 +3,7 @@
 export default function LandingLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <link rel="stylesheet" href="/main-site/assets/styles.css" />
       <noscript>
         <style>{`.landing-v2 .reveal{opacity:1 !important;transform:none !important}`}</style>
       </noscript>
