@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { LangToggle } from "@/components/LangToggle";
@@ -17,6 +17,42 @@ function isPlausiblePhone(phone: string): boolean {
   if (!PHONE_RE.test(phone)) return false;
   return (phone.match(/\d/g) ?? []).length >= 6;
 }
+
+const INTEREST_OPTIONS = [
+  ["playgroup-general", "Little Explorer Playgroup", "Little Explorer Playgroup"],
+  ["playgroup-1h", "Playgroup - 1 hour / 199 THB", "Playgroup - 1 ชั่วโมง / 199 บาท"],
+  ["playgroup-2h", "Playgroup - 2 hours / 300 THB", "Playgroup - 2 ชั่วโมง / 300 บาท"],
+  ["playgroup-half-day", "Playgroup - weekday half-day / 599 THB", "Playgroup - ครึ่งวันธรรมดา / 599 บาท"],
+  ["playgroup-weekday-full", "Playgroup - weekday full-day / 999 THB", "Playgroup - เต็มวันธรรมดา / 999 บาท"],
+  ["playgroup-saturday-full", "Playgroup - Saturday full-day / 1,500 THB", "Playgroup - เต็มวันเสาร์ / 1,500 บาท"],
+  ["playgroup-sunday-full", "Playgroup - Sunday full-day / 1,500 THB", "Playgroup - เต็มวันอาทิตย์ / 1,500 บาท"],
+  ["playgroup-weekday-pass", "Playgroup - 20-session weekday pass / 18,000 THB", "Playgroup - บัตรวันธรรมดา 20 ครั้ง / 18,000 บาท"],
+  ["playgroup-saturday-pass", "Playgroup - 8-session Saturday pass / 9,200 THB", "Playgroup - บัตรวันเสาร์ 8 ครั้ง / 9,200 บาท"],
+  ["playgroup-sunday-pass", "Playgroup - 8-session Sunday pass / 9,200 THB", "Playgroup - บัตรวันอาทิตย์ 8 ครั้ง / 9,200 บาท"],
+  ["creative-general", "Creative Club - After School Explorer", "Creative Club - After School Explorer"],
+  ["creative-1h", "Creative Club - 1 hour / 199 THB", "Creative Club - 1 ชั่วโมง / 199 บาท"],
+  ["creative-2h", "Creative Club - 2 hours / 300 THB", "Creative Club - 2 ชั่วโมง / 300 บาท"],
+  ["creative-half-day", "Creative Club - 4-hour half-day / 599 THB", "Creative Club - ครึ่งวัน 4 ชั่วโมง / 599 บาท"],
+  ["creative-meal", "Creative Club - meal care add-on / 299 THB", "Creative Club - Meal Care / 299 บาท"],
+  ["creative-weekday-pass", "Creative Club - weekday after-school pass", "Creative Club - บัตรหลังเลิกเรียนวันธรรมดา"],
+  ["creative-homework-pass", "Creative Club - homework & creative pass", "Creative Club - Homework & Creative Pass"],
+  ["creative-dinner-pickup-pass", "Creative Club - dinner & late pickup pass", "Creative Club - Dinner & Late Pickup Pass"],
+] as const;
+
+const PLAN_QUERY_TO_INTEREST: Record<string, string> = {
+  "1h": "playgroup-1h",
+  "2h": "playgroup-2h",
+  "4h": "playgroup-half-day",
+  "weekday-full-day": "playgroup-weekday-full",
+  "saturday-full-day": "playgroup-saturday-full",
+  "sunday-full-day": "playgroup-sunday-full",
+  "playgroup-weekday-pass": "playgroup-weekday-pass",
+  "saturday-pass": "playgroup-saturday-pass",
+  "sunday-pass": "playgroup-sunday-pass",
+  "weekday-after-school-pass": "creative-weekday-pass",
+  "homework-creative-pass": "creative-homework-pass",
+  "dinner-late-pickup-pass": "creative-dinner-pickup-pass",
+};
 
 // Today's date as YYYY-MM-DD in the browser's local time — good enough for a
 // same-day DOB check (the server re-checks against Bangkok time).
@@ -35,6 +71,7 @@ export default function SignupPage() {
   const [parentName, setParentName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [programInterest, setProgramInterest] = useState("");
   const [kids, setKids] = useState<ChildForm[]>([emptyChild()]);
   const [consent, setConsent] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,6 +81,13 @@ export default function SignupPage() {
   // only gates /admin). Opened in a new tab so the in-progress form isn't lost.
   const termsUrl = "/terms";
   const privacyUrl = "/privacy";
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("plan") || params.get("program") || "";
+    const mapped = PLAN_QUERY_TO_INTEREST[raw] || raw;
+    if (INTEREST_OPTIONS.some(([value]) => value === mapped)) setProgramInterest(mapped);
+  }, []);
 
   function setKid(i: number, patch: Partial<ChildForm>) {
     setKids((prev) => prev.map((k, idx) => (idx === i ? { ...k, ...patch } : k)));
@@ -75,7 +119,7 @@ export default function SignupPage() {
       res = await fetch("/api/public/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ parentName, phone, email, consent, children: kids }),
+        body: JSON.stringify({ parentName, phone, email, programInterest, consent, children: kids }),
       });
     } catch {
       setBusy(false);
@@ -155,6 +199,25 @@ export default function SignupPage() {
               />
             </Field>
           </div>
+        </section>
+
+        <section className="rounded-xl border border-line bg-card p-2">
+          <h2 className="mb-1 text-[13px] font-bold text-ink">{label("แพ็กเกจที่สนใจ", "Package interest")}</h2>
+          <Field label={label("เลือกถ้าทราบแล้ว", "Select if known")}>
+            <select
+              className="field"
+              style={compactField}
+              value={programInterest}
+              onChange={(e) => setProgramInterest(e.target.value)}
+            >
+              <option value="">{label("ให้ทีมงานช่วยแนะนำ", "Let the team recommend")}</option>
+              {INTEREST_OPTIONS.map(([value, en, th]) => (
+                <option key={value} value={value}>
+                  {lang === "th" ? th : en}
+                </option>
+              ))}
+            </select>
+          </Field>
         </section>
 
         {/* Child cards */}

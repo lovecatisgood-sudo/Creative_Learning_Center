@@ -50,6 +50,16 @@ function instanceCreditsFor(
   };
 }
 
+function shouldCreatePackageInstance(grants: ProductGrants): boolean {
+  if (grants.receiptOnly) return false;
+  return Boolean(
+    (grants.hours ?? 0) > 0 ||
+      (grants.crayonSessions ?? 0) > 0 ||
+      (grants.claySessions ?? 0) > 0 ||
+      grants.extendOnly === true
+  );
+}
+
 // Next daily receipt number SCCC-YYYYMMDD-#### (Bangkok day). Reads the day's
 // existing numbers inside the transaction and takes max+1 in JS (a handful of
 // rows per day). The unique constraint on receipt_no is the concurrency backstop
@@ -159,6 +169,7 @@ export async function createPaidOrder(opts: {
       const grants = (product.grants ?? {}) as ProductGrants;
       const credits = instanceCreditsFor(product.type, grants);
       const expiresAt = product.type === "HOUR_PASS" ? plusSixMonths(now) : null;
+      if (!shouldCreatePackageInstance(grants)) continue;
 
       // qty N → N independent instances (PRD §5, §7.8). Every instance — passes
       // included — is bound to the purchasing child and spendable only by that

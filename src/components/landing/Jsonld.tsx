@@ -9,7 +9,7 @@ export function Jsonld() {
     "@type": "ChildCare",
     name: "Siamese Cat Creative Club",
     description:
-      "A safe supervised indoor children's playroom with art, crayon and soft-clay activities in central Bangkok.",
+      "A safe supervised small-group playgroup and after-school care space for children near Mega Bangna.",
     url: CREATIVE_URL,
     image: `${SITE_URL}${OG_IMAGE}`,
     logo: `${SITE_URL}/landing/siamese-cat-creative-club-logo-512.webp`,
@@ -18,10 +18,12 @@ export function Jsonld() {
     makesOffer: [
       { "@type": "Offer", name: "1 Hour of Play", price: "199", priceCurrency: "THB" },
       { "@type": "Offer", name: "2 Hours of Play", price: "300", priceCurrency: "THB" },
-      { "@type": "Offer", name: "Crayon Drawing Session", price: "59", priceCurrency: "THB" },
-      { "@type": "Offer", name: "Soft-Clay Statue", price: "150", priceCurrency: "THB" },
-      { "@type": "Offer", name: "30-Hour Creative Play Pass", price: "3599", priceCurrency: "THB" },
-      { "@type": "Offer", name: "60-Hour Creative Family Pass", price: "5999", priceCurrency: "THB" },
+      { "@type": "Offer", name: "Weekday Half-Day Care", price: "599", priceCurrency: "THB" },
+      { "@type": "Offer", name: "Weekday Full-Day Playgroup", price: "999", priceCurrency: "THB" },
+      { "@type": "Offer", name: "Weekend Full-Day Playgroup", price: "1500", priceCurrency: "THB" },
+      { "@type": "Offer", name: "20-Session Weekday Full-Day Pass", price: "18000", priceCurrency: "THB" },
+      { "@type": "Offer", name: "8-Session Weekend Full-Day Pass", price: "9200", priceCurrency: "THB" },
+      { "@type": "Offer", name: "After School Meal Care Add-On", price: "299", priceCurrency: "THB" },
     ],
     address: {
       "@type": "PostalAddress",

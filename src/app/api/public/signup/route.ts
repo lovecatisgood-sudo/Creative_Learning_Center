@@ -32,6 +32,7 @@ export async function POST(req: Request) {
   const parentName = String(body.parentName ?? "").trim();
   const phone = String(body.phone ?? "").trim();
   const email = String(body.email ?? "").trim() || null;
+  const programInterest = String(body.programInterest ?? "").trim();
   const consent = body.consent === true;
   const kids: ChildInput[] = Array.isArray(body.children) ? body.children : [];
 
@@ -76,6 +77,7 @@ export async function POST(req: Request) {
           name: k.name.trim(),
           dob: k.dob,
           gender: k.gender,
+          notes: programInterest ? `Package interest: ${programInterest}` : null,
         }))
       )
       .returning();

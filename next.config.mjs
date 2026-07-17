@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const mainSiteRoutes = [
   "inside",
+  "playgroup",
+  "creative",
   "memberships",
   "dinner",
   "faq",

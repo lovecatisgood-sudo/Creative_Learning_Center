@@ -171,6 +171,7 @@ export type ProductGrants = {
   claySessions?: number;
   extendOnly?: boolean;
   shareable?: boolean;
+  receiptOnly?: boolean;
 };
 
 export type Product = typeof products.$inferSelect;

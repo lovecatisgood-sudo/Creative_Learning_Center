@@ -109,8 +109,8 @@ p { margin: 0 0 16px; }
 .cat-face::after { content: "⌄"; position: absolute; left: 7px; top: 5px; color: var(--seal); font-weight: 900; font-size: 12px; }
 .brand-text strong { display: block; font-family: "Mitr", sans-serif; font-size: 16px; line-height: 1.1; }
 .brand-text span { font-size: 11px; color: var(--seal-soft); letter-spacing: .04em; }
-.main-nav { display: flex; align-items: center; gap: 18px; margin-left: auto; }
-.main-nav a { text-decoration: none; font-weight: 700; font-size: 14px; position: relative; white-space: nowrap; }
+.main-nav { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+.main-nav a { text-decoration: none; font-weight: 700; font-size: 13.5px; position: relative; white-space: nowrap; }
 .main-nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: .2s var(--ease); }
 .main-nav a:hover::after, .main-nav a.active::after { transform: scaleX(1); }
 .header-actions { display: flex; gap: 10px; align-items: center; }
@@ -141,8 +141,6 @@ p { margin: 0 0 16px; }
 .btn:hover .paw { transform: translateX(3px) rotate(8deg); }
 
 .hero { min-height: calc(100svh - var(--header-h)); padding: 70px 0 40px; display: grid; align-items: center; position: relative; overflow: clip; }
-.hero::before { content: ""; position: absolute; width: 480px; height: 480px; border-radius: 50%; background: rgba(184,217,194,.42); right: -160px; top: -150px; }
-.hero::after { content: ""; position: absolute; width: 280px; height: 280px; border-radius: 50%; background: rgba(243,194,201,.38); left: -130px; bottom: -100px; }
 .hero-grid { display: grid; grid-template-columns: 1.04fr .96fr; align-items: center; gap: 48px; position: relative; z-index: 2; }
 .hero-copy { max-width: 660px; }
 .hero-copy h1 .highlight { position: relative; display: inline-block; z-index: 1; }
@@ -293,6 +291,19 @@ p { margin: 0 0 16px; }
 .gallery-item.large { grid-row: span 2; }
 .gallery-item .scene-fill { position:absolute; inset:0; }
 .gallery-item .caption { position:absolute; left:16px; right:16px; bottom:16px; background:rgba(255,253,248,.91); padding:12px 14px; border-radius:14px; box-shadow:var(--shadow-soft); }
+.environment-card {
+  background: #e8dfd2;
+  isolation: isolate;
+}
+.environment-card .environment-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  display: block;
+  object-fit: cover;
+}
 .art-room { background: linear-gradient(140deg,#f6dfe4,#fbefd8); }
 .art-room::before { content:""; position:absolute; width:45%; height:38%; left:12%; top:14%; background:#fff; border:8px solid #a87958; transform:rotate(-3deg); }
 .art-room::after { content:"✦  ✎  ●"; position:absolute; font-size:44px; color:var(--coral); left:22%; top:22%; letter-spacing:15px; }
@@ -398,7 +409,7 @@ body.mobile-cta-suppressed .mobile-cta.show { opacity:0; transform:translateY(12
 .success-icon { width:110px; height:110px; border-radius:50%; background:#e4f2e6; display:grid; place-items:center; font-size:52px; margin:0 auto 26px; animation:successPop .7s var(--ease); }
 @keyframes successPop { from{transform:scale(.5) rotate(-20deg);opacity:0} to{transform:scale(1);opacity:1} }
 
-@media (max-width: 1020px) {
+@media (max-width: 1120px) {
   .main-nav { position:fixed; top:var(--header-h); left:0; right:0; background:var(--paper); border-bottom:1px solid var(--border); padding:20px; display:none; flex-direction:column; align-items:stretch; gap:4px; box-shadow:var(--shadow); }
   .main-nav.open { display:flex; }
   .main-nav a { padding:12px; border-radius:10px; }
@@ -458,6 +469,8 @@ body.mobile-cta-suppressed .mobile-cta.show { opacity:0; transform:translateY(12
   body[data-page="home"],
   body[data-page="memberships"],
   body[data-page="inside"],
+  body[data-page="playgroup"],
+  body[data-page="creative"],
   body[data-page="dinner"],
   body[data-page="faq"] { padding-bottom:82px; }
   body[data-page="book"] .mobile-cta,
@@ -694,18 +707,7 @@ body.mobile-cta-suppressed .mobile-cta.show { opacity:0; transform:translateY(12
 
 
 /* Real club environment photo gallery */
-.environment-gallery .environment-card {
-  background: #e8dfd2;
-  isolation: isolate;
-}
 .environment-gallery .environment-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  display: block;
-  object-fit: cover;
   transition: transform .55s var(--ease), filter .35s ease;
 }
 .environment-gallery .environment-card:hover .environment-photo {
