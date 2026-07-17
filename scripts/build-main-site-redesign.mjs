@@ -2,7 +2,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = join(process.cwd(), "public/main-site");
-const ASSET_VERSION = "20260717-navigation-correction";
+const SHELL_VERSION = "20260717-shared-shell-v2";
+const ASSET_VERSION = SHELL_VERSION;
 const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const PUBLIC_ROUTES = new Set([
   "/",
@@ -96,7 +97,7 @@ function header(active, canonicalPath) {
   const switchHref = currentLanguage === "th"
     ? localizedRoute(canonicalPath, "en")
     : localizedRoute(canonicalPath, "th");
-  return `<header class="site-header">
+  return `<header class="site-header" data-shell-version="${SHELL_VERSION}">
   <div class="container header-inner">
     <a class="brand" href="/" aria-label="${text("Siamese Cat Creative Club home", "หน้าหลัก Siamese Cat Creative Club")}">
       <span class="brand-mark"><img class="brand-logo-img" src="/main-site/assets/logo-circle.png" alt="${text("Siamese Cat Creative Club circle logo", "โลโก้ Siamese Cat Creative Club")}"></span>
@@ -115,7 +116,7 @@ function header(active, canonicalPath) {
 }
 
 function footer() {
-  return `<footer class="site-footer">
+  return `<footer class="site-footer" data-shell-version="${SHELL_VERSION}">
   <div class="container">
     <div class="footer-grid">
       <div>
