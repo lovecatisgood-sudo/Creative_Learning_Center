@@ -21,12 +21,12 @@
 <link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/membership">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-shared-shell-v2">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-contact-navigation-v3">
 
 </head>
 <body data-page="membership" data-language="th" data-source="WEB-MEMBERSHIP">
 <a class="skip-link" href="#main">ข้ามไปยังเนื้อหา</a>
-<header class="site-header" data-shell-version="20260717-shared-shell-v2">
+<header class="site-header" data-shell-version="20260717-contact-navigation-v3">
   <div class="container header-inner">
     <a class="brand" href="/" aria-label="หน้าหลัก Siamese Cat Creative Club">
       <span class="brand-mark"><img class="brand-logo-img" src="/main-site/assets/logo-circle.png" alt="โลโก้ Siamese Cat Creative Club"></span>
@@ -41,10 +41,14 @@
         </div>
       </div>
       <a data-nav="little-explorer-program" class="nav-link" href="/little-explorer-program">โปรแกรม Little Explorer</a>
-      <a data-nav="membership" class="nav-link active" href="/membership">สมาชิก</a>
-      <a data-nav="dinner" class="nav-link" href="/dinner">แผนมื้ออาหาร</a>
+      <div class="nav-dropdown active">
+        <a data-nav="membership" class="nav-link nav-parent active" href="/membership" aria-haspopup="true">สมาชิก<span class="nav-caret" aria-hidden="true">⌄</span></a>
+        <div class="nav-submenu" aria-label="หน้าในเมนู สมาชิก">
+          <a data-nav="dinner" class="nav-submenu-link" href="/dinner">แผนมื้ออาหาร</a>
+        </div>
+      </div>
       <a data-nav="faq" class="nav-link" href="/faq">FAQ</a>
-      <a data-nav="contact" class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a>
+      <a data-nav="contact" class="btn btn-primary" href="/contact">ติดต่อเรา</a>
     </nav>
     <div class="header-actions">
       <a class="lang-toggle" data-language-switch href="/EN/membership" hreflang="en" aria-label="เปลี่ยนเป็นภาษาอังกฤษ">English</a>
@@ -53,57 +57,59 @@
   </div>
 </header>
 <main id="main">
-<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">สมาชิก</span><h1>ตัวเลือกสมาชิกสำหรับครอบครัวที่มาเป็นประจำ</h1><p class="lead">เลือกบัตรเพลย์กรุ๊ปสำหรับการดูแลวันธรรมดาหรือวันหยุดเป็นประจำ ส่วนบัตร After School Explorer จะจัดร่วมกับทีมงานตามตารางประจำสัปดาห์ เวลารับกลับ และความต้องการมื้ออาหารของเด็ก</p><div class="hero-actions"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a></div></div><div class="hero-art reveal visible"><div class="card soft-mint"><h3>สมาชิกสองรูปแบบที่แยกชัดเจน</h3><ul class="check-list"><li>Little Explorer Playgroup: บัตรวันธรรมดาและวันหยุดพร้อมราคาชัดเจน</li><li>After School Explorer: บัตรสำหรับมาเป็นประจำที่จัดให้ตรงกับกิจวัตรของเด็ก</li></ul></div></div></div></section>
+<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">สมาชิก</span><h1>ตัวเลือกสมาชิกสำหรับครอบครัวที่มาเป็นประจำ</h1><p class="lead">เลือกบัตรเพลย์กรุ๊ปสำหรับการดูแลวันธรรมดาหรือวันหยุดเป็นประจำ ส่วนบัตร After School Explorer จะจัดร่วมกับทีมงานตามตารางประจำสัปดาห์ เวลารับกลับ และความต้องการมื้ออาหารของเด็ก</p><div class="hero-actions"><a class="btn btn-primary" href="/contact">ติดต่อเรา</a></div></div><div class="hero-art reveal visible"><div class="card soft-mint"><h3>สมาชิกสองรูปแบบที่แยกชัดเจน</h3><ul class="check-list"><li>Little Explorer Playgroup: บัตรวันธรรมดาและวันหยุดพร้อมราคาชัดเจน</li><li>After School Explorer: บัตรสำหรับมาเป็นประจำที่จัดให้ตรงกับกิจวัตรของเด็ก</li></ul></div></div></div></section>
 <section class="section fawn"><div class="container"><div class="section-head"><span class="eyebrow">Little Explorer Playgroup</span><h2>สมาชิกเพลย์กรุ๊ป</h2><p class="kicker">สำหรับครอบครัวที่ต้องการเพลย์กรุ๊ปเต็มวันธรรมดาหรือวันหยุดเป็นประจำ</p></div><div class="plan-grid"><article class="card plan-card featured">
     <span class="card-tag coral">20 ครั้ง</span>
     <h3>บัตรเต็มวันธรรมดา</h3>
     <div class="price">18,000 บาท</div>
     <p class="best-for">เต็มวันธรรมดา 20 ครั้ง พร้อมมูลค่าดูแลมื้ออาหาร เฉลี่ย 900 บาทต่อครั้ง ประหยัด 1,980 บาท</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/contact">ติดต่อเรา</a></div>
   </article><article class="card plan-card hover">
     <span class="card-tag green">8 ครั้ง</span>
     <h3>บัตรเต็มวันเสาร์</h3>
     <div class="price">9,200 บาท</div>
     <p class="best-for">เต็มวันเสาร์ 8 ครั้ง พร้อมมูลค่าดูแลมื้ออาหาร เฉลี่ย 1,150 บาทต่อครั้ง ประหยัด 2,800 บาท</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/contact">ติดต่อเรา</a></div>
   </article><article class="card plan-card hover">
     <span class="card-tag green">8 ครั้ง</span>
     <h3>บัตรเต็มวันอาทิตย์</h3>
     <div class="price">9,200 บาท</div>
     <p class="best-for">เต็มวันอาทิตย์ 8 ครั้ง พร้อมมูลค่าดูแลมื้ออาหาร เฉลี่ย 1,150 บาทต่อครั้ง ประหยัด 2,800 บาท</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/contact">ติดต่อเรา</a></div>
   </article></div></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="eyebrow">After School Explorer</span><h2>สมาชิกหลังเลิกเรียน</h2><p class="kicker">ทีมงานจะยืนยันตาราง กิจวัตรรับกลับ และบริการมื้ออาหารก่อนจัดบัตรสำหรับมาเป็นประจำ</p></div><div class="plan-grid"><article class="card plan-card hover">
     <span class="card-tag blue">กิจวัตรวันธรรมดา</span>
     <h3>บัตรดูแลหลังเลิกเรียนวันธรรมดา</h3>
     <div class="price">จัดตามข้อตกลง</div>
     <p class="best-for">สำหรับการเล่นหลังเลิกเรียน การบ้าน กิจกรรมสร้างสรรค์ และการดูแลมื้ออาหารหากต้องการ</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/contact">ติดต่อเรา</a></div>
   </article><article class="card plan-card hover">
     <span class="card-tag green">โฟกัส + สร้างสรรค์</span>
     <h3>บัตรการบ้านและกิจกรรมสร้างสรรค์</h3>
     <div class="price">จัดตามข้อตกลง</div>
     <p class="best-for">เหมาะกับเด็กที่ต้องการเวลาเงียบสำหรับการบ้านหรืออ่านหนังสือก่อนเล่นสร้างสรรค์</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/contact">ติดต่อเรา</a></div>
   </article><article class="card plan-card featured">
     <span class="card-tag coral">รับกลับเย็น</span>
     <h3>บัตรมื้อเย็นและรับกลับช่วงค่ำ</h3>
     <div class="price">จัดตามข้อตกลง</div>
     <p class="best-for">เหมาะกับผู้ปกครองที่ต้องการดูแลมื้ออาหารและรอรับกลับช่วงเย็นเป็นประจำ</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/contact">ติดต่อเรา</a></div>
   </article></div></div></section>
 </main>
-<footer class="site-footer" data-shell-version="20260717-shared-shell-v2">
+<footer class="site-footer" data-shell-version="20260717-contact-navigation-v3">
   <div class="container">
     <div class="footer-grid">
       <div>
         <div class="brand" style="color:#fff8ed;margin-bottom:18px"><span class="brand-mark"><img class="brand-logo-img" src="/main-site/assets/logo-circle.png" alt="โลโก้ Siamese Cat Creative Club"></span><span class="brand-text"><strong>Siamese Cat Creative Club</strong><span style="color:rgba(255,248,237,.7)">ใกล้เมกาบางนา</span></span></div>
         <p style="max-width:480px;color:rgba(255,248,237,.76)">สองโปรแกรมกลุ่มเล็กแบบยืดหยุ่นสำหรับเด็ก ทั้งเพลย์กรุ๊ปช่วงกลางวัน และโปรแกรมหลังเลิกเรียน พร้อมการเล่น การบ้าน ความสร้างสรรค์ มื้ออาหาร และการรอรับกลับ</p>
+        <a class="footer-cafe-link" href="https://siamesecat.cafe/">เยี่ยมชม Siamese Cat Cafe</a>
       </div>
       <div>
         <div class="footer-title">สำรวจ</div>
         <div class="footer-links">
-          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a class="footer-sublink" href="/playgroup">เพลย์กรุ๊ป</a><a href="/little-explorer-program">โปรแกรม Little Explorer</a><a href="/membership">สมาชิก</a><a href="/dinner">แผนมื้ออาหาร</a><a href="/faq">FAQ</a>
+          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a class="footer-sublink" href="/playgroup">เพลย์กรุ๊ป</a><a href="/little-explorer-program">โปรแกรม Little Explorer</a><a href="/membership">สมาชิก</a><a class="footer-sublink" href="/dinner">แผนมื้ออาหาร</a><a href="/faq">FAQ</a>
+          <a href="/contact">ติดต่อเรา</a>
           <a href="/first-visit">เริ่มครั้งแรก</a>
         </div>
       </div>
@@ -115,8 +121,8 @@
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/privacy">ความเป็นส่วนตัวและ PDPA</a> · <a href="/terms">เงื่อนไขบริการ</a></span></div>
   </div>
 </footer>
-<div class="mobile-cta"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a></div>
+<div class="mobile-cta"><a class="btn btn-primary" href="/contact">ติดต่อเรา</a></div>
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>
-<script src="/main-site/assets/app.js?v=20260717-shared-shell-v2"></script>
+<script src="/main-site/assets/app.js?v=20260717-contact-navigation-v3"></script>
 </body>
 </html>

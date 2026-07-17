@@ -298,6 +298,84 @@
     });
   });
 
+  // Public contact inquiry form
+  qsa('[data-contact-form]').forEach(form => {
+    const required = qsa('[required]', form);
+    const status = qs('.form-status', form);
+    const submit = qs('[type="submit"]', form);
+    const defaultSubmitText = submit?.textContent || '';
+
+    function validateContactField(field) {
+      const wrapper = field.closest('.field') || field.closest('.consent-row');
+      const error = wrapper?.querySelector('.field-error');
+      let valid = field.checkValidity();
+      if (field.type === 'tel' && field.value.trim()) {
+        valid = /^[+\d][\d\s()-]{5,28}$/.test(field.value.trim());
+      }
+      field.setAttribute('aria-invalid', String(!valid));
+      if (error) error.textContent = valid ? '' : (lang === 'th' ? 'กรุณาตรวจสอบข้อมูลในช่องนี้' : 'Please check this field.');
+      return valid;
+    }
+
+    required.forEach(field => {
+      field.addEventListener('blur', () => validateContactField(field));
+      field.addEventListener('input', () => {
+        if (field.getAttribute('aria-invalid') === 'true') validateContactField(field);
+      });
+    });
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const valid = required.every(validateContactField);
+      if (!valid) {
+        if (status) status.textContent = lang === 'th' ? 'กรุณาตรวจสอบช่องที่มีเครื่องหมาย' : 'Please review the marked fields.';
+        qs('[aria-invalid="true"]', form)?.focus();
+        return;
+      }
+
+      if (submit) {
+        submit.disabled = true;
+        submit.textContent = lang === 'th' ? 'กำลังส่ง…' : 'Sending…';
+      }
+      if (status) status.textContent = '';
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const response = await fetch('/api/public/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+            service: data.service || '',
+            message: data.message,
+            website: data.website || '',
+            consent: data.consent === 'on',
+            language: lang,
+            source: body.dataset.source || 'WEB-CONTACT'
+          })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) throw new Error(result.error || 'request_failed');
+        form.reset();
+        required.forEach(field => field.setAttribute('aria-invalid', 'false'));
+        if (status) status.textContent = lang === 'th'
+          ? 'ส่งคำถามเรียบร้อยแล้ว ทีมงานจะติดต่อกลับโดยเร็วที่สุด'
+          : 'Your inquiry has been sent. Our team will respond as soon as possible.';
+      } catch (_) {
+        if (status) status.textContent = lang === 'th'
+          ? 'ไม่สามารถส่งแบบฟอร์มได้ กรุณาติดต่อทาง WhatsApp หรืออีเมล'
+          : 'The form could not be sent. Please contact us by WhatsApp or email.';
+      } finally {
+        if (submit) {
+          submit.disabled = false;
+          submit.textContent = defaultSubmitText;
+        }
+      }
+    });
+  });
+
   // Hide mobile CTA while keyboard is likely open
   let initialHeight = window.innerHeight;
   window.addEventListener('resize', () => {

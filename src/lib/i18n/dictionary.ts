@@ -25,6 +25,7 @@ export const dict = {
   navSearch: { th: "ค้นหา", en: "Search" },
   navSell: { th: "ขาย", en: "Sell" },
   navOverview: { th: "ภาพรวม", en: "Overview" },
+  navInquiries: { th: "คำถาม", en: "Inquiries" },
 
   // ── Login (A0) ──
   loginTitle: { th: "เข้าสู่ระบบพนักงาน", en: "Staff login" },

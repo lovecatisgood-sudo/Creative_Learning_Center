@@ -46,6 +46,26 @@ for (const language of ["th", "en"]) {
     if (JSON.stringify(labels(header)) !== JSON.stringify(expectedNav[language])) {
       throw new Error(`${language}/${page.file} has incorrect navigation labels`);
     }
+    if (!footer.includes('href="https://siamesecat.cafe/"')) {
+      throw new Error(`${language}/${page.file} is missing the Siamese Cat Cafe footer link`);
+    }
+    if (!footer.includes(language === "en" ? 'href="/EN/contact"' : 'href="/contact"')) {
+      throw new Error(`${language}/${page.file} is missing the Contact Us footer link`);
+    }
+  }
+
+  const prefix = language === "en" ? "/EN" : "";
+  const playgroup = pages.find(({ file }) => file === "playgroup.html")?.html ?? "";
+  const dinner = pages.find(({ file }) => file === "dinner.html")?.html ?? "";
+  const contact = pages.find(({ file }) => file === "contact.html")?.html ?? "";
+  if (!playgroup.includes(`href="${prefix}/membership"`)) {
+    throw new Error(`${language}/playgroup.html pass link does not open Membership`);
+  }
+  if (!dinner.includes('<a class="cafe-logo-panel" href="https://siamesecat.cafe/"')) {
+    throw new Error(`${language}/dinner.html café logo is not linked`);
+  }
+  if (!contact.includes("data-contact-form") || !contact.includes("https://wa.me/66952413028")) {
+    throw new Error(`${language}/contact.html is missing its form or WhatsApp contact`);
   }
 }
 

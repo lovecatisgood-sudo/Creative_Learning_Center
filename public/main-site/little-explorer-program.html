@@ -21,12 +21,12 @@
 <link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/little-explorer-program">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-shared-shell-v2">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-contact-navigation-v3">
 
 </head>
 <body data-page="little-explorer-program" data-language="th" data-source="WEB-LITTLE-EXPLORER-PROGRAM">
 <a class="skip-link" href="#main">ข้ามไปยังเนื้อหา</a>
-<header class="site-header" data-shell-version="20260717-shared-shell-v2">
+<header class="site-header" data-shell-version="20260717-contact-navigation-v3">
   <div class="container header-inner">
     <a class="brand" href="/" aria-label="หน้าหลัก Siamese Cat Creative Club">
       <span class="brand-mark"><img class="brand-logo-img" src="/main-site/assets/logo-circle.png" alt="โลโก้ Siamese Cat Creative Club"></span>
@@ -41,10 +41,14 @@
         </div>
       </div>
       <a data-nav="little-explorer-program" class="nav-link active" href="/little-explorer-program">โปรแกรม Little Explorer</a>
-      <a data-nav="membership" class="nav-link" href="/membership">สมาชิก</a>
-      <a data-nav="dinner" class="nav-link" href="/dinner">แผนมื้ออาหาร</a>
+      <div class="nav-dropdown">
+        <a data-nav="membership" class="nav-link nav-parent" href="/membership" aria-haspopup="true">สมาชิก<span class="nav-caret" aria-hidden="true">⌄</span></a>
+        <div class="nav-submenu" aria-label="หน้าในเมนู สมาชิก">
+          <a data-nav="dinner" class="nav-submenu-link" href="/dinner">แผนมื้ออาหาร</a>
+        </div>
+      </div>
       <a data-nav="faq" class="nav-link" href="/faq">FAQ</a>
-      <a data-nav="contact" class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a>
+      <a data-nav="contact" class="btn btn-primary" href="/contact">ติดต่อเรา</a>
     </nav>
     <div class="header-actions">
       <a class="lang-toggle" data-language-switch href="/EN/little-explorer-program" hreflang="en" aria-label="เปลี่ยนเป็นภาษาอังกฤษ">English</a>
@@ -53,7 +57,7 @@
   </div>
 </header>
 <main id="main">
-<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">เล่น • เรียนรู้ • สร้างสรรค์ • สำรวจ</span><h1>โปรแกรม Little Explorer</h1><p class="lead">เซสชัน Little Explorer แบบยืดหยุ่น ทั้งมาเล่นระยะสั้น ครึ่งวัน เต็มวันธรรมดา และวันหยุด เด็กได้เล่น สร้างสรรค์ อ่านหนังสือ และสำรวจโดยมีทีมงานดูแลแบบกลุ่มเล็ก</p><div class="hero-actions"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a><a class="btn btn-secondary" href="/playgroup">รายละเอียดเพลย์กรุ๊ป</a></div></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px"><img class="environment-photo" src="/main-site/assets/environment-play-area.webp" alt="โซนเล่นสำหรับเด็ก"><div class="caption"><strong>เซสชัน Little Explorer สำหรับหลายรูปแบบตารางเวลา</strong></div></div></div></div></section>
+<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">เล่น • เรียนรู้ • สร้างสรรค์ • สำรวจ</span><h1>โปรแกรม Little Explorer</h1><p class="lead">เซสชัน Little Explorer แบบยืดหยุ่น ทั้งมาเล่นระยะสั้น ครึ่งวัน เต็มวันธรรมดา และวันหยุด เด็กได้เล่น สร้างสรรค์ อ่านหนังสือ และสำรวจโดยมีทีมงานดูแลแบบกลุ่มเล็ก</p><div class="hero-actions"><a class="btn btn-primary" href="/contact">ติดต่อเรา</a><a class="btn btn-secondary" href="/playgroup">รายละเอียดเพลย์กรุ๊ป</a></div></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px"><img class="environment-photo" src="/main-site/assets/environment-play-area.webp" alt="โซนเล่นสำหรับเด็ก"><div class="caption"><strong>เซสชัน Little Explorer สำหรับหลายรูปแบบตารางเวลา</strong></div></div></div></div></section>
 <section class="section fawn"><div class="container"><div class="section-head"><span class="eyebrow">โปรแกรม Little Explorer</span><h2>เมนูเซสชัน</h2><p class="kicker">เลือกระยะเวลาเซสชันให้เหมาะกับตารางของครอบครัว</p></div><div class="plan-grid"><article class="card plan-card hover">
     <span class="card-tag blue">มาเล่นสั้น ๆ</span>
     <h3>เข้าเล่น 1 ชั่วโมง</h3>
@@ -93,17 +97,19 @@
   </article></div></div></section>
 <section class="section"><div class="container two-col section-grid"><div><span class="eyebrow">รายละเอียดโปรแกรม</span><h2>ตัวเลือกชัดเจนตั้งแต่ครั้งแรกจนถึงการมาเป็นประจำ</h2><p class="kicker">อ่านรายละเอียดกิจกรรมและการเข้าร่วมได้ในหน้าเพลย์กรุ๊ป ส่วนครอบครัวที่วางแผนมาเป็นประจำสามารถเปรียบเทียบบัตรได้ในหน้าสมาชิก</p></div><div class="card"><ul class="check-list"><li>เซสชัน 1 ชั่วโมงและ 2 ชั่วโมง</li><li>ดูแลครึ่งวันและเต็มวันธรรมดา</li><li>ดูแลเต็มวันเสาร์และอาทิตย์</li></ul><div class="hero-actions"><a class="btn btn-secondary" href="/playgroup">ดูเพลย์กรุ๊ป</a><a class="btn btn-secondary" href="/membership">ดูสมาชิก</a></div></div></div></section>
 </main>
-<footer class="site-footer" data-shell-version="20260717-shared-shell-v2">
+<footer class="site-footer" data-shell-version="20260717-contact-navigation-v3">
   <div class="container">
     <div class="footer-grid">
       <div>
         <div class="brand" style="color:#fff8ed;margin-bottom:18px"><span class="brand-mark"><img class="brand-logo-img" src="/main-site/assets/logo-circle.png" alt="โลโก้ Siamese Cat Creative Club"></span><span class="brand-text"><strong>Siamese Cat Creative Club</strong><span style="color:rgba(255,248,237,.7)">ใกล้เมกาบางนา</span></span></div>
         <p style="max-width:480px;color:rgba(255,248,237,.76)">สองโปรแกรมกลุ่มเล็กแบบยืดหยุ่นสำหรับเด็ก ทั้งเพลย์กรุ๊ปช่วงกลางวัน และโปรแกรมหลังเลิกเรียน พร้อมการเล่น การบ้าน ความสร้างสรรค์ มื้ออาหาร และการรอรับกลับ</p>
+        <a class="footer-cafe-link" href="https://siamesecat.cafe/">เยี่ยมชม Siamese Cat Cafe</a>
       </div>
       <div>
         <div class="footer-title">สำรวจ</div>
         <div class="footer-links">
-          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a class="footer-sublink" href="/playgroup">เพลย์กรุ๊ป</a><a href="/little-explorer-program">โปรแกรม Little Explorer</a><a href="/membership">สมาชิก</a><a href="/dinner">แผนมื้ออาหาร</a><a href="/faq">FAQ</a>
+          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a class="footer-sublink" href="/playgroup">เพลย์กรุ๊ป</a><a href="/little-explorer-program">โปรแกรม Little Explorer</a><a href="/membership">สมาชิก</a><a class="footer-sublink" href="/dinner">แผนมื้ออาหาร</a><a href="/faq">FAQ</a>
+          <a href="/contact">ติดต่อเรา</a>
           <a href="/first-visit">เริ่มครั้งแรก</a>
         </div>
       </div>
@@ -115,8 +121,8 @@
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/privacy">ความเป็นส่วนตัวและ PDPA</a> · <a href="/terms">เงื่อนไขบริการ</a></span></div>
   </div>
 </footer>
-<div class="mobile-cta"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a></div>
+<div class="mobile-cta"><a class="btn btn-primary" href="/contact">ติดต่อเรา</a></div>
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>
-<script src="/main-site/assets/app.js?v=20260717-shared-shell-v2"></script>
+<script src="/main-site/assets/app.js?v=20260717-contact-navigation-v3"></script>
 </body>
 </html>

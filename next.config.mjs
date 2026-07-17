@@ -6,6 +6,7 @@ const mainSiteRoutes = [
   "little-explorer-program",
   "membership",
   "dinner",
+  "contact",
   "faq",
   "first-visit",
   "thank-you",

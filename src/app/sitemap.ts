@@ -9,6 +9,7 @@ const routes = [
   { path: "/little-explorer-program", changeFrequency: "monthly", priority: 0.8 },
   { path: "/membership", changeFrequency: "monthly", priority: 0.8 },
   { path: "/dinner", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
   { path: "/faq", changeFrequency: "monthly", priority: 0.7 },
   { path: "/first-visit", changeFrequency: "monthly", priority: 0.7 },
   { path: "/signup", changeFrequency: "yearly", priority: 0.5 },

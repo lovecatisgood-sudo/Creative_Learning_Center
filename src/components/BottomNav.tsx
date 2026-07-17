@@ -10,6 +10,7 @@ const TABS: { href: string; key: DictKey; icon: string }[] = [
   { href: "/admin/search", key: "navSearch", icon: "🔍" },
   { href: "/admin/sell", key: "navSell", icon: "🛒" },
   { href: "/admin/overview", key: "navOverview", icon: "📊" },
+  { href: "/admin/inquiries", key: "navInquiries", icon: "✉" },
 ];
 
 export function BottomNav() {
@@ -20,7 +21,7 @@ export function BottomNav() {
       {/* Tab row itself is capped and centered so tabs stay thumb-sized instead
           of stretching edge-to-edge on tablet/landscape; the bar background
           (above) still spans the full fluid width. */}
-      <div className="mx-auto grid w-full max-w-[640px] grid-cols-4">
+      <div className="mx-auto grid w-full max-w-[720px] grid-cols-5">
         {TABS.map((tab) => {
           const active = pathname.startsWith(tab.href);
           return (

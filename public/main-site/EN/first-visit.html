@@ -21,12 +21,12 @@
 <link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/first-visit">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-shared-shell-v2">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-contact-navigation-v3">
 
 </head>
 <body data-page="first-visit" data-language="en" data-source="WEB-FIRST-VISIT">
 <a class="skip-link" href="#main">Skip to content</a>
-<header class="site-header" data-shell-version="20260717-shared-shell-v2">
+<header class="site-header" data-shell-version="20260717-contact-navigation-v3">
   <div class="container header-inner">
     <a class="brand" href="/EN/" aria-label="Siamese Cat Creative Club home">
       <span class="brand-mark"><img class="brand-logo-img" src="/main-site/assets/logo-circle.png" alt="Siamese Cat Creative Club circle logo"></span>
@@ -41,10 +41,14 @@
         </div>
       </div>
       <a data-nav="little-explorer-program" class="nav-link" href="/EN/little-explorer-program">Little Explorer Program</a>
-      <a data-nav="membership" class="nav-link" href="/EN/membership">Membership</a>
-      <a data-nav="dinner" class="nav-link" href="/EN/dinner">Meal Plans</a>
+      <div class="nav-dropdown">
+        <a data-nav="membership" class="nav-link nav-parent" href="/EN/membership" aria-haspopup="true">Membership<span class="nav-caret" aria-hidden="true">⌄</span></a>
+        <div class="nav-submenu" aria-label="Membership pages">
+          <a data-nav="dinner" class="nav-submenu-link" href="/EN/dinner">Meal Plans</a>
+        </div>
+      </div>
       <a data-nav="faq" class="nav-link" href="/EN/faq">FAQ</a>
-      <a data-nav="contact" class="btn btn-primary" href="tel:+66804803802">Contact Us</a>
+      <a data-nav="contact" class="btn btn-primary" href="/EN/contact">Contact Us</a>
     </nav>
     <div class="header-actions">
       <a class="lang-toggle" data-language-switch href="/first-visit" hreflang="th" aria-label="Switch to Thai">ไทย</a>
@@ -55,17 +59,19 @@
 <main id="main">
 <section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">Start here</span><h1>Plan your child’s first visit</h1><p class="lead">Choose a Playgroup first visit for daytime care, or choose After School Explorer for after-school care and pickup support.</p><div class="hero-actions"><a class="btn btn-primary" href="/EN/signup">Register first</a><a class="btn btn-secondary" href="/EN/little-explorer-program">Compare packages</a></div></div><div class="hero-art reveal visible"><div class="card soft-mint"><h3>First visit choices</h3><ul class="check-list"><li>Playgroup: 1 hour / 199 THB or 2 hours / 300 THB.</li><li>Playgroup weekday half-day: 4 hours / 599 THB.</li><li>After School Explorer: 1 hour / 199 THB, 2 hours / 300 THB, or 4-hour half-day / 599 THB.</li></ul></div></div></div></section>
 </main>
-<footer class="site-footer" data-shell-version="20260717-shared-shell-v2">
+<footer class="site-footer" data-shell-version="20260717-contact-navigation-v3">
   <div class="container">
     <div class="footer-grid">
       <div>
         <div class="brand" style="color:#fff8ed;margin-bottom:18px"><span class="brand-mark"><img class="brand-logo-img" src="/main-site/assets/logo-circle.png" alt="Siamese Cat Creative Club circle logo"></span><span class="brand-text"><strong>Siamese Cat Creative Club</strong><span style="color:rgba(255,248,237,.7)">Near Mega Bangna</span></span></div>
         <p style="max-width:480px;color:rgba(255,248,237,.76)">Two flexible small-group programs for children: daytime playgroup care and after-school explorer support with play, homework, creativity, meal care and pickup routines.</p>
+        <a class="footer-cafe-link" href="https://siamesecat.cafe/">Visit Siamese Cat Cafe</a>
       </div>
       <div>
         <div class="footer-title">Explore</div>
         <div class="footer-links">
-          <a href="/EN/inside">Inside the Club</a><a href="/EN/creative">Creative Club</a><a class="footer-sublink" href="/EN/playgroup">Playgroup</a><a href="/EN/little-explorer-program">Little Explorer Program</a><a href="/EN/membership">Membership</a><a href="/EN/dinner">Meal Plans</a><a href="/EN/faq">FAQ</a>
+          <a href="/EN/inside">Inside the Club</a><a href="/EN/creative">Creative Club</a><a class="footer-sublink" href="/EN/playgroup">Playgroup</a><a href="/EN/little-explorer-program">Little Explorer Program</a><a href="/EN/membership">Membership</a><a class="footer-sublink" href="/EN/dinner">Meal Plans</a><a href="/EN/faq">FAQ</a>
+          <a href="/EN/contact">Contact Us</a>
           <a href="/EN/first-visit">First Session</a>
         </div>
       </div>
@@ -77,8 +83,8 @@
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/EN/privacy">Privacy &amp; PDPA</a> · <a href="/EN/terms">Service terms</a></span></div>
   </div>
 </footer>
-<div class="mobile-cta"><a class="btn btn-primary" href="tel:+66804803802">Contact Us</a></div>
+<div class="mobile-cta"><a class="btn btn-primary" href="/EN/contact">Contact Us</a></div>
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>
-<script src="/main-site/assets/app.js?v=20260717-shared-shell-v2"></script>
+<script src="/main-site/assets/app.js?v=20260717-contact-navigation-v3"></script>
 </body>
 </html>
