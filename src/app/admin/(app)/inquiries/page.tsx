@@ -12,6 +12,7 @@ type InquiryDetail = {
   message?: string;
   language?: string;
   source?: string;
+  emailDelivery?: "pending" | "sent" | "failed";
 };
 
 const serviceLabels: Record<string, string> = {
@@ -63,6 +64,11 @@ export default async function InquiriesPage() {
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
                     {detail.phone && <a className="font-semibold text-tealdeep underline" href={`tel:${detail.phone}`}>{detail.phone}</a>}
                     {detail.email && <a className="font-semibold text-tealdeep underline" href={`mailto:${detail.email}`}>{detail.email}</a>}
+                    {detail.emailDelivery && (
+                      <span className={detail.emailDelivery === "sent" ? "font-semibold text-tealdeep" : "font-semibold text-amber-700"}>
+                        {detail.emailDelivery === "sent" ? "Email sent" : detail.emailDelivery === "failed" ? "Email delivery failed" : "Email pending"}
+                      </span>
+                    )}
                   </div>
                   <p className="mt-3 whitespace-pre-wrap text-[15px] leading-relaxed text-ink">{detail.message}</p>
                 </article>

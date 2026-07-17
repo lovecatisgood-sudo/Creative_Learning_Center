@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { auditLog } from "@/db/schema";
+import { sendContactInquiryEmail } from "@/lib/contact-mail";
 
 const PHONE_RE = /^[+\d][\d\s()-]{5,28}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,12 +43,38 @@ export async function POST(req: Request) {
   }
 
   try {
-    await db.insert(auditLog).values({
-      action: "public_contact_inquiry",
-      entity: "contact_inquiry",
-      detail: { name, phone, email, service, message, language, source },
-    });
-    return NextResponse.json({ ok: true }, { status: 201 });
+    const detail = { name, phone, email, service, message, language, source };
+    const [savedInquiry] = await db
+      .insert(auditLog)
+      .values({
+        action: "public_contact_inquiry",
+        entity: "contact_inquiry",
+        detail: { ...detail, emailDelivery: "pending" },
+      })
+      .returning({ id: auditLog.id });
+
+    let emailSent = false;
+    try {
+      const delivery = await sendContactInquiryEmail({ ...detail, language });
+      emailSent = true;
+      try {
+        await db
+          .update(auditLog)
+          .set({ detail: { ...detail, emailDelivery: "sent", emailMessageId: delivery.messageId } })
+          .where(eq(auditLog.id, savedInquiry.id));
+      } catch (updateError) {
+        console.error("Unable to record successful email delivery", updateError);
+      }
+    } catch (emailError) {
+      console.error("Contact inquiry email delivery failed", emailError);
+      await db
+        .update(auditLog)
+        .set({ detail: { ...detail, emailDelivery: "failed" } })
+        .where(eq(auditLog.id, savedInquiry.id))
+        .catch((updateError) => console.error("Unable to record email delivery failure", updateError));
+    }
+
+    return NextResponse.json({ ok: true, emailSent }, { status: 201 });
   } catch (error) {
     console.error("Public contact inquiry failed", error);
     return NextResponse.json({ error: "Unable to save inquiry" }, { status: 500 });
