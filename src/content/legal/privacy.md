@@ -67,7 +67,7 @@ We may collect order details, payment method, amount, receipt records, payment p
 
 ### 2.6 Website and Technical Information
 
-Our hosting and security providers may process device, browser, IP address, request, error, and security-log information. The website may store a language preference and temporary form or selected-program information in the browser.
+Our hosting and security providers may process device, browser, IP address, request, error, and security-log information. We use Google Analytics to understand website visits and usage, which may process device, browser, approximate location, interaction, referral, and identifier information. The website may also store a language preference and temporary form or selected-program information in the browser.
 
 ### 2.7 CCTV and Premises Information
 
@@ -212,7 +212,7 @@ Please describe the request and identify the relevant parent, child, registratio
 
 ## 16. Cookies, Local Storage, and Third-Party Links
 
-The website may use necessary browser storage for language preferences, form flow, security, and selected-program information. Hosting providers may use necessary security technologies to protect the site.
+The website may use necessary browser storage for language preferences, form flow, security, and selected-program information. Hosting providers may use necessary security technologies to protect the site. Google Analytics may use cookies or similar technologies to measure visits, page usage, referral sources, and website performance. Information handled by Google is subject to Google's own privacy terms and controls.
 
 The website may link to third-party maps, email, telephone, payment, or social services. Those services apply their own privacy policies.
 

@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = join(process.cwd(), "public/main-site");
+const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 const expectedNav = {
   th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "FAQ", "ติดต่อเรา"],
   en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "FAQ", "Contact Us"],
@@ -64,6 +65,13 @@ for (const language of ["th", "en"]) {
     if (!page.html.includes('<link rel="canonical"') || !page.html.includes('hreflang="th"') || !page.html.includes('hreflang="en"') || !page.html.includes('hreflang="x-default"')) {
       throw new Error(`${language}/${page.file} is missing canonical or language metadata`);
     }
+    const analyticsLoader = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`;
+    if (!page.html.includes(analyticsLoader) || !page.html.includes(`gtag('config', '${GOOGLE_ANALYTICS_ID}')`)) {
+      throw new Error(`${language}/${page.file} is missing Google Analytics`);
+    }
+    if (page.html.split(analyticsLoader).length !== 2) {
+      throw new Error(`${language}/${page.file} contains duplicate Google Analytics tags`);
+    }
     if (page.html.includes("logo-circle.png")) {
       throw new Error(`${language}/${page.file} still references the oversized PNG logo`);
     }
@@ -92,6 +100,18 @@ for (const language of ["th", "en"]) {
   if (!contact.includes("data-contact-form") || !contact.includes("https://wa.me/66952413028")) {
     throw new Error(`${language}/contact.html is missing its form or WhatsApp contact`);
   }
+}
+
+const appLayout = readFileSync(join(process.cwd(), "src/app/layout.tsx"), "utf8");
+const middleware = readFileSync(join(process.cwd(), "src/middleware.ts"), "utf8");
+if (!appLayout.includes(GOOGLE_ANALYTICS_ID) || !appLayout.includes("isCustomerPage")) {
+  throw new Error("Next.js public routes are missing guarded Google Analytics");
+}
+if (!appLayout.includes('pathname.startsWith("/admin")') || !appLayout.includes('pathname.startsWith("/api")')) {
+  throw new Error("Google Analytics is not excluded from admin and API routes");
+}
+if (!middleware.includes('requestHeaders.set("x-sccc-pathname", pathname)')) {
+  throw new Error("Middleware is not forwarding the pathname to the analytics guard");
 }
 
 console.log("main-site:shell → shared header, footer, labels and links verified");

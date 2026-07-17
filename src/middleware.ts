@@ -17,6 +17,7 @@ export function middleware(req: NextRequest) {
 
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set("x-sccc-language", pathname === "/EN" || pathname.startsWith("/EN/") ? "en" : "th");
+  requestHeaders.set("x-sccc-pathname", pathname);
   const nextWithLanguage = () => NextResponse.next({ request: { headers: requestHeaders } });
 
   const isLoginPage = pathname === "/admin/login";

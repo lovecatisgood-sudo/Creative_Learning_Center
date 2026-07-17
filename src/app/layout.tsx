@@ -4,6 +4,8 @@ import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { SITE_URL } from "@/lib/landing/site";
 
+const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club",
@@ -43,9 +45,26 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const language = headers().get("x-sccc-language") === "en" ? "en" : "th";
+  const requestHeaders = headers();
+  const language = requestHeaders.get("x-sccc-language") === "en" ? "en" : "th";
+  const pathname = requestHeaders.get("x-sccc-pathname") ?? "";
+  const isCustomerPage = !pathname.startsWith("/admin") && !pathname.startsWith("/api");
+
   return (
     <html lang={language}>
+      {isCustomerPage && (
+        <head>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
+            }}
+          />
+        </head>
+      )}
       <body>
         <LanguageProvider>{children}</LanguageProvider>
       </body>

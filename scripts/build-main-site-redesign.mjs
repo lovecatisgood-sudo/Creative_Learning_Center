@@ -2,11 +2,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = join(process.cwd(), "public/main-site");
-const SHELL_VERSION = "20260717-seo-performance-v5";
+const SHELL_VERSION = "20260717-google-analytics-v6";
 const ASSET_VERSION = SHELL_VERSION;
 const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const CAFE_URL = "https://siamesecat.cafe/";
 const CONTACT_URL = "/contact";
+const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 const PUBLIC_ROUTES = new Set([
   "/",
   "/inside",
@@ -273,6 +274,13 @@ function layout({ page, titleEn, titleTh, description, descriptionTh, body, acti
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/main-site/assets/styles.css?v=${ASSET_VERSION}">
 ${extraHead}
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${GOOGLE_ANALYTICS_ID}');
+</script>
 <script type="application/ld+json">${structuredData({ canonicalUrl, pageTitle, pageDescription })}</script>
 </head>
 <body data-page="${esc(page)}" data-language="${currentLanguage}" data-source="WEB-${page.toUpperCase()}">
