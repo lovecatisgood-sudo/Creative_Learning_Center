@@ -35,8 +35,8 @@ export const dict = {
   loginError: { th: "อีเมลหรือรหัสผ่านไม่ถูกต้อง", en: "Email or password is incorrect." },
 
   // ── Signup (P1/P2) ──
-  signupTitle: { th: "ลงทะเบียนสมาชิก", en: "Member registration" },
-  signupSubtitle: { th: "ลงทะเบียนสมาชิก", en: "Member registration" },
+  signupTitle: { th: "ลงทะเบียนผู้ปกครอง", en: "Parent signup" },
+  signupSubtitle: { th: "ลงทะเบียนผู้ปกครองและเด็ก", en: "Register a parent and child" },
   parentSection: { th: "ข้อมูลผู้ปกครอง", en: "Parent details" },
   parentName: { th: "ชื่อผู้ปกครอง", en: "Parent's name" },
   contactNumber: { th: "เบอร์ติดต่อ", en: "Contact number" },

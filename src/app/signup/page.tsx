@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { LangToggle } from "@/components/LangToggle";
 import { Logo } from "@/components/Logo";
@@ -18,7 +19,7 @@ function isPlausiblePhone(phone: string): boolean {
   return (phone.match(/\d/g) ?? []).length >= 6;
 }
 
-const INTEREST_OPTIONS = [
+const PLAYGROUP_INTEREST_OPTIONS = [
   ["playgroup-general", "Little Explorer Playgroup", "Little Explorer Playgroup"],
   ["playgroup-1h", "Playgroup - 1 hour / 199 THB", "Playgroup - 1 ชั่วโมง / 199 บาท"],
   ["playgroup-2h", "Playgroup - 2 hours / 300 THB", "Playgroup - 2 ชั่วโมง / 300 บาท"],
@@ -29,15 +30,20 @@ const INTEREST_OPTIONS = [
   ["playgroup-weekday-pass", "Playgroup - 20-session weekday pass / 18,000 THB", "Playgroup - บัตรวันธรรมดา 20 ครั้ง / 18,000 บาท"],
   ["playgroup-saturday-pass", "Playgroup - 8-session Saturday pass / 9,200 THB", "Playgroup - บัตรวันเสาร์ 8 ครั้ง / 9,200 บาท"],
   ["playgroup-sunday-pass", "Playgroup - 8-session Sunday pass / 9,200 THB", "Playgroup - บัตรวันอาทิตย์ 8 ครั้ง / 9,200 บาท"],
-  ["creative-general", "Creative Club - After School Explorer", "Creative Club - After School Explorer"],
-  ["creative-1h", "Creative Club - 1 hour / 199 THB", "Creative Club - 1 ชั่วโมง / 199 บาท"],
-  ["creative-2h", "Creative Club - 2 hours / 300 THB", "Creative Club - 2 ชั่วโมง / 300 บาท"],
-  ["creative-half-day", "Creative Club - 4-hour half-day / 599 THB", "Creative Club - ครึ่งวัน 4 ชั่วโมง / 599 บาท"],
-  ["creative-meal", "Creative Club - meal care add-on / 299 THB", "Creative Club - Meal Care / 299 บาท"],
-  ["creative-weekday-pass", "Creative Club - weekday after-school pass", "Creative Club - บัตรหลังเลิกเรียนวันธรรมดา"],
-  ["creative-homework-pass", "Creative Club - homework & creative pass", "Creative Club - Homework & Creative Pass"],
-  ["creative-dinner-pickup-pass", "Creative Club - dinner & late pickup pass", "Creative Club - Dinner & Late Pickup Pass"],
 ] as const;
+
+const AFTERSCHOOL_INTEREST_OPTIONS = [
+  ["creative-general", "After School Explorer Program", "After School Explorer Program"],
+  ["creative-1h", "After School Explorer - 1 hour / 199 THB", "After School Explorer - 1 ชั่วโมง / 199 บาท"],
+  ["creative-2h", "After School Explorer - 2 hours / 300 THB", "After School Explorer - 2 ชั่วโมง / 300 บาท"],
+  ["creative-half-day", "After School Explorer - 4-hour half-day / 599 THB", "After School Explorer - ครึ่งวัน 4 ชั่วโมง / 599 บาท"],
+  ["creative-meal", "After School Explorer - meal care add-on / 299 THB", "After School Explorer - Meal Care / 299 บาท"],
+  ["creative-weekday-pass", "After School Explorer - weekday pass", "After School Explorer - บัตรวันธรรมดา"],
+  ["creative-homework-pass", "After School Explorer - homework & creative pass", "After School Explorer - Homework & Creative Pass"],
+  ["creative-dinner-pickup-pass", "After School Explorer - dinner & late pickup pass", "After School Explorer - Dinner & Late Pickup Pass"],
+] as const;
+
+const INTEREST_OPTIONS = [...PLAYGROUP_INTEREST_OPTIONS, ...AFTERSCHOOL_INTEREST_OPTIONS] as const;
 
 const PLAN_QUERY_TO_INTEREST: Record<string, string> = {
   "1h": "playgroup-1h",
@@ -155,15 +161,15 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-paper pb-16">
       <header className="flex items-center justify-between px-4 py-1">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2" aria-label={label("กลับหน้าหลัก", "Back to home")}>
           <Logo size={28} />
           <div>
             <div className="text-[13px] font-extrabold leading-tight text-ink">
               {process.env.NEXT_PUBLIC_SHOP_NAME || t("shopName")}
             </div>
-            <div className="text-[10px] leading-tight text-meta">{label("ลงทะเบียนสมาชิก", "Member registration")}</div>
+            <div className="text-[10px] leading-tight text-meta">{label("ลงทะเบียนผู้ปกครอง", "Parent registration")}</div>
           </div>
-        </div>
+        </Link>
         <LangToggle />
       </header>
 
@@ -202,7 +208,7 @@ export default function SignupPage() {
         </section>
 
         <section className="rounded-xl border border-line bg-card p-2">
-          <h2 className="mb-1 text-[13px] font-bold text-ink">{label("แพ็กเกจที่สนใจ", "Package interest")}</h2>
+          <h2 className="mb-1 text-[13px] font-bold text-ink">{label("โปรแกรมหรือแพ็กเกจที่สนใจ", "Program or package interest")}</h2>
           <Field label={label("เลือกถ้าทราบแล้ว", "Select if known")}>
             <select
               className="field"
@@ -211,11 +217,20 @@ export default function SignupPage() {
               onChange={(e) => setProgramInterest(e.target.value)}
             >
               <option value="">{label("ให้ทีมงานช่วยแนะนำ", "Let the team recommend")}</option>
-              {INTEREST_OPTIONS.map(([value, en, th]) => (
-                <option key={value} value={value}>
-                  {lang === "th" ? th : en}
-                </option>
-              ))}
+              <optgroup label={label("Little Explorer Playgroup", "Little Explorer Playgroup")}>
+                {PLAYGROUP_INTEREST_OPTIONS.map(([value, en, th]) => (
+                  <option key={value} value={value}>
+                    {lang === "th" ? th : en}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label={label("After School Explorer", "After School Explorer")}>
+                {AFTERSCHOOL_INTEREST_OPTIONS.map(([value, en, th]) => (
+                  <option key={value} value={value}>
+                    {lang === "th" ? th : en}
+                  </option>
+                ))}
+              </optgroup>
             </select>
           </Field>
         </section>

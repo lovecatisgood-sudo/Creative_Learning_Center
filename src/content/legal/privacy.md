@@ -1,21 +1,19 @@
-# Siamese Creative Club — Privacy Policy
+# Siamese Cat Creative Club - Privacy Policy
 
-**Effective date:** [OWNER TODO: insert effective date, e.g. DD Month YYYY]  
-**Last updated:** [OWNER TODO: insert last-updated date, e.g. DD Month YYYY]
+**Effective date:** 17 July 2026<br>
+**Last updated:** 17 July 2026
 
-This Privacy Policy explains how **Siamese Creative Club** (“the Club,” “we,” “us,” or “our”) collects, uses, stores, discloses, and protects personal data relating to parents, guardians, children, authorized pickup persons, emergency contacts, website or app users, and customers.
+This Privacy Policy explains how **Siamese Cat Creative Club** ("the Club," "we," "us," or "our") collects, uses, stores, discloses, and protects personal data relating to parents, guardians, children, authorized pickup persons, emergency contacts, website users, and customers.
 
-This policy is intended to support compliance with Thailand’s Personal Data Protection Act B.E. 2562 (2019) (“PDPA”) and other applicable laws.
+This policy is intended to support compliance with Thailand's Personal Data Protection Act B.E. 2562 (2019) ("PDPA") and other applicable laws.
 
-> **Data Controller**  
-> Legal entity: Siamese Cat Cafe Co., Ltd.  
-> Company registration number: [OWNER TODO: insert company registration number]  
-> Address: 46/27 Bang Na-Trat Frontage Rd, Bang Kaeo, Samut Prakan 10540  
-> Telephone: +66-0804803802  
-> LINE: [OWNER TODO: insert LINE ID]  
+> **Data Controller**<br>
+> Legal entity: Siamese Cat Cafe Co., Ltd.<br>
+> Address: 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
+> Telephone: +66 80 480 3802<br>
 > Email: Cafe@siamesecat.cafe
 
-By using our app or services, you acknowledge that you have read this Privacy Policy. Where consent is required, the app will request that consent separately.
+By registering a child or using our services, you acknowledge that you have read this Privacy Policy. Where consent is legally required, we request it separately.
 
 ## 1. Who This Policy Applies To
 
@@ -23,440 +21,209 @@ This policy applies to personal data relating to:
 
 - Parents and legal guardians
 - Children registered for Club services
-- Emergency contacts
-- Authorized pickup persons
-- Customers purchasing Passes, Memberships, meals, or activities
-- Website and app users
-- Visitors to Club premises
+- Emergency contacts and authorized pickup persons
+- Customers purchasing sessions, packages, passes, activities, or meal care
+- Website users and visitors to Club premises
 - People communicating with the Club
 - People appearing in CCTV, photographs, or videos where applicable
 
 ## 2. Personal Data We Collect
 
-Depending on how you use the Club, we may collect the following information.
+Depending on how you interact with the Club, we may collect the following information.
 
 ### 2.1 Parent or Guardian Information
 
-- Full name
-- Relationship to the child
+- Name
 - Telephone number
 - Email address
-- LINE ID or other communication account
-- Address
-- Identification details where reasonably needed
-- Account login information
-- Payment and transaction information
-- Booking and communication records
-- Marketing preferences
-- Complaint and customer-service records
+- Relationship to the child, address, or identification details when reasonably needed
+- Registration, booking, communication, complaint, and customer-service records
+- Payment, transaction, and receipt information
 
 ### 2.2 Child Information
 
-- Full name
-- Nickname
-- Date of birth and age
-- Gender, where provided
-- School
-- Languages understood
-- Membership or Pass information
-- Visit, check-in, and check-out records
-- Activity participation
-- Meal selections
-- Homework or participation notes
-- Behavior, incident, and safety records
+- Name, nickname, date of birth, age, and gender where provided
+- Program or package interest
+- Booking, visit, check-in, check-out, attendance, and package-use records
+- Activity, meal, homework, participation, behavior, incident, or safety notes where relevant
 - Authorized pickup information
 - Photographs or video where separately permitted
 
-### 2.3 Health and Sensitive Personal Data
+### 2.3 Health and Other Sensitive Information
 
-Where necessary for safety and service delivery, we may collect:
+Where necessary for safety or service delivery, we may collect information about allergies, food restrictions, medical conditions, medication, disabilities, additional support needs, behavior, development, emergency care, or religious dietary requirements.
 
-- Allergies
-- Food intolerances
-- Medical conditions
-- Medication instructions
-- Disability or additional-support information
-- Developmental or behavioral information
-- Emergency medical information
-- Dietary or religious food requirements where these reveal sensitive information
+This information may be sensitive personal data. We process it only where necessary and where an appropriate legal basis or explicit consent applies.
 
-Health, disability, biometric, religious, and similar information may be sensitive personal data under applicable law. We process it only where necessary and where an appropriate legal basis or explicit consent applies.
+### 2.4 Emergency Contacts and Authorized Pickup Persons
 
-### 2.4 Emergency Contact and Authorized Pickup Information
+We may collect a person's name, relationship to the child, telephone number, identification details where reasonably needed, and pickup approval records.
 
-- Name
-- Relationship to the child
-- Telephone number
-- Identification details where reasonably needed
-- Pickup approvals and verification records
+The registering parent should tell these individuals that their information has been provided to the Club.
 
-The registering parent must inform these individuals that their information has been provided to us.
+### 2.5 Payment and Operational Information
 
-### 2.5 App, Website, and Technical Information
+We may collect order details, payment method, amount, receipt records, payment proof, purchased products, remaining package hours or sessions, and related staff audit records.
 
-- Account identifiers
-- Device and browser information
-- IP address
-- Login records
-- App activity
-- Booking history
-- Consent records
-- Document version accepted
-- Cookies or similar technologies
-- Error, security, and audit logs
+### 2.6 Website and Technical Information
 
-### 2.6 CCTV and Premises Information
+Our hosting and security providers may process device, browser, IP address, request, error, and security-log information. The website may store a language preference and temporary form or selected-program information in the browser.
 
-CCTV may record images in appropriate common areas for safety, security, access control, incident review, and operational management.
+### 2.7 CCTV and Premises Information
 
-CCTV is not placed in toilets, private changing areas, or other areas where privacy is reasonably expected.
+CCTV may record images in appropriate common areas for safety, security, access control, and incident review. CCTV is not placed in toilets, private changing areas, or other areas where privacy is reasonably expected.
 
 ## 3. How We Collect Personal Data
 
 We may collect information:
 
-- Directly from parents or guardians
-- Through registration and booking forms
-- Through our website or app
-- During check-in and check-out
-- Through purchases and payments
-- During activities and customer-service interactions
-- From CCTV in Club common areas
-- From Siamese Cat Cafe or another business within our group where necessary and legally permitted
-- From payment processors, communication services, or booking providers
-- From authorized persons acting on behalf of the parent
-
-We do not intentionally collect more information than reasonably necessary for the stated purposes.
+- Directly from parents, guardians, customers, or authorized contacts
+- Through registration, booking, payment, and service forms
+- During check-in, attendance, pickup, activities, meal care, or customer support
+- Through our website, hosting infrastructure, and security systems
+- From Club staff or service providers involved in delivering the requested service
+- From CCTV or incident records at the premises
 
 ## 4. Why We Use Personal Data
 
-We may use personal data for the following purposes.
+We may use personal data to:
 
-### 4.1 Registration and Account Administration
-
-- Create and manage parent and child profiles
-- Confirm eligibility
-- Maintain current contact information
-- Record acceptance of Terms and policies
-- Manage account access
-
-### 4.2 Service Delivery
-
-- Manage Passes and Memberships
-- Process bookings
-- Record attendance
-- Manage check-in and check-out
-- Track remaining hours or eligible access
-- Arrange activities and materials
-- Provide meal-plan services
-- Communicate necessary service information
-
-### 4.3 Child Safety and Wellbeing
-
-- Review allergies, medical conditions, and support needs
-- Verify authorized pickup persons
-- Contact parents and emergency contacts
-- Respond to incidents and emergencies
-- Maintain safety and safeguarding records
-- Determine whether the Club can reasonably support a child’s needs
-
-### 4.4 Payments and Business Administration
-
-- Process payments
-- Issue receipts
-- Prevent fraud or misuse
-- Reconcile café and activity charges
-- Maintain accounting, tax, and transaction records
-- Handle refunds and disputes
-
-### 4.5 Customer Service and Quality
-
-- Respond to questions and complaints
-- Record feedback
-- Investigate incidents
-- Improve activities, scheduling, and customer experience
-- Train staff using appropriately protected operational information
-
-### 4.6 Security and Legal Compliance
-
+- Register parents and children
+- Review service interest, child readiness, and requested support
+- Confirm bookings, capacity, attendance, check-in, and pickup
+- Deliver Little Explorer Playgroup and After School Explorer services
+- Manage packages, passes, remaining access, activities, and meal care
+- Process payments, issue receipts, prevent misuse, and maintain accounting records
 - Protect children, families, staff, property, and systems
-- Maintain audit logs
-- Detect unauthorized access or misuse
-- Comply with legal obligations
-- Establish, exercise, or defend legal claims
-- Respond to lawful requests from authorities
+- Review allergies, health information, emergency needs, and authorized pickup
+- Respond to questions, complaints, incidents, and privacy requests
+- Maintain operational, security, and audit records
+- Comply with legal obligations and establish, exercise, or defend legal claims
+- Send marketing only where consent or another lawful basis applies
 
-### 4.7 Marketing
-
-Where consent or another lawful basis is required, we may send:
-
-- Promotions
-- Membership offers
-- Activity announcements
-- Café offers
-- Event information
-- News from businesses within our own group
-
-Marketing preferences are optional. Declining marketing does not prevent service registration.
+If information is necessary to register a child or provide a service safely, failure to provide it may mean we cannot confirm the service.
 
 ## 5. Legal Bases for Processing
 
-Depending on the purpose and applicable law, we may process personal data based on:
+Depending on the purpose and applicable law, we may rely on:
 
 - Steps requested before entering into a contract
 - Performance of a contract
 - Compliance with legal obligations
 - Protection of vital interests
-- Our legitimate interests or those of another person, where these interests do not override the individual’s rights
+- Legitimate interests that do not override the individual's rights
 - Establishment, exercise, or defense of legal claims
-- Consent
-- Explicit consent for sensitive personal data where required
-- Other lawful grounds available under applicable law
+- Consent or explicit consent where required
+- Another lawful ground available under applicable law
 
-Where processing is necessary to provide a requested service, failure to provide required information may mean we cannot register the child or safely provide the service.
+## 6. Children's Data and Parental Authority
 
-## 6. Children’s Personal Data and Parental Authority
+A parent, legal guardian, or authorized person must register the child and provide accurate information.
 
-A parent or legal guardian must register the child and provide the required acknowledgments and consents.
+We limit children's personal data to what is reasonably needed for registration, safety, service delivery, payment, attendance, and legal obligations. Sensitive information is available only to authorized staff or providers who need it for those purposes.
 
-The registering adult confirms that they:
+We do not use children's health or support information for advertising profiling.
 
-- Have authority to provide the child’s information
-- Have authority to accept applicable Terms
-- Will provide accurate information
-- Will update the Club when information changes
+## 7. Necessary Service Communications
 
-Where Thai law requires parental consent or another form of authorization for a child’s personal data, we will request it through the app or another appropriate method.
+We may send non-marketing communications about registration, booking confirmation, schedule changes, capacity, payment, package balance, attendance, pickup, safety, incidents, or policy updates.
 
-We do not knowingly use a child’s personal data for direct marketing to the child.
+These communications may be sent by telephone, email, SMS, or another channel the family uses with the Club.
 
-## 7. Sensitive Personal Data
+## 8. Marketing and Media Choices
 
-We may need health, allergy, disability, developmental, behavioral, medication, dietary, or emergency information to determine whether participation is safe and appropriate.
+Marketing and promotional photography or video are optional. Declining either does not prevent registration or access to services.
 
-We limit access to this information to staff or service providers who reasonably need it.
+Where consent applies, it may be withdrawn for future use by contacting the Club. Withdrawal does not affect processing that occurred lawfully before withdrawal.
 
-Sensitive personal data will not be used for advertising profiling.
+Security or incident images may still be created or retained where reasonably necessary and legally permitted.
 
-The app should present a separate acknowledgment or explicit-consent mechanism where required for sensitive personal data.
+We do not sell personal data or disclose it to unrelated businesses for their own marketing.
 
-## 8. Necessary Service Communications
+## 9. Sharing Personal Data
 
-Even where a parent declines marketing, we may still send necessary service communications, including:
+We may share personal data only where reasonably necessary with:
 
-- Booking confirmation
-- Changes to operating hours
-- Payment information
-- Pass or Membership balance
-- Pickup or attendance matters
-- Safety or emergency information
-- Incident information
-- Policy or Terms updates
-- Account-security notices
-
-These messages are not promotional marketing.
-
-## 9. Marketing Preferences
-
-Marketing is optional.
-
-Parents may choose which channels they wish to receive marketing through, such as:
-
-- Email
-- SMS
-- LINE or chat
-- Telephone
-- In-app notification
-
-Consent may be withdrawn at any time by using an unsubscribe link, replying “STOP” where supported, changing app preferences, or contacting the Club.
-
-Withdrawal does not affect processing that occurred lawfully before withdrawal.
-
-We do not sell personal data and do not disclose it to outside businesses for their own unrelated marketing.
-
-## 10. Photographs and Videos
-
-Promotional photography and video require separate optional consent.
-
-Parents may choose whether the Club may use identifiable images of their child for social media, the website, printed advertising, event promotion, or internal group marketing.
-
-Declining media consent does not affect access to services.
-
-The Club may still create images or recordings where reasonably necessary for security, incident documentation, or legal purposes, subject to applicable law.
-
-Media consent may be withdrawn for future use. Withdrawal may not require the Club to recall printed materials already distributed or content lawfully published before withdrawal, but we will take reasonable steps regarding future use.
-
-## 11. Use Within Our Business Group
-
-Personal data may be used within our own group of related businesses where necessary and legally permitted, including:
-
-- Siamese Creative Club
-- Siamese Cat Cafe
-- Siamese Cat Hotel or pet-service operations
-- Related education or activity services operated by the same group
-
-Internal use may include shared customer support, booking coordination, café meal administration, payment reconciliation, safety management, account administration, and marketing where the parent has opted in.
-
-We do not treat internal-group access as unlimited. Information should be shared only where relevant to the stated purpose and only with authorized personnel.
-
-## 12. Service Providers and Other Recipients
-
-We may disclose personal data to trusted third parties where reasonably necessary, including:
-
-- App and website hosting providers
-- Cloud-storage providers
-- Payment processors and banks
-- Email, SMS, LINE, and notification providers
-- Booking, CRM, and customer-support providers
-- Accountants, auditors, insurers, and professional advisers
+- Authorized Club and Siamese Cat Cafe staff supporting registration, activities, meal care, payment, safety, or customer service
+- Website, database, cloud-storage, security, email, and communications providers
+- Banks, payment processors, accountants, auditors, insurers, and professional advisers
 - Medical or emergency services
 - Government authorities, courts, regulators, or law-enforcement bodies where legally required
 - Contractors supporting security, maintenance, or operations
 
-Service providers should process personal data only for authorized purposes and with appropriate protection.
+Providers should use personal data only for authorized purposes and with appropriate safeguards.
 
-We do not share customer information with unrelated businesses for their own marketing.
+## 10. International Data Transfers
 
-## 13. International Data Transfers
+Some technology providers may store or process information outside Thailand. Where an international transfer occurs, we take reasonable steps required by applicable law, such as selecting appropriate providers, using contractual safeguards, obtaining consent where required, or relying on another lawful transfer mechanism.
 
-Some technology providers may store or process information outside Thailand.
+## 11. Data Retention
 
-Where personal data is transferred internationally, we will take reasonable steps required by applicable law, which may include using providers in jurisdictions with appropriate protection, contractual data-protection safeguards, consent where legally required, or another lawful transfer mechanism.
+We retain personal data only for as long as reasonably necessary for service delivery, safety, legal obligations, accounting, dispute resolution, and legitimate business needs.
 
-## 14. Data Retention
+Retention depends on the type of record:
 
-We retain personal data only for as long as reasonably necessary for the stated purposes, legal obligations, safety, accounting, dispute resolution, and legitimate business needs.
+- Registration and child profiles are kept while services remain active and for a reasonable period afterward
+- Booking, transaction, receipt, and tax records are kept for applicable legal and accounting periods
+- Incident and safety records are kept as reasonably needed for safeguarding, insurance, or claims
+- CCTV is kept for a limited operational period unless footage is needed for an incident, investigation, or legal matter
+- Marketing records are kept until consent is withdrawn or the information is no longer needed
+- Consent and acceptance records are kept as reasonably needed to demonstrate compliance
 
-Indicative retention periods may include:
+We may anonymize information instead of deleting it when it can no longer identify a person.
 
-- Active account and child profile: while the account or Membership remains active
-- Registration and contractual records: for the applicable legal limitation and accounting period after the relationship ends
-- Payment and tax records: according to legal accounting and tax requirements
-- Incident and safety records: for the period reasonably needed for safeguarding, insurance, or claims
-- CCTV: generally [OWNER TODO: insert number of] days, unless footage is required for an incident, investigation, or legal matter
-- Marketing records: until consent is withdrawn or the information is no longer needed
-- Consent and withdrawal records: for the period necessary to demonstrate compliance
+## 12. Data Security
 
-We may anonymize data instead of deleting it where it is no longer linked to an identifiable person.
+We use reasonable administrative, technical, and physical safeguards, which may include role-based access, password protection, restricted access to sensitive information, audit logs, secure storage, backups, vendor controls, and incident-response procedures.
 
-## 15. Data Security
+No system can be guaranteed completely secure. Please contact the Club promptly if you believe personal data has been accessed or used without authorization.
 
-We use reasonable administrative, technical, and physical safeguards, which may include:
+## 13. Personal Data Breaches
 
-- Role-based access controls
-- Password and account security
-- Secure storage
-- Restricted health-data access
-- Staff confidentiality obligations
-- Audit logs
-- Backup and recovery controls
-- Vendor review
-- Secure disposal
-- Incident-response procedures
+We assess suspected personal data breaches and take reasonable containment, investigation, and corrective steps. Where required by law, we notify the competent authority and affected individuals within the applicable period.
 
-No system is completely secure. Parents should protect account credentials and immediately report suspected unauthorized access.
+## 14. Privacy Rights
 
-## 16. Personal Data Breaches
-
-Where a personal data breach occurs, we will assess the risk and take appropriate steps.
-
-Where required by law, we will notify the relevant authority and affected individuals within the applicable period.
-
-Notifications may explain what happened, what information was affected, likely risks, steps taken, recommended protective actions, and how to contact us.
-
-## 17. Your Rights
-
-Subject to applicable law and exceptions, a data subject or authorized parent or guardian may have rights to:
+Subject to the PDPA, applicable exceptions, and verification of identity, a person may have the right to:
 
 - Request access to personal data
-- Request a copy of personal data
-- Request correction of inaccurate information
-- Request deletion, destruction, or anonymization
+- Request correction of inaccurate or incomplete data
+- Request deletion, destruction, or anonymization where legally available
 - Request restriction of processing
 - Object to certain processing
-- Withdraw consent
 - Request data portability where applicable
-- Request information about sources or recipients
-- Lodge a complaint with the competent authority
+- Withdraw consent for future processing based on consent
+- Submit a complaint to the competent personal data protection authority
 
-Some requests may be limited where information must be retained for legal, safety, contractual, or claims purposes.
+A request concerning a child must be made by a person with appropriate authority. We may need information to verify identity and authority before acting.
 
-We may need to verify identity and authority before responding.
-
-## 18. Exercising Privacy Rights
+## 15. Exercising Privacy Rights
 
 To submit a privacy request, contact:
 
-**Privacy Contact / Data Controller**  
-Siamese Creative Club  
-Legal entity: Siamese Cat Cafe Co., Ltd.  
-Address: 46/27 Bang Na-Trat Frontage Rd, Bang Kaeo, Samut Prakan 10540  
-Email: Cafe@siamesecat.cafe  
-Telephone: +66-0804803802  
-LINE: [OWNER TODO: insert LINE ID]
+**Privacy Contact / Data Controller**<br>
+Siamese Cat Creative Club<br>
+Siamese Cat Cafe Co., Ltd.<br>
+46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
+Email: Cafe@siamesecat.cafe<br>
+Telephone: +66 80 480 3802
 
-Please describe the request and identify the relevant parent, child, or account.
+Please describe the request and identify the relevant parent, child, registration, or transaction. We will respond within the period required by applicable law.
 
-We will respond within the period required by applicable law.
+## 16. Cookies, Local Storage, and Third-Party Links
 
-## 19. Cookies and Similar Technologies
+The website may use necessary browser storage for language preferences, form flow, security, and selected-program information. Hosting providers may use necessary security technologies to protect the site.
 
-Our website or app may use cookies, local storage, pixels, or similar technologies for login and account functionality, security, booking and checkout, preferences, performance, analytics, or marketing where consent is required.
+The website may link to third-party maps, email, telephone, payment, or social services. Those services apply their own privacy policies.
 
-A cookie notice or preference tool may provide additional choices.
+## 17. Changes to This Policy
 
-Necessary technologies may be used without marketing consent where permitted by law.
+We may update this Privacy Policy to reflect service, technology, security, or legal changes. The updated version will show a new "Last updated" date.
 
-## 20. Third-Party Links and Platforms
+Material changes may be communicated through an appropriate service channel. Where new consent is legally required, we will request it.
 
-Our website, app, messages, or social pages may link to third-party services such as payment providers, maps, LINE, social networks, or Siamese Cat Cafe systems.
+## 18. Acceptance Records
 
-Those services may apply their own privacy policies.
+The registration form asks the parent or legal guardian to confirm that they are authorized to register the child and that they acknowledge this Privacy Policy and the Terms of Service.
 
-We are not responsible for independent third-party privacy practices, but we aim to select appropriate providers and limit information sharing to what is reasonably needed.
-
-## 21. Automated Decisions
-
-We do not currently use solely automated decision-making that produces legal or similarly significant effects concerning a child or parent.
-
-If this changes, we will update this policy and provide any required information or choices.
-
-## 22. Changes to This Policy
-
-We may update this Privacy Policy to reflect service changes, technology changes, legal requirements, security practices, or group-business changes.
-
-The updated version will show a new “Last updated” date.
-
-Material changes may be communicated through the app, email, LINE, or another appropriate channel.
-
-Where new consent is legally required, we will request it.
-
-## 23. Complaints
-
-Questions or concerns should first be sent to the Club’s Privacy Contact.
-
-A person may also have the right to complain to Thailand’s competent personal data protection authority.
-
-Nothing in this policy limits rights available under applicable law.
-
-## 24. Online Acknowledgments and Optional Consents
-
-The registration app should separate required acknowledgment from optional consent.
-
-### Required acknowledgment
-
-> **I confirm that I am authorized to register this child. I have read and understood the Siamese Creative Club Privacy Policy and Terms of Service.**
-
-### Sensitive data acknowledgment or consent
-
-> **I confirm that the health, allergy, medication, dietary, developmental, and emergency information I provide is accurate. I authorize the Club to use this information where necessary for safety, participation, meal administration, emergency response, and service delivery, subject to applicable law.**
-
-### Optional marketing consent
-
-> **I agree to receive promotions, offers, events, and news from Siamese Creative Club and related businesses within the Siamese Cat group through the channels I select. I understand that I may unsubscribe at any time.**
-
-### Optional photo and video consent
-
-> **I agree that identifiable photographs or videos of my child may be used for the selected promotional purposes. I understand that I may withdraw consent for future use.**
-
-The app should record the account identifier, parent or guardian identity, child profile, consent or acknowledgment type, selected channels and purposes, date and time, document version, withdrawal date where applicable, and relevant technical audit information.
+The Club may retain the accepted document version, date, time, and related registration record to document that acceptance.

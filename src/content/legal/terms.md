@@ -1,355 +1,195 @@
-# Siamese Creative Club — Terms of Service
+# Siamese Cat Creative Club - Terms of Service
 
-**Effective date:** [OWNER TODO: insert effective date, e.g. DD Month YYYY]  
-**Last updated:** [OWNER TODO: insert last-updated date, e.g. DD Month YYYY]
+**Effective date:** 17 July 2026<br>
+**Last updated:** 17 July 2026
 
-These Terms of Service (“Terms”) govern the purchase and use of Flexi Passes, Memberships, creative activities, meal plans, and related services offered by **Siamese Creative Club** (“the Club,” “we,” “us,” or “our”).
+These Terms of Service ("Terms") apply to parent registration, bookings, sessions, packages, passes, meal care, activities, and related services provided by **Siamese Cat Creative Club** ("the Club," "we," "us," or "our").
 
-By creating an account, registering a child, purchasing a Pass or Membership, or checking the acknowledgment box in our registration app, the parent or legal guardian confirms that they have read, understood, and agreed to these Terms.
+By registering a child, requesting a booking, purchasing a service, or accepting these Terms, the parent or legal guardian confirms that they have read and agreed to them.
 
-> **Business details**  
-> Legal entity: Siamese Cat Cafe Co., Ltd.  
-> Company registration number: [OWNER TODO: insert company registration number]  
-> Address: 46/27 Bang Na-Trat Frontage Rd, Bang Kaeo, Samut Prakan 10540  
-> Telephone: +66-0804803802  
-> LINE: [OWNER TODO: insert LINE ID]  
+> **Business details**<br>
+> Legal entity: Siamese Cat Cafe Co., Ltd.<br>
+> Address: 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
+> Telephone: +66 80 480 3802<br>
 > Email: Cafe@siamesecat.cafe
 
----
+## 1. Our Programs
 
-## 1. Nature of the Service
+The Club provides two separate supervised small-group programs:
 
-Siamese Creative Club provides a recreational after-school creative club and weekend activity studio for children aged **5–12**.
+- **Little Explorer Playgroup:** daytime and weekend playgroup care with indoor play, creative activities, reading, simple learning, outdoor play, and supervised animal visits when available.
+- **After School Explorer Program:** after-school care with play, homework or quiet focus, creative activities, meal support, and pickup routines.
 
-Available services may include:
+These programs are not private one-to-one nanny care, formal school enrollment, medical care, therapy, or guaranteed private tutoring.
 
-- Playroom and art-room access
-- Recreational creative activities
-- Quiet homework monitoring
-- Reading and calm activity time
-- English- and Thai-speaking staff support
-- Refresh time
-- Optional meals prepared by Siamese Cat Cafe
-- Other activities described in the selected Pass or Membership
-
-The Club does not provide formal school enrollment, academic certification, guaranteed academic improvement, private one-to-one tutoring, medical care, or specialist therapeutic services.
-
-Activities are recreational and may change according to scheduling, material availability, staffing, safety considerations, or the needs of the participating group.
+Activities may change according to the child's age and readiness, session length, staffing, weather, materials, safety, and animal welfare.
 
 ## 2. Parent or Guardian Authority
 
 The person registering a child confirms that they:
 
-- Are the child’s parent, legal guardian, or are otherwise legally authorized to register the child
+- Are the child's parent, legal guardian, or otherwise authorized to register the child
+- Will provide accurate contact, health, allergy, emergency, and pickup information
+- Will update the Club when important information changes
+- Will remain reachable while the child is attending
 - Have authority to accept these Terms for the child
-- Will provide complete and accurate registration, health, allergy, emergency-contact, and pickup information
-- Will promptly update the Club when important information changes
-- Will remain reachable by telephone while the child is checked in
 
-The Club may request proof of identity, guardianship, or pickup authority where reasonably necessary.
+The Club may request identification or evidence of pickup authority when reasonably necessary.
 
-## 3. Eligibility and Child Readiness
+## 3. Child Readiness and Suitability
 
-The Club is designed for children aged **5–12**.
+Participation depends on the child's comfort, safety, communication needs, and ability to take part in a shared small-group environment.
 
-A participating child should generally be able to:
+Children under 3 may require a parent or guardian to remain on site, depending on the child's comfort and safety. A first visit or readiness discussion may be required for any child who needs additional support.
 
-- Communicate basic needs
-- Use the toilet independently
-- Eat independently
-- Follow simple group safety instructions
-- Participate in a shared environment without continuous one-to-one personal assistance
+The Club may decline, limit, pause, or end participation when a child's needs exceed the staffing, training, facilities, or safety support reasonably available.
 
-A settling-in visit, trial session, or management review may be required before recurring access is approved, particularly for younger children or children requiring additional support.
+## 4. Registration, Booking, and Capacity
 
-The Club may decline, limit, pause, or end access where a child’s needs exceed the Club’s available staffing, facilities, training, or safety capability.
+Parent registration is required before a child joins a program.
 
-## 4. Flexible Access
+Submitting the online signup form records the family's interest; it does not by itself confirm a reservation. A visit is confirmed only after the Club accepts the requested date, time, program, and capacity.
 
-Memberships and Flexi Passes provide access during the eligible operating days and published access windows of the selected plan.
+Advance booking is recommended, especially on weekends, school holidays, public holidays, and for evening pickup. Entry remains subject to confirmed capacity, staffing, operating hours, and child readiness.
 
-Unless a specific product states otherwise:
+The Club may release an unconfirmed request or a confirmed place after a material late arrival or no-show when no notice is received.
 
-- There is no fixed arrival time within the eligible access window
-- A child is not required to remain for the full access window
-- Families may choose a suitable check-in and check-out time
-- Each registered child may have one active checked-in visit at a time
-- Entry remains subject to operating hours, reservations, available capacity, and safety requirements
+## 5. Sessions, Packages, and Passes
 
-A Membership provides access eligibility. It does not guarantee immediate entry at every moment when safe capacity has been reached.
+Available products are shown on the Club website or confirmed by staff. They currently include:
 
-## 5. Operating Hours and Closures
+- Little Explorer Playgroup short sessions, weekday half-day and full-day sessions, weekend full-day sessions, and regular full-day passes
+- After School Explorer short sessions, weekday half-day care, dinner and pickup support, and regular after-school passes arranged with the team
+- Program-specific meal care options
 
-Current operating hours will be published in the registration app, at the Club, or through our official communication channels.
+The description confirmed at booking or purchase controls the included time, activities, meal value, price, validity, and other conditions.
 
-Indicative access windows may include:
+Unless a product states otherwise, a package or pass is registered to one child and may not be transferred, shared, resold, or exchanged for cash. Any expiry date or session limit shown at purchase applies.
 
-- **Weekday Studio:** Monday–Friday, 3:00 PM–8:00 PM
-- **Weekend Studio:** Saturday–Sunday, 10:00 AM–6:00 PM
+## 6. Prices, Value Comparisons, and Payment
 
-Operating hours may change for public holidays, maintenance, staff training, private events, emergency conditions, government directions, safety, or capacity reasons.
+Prices are stated in Thai baht. Payment is due before the service begins unless the Club confirms another arrangement.
 
-Where the Club cancels prepaid access, we may provide a reasonable replacement visit, extension, or account credit. The appropriate remedy will depend on the affected product and circumstances.
+Where the website shows a saving or "up to" value, the comparison is based on the listed hourly/session price and any stated meal-care value. Actual value depends on attendance, the selected service, and available meal choices.
 
-## 6. Reservations and Capacity
+Payment methods may include cash, bank transfer, PromptPay, or another method confirmed by the Club. Receipts are issued through the Club's normal process.
 
-Advance booking is recommended and may be required during weekends, school holidays, public holidays, peak periods, special creative activities, or limited-capacity sessions.
+Any additional charge, including extra time or late pickup, must be disclosed or agreed before it is charged, except where immediate action is reasonably required for a child's safety.
 
-The Club may introduce fair booking limits to protect safe capacity and reasonable access for all Members.
+## 7. Changes, Cancellations, and Refunds
 
-A reservation may be released where the child does not arrive within the published grace period and the Club has not received notice.
+Families should notify the Club as early as possible if they cannot attend. Cancellation, rescheduling, expiry, and refund conditions may vary by service and will be confirmed before payment where applicable.
 
-Repeated no-shows may lead to booking restrictions.
+When the Club cancels prepaid access, it may offer a replacement session, reasonable extension, account credit, or refund as appropriate to the product and applicable law.
 
-## 7. Check-In and Check-Out
+Nothing in these Terms limits a consumer right that cannot legally be excluded.
 
-A parent or authorized adult must complete the Club’s check-in process before leaving the child in the activity area.
+## 8. Check-In and Pickup
 
-At check-in, the Club may confirm:
+A parent or authorized adult must complete the Club's check-in process before leaving a child in the supervised area.
 
-- The child’s identity
-- The active Pass or Membership
-- Arrival time
-- Expected pickup time
-- Authorized pickup person
-- Meal selection
-- Allergy, health, or medication alerts
+The Club may confirm the child's identity, selected program, expected pickup time, authorized pickup person, meal request, and health or allergy notes.
 
-A child may leave only with a registered parent or guardian, a person listed as an authorized pickup person, or another person approved through the Club’s verified communication process.
+A child will be released only to a registered parent or guardian, an authorized pickup person, or another person approved through a verified communication process. Photo identification may be requested.
 
-The Club may request photo identification and may refuse release where identity or authority cannot be verified.
+Parents must collect children within the confirmed service time. Repeated or significant late pickup may lead to additional charges disclosed by the Club, booking restrictions, or a review of future access.
 
-## 8. Passes, Memberships, and Validity
+## 9. Homework and Quiet Focus
 
-Each product is governed by the description displayed at purchase.
+After School Explorer may provide a calm place, reminders, reading time, organization support, and basic clarification for simple homework.
 
-Examples may include single-use Flexi Passes, time-based Multi-Visit Flexi Passes, four-week Memberships, Weekend Memberships, Combination Memberships, fixed-term Memberships, and Meal-plan Memberships.
+The Club does not promise private tutoring, subject-specialist teaching, guaranteed correctness, improved grades, or completion of every assignment. Parents remain responsible for reviewing schoolwork where needed.
 
-Unless otherwise stated:
+## 10. Creative Activities and Play
 
-- Passes and Memberships are registered to one child
-- They may not be transferred, shared, resold, or exchanged for cash
-- They expire on the stated end date
-- Unused access does not roll over
-- Missed family-selected visits do not create a refund, credit, or extension
-- Promotional prices cannot be combined unless expressly stated
+Activities may include drawing, coloring, clay, crafts, Lego, reading, soft play, indoor play, outdoor garden play, water play, and simple group projects.
 
-Any exception must be approved by the Club in writing or through the app.
+Children must follow staff instructions and use materials and equipment safely. Premium materials, take-home projects, or special workshops may be separately priced when clearly offered.
 
-## 9. Time-Based Flexi Passes and Overage
+## 11. Animal Visits
 
-For time-based Flexi Passes:
+Visits with cats, rabbits, or turtles are not guaranteed. They depend on availability, staffing, child readiness, and animal welfare.
 
-- Usage begins when check-in is completed
-- Usage ends when check-out is completed
-- A minimum deduction may apply per visit
-- Additional time may be rounded to the next 30-minute block
-- Remaining time expires at the end of the stated validity period
+All interaction must be supervised and gentle. Socks are not required in the children's play area, but socks are required when entering the cat room.
 
-Additional usage beyond the included balance may be charged at the current overage rate displayed in the app or at reception.
+## 12. Meal Care and Allergies
 
-Unless a different rate is published:
+Meal care differs by program. Playgroup may include or refer to a stated meal-care value for eligible longer sessions. After School Explorer offers its stated Meal Care Add-On with one child-friendly food item and one drink.
 
-- Overage during normal opening hours: **100 THB per hour**, calculated in 30-minute blocks
-- Pickup after closing: **100 THB per 30 minutes**, rounded up
+Menus and availability may change. Parents must disclose allergies, intolerances, dietary restrictions, religious requirements, and special eating habits before meal care is confirmed.
 
-Repeated late pickup may result in a review, suspension, or termination of access.
+The cafe is a shared food-preparation environment. Families with severe allergies must discuss the child's needs and an emergency plan with management before attendance.
 
-## 10. Fees and Payment
+## 13. Health and Illness
 
-All prices are stated in Thai baht.
+Children must be healthy enough to participate safely. A child should remain at home when unwell or contagious, including with fever, repeated vomiting, diarrhea, a contagious rash, strong coughing, or another significant contagious symptom.
 
-Fees must be paid before access begins unless the Club approves another arrangement.
+The Club may refuse entry or request prompt pickup when a child is unwell, becomes unwell, or cannot safely take part in the group.
 
-Payment may be accepted through methods displayed in the app or at reception, including cash, bank transfer, PromptPay QR, card, or another approved method.
+## 14. Medication and Personal Care
 
-Additional charges may apply for overage, late pickup, café orders above a plan allowance, premium or take-home creative materials, replacement of lost Club property, intentional or reckless damage, or other separately accepted services.
+Medication will be handled only when management accepts a clear written arrangement and staff are reasonably able and authorized to follow it. Emergency medication and serious allergy plans must be discussed before attendance.
 
-Where required by law, applicable tax will be included or separately identified.
+Routine intimate personal care and continuous one-to-one toileting assistance are not included. Staff maintain appropriate privacy and safeguarding boundaries.
 
-## 11. Promotions and Value Comparisons
+## 15. Behavior and Group Safety
 
-Promotions are subject to their published eligibility, dates, availability, and limits.
+Children must follow reasonable staff instructions, remain in authorized areas, treat others respectfully, and avoid unsafe or seriously disruptive behavior.
 
-Where the Club displays a standard-price comparison, menu-value comparison, or potential saving:
-
-- The comparison is based on the stated standard price, eligible usage, or current Siamese Cat Cafe menu
-- Actual value depends on attendance and selections
-- “Up to” values represent the maximum available value under the stated assumptions
-- Promotional credits and allowances have no cash value
-- The Club may correct an obvious pricing or calculation error before confirming a purchase
-
-## 12. Cancellation, Refunds, and Membership Pauses
-
-Before first use, an unused Pass or Membership may be canceled before its start date where required by law or where approved by the Club.
-
-Reasonable non-recoverable payment-processing charges may be deducted where legally permitted and clearly disclosed.
-
-Once access has started:
-
-- Missed visits are generally non-refundable
-- Unused eligible days normally expire at the end of the cycle
-- Club-caused cancellations may receive an extension, replacement access, or credit
-- A documented medical pause may be considered
-- Fixed-term Membership cancellation may be recalculated using the standard shorter-term rate for completed periods, with any remaining refundable balance determined by the Club and applicable law
-
-Approved refunds will be returned through a reasonable payment method and processing period.
-
-## 13. Homework Monitoring
-
-Homework monitoring provides a quiet and organized study period.
-
-Staff may encourage focus, help organize books and materials, track whether work appears completed, and assist with simple clarifying questions.
-
-The Club does not promise private tutoring, subject-specialist teaching, guaranteed correctness, improved grades, completion of every assignment, or formal academic assessment.
-
-Parents remain responsible for reviewing schoolwork where necessary.
-
-## 14. Creative Activities and Materials
-
-Creative activities are recreational and may include drawing, coloring, painting, soft-clay statue painting, crafts, reading, storytelling, and seasonal projects.
-
-The selected Pass or Membership determines what is included.
-
-The Club may charge separately for premium materials, extra take-home projects, additional statues, special-event workshops, or replacement materials.
-
-Children must use materials according to staff safety instructions.
-
-The Club may stop or modify an activity where participation becomes unsafe or unsuitable.
-
-## 15. Meals and Siamese Cat Cafe
-
-Meals may be purchased individually or through an eligible Café Dinner Membership.
-
-Meal plans may provide a stated number of eligible meals, a daily menu-value allowance, selected menu choices, and additional premium options.
-
-Unless expressly stated:
-
-- One eligible meal may be used per qualifying visit
-- Unused meal eligibility expires with the relevant cycle
-- Meal credits have no cash value
-- Any amount above the daily allowance is charged separately
-- Actual menu value depends on attendance and food selection
-
-Parents must disclose all food allergies, intolerances, dietary restrictions, and religious requirements before ordering.
-
-The café is a shared food-preparation environment and may handle multiple ingredients. Families with severe allergies must discuss an emergency plan with management before enrollment.
-
-## 16. Health and Illness
-
-A child should not attend when significantly unwell or contagious.
-
-The Club may refuse entry or request prompt pickup where a child has, or develops, fever, repeated vomiting, diarrhea, a contagious rash, significant respiratory symptoms, a diagnosed contagious illness, or a condition that prevents comfortable or safe group participation.
-
-Parents must promptly inform the Club of any medical condition that may affect participation or emergency response.
-
-## 17. Medication
-
-Staff will not administer medication unless the parent submits a clear written request, the medication is in its original labeled packaging, instructions are complete, management accepts the arrangement, and staff are reasonably able and authorized to follow the instructions.
-
-The Club may decline medication arrangements outside its capability.
-
-Emergency medication and serious allergy plans must be discussed before the child’s first visit.
-
-## 18. Refresh Time and Personal Care
-
-Refresh time may include handwashing, face washing, brushing hair, organizing belongings, independent clothing changes, and preparing for pickup.
-
-Routine showering, intimate personal care, private body washing, and continuous toileting assistance are not included unless a separately approved service is introduced.
-
-Staff maintain appropriate privacy and safeguarding boundaries.
-
-## 19. Behavior and Safety
-
-Children must follow reasonable staff instructions, remain within authorized areas, treat others respectfully, use equipment and materials appropriately, and avoid violence, bullying, throwing objects, running away, or intentional damage.
-
-The Club may respond by giving a calm reminder, redirecting the child, stopping an activity, moving the child to a calmer visible area, contacting the parent, requesting early pickup, or suspending or ending access after serious or repeated incidents.
+Staff may redirect a child, stop an activity, move the child to a calm visible area, contact the parent, request early pickup, or pause future access after a serious or repeated safety concern.
 
 Physical punishment, humiliation, threats, food deprivation, and locked isolation are not used.
 
-## 20. Emergencies, First Aid, and Incidents
+## 16. Emergencies and Incidents
 
-Staff may provide basic first aid within their training.
+Staff may provide basic first aid within their training. When urgent help is reasonably needed, the parent authorizes the Club to contact emergency services and arrange appropriate assistance while attempting to contact the parent or emergency contact promptly.
 
-The parent authorizes the Club to contact the parent or emergency contact, contact emergency services, and arrange appropriate urgent medical assistance where delay could create material risk.
+The parent remains responsible for medical expenses unless the Club is legally responsible for those costs. Significant incidents may be documented and shared with the parent.
 
-The Club will make reasonable efforts to contact the parent promptly.
+## 17. Personal Belongings and Property
 
-The parent remains responsible for medical expenses unless the Club is legally responsible for those costs.
+Belongings should be labeled. Valuable jewelry, large amounts of cash, and expensive electronics should not be brought to the Club.
 
-Significant incidents may be documented and shared with the parent.
+The Club takes reasonable care but cannot guarantee against ordinary loss, staining, breakage, or accidental damage. Responsibility for intentional or reckless damage will be assessed reasonably and subject to applicable law.
 
-## 21. Personal Belongings and Property
+## 18. CCTV, Photography, and Media
 
-Belongings should be clearly labeled.
+CCTV may operate in appropriate common areas for safety, security, and incident review. It is not placed in toilets or private changing areas.
 
-Valuable jewelry, large amounts of cash, and expensive electronics should not be brought into the Club.
+Promotional photography or video requires separate optional consent. Declining promotional media consent does not prevent access to services.
 
-The Club will take reasonable care but cannot guarantee against ordinary loss, staining, breakage, or accidental damage.
+## 19. Suspension or Ending Access
 
-Parents may be responsible for damage intentionally or recklessly caused by their child, subject to applicable law and a reasonable assessment of the circumstances.
+The Club may suspend or end access for unpaid fees, materially inaccurate information, serious or repeated unsafe behavior, abuse or harassment, unauthorized pickup attempts, repeated late pickup, misuse of a pass, or needs beyond the Club's reasonable capability.
 
-Nothing in these Terms excludes liability that cannot lawfully be excluded.
+Where appropriate, the Club will explain the reason and consider whether a safer alternative arrangement is available.
 
-## 22. CCTV, Photography, and Media
+## 20. Privacy and Communications
 
-CCTV may be used in appropriate common areas for safety, security, incident review, and operational management.
+Personal data is handled according to the **Siamese Cat Creative Club Privacy Policy**.
 
-CCTV is not placed in toilets, private changing spaces, or other areas where privacy is reasonably expected.
+The Club may send necessary service communications by telephone, email, SMS, or another channel the family uses with the Club. Marketing and promotional media consent are optional.
 
-Promotional photography and video require a separate optional consent. Declining promotional media consent does not prevent access to the Club.
+## 21. Changes to Services or Terms
 
-## 23. Suspension or Termination
+The Club may make reasonable changes to schedules, activities, booking procedures, capacity rules, safety policies, prices for future purchases, or these Terms.
 
-The Club may suspend or terminate access for unpaid fees, materially inaccurate registration information, serious or repeated unsafe behavior, abuse or harassment, unauthorized pickup attempts, repeated late pickup, misuse of a Pass or Membership, needs beyond the Club’s reasonable capability, or serious breach of these Terms or safety policies.
+Material changes affecting an active prepaid service will be communicated in advance where reasonably possible. The version accepted at purchase normally applies to that purchase unless a change is required by law or safety.
 
-Where appropriate, the Club will explain the reason and consider whether a reasonable alternative arrangement is possible.
+## 22. Governing Law and Contact
 
-## 24. Privacy
-
-Personal information is handled according to the **Siamese Creative Club Privacy Policy**, which forms part of the registration process.
-
-Marketing communication and promotional media consent are optional and are not conditions of purchasing a Pass or Membership.
-
-## 25. Communications
-
-The Club may send necessary service communications through in-app notifications, LINE, SMS, email, telephone, printed notices, or official social-media channels.
-
-Necessary communications may include booking confirmations, access balances, schedule changes, payment matters, safety alerts, incident information, and policy updates.
-
-Parents are responsible for keeping contact details current.
-
-## 26. Changes to Services or Terms
-
-The Club may make reasonable changes to operating schedules, activity rotations, booking procedures, capacity rules, safety policies, prices for future purchases, or these Terms.
-
-Material changes affecting an active prepaid product will be communicated in advance where reasonably possible.
-
-The version accepted at purchase will normally apply to that purchase, except where a change is required by law, safety, or an authority.
-
-## 27. Governing Law and Consumer Rights
-
-These Terms are governed by the laws of Thailand.
-
-Nothing in these Terms limits any consumer right, child-protection obligation, privacy right, or liability that cannot legally be excluded or limited.
-
-Any dispute should first be raised with the Club using the contact details below so that the parties can attempt a good-faith resolution.
-
-## 28. Contact
+These Terms are governed by the laws of Thailand. Nothing in them excludes a child-protection duty, privacy right, consumer right, or liability that cannot lawfully be excluded.
 
 Questions, complaints, cancellation requests, and formal notices may be sent to:
 
-**Siamese Creative Club**  
-Legal entity: Siamese Cat Cafe Co., Ltd.  
-Address: 46/27 Bang Na-Trat Frontage Rd, Bang Kaeo, Samut Prakan 10540  
-Telephone: +66-0804803802  
-LINE: [OWNER TODO: insert LINE ID]  
+**Siamese Cat Creative Club**<br>
+Siamese Cat Cafe Co., Ltd.<br>
+46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
+Telephone: +66 80 480 3802<br>
 Email: Cafe@siamesecat.cafe
 
-## 29. Online Acknowledgment
+## 23. Online Acceptance
 
-Before registration is completed, the app should require the parent or legal guardian to tick a box stating:
+The registration form asks the parent or legal guardian to confirm that they are authorized to register the child and that they acknowledge these Terms and the Privacy Policy.
 
-> **I confirm that I am authorized to register this child. I have read, understood, and agree to the Siamese Creative Club Terms of Service and Privacy Policy. I understand the flexible-access, payment, booking, pickup, health, safety, and cancellation rules.**
-
-The app should record the accepted document version, date, time, account identifier, and relevant technical audit information.
+The Club may retain the accepted document version, date, time, and related registration record to document that acceptance.

@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/landing/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club",
-  description: "Point-of-sale & session management",
+  description: "Little Explorer Playgroup and After School Explorer programs near Mega Bangna, with flexible sessions, creative activities, meal care and pickup support.",
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },

@@ -2,7 +2,6 @@
   'use strict';
 
   const CONFIG = {
-    lineUrl: '', // Set when the official LINE OA URL is available.
     phone: '+66804803802',
     formEndpoint: '',
     defaultLang: 'en'
@@ -203,23 +202,7 @@
     storySectionObserver.observe(qs('#visit-story'));
   }
 
-  // LINE and phone placeholders
-  qsa('[data-line]').forEach(link => {
-    link.addEventListener('click', event => {
-      const ref = link.dataset.ref || body.dataset.source || 'WEB-GEN';
-      const plan = storage.get('sessionStorage', 'sccc-selected-plan') || link.dataset.plan || '';
-      const message = lang === 'th'
-        ? `สวัสดีค่ะ สนใจ${plan ? 'แพ็กเกจ ' + plan : 'สอบถาม Creative Club'} (อ้างอิง: ${ref})`
-        : `Hello, I am interested in ${plan || 'Siamese Cat Creative Club'} (ref: ${ref})`;
-      if (CONFIG.lineUrl) {
-        link.href = `${CONFIG.lineUrl}?text=${encodeURIComponent(message)}`;
-      } else {
-        event.preventDefault();
-        showToast(lang === 'th' ? `ยังไม่ได้เชื่อมลิงก์ LINE OA กรุณาใช้แบบฟอร์มลงทะเบียนหรือโทรหาเรา (${ref})` : `LINE is not connected yet. Please use signup or call us (${ref})`);
-      }
-    });
-  });
-
+  // Phone contact
   qsa('[data-phone]').forEach(link => {
     link.addEventListener('click', event => {
       if (!CONFIG.phone) {
