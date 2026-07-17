@@ -1,4 +1,4 @@
-import { SITE_URL, OG_IMAGE } from "@/lib/landing/site";
+import { CREATIVE_URL, SITE_URL, OG_IMAGE } from "@/lib/landing/site";
 
 // LocalBusiness structured data. Address + telephone are the owner's real
 // details; openingHours is intentionally omitted until confirmed (never ship
@@ -10,7 +10,7 @@ export function Jsonld() {
     name: "Siamese Cat Creative Club",
     description:
       "A safe supervised indoor children's playroom with art, crayon and soft-clay activities in central Bangkok.",
-    url: SITE_URL,
+    url: CREATIVE_URL,
     image: `${SITE_URL}${OG_IMAGE}`,
     logo: `${SITE_URL}/landing/siamese-cat-creative-club-logo-512.webp`,
     priceRange: "฿฿",

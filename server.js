@@ -4,8 +4,8 @@
 // all served through Next's request handler. Listens on the host-assigned PORT.
 //
 // Deploy config on Hostinger:
-//   Install command: npm install
-//   Build command:   npm run build
+//   Install command: corepack enable && pnpm install --frozen-lockfile
+//   Build command:   pnpm build
 //   Entry file:      server.js      (or Start command: node server.js)
 //   Node version:    20.x
 const { createServer } = require("http");

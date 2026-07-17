@@ -1,12 +1,23 @@
 # Deployment — SCCC Management System
 
-Target: **Hostinger VPS** (Ubuntu 22.04+, Node 20), Next.js under **PM2** behind
-**Nginx** with HTTPS via **certbot**. The same build also runs unchanged on
-Vercel (set the env vars in the dashboard and deploy — skip §2–§8 below).
+Target: **Hostinger Node.js Web App** or **Hostinger VPS** (Ubuntu 22.04+,
+Node 20). This is one bundled Next.js app for the public website, signup flow,
+and admin dashboard.
 
 Owner checklist before you start (PRD §9): Neon `DATABASE_URL`, PromptPay ID,
 bank name/account, Terms & Privacy URLs, admin email + password, a domain or
 subdomain pointing at the VPS IP.
+
+Route map for `https://creative.siamesecat.cafe`:
+
+| URL | Purpose |
+|---|---|
+| `/` | New static main website from `public/main-site/index.html` |
+| `/inside`, `/memberships`, `/dinner`, `/faq`, `/first-visit` | Static website detail pages |
+| `/creative` | Previous Creative Club landing page |
+| `/signup` | Parent signup / registration app |
+| `/admin` | Staff admin dashboard |
+| `/terms`, `/privacy` | App legal pages |
 
 ---
 
@@ -72,13 +83,27 @@ pnpm db:seed      # inserts the 11 products (idempotent)
 (`pnpm create-admin ...` in §4 already inserted the admin row. If you skipped it,
 run it now with `DATABASE_URL` set.)
 
-## 6. Build & start under PM2
+## 6. Build & start
 
-`public/landing/*` (the landing page's responsive WebP images) is committed to the repo, so a
-normal deploy needs no image-generation step. Only if you change source images under `assets/`
-do you need to run `pnpm images:landing` (regenerates `public/landing/*` + the typed manifest
-`src/lib/landing/images.ts`) before building — it needs the `sharp` devDependency, which
-`pnpm install` already provides.
+For Hostinger Node.js Web App hosting, use:
+
+```bash
+# Install command
+corepack enable && pnpm install --frozen-lockfile
+
+# Build command
+pnpm build
+
+# Start command / entry file
+node server.js
+```
+
+For a VPS with PM2:
+
+`public/main-site/*` and `public/landing/*` are committed to this app, so a
+normal deploy needs no separate static-site upload and no image-generation step.
+Only if you change source images under `assets/` do you need to run
+`pnpm images:landing` before building.
 
 ```bash
 pnpm build

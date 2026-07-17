@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { dict } from "@/lib/i18n/dictionary";
-import { SITE_URL, OG_IMAGE } from "@/lib/landing/site";
+import { CREATIVE_URL, OG_IMAGE } from "@/lib/landing/site";
 import { Jsonld } from "@/components/landing/Jsonld";
 import { LandingClient } from "@/components/landing/LandingClient";
 
@@ -12,10 +12,10 @@ export const metadata: Metadata = {
     "สนามเด็กเล่นในร่ม", "สนามเด็กเล่น กรุงเทพ", "กิจกรรมเด็ก", "ปั้นดินเบา", "ระบายสีเด็ก",
     "indoor playroom bangkok", "kids creative studio", "children playground bangkok",
   ],
-  alternates: { canonical: SITE_URL },
+  alternates: { canonical: CREATIVE_URL },
   openGraph: {
     type: "website",
-    url: SITE_URL,
+    url: CREATIVE_URL,
     siteName: "Siamese Cat Creative Club",
     title: dict.landingMetaTitle.th,
     description: dict.landingMetaDescription.th,

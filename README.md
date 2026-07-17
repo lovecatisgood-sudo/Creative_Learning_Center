@@ -1,8 +1,9 @@
 # Siamese Cat Creative Club — Management System
 
-Internal point-of-sale & session-management web app for a supervised children's
-playroom in Bangkok. One admin device runs the whole shop; parents self-register
-via a public QR form and never log in.
+Combined public website, parent signup, and internal point-of-sale/session
+management web app for Siamese Cat Creative Club. The public website is served
+from the domain root, parents self-register at `/signup`, and staff work inside
+the protected `/admin` dashboard.
 
 Built to `sccc-management-system-prd-v1.md` (business rules) and
 `sccc-uiux-spec-v1.md` (screens). See `DECISIONS.md` for spec interpretations,
@@ -43,8 +44,12 @@ Any standard Postgres works locally (e.g. Docker):
 ## Layout
 
 ```
+public/
+  main-site/               static public website mounted at /, /inside, /memberships, /dinner, /faq
+  landing/                 images for the previous landing page now mounted at /creative
 src/
   app/
+    creative/              previous Creative Club landing page
     signup/                 public parent registration (P1/P2)
     admin/(app)/            authed shell: sessions · search · sell · overview · child · session · receipt
     admin/login/            login (A0)
