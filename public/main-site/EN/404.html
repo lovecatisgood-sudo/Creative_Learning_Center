@@ -21,7 +21,7 @@
 <link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/404">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-thai-default">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-navigation-correction">
 
 </head>
 <body data-page="404" data-language="en" data-source="WEB-404">
@@ -33,13 +33,18 @@
       <span class="brand-text"><strong>Siamese Cat Creative Club</strong><span>Flexible • Creative • Caring</span></span>
     </a>
     <nav class="main-nav" aria-label="Primary navigation">
-      <a data-nav="inside" href="/EN/inside">Inside the Club</a>
-      <a data-nav="creative" href="/EN/creative">Creative Club</a>
-      <a data-nav="playgroup" href="/EN/playgroup">Playgroup</a>
-      <a data-nav="memberships" href="/EN/memberships">Memberships</a>
-      <a data-nav="dinner" href="/EN/dinner">Meal Care</a>
-      <a data-nav="faq" href="/EN/faq">FAQ</a>
-      <a data-nav="book" class="btn btn-primary" href="/EN/signup">Parent Signup</a>
+      <a data-nav="inside" class="nav-link" href="/EN/inside">Inside the Club</a>
+      <div class="nav-dropdown">
+        <a data-nav="creative" class="nav-link nav-parent" href="/EN/creative" aria-haspopup="true">Creative Club<span class="nav-caret" aria-hidden="true">⌄</span></a>
+        <div class="nav-submenu" aria-label="Creative Club pages">
+          <a data-nav="playgroup" class="nav-submenu-link" href="/EN/playgroup">Playgroup</a>
+        </div>
+      </div>
+      <a data-nav="little-explorer-program" class="nav-link" href="/EN/little-explorer-program">Little Explorer Program</a>
+      <a data-nav="membership" class="nav-link" href="/EN/membership">Membership</a>
+      <a data-nav="dinner" class="nav-link" href="/EN/dinner">Meal Plans</a>
+      <a data-nav="faq" class="nav-link" href="/EN/faq">FAQ</a>
+      <a data-nav="contact" class="btn btn-primary" href="tel:+66804803802">Contact Us</a>
     </nav>
     <div class="header-actions">
       <a class="lang-toggle" data-language-switch href="/404" hreflang="th" aria-label="Switch to Thai">ไทย</a>
@@ -48,7 +53,7 @@
   </div>
 </header>
 <main id="main">
-<section class="success-wrap"><div class="narrow"><span class="eyebrow">404</span><h1 style="font-size:clamp(48px,8vw,86px)">We couldn't find this page</h1><p class="kicker" style="margin-inline:auto">Explore Little Explorer Playgroup, After School Explorer, packages and meal care from the main pages.</p><div class="hero-actions" style="justify-content:center"><a class="btn btn-primary" href="/EN/memberships">View Packages</a><a class="btn btn-secondary" href="/EN/">Return Home</a></div></div></section>
+<section class="success-wrap"><div class="narrow"><span class="eyebrow">404</span><h1 style="font-size:clamp(48px,8vw,86px)">We couldn't find this page</h1><p class="kicker" style="margin-inline:auto">Explore Little Explorer Playgroup, After School Explorer, packages and meal care from the main pages.</p><div class="hero-actions" style="justify-content:center"><a class="btn btn-primary" href="/EN/little-explorer-program">View Packages</a><a class="btn btn-secondary" href="/EN/">Return Home</a></div></div></section>
 </main>
 <footer class="site-footer">
   <div class="container">
@@ -60,7 +65,7 @@
       <div>
         <div class="footer-title">Explore</div>
         <div class="footer-links">
-          <a href="/EN/inside">Inside the Club</a><a href="/EN/creative">Creative Club</a><a href="/EN/playgroup">Playgroup</a><a href="/EN/memberships">Memberships</a><a href="/EN/dinner">Meal Care</a><a href="/EN/faq">FAQ</a>
+          <a href="/EN/inside">Inside the Club</a><a href="/EN/creative">Creative Club</a><a class="footer-sublink" href="/EN/playgroup">Playgroup</a><a href="/EN/little-explorer-program">Little Explorer Program</a><a href="/EN/membership">Membership</a><a href="/EN/dinner">Meal Plans</a><a href="/EN/faq">FAQ</a>
           <a href="/EN/first-visit">First Session</a>
         </div>
       </div>
@@ -72,8 +77,8 @@
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/EN/privacy">Privacy &amp; PDPA</a> · <a href="/EN/terms">Service terms</a></span></div>
   </div>
 </footer>
-<div class="mobile-cta"><a class="btn btn-primary" href="/EN/signup">Parent Signup</a><a class="btn btn-line" href="tel:+66804803802">Call</a></div>
+<div class="mobile-cta"><a class="btn btn-primary" href="tel:+66804803802">Contact Us</a></div>
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>
-<script src="/main-site/assets/app.js?v=20260717-thai-default"></script>
+<script src="/main-site/assets/app.js?v=20260717-navigation-correction"></script>
 </body>
 </html>

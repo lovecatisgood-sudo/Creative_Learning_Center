@@ -21,7 +21,7 @@
 <link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/playgroup">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-thai-default">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-navigation-correction">
 
 </head>
 <body data-page="playgroup" data-language="th" data-source="WEB-PLAYGROUP">
@@ -33,13 +33,18 @@
       <span class="brand-text"><strong>Siamese Cat Creative Club</strong><span>ยืดหยุ่น • สร้างสรรค์ • ใส่ใจ</span></span>
     </a>
     <nav class="main-nav" aria-label="เมนูหลัก">
-      <a data-nav="inside" href="/inside">ภายในคลับ</a>
-      <a data-nav="creative" href="/creative">ครีเอทีฟคลับ</a>
-      <a data-nav="playgroup" class="active" href="/playgroup">เพลย์กรุ๊ป</a>
-      <a data-nav="memberships" href="/memberships">แพ็กเกจและบัตรเหมารอบ</a>
-      <a data-nav="dinner" href="/dinner">ดูแลมื้ออาหาร</a>
-      <a data-nav="faq" href="/faq">คำถามที่พบบ่อย</a>
-      <a data-nav="book" class="btn btn-primary" href="/signup">ลงทะเบียนผู้ปกครอง</a>
+      <a data-nav="inside" class="nav-link" href="/inside">ภายในคลับ</a>
+      <div class="nav-dropdown active">
+        <a data-nav="creative" class="nav-link nav-parent active" href="/creative" aria-haspopup="true">ครีเอทีฟคลับ<span class="nav-caret" aria-hidden="true">⌄</span></a>
+        <div class="nav-submenu" aria-label="หน้าในเมนู ครีเอทีฟคลับ">
+          <a data-nav="playgroup" class="nav-submenu-link active" href="/playgroup">เพลย์กรุ๊ป</a>
+        </div>
+      </div>
+      <a data-nav="little-explorer-program" class="nav-link" href="/little-explorer-program">โปรแกรม Little Explorer</a>
+      <a data-nav="membership" class="nav-link" href="/membership">สมาชิก</a>
+      <a data-nav="dinner" class="nav-link" href="/dinner">แผนมื้ออาหาร</a>
+      <a data-nav="faq" class="nav-link" href="/faq">FAQ</a>
+      <a data-nav="contact" class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a>
     </nav>
     <div class="header-actions">
       <a class="lang-toggle" data-language-switch href="/EN/playgroup" hreflang="en" aria-label="เปลี่ยนเป็นภาษาอังกฤษ">English</a>
@@ -86,25 +91,7 @@
     <p class="best-for">วันอาทิตย์เต็มวัน พร้อมการเล่น กิจกรรมสร้างสรรค์ การเรียนรู้ง่าย ๆ และการดูแลมื้ออาหารโดยมีทีมงานดูแล</p>
     <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?program=playgroup-sunday-full">ขอจองวันอาทิตย์</a></div>
   </article></div></div></section>
-<section id="passes" class="section"><div class="container"><div class="section-head"><span class="eyebrow">สำหรับครอบครัวที่มาเป็นประจำ</span><h2>บัตรเหมารอบเพลย์กรุ๊ป</h2><p class="kicker">เหมาะสำหรับครอบครัวที่ต้องการความคุ้มค่าและวางแผนง่ายขึ้น</p></div><div class="plan-grid"><article class="card plan-card featured">
-    <span class="card-tag coral">วันธรรมดา</span>
-    <h3>บัตรเต็มวันธรรมดา 20 ครั้ง</h3>
-    <div class="price">18,000 บาท</div>
-    <p class="best-for">แต่ละครั้งรวมเพลย์กรุ๊ปเต็มวันแบบมีทีมงานดูแลและมูลค่า การดูแลมื้ออาหาร เฉลี่ย 900 บาท ประหยัด 1,980 บาทเมื่อเทียบกับการซื้อแยก 20 ครั้ง</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?plan=playgroup-weekday-pass">สอบถามบัตรนี้</a></div>
-  </article><article class="card plan-card hover">
-    <span class="card-tag green">วันเสาร์</span>
-    <h3>บัตรเต็มวันเสาร์ 8 ครั้ง</h3>
-    <div class="price">9,200 บาท</div>
-    <p class="best-for">แต่ละวันเสาร์รวมการดูแลเต็มวันและมูลค่า การดูแลมื้ออาหาร เฉลี่ย 1,150 บาท ประหยัด 2,800 บาทเมื่อเทียบกับการซื้อแยก 8 ครั้ง</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?plan=saturday-pass">สอบถามบัตรวันเสาร์</a></div>
-  </article><article class="card plan-card hover">
-    <span class="card-tag green">วันอาทิตย์</span>
-    <h3>บัตรเต็มวันอาทิตย์ 8 ครั้ง</h3>
-    <div class="price">9,200 บาท</div>
-    <p class="best-for">แต่ละวันอาทิตย์รวมการดูแลเต็มวันและมูลค่า การดูแลมื้ออาหาร เฉลี่ย 1,150 บาท ประหยัด 2,800 บาทเมื่อเทียบกับการซื้อแยก 8 ครั้ง</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?plan=sunday-pass">สอบถามบัตรวันอาทิตย์</a></div>
-  </article></div></div></section>
+<section id="membership-options" class="section"><div class="container"><div class="cta-band"><div><span class="eyebrow" style="color:#b8d9c2">สมาชิก</span><h2>วางแผนมาใช้บริการเป็นประจำ?</h2><p class="muted">ดูบัตรวันธรรมดาและวันหยุดได้ในหน้าสมาชิกโดยเฉพาะ</p></div><div class="cta-actions"><a class="btn btn-light" href="/membership">ดูสมาชิก</a></div></div></div></section>
 <section class="section mint"><div class="container two-col section-grid"><div><span class="eyebrow">ดูแลมื้ออาหาร</span><h2>มูลค่าดูแลมื้ออาหาร — 250 บาท</h2><p class="kicker">สำหรับเซสชันเพลย์กรุ๊ปที่นานขึ้น เด็กสามารถรับอาหารเด็กและเครื่องดื่มจากเมนูคาเฟ่ พร้อมทีมงานช่วยดูแลระหว่างทาน</p><a class="btn btn-secondary" href="/dinner">ดูรายละเอียดมื้ออาหาร</a></div><div class="card"><ul class="check-list"><li>ผู้ปกครองควรแจ้งอาการแพ้ ข้อจำกัดอาหาร หรือพฤติกรรมการทานล่วงหน้า</li><li>เมนูขึ้นอยู่กับรายการอาหารเด็กที่พร้อมให้บริการ</li><li>ทีมงานช่วยเตือนและดูแลระหว่างทานอาหาร</li></ul></div></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="eyebrow">กิจกรรมที่อาจได้ทำ</span><h2>สมดุลระหว่างการเล่น ความสร้างสรรค์ และการเรียนรู้ง่าย ๆ</h2></div><div class="activity-grid"><article class="card activity-card"><h3>เล่นในร่ม</h3><p>ของเล่น โซนนุ่ม การเคลื่อนไหว และการสำรวจอิสระ</p></article><article class="card activity-card"><h3>งานสร้างสรรค์</h3><p>วาดรูป ระบายสี ดินปั้น เลโก้ และโปรเจกต์ง่าย ๆ</p></article><article class="card activity-card"><h3>อ่านหนังสือและเวลาสงบ</h3><p>มุมอ่านหนังสือ เวลาพัก และการโฟกัสอย่างสงบ</p></article><article class="card activity-card"><h3>เล่นกลางแจ้ง</h3><p>เล่นสวนหรือกิจกรรมน้ำเมื่อทีมงาน สภาพอากาศ และตารางพร้อม</p></article><article class="card activity-card"><h3>พบสัตว์</h3><p>แมว กระต่าย หรือเต่าเมื่อพร้อมให้บริการ โดยมีทีมงานดูแลเสมอ</p></article></div></div></section>
 <section class="section mint"><div class="container two-col section-grid"><div><span class="eyebrow">เหตุผลที่ครอบครัวเลือกเพลย์กรุ๊ป</span><h2>การดูแลยืดหยุ่น ทั้งมาเล่นสั้น เต็มวัน และมาเป็นประจำ</h2><p class="kicker">เด็กได้เล่นกับเพื่อน ทำกิจกรรมสร้างสรรค์ และเรียนรู้อย่างเป็นธรรมชาติ ขณะที่ผู้ปกครองเลือกระยะเวลาที่เหมาะกับแต่ละวัน</p></div><div class="card"><ul class="check-list"><li>ตัวเลือกสั้น 1 ชั่วโมงและ 2 ชั่วโมง</li><li>ดูแลครึ่งวันและเต็มวันธรรมดา</li><li>ดูแลเต็มวันวันหยุดและบัตรเหมารอบ</li></ul></div></div></section>
@@ -120,7 +107,7 @@
       <div>
         <div class="footer-title">สำรวจ</div>
         <div class="footer-links">
-          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a href="/playgroup">เพลย์กรุ๊ป</a><a href="/memberships">แพ็กเกจและบัตรเหมารอบ</a><a href="/dinner">ดูแลมื้ออาหาร</a><a href="/faq">คำถามที่พบบ่อย</a>
+          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a class="footer-sublink" href="/playgroup">เพลย์กรุ๊ป</a><a href="/little-explorer-program">โปรแกรม Little Explorer</a><a href="/membership">สมาชิก</a><a href="/dinner">แผนมื้ออาหาร</a><a href="/faq">FAQ</a>
           <a href="/first-visit">เริ่มครั้งแรก</a>
         </div>
       </div>
@@ -132,8 +119,8 @@
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/privacy">ความเป็นส่วนตัวและ PDPA</a> · <a href="/terms">เงื่อนไขบริการ</a></span></div>
   </div>
 </footer>
-<div class="mobile-cta"><a class="btn btn-primary" href="/signup">ลงทะเบียนผู้ปกครอง</a><a class="btn btn-line" href="tel:+66804803802">โทร</a></div>
+<div class="mobile-cta"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a></div>
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>
-<script src="/main-site/assets/app.js?v=20260717-thai-default"></script>
+<script src="/main-site/assets/app.js?v=20260717-navigation-correction"></script>
 </body>
 </html>

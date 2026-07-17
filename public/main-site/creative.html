@@ -21,7 +21,7 @@
 <link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/creative">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-thai-default">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-navigation-correction">
 
 </head>
 <body data-page="creative" data-language="th" data-source="WEB-CREATIVE">
@@ -33,13 +33,18 @@
       <span class="brand-text"><strong>Siamese Cat Creative Club</strong><span>ยืดหยุ่น • สร้างสรรค์ • ใส่ใจ</span></span>
     </a>
     <nav class="main-nav" aria-label="เมนูหลัก">
-      <a data-nav="inside" href="/inside">ภายในคลับ</a>
-      <a data-nav="creative" class="active" href="/creative">ครีเอทีฟคลับ</a>
-      <a data-nav="playgroup" href="/playgroup">เพลย์กรุ๊ป</a>
-      <a data-nav="memberships" href="/memberships">แพ็กเกจและบัตรเหมารอบ</a>
-      <a data-nav="dinner" href="/dinner">ดูแลมื้ออาหาร</a>
-      <a data-nav="faq" href="/faq">คำถามที่พบบ่อย</a>
-      <a data-nav="book" class="btn btn-primary" href="/signup">ลงทะเบียนผู้ปกครอง</a>
+      <a data-nav="inside" class="nav-link" href="/inside">ภายในคลับ</a>
+      <div class="nav-dropdown active">
+        <a data-nav="creative" class="nav-link nav-parent active" href="/creative" aria-haspopup="true">ครีเอทีฟคลับ<span class="nav-caret" aria-hidden="true">⌄</span></a>
+        <div class="nav-submenu" aria-label="หน้าในเมนู ครีเอทีฟคลับ">
+          <a data-nav="playgroup" class="nav-submenu-link" href="/playgroup">เพลย์กรุ๊ป</a>
+        </div>
+      </div>
+      <a data-nav="little-explorer-program" class="nav-link" href="/little-explorer-program">โปรแกรม Little Explorer</a>
+      <a data-nav="membership" class="nav-link" href="/membership">สมาชิก</a>
+      <a data-nav="dinner" class="nav-link" href="/dinner">แผนมื้ออาหาร</a>
+      <a data-nav="faq" class="nav-link" href="/faq">FAQ</a>
+      <a data-nav="contact" class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a>
     </nav>
     <div class="header-actions">
       <a class="lang-toggle" data-language-switch href="/EN/creative" hreflang="en" aria-label="เปลี่ยนเป็นภาษาอังกฤษ">English</a>
@@ -48,56 +53,37 @@
   </div>
 </header>
 <main id="main">
-<section class="hero"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">เล่น • การบ้าน • สร้างสรรค์ • อาหารเย็น • รับกลับ</span><h1>โปรแกรม After School Explorer</h1><p class="lead">พื้นที่ปลอดภัย สนุก และมีความหมายหลังเลิกเรียน เด็กได้เล่น ทำการบ้านง่าย ๆ ทำกิจกรรมสร้างสรรค์ ทานอาหารเย็น และรอรับกลับอย่างสบายใจ</p><div class="hero-actions"><a class="btn btn-primary" href="#sessions">ดูเมนูหลังเลิกเรียน</a><a class="btn btn-secondary" href="/dinner">ดูแลมื้ออาหาร</a></div><p class="small" style="margin-top:14px">เป็นโปรแกรมหลังเลิกเรียนแบบกลุ่มเล็กที่มีทีมงานดูแล ไม่ใช่บริการพี่เลี้ยงส่วนตัวแบบตัวต่อตัว</p></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px"><img class="environment-photo" src="/main-site/assets/environment-creative-room.webp" alt="ห้องกิจกรรมครีเอทีฟคลับ"><div class="caption"><strong>พื้นที่จริงสำหรับพัก โฟกัส และสร้างสรรค์</strong></div></div></div></div></section>
+<section class="hero"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">เล่น • การบ้าน • สร้างสรรค์ • อาหารเย็น • รับกลับ</span><h1>โปรแกรม After School Explorer</h1><p class="lead">พื้นที่ปลอดภัย สนุก และมีความหมายหลังเลิกเรียน เด็กได้เล่น ทำการบ้านง่าย ๆ ทำกิจกรรมสร้างสรรค์ ทานอาหารเย็น และรอรับกลับอย่างสบายใจ</p><div class="hero-actions"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a></div><p class="small" style="margin-top:14px">เป็นโปรแกรมหลังเลิกเรียนแบบกลุ่มเล็กที่มีทีมงานดูแล ไม่ใช่บริการพี่เลี้ยงส่วนตัวแบบตัวต่อตัว</p></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px"><img class="environment-photo" src="/main-site/assets/environment-creative-room.webp" alt="ห้องกิจกรรมครีเอทีฟคลับ"><div class="caption"><strong>พื้นที่จริงสำหรับพัก โฟกัส และสร้างสรรค์</strong></div></div></div></div></section>
 <section id="sessions" class="section fawn"><div class="container"><div class="section-head"><span class="eyebrow">เมนู After School Explorer</span><h2>ดูแลสั้น ดูแลยาว อาหารเย็น และรอรับกลับ</h2></div><div class="plan-grid"><article class="card plan-card hover">
     <span class="card-tag blue">มาเล่นสั้น ๆ</span>
     <h3>เข้าเล่นหลังเลิกเรียน 1 ชั่วโมง</h3>
     <div class="price">199 บาท</div>
     <p class="best-for">ตัวเลือกสั้นหลังเลิกเรียน สำหรับเล่นในโซนเด็กหรือรอรับกลับและมื้อเย็นแบบมีทีมงานดูแล</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?program=creative-1h">ขอจอง 1 ชั่วโมง</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
   </article><article class="card plan-card hover">
     <span class="card-tag green">เวลามากขึ้น</span>
     <h3>หลังเลิกเรียน 2 ชั่วโมง</h3>
     <div class="price">300 บาท</div>
     <p class="best-for">มีเวลาปรับตัวหลังเลิกเรียน เล่น วาดรูป อ่านหนังสือ พัก หรือทำกิจกรรมเงียบโดยไม่เร่งรีบ</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?program=creative-2h">ขอจอง 2 ชั่วโมง</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
   </article><article class="card plan-card featured">
     <span class="card-tag coral">คุ้มค่าวันธรรมดา</span>
     <h3>หลังเลิกเรียนครึ่งวันธรรมดา</h3>
     <div class="price">599 บาท</div>
     <p class="best-for">ดูแลหลังเลิกเรียน 4 ชั่วโมง พร้อมเล่น กิจกรรมสร้างสรรค์ ดูแลการบ้าน และมุมสงบ ประหยัด 197 บาทเมื่อเทียบกับ 1 ชั่วโมง 4 ครั้ง ก่อนเพิ่มบริการมื้ออาหาร</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?program=creative-half-day">ขอจอง 4 ชั่วโมง</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
   </article><article class="card plan-card hover">
     <span class="card-tag blue">ช่วงเย็น</span>
     <h3>อาหารเย็นและรอรับกลับ</h3>
     <div class="price">ตามเซสชัน</div>
     <p class="best-for">เล่น ทำกิจกรรมเงียบ และดูแลมื้ออาหารก่อนผู้ปกครองมารับ</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/dinner">ดูบริการมื้ออาหาร</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
   </article><article class="card plan-card hover">
     <span class="card-tag green">เพิ่มมื้ออาหาร</span>
     <h3>บริการเสริมมื้ออาหาร</h3>
     <div class="price">299 บาท</div>
     <p class="best-for">อาหารเด็ก 1 รายการและเครื่องดื่ม 1 แก้ว พร้อมทีมงานช่วยดูแลระหว่างทาน</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/dinner">เพิ่มบริการมื้ออาหาร</a></div>
-  </article></div></div></section>
-<section class="section"><div class="container"><div class="section-head"><span class="eyebrow">บัตรสำหรับมาเป็นประจำหลังเลิกเรียน</span><h2>สำหรับครอบครัวที่ต้องการกิจวัตรประจำสัปดาห์</h2><p class="kicker">บัตรเหล่านี้จัดรายละเอียดร่วมกับทีมงาน เพื่อให้ตรงกับตารางรับกลับและความต้องการมื้ออาหารของเด็ก</p></div><div class="plan-grid"><article class="card plan-card hover">
-    <span class="card-tag blue">กิจวัตรวันธรรมดา</span>
-    <h3>บัตรดูแลหลังเลิกเรียนวันธรรมดา</h3>
-    <div class="price">จัดตามข้อตกลง</div>
-    <p class="best-for">สำหรับการเล่นหลังเลิกเรียน การบ้าน กิจกรรมสร้างสรรค์ และการดูแลมื้ออาหารหากต้องการ</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?plan=weekday-after-school-pass">สอบถามบัตรนี้</a></div>
-  </article><article class="card plan-card hover">
-    <span class="card-tag green">โฟกัส + สร้างสรรค์</span>
-    <h3>บัตรการบ้านและกิจกรรมสร้างสรรค์</h3>
-    <div class="price">จัดตามข้อตกลง</div>
-    <p class="best-for">เหมาะกับเด็กที่ต้องการเวลาเงียบสำหรับการบ้านหรืออ่านหนังสือก่อนเล่นสร้างสรรค์</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?plan=homework-creative-pass">สอบถามบัตรนี้</a></div>
-  </article><article class="card plan-card featured">
-    <span class="card-tag coral">รับกลับเย็น</span>
-    <h3>บัตรมื้อเย็นและรับกลับช่วงค่ำ</h3>
-    <div class="price">จัดตามข้อตกลง</div>
-    <p class="best-for">เหมาะกับผู้ปกครองที่ต้องการดูแลมื้ออาหารและรอรับกลับช่วงเย็นเป็นประจำ</p>
-    <div class="plan-actions"><a class="btn btn-primary btn-block" href="/signup?plan=dinner-late-pickup-pass">สอบถามบัตรนี้</a></div>
+    <div class="plan-actions"><a class="btn btn-primary btn-block" href="tel:+66804803802">ติดต่อเรา</a></div>
   </article></div></div></section>
 <section class="section fawn"><div class="container"><div class="section-head"><span class="eyebrow">เด็กทำอะไรได้บ้างหลังเลิกเรียน</span><h2>การบ้าน ความสร้างสรรค์ การเล่น และเวลาพักใจ</h2><p class="kicker">กิจกรรมแตกต่างกันตามอายุเด็ก ระยะเวลาเซสชัน ตารางทีมงาน และสภาพอากาศ</p></div><div class="activity-grid"><article class="card activity-card"><h3>การบ้านและอ่านหนังสือ</h3><p>พื้นที่สงบสำหรับการบ้านง่าย ๆ อ่านหนังสือ และโฟกัส โดยมีทีมงานช่วยดูแล</p></article><article class="card activity-card"><h3>กิจกรรมสร้างสรรค์</h3><p>วาดรูป ระบายสี ดินปั้น เลโก้ งานประดิษฐ์ และโปรเจกต์เล็ก ๆ</p></article><article class="card activity-card"><h3>เล่นและเติมพลัง</h3><p>ของเล่นในร่ม โซนนุ่ม กิจกรรมกลุ่ม หรือเล่นสวนเมื่อพร้อม</p></article><article class="card activity-card"><h3>เวลาสงบ</h3><p>เด็กได้พักและปรับตัวหลังวันเรียนโดยไม่ต้องเร่งรีบ</p></article><article class="card activity-card"><h3>พบสัตว์</h3><p>พบแมว กระต่าย หรือเต่าแบบมีทีมงานดูแลเมื่อพร้อม</p></article></div></div></section>
 <section class="section mint"><div class="container"><div class="section-head center"><span class="eyebrow">ตัวอย่างลำดับหลังเลิกเรียน</span><h2>กิจวัตรสงบระหว่างโรงเรียนและบ้าน</h2></div><div class="paw-timeline reveal"><div class="paw-step"><div class="paw-node">1</div><div><h3>มาถึงและปรับตัว</h3><p class="small">วางกระเป๋า ล้างมือ และพักสั้น ๆ</p></div></div><div class="paw-step"><div class="paw-node">2</div><div><h3>การบ้านหรือโฟกัสเงียบ</h3><p class="small">ทีมงานช่วยจัดบรรยากาศ เตือน และอธิบายเบื้องต้นเมื่อเหมาะสม</p></div></div><div class="paw-step"><div class="paw-node">3</div><div><h3>สร้างสรรค์และเล่น</h3><p class="small">วาดรูป ระบายสี ดินปั้น เลโก้ อ่านหนังสือ เล่นในร่มหรือกลางแจ้งเมื่อพร้อม</p></div></div><div class="paw-step"><div class="paw-node">4</div><div><h3>อาหารเย็นและรับกลับ</h3><p class="small">สามารถขอบริการดูแลมื้ออาหารล่วงหน้าก่อนผู้ปกครองรับกลับ</p></div></div></div></div></section>
@@ -114,7 +100,7 @@
       <div>
         <div class="footer-title">สำรวจ</div>
         <div class="footer-links">
-          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a href="/playgroup">เพลย์กรุ๊ป</a><a href="/memberships">แพ็กเกจและบัตรเหมารอบ</a><a href="/dinner">ดูแลมื้ออาหาร</a><a href="/faq">คำถามที่พบบ่อย</a>
+          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a class="footer-sublink" href="/playgroup">เพลย์กรุ๊ป</a><a href="/little-explorer-program">โปรแกรม Little Explorer</a><a href="/membership">สมาชิก</a><a href="/dinner">แผนมื้ออาหาร</a><a href="/faq">FAQ</a>
           <a href="/first-visit">เริ่มครั้งแรก</a>
         </div>
       </div>
@@ -126,8 +112,8 @@
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/privacy">ความเป็นส่วนตัวและ PDPA</a> · <a href="/terms">เงื่อนไขบริการ</a></span></div>
   </div>
 </footer>
-<div class="mobile-cta"><a class="btn btn-primary" href="/signup">ลงทะเบียนผู้ปกครอง</a><a class="btn btn-line" href="tel:+66804803802">โทร</a></div>
+<div class="mobile-cta"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a></div>
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>
-<script src="/main-site/assets/app.js?v=20260717-thai-default"></script>
+<script src="/main-site/assets/app.js?v=20260717-navigation-correction"></script>
 </body>
 </html>

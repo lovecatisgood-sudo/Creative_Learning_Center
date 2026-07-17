@@ -21,7 +21,7 @@
 <link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/inside">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-thai-default">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=20260717-navigation-correction">
 
 </head>
 <body data-page="inside" data-language="th" data-source="WEB-INSIDE">
@@ -33,13 +33,18 @@
       <span class="brand-text"><strong>Siamese Cat Creative Club</strong><span>ยืดหยุ่น • สร้างสรรค์ • ใส่ใจ</span></span>
     </a>
     <nav class="main-nav" aria-label="เมนูหลัก">
-      <a data-nav="inside" class="active" href="/inside">ภายในคลับ</a>
-      <a data-nav="creative" href="/creative">ครีเอทีฟคลับ</a>
-      <a data-nav="playgroup" href="/playgroup">เพลย์กรุ๊ป</a>
-      <a data-nav="memberships" href="/memberships">แพ็กเกจและบัตรเหมารอบ</a>
-      <a data-nav="dinner" href="/dinner">ดูแลมื้ออาหาร</a>
-      <a data-nav="faq" href="/faq">คำถามที่พบบ่อย</a>
-      <a data-nav="book" class="btn btn-primary" href="/signup">ลงทะเบียนผู้ปกครอง</a>
+      <a data-nav="inside" class="nav-link active" href="/inside">ภายในคลับ</a>
+      <div class="nav-dropdown">
+        <a data-nav="creative" class="nav-link nav-parent" href="/creative" aria-haspopup="true">ครีเอทีฟคลับ<span class="nav-caret" aria-hidden="true">⌄</span></a>
+        <div class="nav-submenu" aria-label="หน้าในเมนู ครีเอทีฟคลับ">
+          <a data-nav="playgroup" class="nav-submenu-link" href="/playgroup">เพลย์กรุ๊ป</a>
+        </div>
+      </div>
+      <a data-nav="little-explorer-program" class="nav-link" href="/little-explorer-program">โปรแกรม Little Explorer</a>
+      <a data-nav="membership" class="nav-link" href="/membership">สมาชิก</a>
+      <a data-nav="dinner" class="nav-link" href="/dinner">แผนมื้ออาหาร</a>
+      <a data-nav="faq" class="nav-link" href="/faq">FAQ</a>
+      <a data-nav="contact" class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a>
     </nav>
     <div class="header-actions">
       <a class="lang-toggle" data-language-switch href="/EN/inside" hreflang="en" aria-label="เปลี่ยนเป็นภาษาอังกฤษ">English</a>
@@ -62,7 +67,7 @@
       <div>
         <div class="footer-title">สำรวจ</div>
         <div class="footer-links">
-          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a href="/playgroup">เพลย์กรุ๊ป</a><a href="/memberships">แพ็กเกจและบัตรเหมารอบ</a><a href="/dinner">ดูแลมื้ออาหาร</a><a href="/faq">คำถามที่พบบ่อย</a>
+          <a href="/inside">ภายในคลับ</a><a href="/creative">ครีเอทีฟคลับ</a><a class="footer-sublink" href="/playgroup">เพลย์กรุ๊ป</a><a href="/little-explorer-program">โปรแกรม Little Explorer</a><a href="/membership">สมาชิก</a><a href="/dinner">แผนมื้ออาหาร</a><a href="/faq">FAQ</a>
           <a href="/first-visit">เริ่มครั้งแรก</a>
         </div>
       </div>
@@ -74,8 +79,8 @@
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/privacy">ความเป็นส่วนตัวและ PDPA</a> · <a href="/terms">เงื่อนไขบริการ</a></span></div>
   </div>
 </footer>
-<div class="mobile-cta"><a class="btn btn-primary" href="/signup">ลงทะเบียนผู้ปกครอง</a><a class="btn btn-line" href="tel:+66804803802">โทร</a></div>
+<div class="mobile-cta"><a class="btn btn-primary" href="tel:+66804803802">ติดต่อเรา</a></div>
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>
-<script src="/main-site/assets/app.js?v=20260717-thai-default"></script>
+<script src="/main-site/assets/app.js?v=20260717-navigation-correction"></script>
 </body>
 </html>

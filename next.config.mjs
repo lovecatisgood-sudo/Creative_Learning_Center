@@ -3,7 +3,8 @@ const mainSiteRoutes = [
   "inside",
   "playgroup",
   "creative",
-  "memberships",
+  "little-explorer-program",
+  "membership",
   "dinner",
   "faq",
   "first-visit",
@@ -18,6 +19,10 @@ const nextConfig = {
     return [
       { source: "/index.html", destination: "/", permanent: true },
       { source: "/EN/index.html", destination: "/EN/", permanent: true },
+      { source: "/memberships", destination: "/little-explorer-program", permanent: true },
+      { source: "/memberships.html", destination: "/little-explorer-program", permanent: true },
+      { source: "/EN/memberships", destination: "/EN/little-explorer-program", permanent: true },
+      { source: "/EN/memberships.html", destination: "/EN/little-explorer-program", permanent: true },
       ...mainSiteRoutes.map((route) => ({
         source: `/${route}.html`,
         destination: `/${route}`,
