@@ -16,6 +16,30 @@ const nextConfig = {
   reactStrictMode: true,
   // Uploaded proof photos are served through an authenticated API route, not the
   // public folder, so no image domains config is required.
+  async headers() {
+    return [
+      {
+        source: "/main-site/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/landing/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      ...["/terms", "/privacy", "/EN/terms", "/EN/privacy"].map((source) => ({
+        source,
+        headers: [{ key: "Cache-Control", value: "public, max-age=300, stale-while-revalidate=3600" }],
+      })),
+      {
+        source: "/admin/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      {
+        source: "/api/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
+  },
   async redirects() {
     return [
       { source: "/index.html", destination: "/", permanent: true },

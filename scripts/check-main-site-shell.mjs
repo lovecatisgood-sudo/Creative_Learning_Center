@@ -52,6 +52,31 @@ for (const language of ["th", "en"]) {
     if (!footer.includes(language === "en" ? 'href="/EN/contact"' : 'href="/contact"')) {
       throw new Error(`${language}/${page.file} is missing the Contact Us footer link`);
     }
+    const structuredMatch = page.html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    if (!structuredMatch) {
+      throw new Error(`${language}/${page.file} is missing JSON-LD structured data`);
+    }
+    const structured = JSON.parse(structuredMatch[1]);
+    const business = structured["@graph"]?.find((item) => item["@type"] === "LocalBusiness");
+    if (business?.name !== "Siamese Cat Creative Club" || business?.legalName !== "Siamese Cat Cafe Co., Ltd. (Thailand)" || business?.address?.addressCountry !== "TH") {
+      throw new Error(`${language}/${page.file} has incomplete LocalBusiness structured data`);
+    }
+    if (!page.html.includes('<link rel="canonical"') || !page.html.includes('hreflang="th"') || !page.html.includes('hreflang="en"') || !page.html.includes('hreflang="x-default"')) {
+      throw new Error(`${language}/${page.file} is missing canonical or language metadata`);
+    }
+    if (page.html.includes("logo-circle.png")) {
+      throw new Error(`${language}/${page.file} still references the oversized PNG logo`);
+    }
+    for (const [, image] of page.html.matchAll(/(<img\b[^>]*>)/g)) {
+      if (!/\bwidth="\d+"/.test(image) || !/\bheight="\d+"/.test(image)) {
+        throw new Error(`${language}/${page.file} contains an image without intrinsic dimensions`);
+      }
+    }
+    const shouldIndex = !["404.html", "thank-you.html"].includes(page.file);
+    const expectedRobots = shouldIndex ? 'content="index,follow,max-image-preview:large"' : 'content="noindex,nofollow"';
+    if (!page.html.includes(expectedRobots)) {
+      throw new Error(`${language}/${page.file} has the wrong robots policy`);
+    }
   }
 
   const prefix = language === "en" ? "/EN" : "";

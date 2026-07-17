@@ -165,7 +165,7 @@ function SignupPageContent({ language }: { language: Lang }) {
     <div className="min-h-screen bg-paper pb-16">
       <header className="flex items-center justify-between px-4 py-1">
         <Link href={homeUrl} className="flex items-center gap-2" aria-label={label("กลับหน้าหลัก", "Back to home")}>
-          <Logo size={28} />
+          <Logo size={28} alt="" />
           <div>
             <div className="text-[13px] font-extrabold leading-tight text-ink">
               {process.env.NEXT_PUBLIC_SHOP_NAME || t("shopName")}
@@ -175,6 +175,11 @@ function SignupPageContent({ language }: { language: Lang }) {
         </Link>
         <PublicLanguageLink language={lang} path="/signup" />
       </header>
+
+      <div className="px-4 pb-2 pt-1">
+        <h1 className="text-xl font-extrabold text-brown">{t("signupTitle")}</h1>
+        <p className="text-[13px] text-meta">{t("signupSubtitle")}</p>
+      </div>
 
       <form onSubmit={submit} className="flex flex-col gap-1.5 px-4">
         {/* Parent card */}

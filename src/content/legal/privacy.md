@@ -8,7 +8,7 @@ This Privacy Policy explains how **Siamese Cat Creative Club** ("the Club," "we,
 This policy is intended to support compliance with Thailand's Personal Data Protection Act B.E. 2562 (2019) ("PDPA") and other applicable laws.
 
 > **Data Controller**<br>
-> Legal entity: Siamese Cat Cafe Co., Ltd.<br>
+> Legal entity: Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 > Address: 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
 > Telephone: +66 80 480 3802<br>
 > Email: Cafe@siamesecat.cafe
@@ -203,7 +203,7 @@ To submit a privacy request, contact:
 
 **Privacy Contact / Data Controller**<br>
 Siamese Cat Creative Club<br>
-Siamese Cat Cafe Co., Ltd.<br>
+Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
 Email: Cafe@siamesecat.cafe<br>
 Telephone: +66 80 480 3802

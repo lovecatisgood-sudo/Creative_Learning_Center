@@ -10,7 +10,7 @@ import { toPng } from "html-to-image";
 import { dict } from "@/lib/i18n/dictionary";
 
 const SHOP = process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club";
-const COMPANY = process.env.NEXT_PUBLIC_COMPANY_NAME || "Siamese Cat Cafe Co., Ltd.";
+const COMPANY = process.env.NEXT_PUBLIC_COMPANY_NAME || "Siamese Cat Cafe Co., Ltd. (Thailand)";
 
 // The printed ticket always shows Thai + English together, independent of the
 // app's language toggle (`lang`), which only affects on-screen chrome (AppBar,

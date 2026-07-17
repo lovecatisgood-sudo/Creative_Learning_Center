@@ -190,7 +190,7 @@ html[lang="th"] .eyebrow { text-transform: none; }
 .card p:last-child { margin-bottom: 0; }
 .card-tag { display: inline-flex; padding: 6px 10px; border-radius: 999px; background: var(--pink); font-size: 12px; font-weight: 900; margin-bottom: 14px; }
 .card-tag.blue { background: #d9e9f4; color: var(--blue-deep); }
-.card-tag.green { background: #dcebdd; color: var(--leaf); }
+.card-tag.green { background: #dcebdd; color: #315f36; }
 .card-tag.coral { background: var(--coral); color: #fff; }
 
 .activity-grid { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 16px; }

@@ -240,7 +240,7 @@ a:focus-visible,
 .landing-v2 h2,
 .landing-v2 h3 {
   line-height: 1.12;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 .landing-v2 .wrap {
   max-width: 1080px;

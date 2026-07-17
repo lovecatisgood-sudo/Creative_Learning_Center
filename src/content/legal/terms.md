@@ -8,7 +8,7 @@ These Terms of Service ("Terms") apply to parent registration, bookings, session
 By registering a child, requesting a booking, purchasing a service, or accepting these Terms, the parent or legal guardian confirms that they have read and agreed to them.
 
 > **Business details**<br>
-> Legal entity: Siamese Cat Cafe Co., Ltd.<br>
+> Legal entity: Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 > Address: 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
 > Telephone: +66 80 480 3802<br>
 > Email: Cafe@siamesecat.cafe
@@ -183,7 +183,7 @@ These Terms are governed by the laws of Thailand. Nothing in them excludes a chi
 Questions, complaints, cancellation requests, and formal notices may be sent to:
 
 **Siamese Cat Creative Club**<br>
-Siamese Cat Cafe Co., Ltd.<br>
+Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
 Telephone: +66 80 480 3802<br>
 Email: Cafe@siamesecat.cafe

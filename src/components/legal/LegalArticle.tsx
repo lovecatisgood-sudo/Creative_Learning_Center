@@ -14,7 +14,7 @@ export function LegalArticle({ html, language, path }: { html: string; language:
       <header className="sticky top-0 z-30 border-b border-line bg-paper/90 backdrop-blur">
         <div className="mx-auto flex max-w-[760px] items-center justify-between gap-3 px-5 py-3">
           <Link href={homeUrl} className="flex items-center gap-2.5">
-            <Logo size={34} />
+            <Logo size={34} alt="" />
             <b className="text-[15px] font-extrabold text-brown">Siamese Cat Creative Club</b>
           </Link>
           <PublicLanguageLink language={language} path={path} />
@@ -33,6 +33,15 @@ export function LegalArticle({ html, language, path }: { html: string; language:
           className="legal-prose mt-4"
           dangerouslySetInnerHTML={{ __html: html }}
         />
+
+        <div className="mt-10 border-t border-line pt-6">
+          <Link
+            href={homeUrl}
+            className="inline-flex min-h-[44px] items-center gap-1.5 font-bold text-tealdeep underline decoration-2 underline-offset-4"
+          >
+            <span aria-hidden>←</span> {backLabel}
+          </Link>
+        </div>
       </main>
     </div>
   );

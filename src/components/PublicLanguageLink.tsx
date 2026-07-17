@@ -29,7 +29,7 @@ export function PublicLanguageLink({
     <Link
       href={href}
       hrefLang={language === "th" ? "en" : "th"}
-      aria-label={language === "th" ? "เปลี่ยนเป็นภาษาอังกฤษ" : "Switch to Thai"}
+      aria-label={language === "th" ? "English - เปลี่ยนเป็นภาษาอังกฤษ" : "ไทย - Switch to Thai"}
       className={
         "inline-flex min-h-[44px] items-center justify-center rounded-full border px-4 text-[13px] font-bold " +
         (dark ? "border-cream/40 text-cream" : "border-line bg-card text-ink")
