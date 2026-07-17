@@ -6,7 +6,7 @@ import { PublicLanguageLink } from "@/components/PublicLanguageLink";
 import { Logo } from "@/components/Logo";
 
 export function LegalArticle({ html, language, path }: { html: string; language: Lang; path: string }) {
-  const homeUrl = language === "en" ? "/EN/" : "/";
+  const homeUrl = language === "en" ? "/EN" : "/";
   const backLabel = language === "th" ? "กลับหน้าหลัก" : "Back to home";
 
   return (

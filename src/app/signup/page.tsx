@@ -87,7 +87,7 @@ function SignupPageContent({ language }: { language: Lang }) {
   // Point at the app's own public policy pages (publicly reachable — middleware
   // only gates /admin). Opened in a new tab so the in-progress form isn't lost.
   const languagePrefix = lang === "en" ? "/EN" : "";
-  const homeUrl = lang === "en" ? "/EN/" : "/";
+  const homeUrl = lang === "en" ? "/EN" : "/";
   const termsUrl = `${languagePrefix}/terms`;
   const privacyUrl = `${languagePrefix}/privacy`;
 

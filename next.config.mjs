@@ -43,7 +43,7 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/index.html", destination: "/", permanent: true },
-      { source: "/EN/index.html", destination: "/EN/", permanent: true },
+      { source: "/EN/index.html", destination: "/EN", permanent: true },
       { source: "/memberships", destination: "/little-explorer-program", permanent: true },
       { source: "/memberships.html", destination: "/little-explorer-program", permanent: true },
       { source: "/EN/memberships", destination: "/EN/little-explorer-program", permanent: true },

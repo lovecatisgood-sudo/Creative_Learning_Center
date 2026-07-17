@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { Lang } from "@/lib/i18n/dictionary";
 
 function counterpartPath(path: string, language: Lang): string {
-  if (language === "th") return path === "/" ? "/EN/" : `/EN${path}`;
+  if (language === "th") return path === "/" ? "/EN" : `/EN${path}`;
   return path;
 }
 

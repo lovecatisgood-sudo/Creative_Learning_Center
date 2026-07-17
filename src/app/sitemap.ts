@@ -22,7 +22,7 @@ const LAST_UPDATED = new Date("2026-07-17T00:00:00+07:00");
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.flatMap(({ path, changeFrequency, priority }) => {
     const thaiUrl = `${SITE_URL}${path || "/"}`;
-    const englishUrl = `${SITE_URL}/EN${path || "/"}`;
+    const englishUrl = `${SITE_URL}/EN${path}`;
     const alternates = { languages: { th: thaiUrl, en: englishUrl, "x-default": thaiUrl } };
 
     return [

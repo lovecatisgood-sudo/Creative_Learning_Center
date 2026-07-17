@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = join(process.cwd(), "public/main-site");
-const SHELL_VERSION = "20260717-seo-performance-v4";
+const SHELL_VERSION = "20260717-seo-performance-v5";
 const ASSET_VERSION = SHELL_VERSION;
 const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const CAFE_URL = "https://siamesecat.cafe/";
@@ -47,7 +47,7 @@ function localizedRoute(href, language = currentLanguage) {
   const url = new URL(href, "https://creative.siamesecat.cafe");
   if (!PUBLIC_ROUTES.has(url.pathname)) return href;
   const localizedPath = language === "en"
-    ? url.pathname === "/" ? "/EN/" : `/EN${url.pathname}`
+    ? url.pathname === "/" ? "/EN" : `/EN${url.pathname}`
     : url.pathname;
   return `${localizedPath}${url.search}${url.hash}`;
 }
