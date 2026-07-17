@@ -109,7 +109,7 @@ p { margin: 0 0 16px; }
 .cat-face::after { content: "⌄"; position: absolute; left: 7px; top: 5px; color: var(--seal); font-weight: 900; font-size: 12px; }
 .brand-text strong { display: block; font-family: "Mitr", sans-serif; font-size: 16px; line-height: 1.1; }
 .brand-text span { font-size: 11px; color: var(--seal-soft); letter-spacing: .04em; }
-.main-nav { display: flex; align-items: center; gap: 24px; margin-left: auto; }
+.main-nav { display: flex; align-items: center; gap: 18px; margin-left: auto; }
 .main-nav a { text-decoration: none; font-weight: 700; font-size: 14px; position: relative; white-space: nowrap; }
 .main-nav a:not(.btn)::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: .2s var(--ease); }
 .main-nav a:hover::after, .main-nav a.active::after { transform: scaleX(1); }
