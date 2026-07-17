@@ -69,6 +69,16 @@ pnpm create-admin admin@yourshop.com 'your-strong-password'   # prints the hash 
 openssl rand -base64 48
 ```
 
+Generate a separate key for automated blog publishing and add it as
+`BLOG_PUBLISH_API_KEY` in Hostinger's environment variables:
+
+```bash
+openssl rand -hex 32
+```
+
+Do not reuse the admin password or session secret. The blog API guide is in
+`docs/blog-publishing-api.md`.
+
 Set `UPLOAD_DIR=/var/sccc/uploads` and create it:
 
 ```bash
