@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useLang } from "@/lib/i18n/LanguageProvider";
-import { LangToggle } from "@/components/LangToggle";
+import { dict, type DictKey, type Lang } from "@/lib/i18n/dictionary";
+import { PublicLanguageLink } from "@/components/PublicLanguageLink";
 import { Logo } from "@/components/Logo";
 
 type ChildForm = { name: string; dob: string; gender: "male" | "female" | "" };
@@ -21,26 +21,26 @@ function isPlausiblePhone(phone: string): boolean {
 
 const PLAYGROUP_INTEREST_OPTIONS = [
   ["playgroup-general", "Little Explorer Playgroup", "Little Explorer Playgroup"],
-  ["playgroup-1h", "Playgroup - 1 hour / 199 THB", "Playgroup - 1 ชั่วโมง / 199 บาท"],
-  ["playgroup-2h", "Playgroup - 2 hours / 300 THB", "Playgroup - 2 ชั่วโมง / 300 บาท"],
-  ["playgroup-half-day", "Playgroup - weekday half-day / 599 THB", "Playgroup - ครึ่งวันธรรมดา / 599 บาท"],
-  ["playgroup-weekday-full", "Playgroup - weekday full-day / 999 THB", "Playgroup - เต็มวันธรรมดา / 999 บาท"],
-  ["playgroup-saturday-full", "Playgroup - Saturday full-day / 1,500 THB", "Playgroup - เต็มวันเสาร์ / 1,500 บาท"],
-  ["playgroup-sunday-full", "Playgroup - Sunday full-day / 1,500 THB", "Playgroup - เต็มวันอาทิตย์ / 1,500 บาท"],
-  ["playgroup-weekday-pass", "Playgroup - 20-session weekday pass / 18,000 THB", "Playgroup - บัตรวันธรรมดา 20 ครั้ง / 18,000 บาท"],
-  ["playgroup-saturday-pass", "Playgroup - 8-session Saturday pass / 9,200 THB", "Playgroup - บัตรวันเสาร์ 8 ครั้ง / 9,200 บาท"],
-  ["playgroup-sunday-pass", "Playgroup - 8-session Sunday pass / 9,200 THB", "Playgroup - บัตรวันอาทิตย์ 8 ครั้ง / 9,200 บาท"],
+  ["playgroup-1h", "Playgroup - 1 hour / 199 THB", "เพลย์กรุ๊ป - 1 ชั่วโมง / 199 บาท"],
+  ["playgroup-2h", "Playgroup - 2 hours / 300 THB", "เพลย์กรุ๊ป - 2 ชั่วโมง / 300 บาท"],
+  ["playgroup-half-day", "Playgroup - weekday half-day / 599 THB", "เพลย์กรุ๊ป - ครึ่งวันธรรมดา / 599 บาท"],
+  ["playgroup-weekday-full", "Playgroup - weekday full-day / 999 THB", "เพลย์กรุ๊ป - เต็มวันธรรมดา / 999 บาท"],
+  ["playgroup-saturday-full", "Playgroup - Saturday full-day / 1,500 THB", "เพลย์กรุ๊ป - เต็มวันเสาร์ / 1,500 บาท"],
+  ["playgroup-sunday-full", "Playgroup - Sunday full-day / 1,500 THB", "เพลย์กรุ๊ป - เต็มวันอาทิตย์ / 1,500 บาท"],
+  ["playgroup-weekday-pass", "Playgroup - 20-session weekday pass / 18,000 THB", "เพลย์กรุ๊ป - บัตรวันธรรมดา 20 ครั้ง / 18,000 บาท"],
+  ["playgroup-saturday-pass", "Playgroup - 8-session Saturday pass / 9,200 THB", "เพลย์กรุ๊ป - บัตรวันเสาร์ 8 ครั้ง / 9,200 บาท"],
+  ["playgroup-sunday-pass", "Playgroup - 8-session Sunday pass / 9,200 THB", "เพลย์กรุ๊ป - บัตรวันอาทิตย์ 8 ครั้ง / 9,200 บาท"],
 ] as const;
 
 const AFTERSCHOOL_INTEREST_OPTIONS = [
-  ["creative-general", "After School Explorer Program", "After School Explorer Program"],
+  ["creative-general", "After School Explorer Program", "โปรแกรม After School Explorer"],
   ["creative-1h", "After School Explorer - 1 hour / 199 THB", "After School Explorer - 1 ชั่วโมง / 199 บาท"],
   ["creative-2h", "After School Explorer - 2 hours / 300 THB", "After School Explorer - 2 ชั่วโมง / 300 บาท"],
   ["creative-half-day", "After School Explorer - 4-hour half-day / 599 THB", "After School Explorer - ครึ่งวัน 4 ชั่วโมง / 599 บาท"],
-  ["creative-meal", "After School Explorer - meal care add-on / 299 THB", "After School Explorer - Meal Care / 299 บาท"],
+  ["creative-meal", "After School Explorer - meal care add-on / 299 THB", "After School Explorer - บริการเสริมมื้ออาหาร / 299 บาท"],
   ["creative-weekday-pass", "After School Explorer - weekday pass", "After School Explorer - บัตรวันธรรมดา"],
-  ["creative-homework-pass", "After School Explorer - homework & creative pass", "After School Explorer - Homework & Creative Pass"],
-  ["creative-dinner-pickup-pass", "After School Explorer - dinner & late pickup pass", "After School Explorer - Dinner & Late Pickup Pass"],
+  ["creative-homework-pass", "After School Explorer - homework & creative pass", "After School Explorer - บัตรการบ้านและกิจกรรมสร้างสรรค์"],
+  ["creative-dinner-pickup-pass", "After School Explorer - dinner & late pickup pass", "After School Explorer - บัตรมื้อเย็นและรับกลับช่วงค่ำ"],
 ] as const;
 
 const INTEREST_OPTIONS = [...PLAYGROUP_INTEREST_OPTIONS, ...AFTERSCHOOL_INTEREST_OPTIONS] as const;
@@ -70,8 +70,9 @@ function todayISO(): string {
   return `${y}-${m}-${day}`;
 }
 
-export default function SignupPage() {
-  const { t, lang } = useLang();
+function SignupPageContent({ language }: { language: Lang }) {
+  const lang = language;
+  const t = (key: DictKey) => dict[key][lang];
   const router = useRouter();
 
   const [parentName, setParentName] = useState("");
@@ -85,8 +86,10 @@ export default function SignupPage() {
 
   // Point at the app's own public policy pages (publicly reachable — middleware
   // only gates /admin). Opened in a new tab so the in-progress form isn't lost.
-  const termsUrl = "/terms";
-  const privacyUrl = "/privacy";
+  const languagePrefix = lang === "en" ? "/EN" : "";
+  const homeUrl = lang === "en" ? "/EN/" : "/";
+  const termsUrl = `${languagePrefix}/terms`;
+  const privacyUrl = `${languagePrefix}/privacy`;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -144,14 +147,14 @@ export default function SignupPage() {
           duplicatePhone: data.duplicatePhone,
         })
       );
-      router.push("/signup/success");
+      router.push(`${languagePrefix}/signup/success`);
     } else {
       const body = await res.json().catch(() => null);
       setErrors((prev) => ({ ...prev, form: (body?.error as string) || t("signupFailed") }));
     }
   }
 
-  const label = (th: string, en: string) => (lang === "th" ? `${th} / ${en}` : `${en} / ${th}`);
+  const label = (th: string, en: string) => (lang === "th" ? th : en);
 
   // Inputs default to a 48px-tall .field (shared, app-wide class); trimming to
   // the 44px touch-target floor here via inline style (not by editing .field,
@@ -161,7 +164,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-paper pb-16">
       <header className="flex items-center justify-between px-4 py-1">
-        <Link href="/" className="flex items-center gap-2" aria-label={label("กลับหน้าหลัก", "Back to home")}>
+        <Link href={homeUrl} className="flex items-center gap-2" aria-label={label("กลับหน้าหลัก", "Back to home")}>
           <Logo size={28} />
           <div>
             <div className="text-[13px] font-extrabold leading-tight text-ink">
@@ -170,7 +173,7 @@ export default function SignupPage() {
             <div className="text-[10px] leading-tight text-meta">{label("ลงทะเบียนผู้ปกครอง", "Parent registration")}</div>
           </div>
         </Link>
-        <LangToggle />
+        <PublicLanguageLink language={lang} path="/signup" />
       </header>
 
       <form onSubmit={submit} className="flex flex-col gap-1.5 px-4">
@@ -332,6 +335,11 @@ export default function SignupPage() {
       </div>
     </div>
   );
+}
+
+export default function SignupPage() {
+  const pathname = usePathname();
+  return <SignupPageContent language={pathname.startsWith("/EN/") ? "en" : "th"} />;
 }
 
 function Field({

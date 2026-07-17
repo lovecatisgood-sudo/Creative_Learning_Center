@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { SITE_URL } from "@/lib/landing/site";
@@ -6,7 +7,7 @@ import { SITE_URL } from "@/lib/landing/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club",
-  description: "Little Explorer Playgroup and After School Explorer programs near Mega Bangna, with flexible sessions, creative activities, meal care and pickup support.",
+  description: "Little Explorer Playgroup และโปรแกรม After School Explorer ใกล้เมกาบางนา พร้อมเซสชันยืดหยุ่น กิจกรรมสร้างสรรค์ ดูแลมื้ออาหาร และรอรับกลับ",
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -24,8 +25,9 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const language = headers().get("x-sccc-language") === "en" ? "en" : "th";
   return (
-    <html lang="th">
+    <html lang={language}>
       <body>
         <LanguageProvider>{children}</LanguageProvider>
       </body>

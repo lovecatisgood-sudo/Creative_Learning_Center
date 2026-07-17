@@ -14,7 +14,9 @@ const DIR = path.join(root, "src", "content", "legal");
 
 const DOCS = [
   { md: "privacy.md", out: "privacy.html.ts" },
+  { md: "privacy.th.md", out: "privacy.th.html.ts" },
   { md: "terms.md", out: "terms.html.ts" },
+  { md: "terms.th.md", out: "terms.th.html.ts" },
 ];
 
 marked.setOptions({ gfm: true, breaks: false });

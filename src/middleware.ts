@@ -9,18 +9,28 @@ const SESSION_COOKIE = "sccc_admin";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/EN${pathname.slice(3) || "/"}`;
+    return NextResponse.redirect(url, 308);
+  }
+
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set("x-sccc-language", pathname === "/EN" || pathname.startsWith("/EN/") ? "en" : "th");
+  const nextWithLanguage = () => NextResponse.next({ request: { headers: requestHeaders } });
+
   const isLoginPage = pathname === "/admin/login";
   const isLoginApi = pathname === "/api/admin/login";
   const hasCookie = req.cookies.has(SESSION_COOKIE);
 
   // Public: signup pages, login page, login API, everything under /api/public.
   if (isLoginPage || isLoginApi) {
-    return NextResponse.next();
+    return nextWithLanguage();
   }
 
   const isProtected =
     pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
-  if (!isProtected) return NextResponse.next();
+  if (!isProtected) return nextWithLanguage();
 
   if (!hasCookie) {
     if (pathname.startsWith("/api/")) {
@@ -31,9 +41,9 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  return nextWithLanguage();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|favicon-16.png|favicon-32.png|apple-touch-icon.png|main-site/assets).*)"],
 };

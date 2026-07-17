@@ -4,12 +4,12 @@
   const CONFIG = {
     phone: '+66804803802',
     formEndpoint: '',
-    defaultLang: 'en'
   };
 
   const qs = (sel, root = document) => root.querySelector(sel);
   const qsa = (sel, root = document) => [...root.querySelectorAll(sel)];
   const toast = qs('#site-toast');
+  const body = document.body;
 
   const storage = {
     get(type, key) {
@@ -28,35 +28,14 @@
     showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 3200);
   }
 
-  // Language
-  let lang = storage.get('localStorage', 'sccc-lang') || CONFIG.defaultLang;
-  const body = document.body;
-
-  function applyLang(next) {
-    lang = next === 'th' ? 'th' : 'en';
-    storage.set('localStorage', 'sccc-lang', lang);
-    document.documentElement.lang = lang;
-    qsa('[data-en][data-th]').forEach(el => {
-      const value = el.dataset[lang];
-      if (value !== undefined) el.textContent = value;
-    });
-    qsa('[data-en-placeholder][data-th-placeholder]').forEach(el => {
-      el.placeholder = lang === 'th' ? el.dataset.thPlaceholder : el.dataset.enPlaceholder;
-    });
-    qsa('[data-en-aria][data-th-aria]').forEach(el => {
-      el.setAttribute('aria-label', lang === 'th' ? el.dataset.thAria : el.dataset.enAria);
-    });
-    qsa('.lang-toggle').forEach(btn => {
-      btn.textContent = lang === 'en' ? 'TH' : 'EN';
-      btn.setAttribute('aria-label', lang === 'en' ? 'Switch to Thai' : 'เปลี่ยนเป็นภาษาอังกฤษ');
-    });
-    if (body.dataset.titleEn && body.dataset.titleTh) {
-      document.title = lang === 'th' ? body.dataset.titleTh : body.dataset.titleEn;
-    }
-  }
-
-  qsa('.lang-toggle').forEach(btn => btn.addEventListener('click', () => applyLang(lang === 'en' ? 'th' : 'en')));
-  applyLang(lang);
+  // Language is URL-based: Thai uses the default route and English uses /EN/.
+  const lang = body.dataset.language === 'en' ? 'en' : 'th';
+  qsa('[data-language-switch]').forEach(link => {
+    const target = new URL(link.href, window.location.origin);
+    target.search = window.location.search;
+    target.hash = window.location.hash;
+    link.href = `${target.pathname}${target.search}${target.hash}`;
+  });
 
   // Mobile menu
   const menuToggle = qs('.menu-toggle');

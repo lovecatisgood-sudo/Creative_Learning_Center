@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useLang } from "@/lib/i18n/LanguageProvider";
-import { Logo } from "@/components/Logo";
-import { LangToggle } from "@/components/LangToggle";
+import { usePathname, useRouter } from "next/navigation";
+import { dict, type DictKey, type Lang } from "@/lib/i18n/dictionary";
+import { PublicLanguageLink } from "@/components/PublicLanguageLink";
 
 type Result = { parentName: string; childNames: string[]; duplicatePhone?: boolean };
 
-export default function SignupSuccessPage() {
-  const { t, lang } = useLang();
+function SignupSuccessPageContent({ language }: { language: Lang }) {
+  const lang = language;
+  const t = (key: DictKey) => dict[key][lang];
   const router = useRouter();
   const [result, setResult] = useState<Result | null>(null);
 
@@ -18,12 +18,13 @@ export default function SignupSuccessPage() {
     if (raw) setResult(JSON.parse(raw));
   }, []);
 
-  const label = (th: string, en: string) => (lang === "th" ? `${th} / ${en}` : `${en} / ${th}`);
+  const label = (th: string, en: string) => (lang === "th" ? th : en);
+  const signupUrl = lang === "en" ? "/EN/signup" : "/signup";
 
   return (
     <div className="flex min-h-screen flex-col bg-paper px-6 pb-10 pt-4">
       <div className="flex justify-end">
-        <LangToggle />
+        <PublicLanguageLink language={lang} path="/signup/success" />
       </div>
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-okbg text-4xl text-ok">
@@ -56,7 +57,7 @@ export default function SignupSuccessPage() {
       <button
         onClick={() => {
           sessionStorage.removeItem("sccc_signup_result");
-          router.push("/signup");
+          router.push(signupUrl);
         }}
         className="btn-ghost mt-6"
       >
@@ -64,4 +65,9 @@ export default function SignupSuccessPage() {
       </button>
     </div>
   );
+}
+
+export default function SignupSuccessPage() {
+  const pathname = usePathname();
+  return <SignupSuccessPageContent language={pathname.startsWith("/EN/") ? "en" : "th"} />;
 }

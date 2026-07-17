@@ -13,11 +13,24 @@ type LangContext = {
 const Ctx = createContext<LangContext | null>(null);
 const STORAGE_KEY = "sccc_lang";
 
+function publicPathLanguage(): Lang | null {
+  if (typeof window === "undefined") return null;
+  const { pathname } = window.location;
+  if (pathname === "/EN" || pathname.startsWith("/EN/")) return "en";
+  if (!pathname.startsWith("/admin") && !pathname.startsWith("/api")) return "th";
+  return null;
+}
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // Thai is the default (PRD §2); persisted per device in localStorage.
   const [lang, setLangState] = useState<Lang>("th");
 
   useEffect(() => {
+    const urlLanguage = publicPathLanguage();
+    if (urlLanguage) {
+      setLangState(urlLanguage);
+      return;
+    }
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === "en" || saved === "th") setLangState(saved);
   }, []);
@@ -27,7 +40,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // every subsequent change, whether via setLang or toggle.
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.documentElement.lang = lang;
+      document.documentElement.lang = publicPathLanguage() || lang;
     }
   }, [lang]);
 

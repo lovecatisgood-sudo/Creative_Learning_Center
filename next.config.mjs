@@ -17,22 +17,36 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/index.html", destination: "/", permanent: true },
+      { source: "/EN/index.html", destination: "/EN/", permanent: true },
       ...mainSiteRoutes.map((route) => ({
         source: `/${route}.html`,
         destination: `/${route}`,
         permanent: true,
       })),
+      ...mainSiteRoutes.map((route) => ({
+        source: `/EN/${route}.html`,
+        destination: `/EN/${route}`,
+        permanent: true,
+      })),
       { source: "/privacy.html", destination: "/privacy", permanent: true },
+      { source: "/EN/privacy.html", destination: "/EN/privacy", permanent: true },
       { source: "/book", destination: "/signup", permanent: false },
       { source: "/book.html", destination: "/signup", permanent: false },
+      { source: "/EN/book", destination: "/EN/signup", permanent: false },
+      { source: "/EN/book.html", destination: "/EN/signup", permanent: false },
     ];
   },
   async rewrites() {
     return [
       { source: "/", destination: "/main-site/index.html" },
+      { source: "/EN", destination: "/main-site/EN/index.html" },
       ...mainSiteRoutes.map((route) => ({
         source: `/${route}`,
         destination: `/main-site/${route}.html`,
+      })),
+      ...mainSiteRoutes.map((route) => ({
+        source: `/EN/${route}`,
+        destination: `/main-site/EN/${route}.html`,
       })),
     ];
   },
