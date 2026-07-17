@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = join(process.cwd(), "public/main-site");
-const SHELL_VERSION = "20260717-google-analytics-v6";
+const SHELL_VERSION = "20260717-blog-v7";
 const ASSET_VERSION = SHELL_VERSION;
 const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const CAFE_URL = "https://siamesecat.cafe/";
@@ -17,6 +17,7 @@ const PUBLIC_ROUTES = new Set([
   "/membership",
   "/dinner",
   "/contact",
+  "/blog",
   "/faq",
   "/first-visit",
   "/thank-you",
@@ -166,7 +167,15 @@ const nav = [
       { key: "dinner", href: "/dinner", en: "Meal Plans", th: "แผนมื้ออาหาร" },
     ],
   },
-  { key: "faq", href: "/faq", en: "FAQ", th: "FAQ" },
+  {
+    key: "blog",
+    href: "/blog",
+    en: "Blog",
+    th: "บล็อก",
+    children: [
+      { key: "faq", href: "/faq", en: "FAQ", th: "FAQ" },
+    ],
+  },
 ];
 
 function navItem(item, active) {

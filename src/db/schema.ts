@@ -44,6 +44,12 @@ export const redemptionTypeEnum = pgEnum("redemption_type", [
   "clay",
   "extra_hour",
 ]);
+export const blogCategoryEnum = pgEnum("blog_category", [
+  "parenting-guides",
+  "kid-learning-material",
+  "club-news-updates",
+  "faq",
+]);
 
 // ─── Tables (PRD §5) ────────────────────────────────────────────────────────
 export const parents = pgTable("parents", {
@@ -164,6 +170,30 @@ export const auditLog = pgTable("audit_log", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  category: blogCategoryEnum("category").notNull(),
+  titleTh: text("title_th").default("").notNull(),
+  summaryTh: text("summary_th").default("").notNull(),
+  bodyTh: text("body_th").default("").notNull(),
+  seoTitleTh: text("seo_title_th").default("").notNull(),
+  seoDescriptionTh: text("seo_description_th").default("").notNull(),
+  titleEn: text("title_en").default("").notNull(),
+  summaryEn: text("summary_en").default("").notNull(),
+  bodyEn: text("body_en").default("").notNull(),
+  seoTitleEn: text("seo_title_en").default("").notNull(),
+  seoDescriptionEn: text("seo_description_en").default("").notNull(),
+  coverImageUrl: text("cover_image_url").default("").notNull(),
+  coverImageAltTh: text("cover_image_alt_th").default("").notNull(),
+  coverImageAltEn: text("cover_image_alt_en").default("").notNull(),
+  publishedTh: boolean("published_th").default(false).notNull(),
+  publishedEn: boolean("published_en").default(false).notNull(),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 // ─── Shared types ───────────────────────────────────────────────────────────
 export type ProductGrants = {
   hours?: number;
@@ -180,3 +210,4 @@ export type Child = typeof children.$inferSelect;
 export type Order = typeof orders.$inferSelect;
 export type PackageInstance = typeof packageInstances.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
+export type BlogPost = typeof blogPosts.$inferSelect;

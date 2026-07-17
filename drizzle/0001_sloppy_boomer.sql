@@ -1,0 +1,25 @@
+CREATE TYPE "public"."blog_category" AS ENUM('parenting-guides', 'kid-learning-material', 'club-news-updates', 'faq');--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "blog_posts" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"slug" text NOT NULL,
+	"category" "blog_category" NOT NULL,
+	"title_th" text DEFAULT '' NOT NULL,
+	"summary_th" text DEFAULT '' NOT NULL,
+	"body_th" text DEFAULT '' NOT NULL,
+	"seo_title_th" text DEFAULT '' NOT NULL,
+	"seo_description_th" text DEFAULT '' NOT NULL,
+	"title_en" text DEFAULT '' NOT NULL,
+	"summary_en" text DEFAULT '' NOT NULL,
+	"body_en" text DEFAULT '' NOT NULL,
+	"seo_title_en" text DEFAULT '' NOT NULL,
+	"seo_description_en" text DEFAULT '' NOT NULL,
+	"cover_image_url" text DEFAULT '' NOT NULL,
+	"cover_image_alt_th" text DEFAULT '' NOT NULL,
+	"cover_image_alt_en" text DEFAULT '' NOT NULL,
+	"published_th" boolean DEFAULT false NOT NULL,
+	"published_en" boolean DEFAULT false NOT NULL,
+	"published_at" timestamp with time zone,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "blog_posts_slug_unique" UNIQUE("slug")
+);

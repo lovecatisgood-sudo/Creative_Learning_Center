@@ -4,8 +4,8 @@ import { join } from "node:path";
 const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 const expectedNav = {
-  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "FAQ", "ติดต่อเรา"],
-  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "FAQ", "Contact Us"],
+  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "FAQ", "ติดต่อเรา"],
+  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "FAQ", "Contact Us"],
 };
 
 function extract(html, tag) {

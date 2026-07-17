@@ -13,8 +13,10 @@ Route map for `https://creative.siamesecat.cafe`:
 | URL | Purpose |
 |---|---|
 | `/` | New static main website from `public/main-site/index.html` |
-| `/inside`, `/memberships`, `/dinner`, `/faq`, `/first-visit` | Static website detail pages |
+| `/inside`, `/little-explorer-program`, `/membership`, `/dinner`, `/faq`, `/first-visit` | Static website detail pages |
 | `/creative` | Previous Creative Club landing page |
+| `/blog`, `/blog/[slug]` | Thai blog index and published articles |
+| `/EN/blog`, `/EN/blog/[slug]` | English blog index and published articles |
 | `/signup` | Parent signup / registration app |
 | `/admin` | Staff admin dashboard |
 | `/terms`, `/privacy` | App legal pages |
@@ -91,8 +93,8 @@ For Hostinger Node.js Web App hosting, use:
 # Install command
 corepack enable && pnpm install --frozen-lockfile
 
-# Build command
-pnpm build
+# Build command (runs pending database migrations first)
+pnpm hostinger:build
 
 # Start command / entry file
 node server.js

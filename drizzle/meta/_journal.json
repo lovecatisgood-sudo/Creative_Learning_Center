@@ -8,6 +8,13 @@
       "when": 1783829263826,
       "tag": "0000_panoramic_korg",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784302040019,
+      "tag": "0001_sloppy_boomer",
+      "breakpoints": true
     }
   ]
 }

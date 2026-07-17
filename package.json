@@ -9,6 +9,7 @@
     "dev": "next dev",
     "prebuild": "node scripts/optimize-main-site-images.mjs && node scripts/build-main-site-redesign.mjs && node scripts/check-main-site-shell.mjs && node scripts/build-legal.mjs",
     "build": "next build",
+    "hostinger:build": "pnpm db:migrate && pnpm build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
