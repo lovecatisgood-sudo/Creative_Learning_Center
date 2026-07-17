@@ -2,6 +2,7 @@ import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = join(process.cwd(), "public/main-site");
+const ASSET_VERSION = "20260717-shared-shell";
 
 function esc(value) {
   return String(value)
@@ -26,7 +27,7 @@ const nav = [
   ["inside", "/inside", "Inside the Club", "ภายในคลับ"],
   ["creative", "/creative", "Creative Club", "Creative Club"],
   ["playgroup", "/playgroup", "Playgroup", "เพลย์กรุ๊ป"],
-  ["memberships", "/memberships", "Packages", "แพ็กเกจ"],
+  ["memberships", "/memberships", "Memberships", "แพ็กเกจและบัตรเหมารอบ"],
   ["dinner", "/dinner", "Meal Care", "มื้ออาหาร"],
   ["faq", "/faq", "FAQ", "คำถามที่พบบ่อย"],
 ];
@@ -86,7 +87,7 @@ function layout({ page, titleEn, titleTh, description, body, active = page, extr
 <meta name="description" content="${esc(description)}">
 <meta name="theme-color" content="#fff9f0">
 <title>${esc(titleEn)}</title>
-<link rel="stylesheet" href="/main-site/assets/styles.css">
+<link rel="stylesheet" href="/main-site/assets/styles.css?v=${ASSET_VERSION}">
 ${extraHead}
 </head>
 <body data-page="${esc(page)}" data-source="WEB-${page.toUpperCase()}" data-title-en="${esc(titleEn)}" data-title-th="${esc(titleTh)}">
@@ -96,7 +97,7 @@ ${header(active)}
 ${body}
 </main>
 ${footer()}
-<script src="/main-site/assets/app.js"></script>
+<script src="/main-site/assets/app.js?v=${ASSET_VERSION}"></script>
 </body>
 </html>
 `;
