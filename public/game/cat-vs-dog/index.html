@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07050f">
+<title>Siamese Cat vs Dog 1986 — free retro arcade game by Siamese Cat Café Bangkok</title>
+<meta name="description" content="A retro cat-vs-alien-dog arcade shooter from the Siamese Cat Café, Bangkok. Jetpack cat. Mutant alien dogs. Conquer Wonderland. Play free in your browser.">
+<link rel="canonical" href="https://creative.siamesecat.cafe/game/cat-vs-dog/">
+<link rel="icon" type="image/png" href="assets/img/cafe_badge.png">
+<!-- social share card -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Siamese Cat vs Dog 1986 🐱">
+<meta property="og:description" content="One jetpack Siamese cat vs the mutant alien dog invasion. Free retro arcade game by Siamese Cat Café, Bangkok — can you conquer Wonderland?">
+<meta property="og:url" content="https://creative.siamesecat.cafe/game/cat-vs-dog/">
+<meta property="og:image" content="https://creative.siamesecat.cafe/game/cat-vs-dog/assets/img/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<script>
+(function () {
+  var desktopDomain = "https://siamesecatcafe.com";
+  var isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+
+  if (!isMobile) {
+    window.location.replace(desktopDomain + window.location.pathname + window.location.search);
+  }
+})();
+</script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; }
+  @font-face { font-family:'NotoThai'; src:url('assets/fonts/noto-sans-thai.woff2') format('woff2');
+               font-display:swap; unicode-range:U+0E00-0E7F; }
+  body { background:#07050f; color:#fff; font-family:'Courier New','NotoThai',monospace; overflow:hidden; }
+  img.px { image-rendering:pixelated; }
+  a { -webkit-tap-highlight-color:transparent; }
+
+  /* ===== story player: one swipe = one scene ===== */
+  #player { height:100vh; height:100dvh; overflow-y:scroll; scroll-snap-type:y mandatory;
+            scrollbar-width:none; }
+  #player::-webkit-scrollbar { display:none; }
+  .scene { position:relative; height:100vh; height:100dvh; scroll-snap-align:start; scroll-snap-stop:always;
+           display:flex; flex-direction:column; align-items:center; justify-content:center;
+           text-align:center; padding:40px 22px; overflow:hidden; }
+
+  /* language toggle */
+  #lang { position:fixed; top:max(10px, env(safe-area-inset-top)); right:12px; z-index:70; font-size:12px; }
+  #lang span { color:rgba(255,255,255,0.45); padding:7px 9px; cursor:pointer; letter-spacing:1px; }
+  #lang span.cur { color:#FFD23F; font-weight:bold; }
+  #bgm { position:fixed; top:max(10px, env(safe-area-inset-top)); left:12px; z-index:70; font-size:15px; padding:5px 9px; cursor:pointer; opacity:0.75; }
+
+  /* progress dots */
+  #dots { position:fixed; right:10px; top:50%; transform:translateY(-50%); z-index:60; }
+  #dots i { display:block; width:7px; height:7px; border-radius:50%; background:#fff3; margin:9px 0; transition:.3s; }
+  #dots i.cur { background:#FFD23F; box-shadow:0 0 8px #FFD23F; transform:scale(1.4); }
+
+  /* swipe hint */
+  .hint { position:absolute; bottom:max(20px, env(safe-area-inset-bottom)); left:0; right:0; color:rgba(255,255,255,0.55);
+          font-size:11px; letter-spacing:3px; animation:hintup 1.8s ease-in-out infinite; }
+  @keyframes hintup { 0%,100%{transform:translateY(0);opacity:.55} 50%{transform:translateY(-8px);opacity:1} }
+
+  .sub { color:rgba(255,255,255,0.7); font-size:13px; line-height:1.9; max-width:340px; }
+  .playbtn { display:inline-block; background:#FFD23F; color:#1a1028; font-weight:bold; font-size:18px;
+             letter-spacing:2px; padding:16px 44px; border-radius:8px; text-decoration:none;
+             box-shadow:0 0 24px rgba(255,210,63,0.55), 0 4px 0 #b8920a; }
+
+  /* ===== choreography engine: .a elements perform when scene gets .on ===== */
+  .a { opacity:0; }
+  .on .a       { animation:rise .7s cubic-bezier(.2,.9,.3,1.2) forwards; }
+  .on .a.pop   { animation:pop  .55s cubic-bezier(.2,.9,.3,1.4) forwards; }
+  .on .a.slam  { animation:slam .5s cubic-bezier(.4,0,.6,1) forwards; }
+  .on .d1{animation-delay:.05s} .on .d2{animation-delay:.3s} .on .d3{animation-delay:.55s}
+  .on .d4{animation-delay:.8s}  .on .d5{animation-delay:1.05s} .on .d6{animation-delay:1.3s}
+  @keyframes rise { from{opacity:0; transform:translateY(46px)} to{opacity:1; transform:none} }
+  @keyframes pop  { from{opacity:0; transform:scale(0)} to{opacity:1; transform:scale(1)} }
+  @keyframes slam { from{opacity:0; transform:translateY(-120px) scale(1.6)} 70%{opacity:1; transform:translateY(6px) scale(.97)} to{opacity:1; transform:none} }
+
+  /* entry flash (scene after the portal starts with a pink burst) */
+  .flashin::after { content:''; position:absolute; inset:0; background:#FF9ECF; opacity:0; pointer-events:none; z-index:40; }
+  .flashin.on::after { animation:flashout .9s ease-out forwards; }
+  @keyframes flashout { from{opacity:.9} to{opacity:0} }
+
+  /* shake on boss entry */
+  .on .shaker { animation:shake .5s linear .6s; }
+  @keyframes shake { 0%,100%{transform:none} 20%{transform:translate(-6px,3px)} 40%{transform:translate(5px,-4px)} 60%{transform:translate(-4px,-2px)} 80%{transform:translate(3px,3px)} }
+
+  /* ============ S1 HERO ============ */
+  #s1 { background:radial-gradient(ellipse at 50% 30%, #221540 0%, #0b0718 65%, #07050f 100%); }
+  #s1::before { content:''; position:absolute; inset:0; pointer-events:none; z-index:30;
+        background:repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0 2px, transparent 2px 4px); }
+  #s1 .logo { width:min(76vw,330px); filter:drop-shadow(0 0 18px rgba(255,158,207,0.4)); }
+  .herocat { width:88px; margin:22px 0 16px; }
+  .on .herocat { animation:catin 1s cubic-bezier(.2,.9,.3,1.2) forwards, hover 2.2s ease-in-out 1s infinite; }
+  @keyframes catin { from{opacity:0; transform:translateY(60vh) scale(.6)} to{opacity:1; transform:none} }
+  @keyframes hover { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  .pew { position:absolute; width:4px; height:14px; background:#7CFF8A; border-radius:2px; left:50%;
+         box-shadow:0 0 8px #7CFF8A; opacity:0; }
+  .on .pew { animation:pew 1.4s linear 1.4s infinite; }
+  .pew.p2 { animation-delay:2.1s !important; }
+  @keyframes pew { 0%{opacity:0} 5%{opacity:1; transform:translateY(0)} 60%{opacity:1} 70%{opacity:0; transform:translateY(-46vh)} 100%{opacity:0} }
+
+  /* ============ S2 STORY ============ */
+  #s2 { background:linear-gradient(#07050f, #141031 70%, #1a1230); }
+  .stars { position:absolute; inset:0; background-image:
+      radial-gradient(1.5px 1.5px at 20% 30%, #fff8, transparent),
+      radial-gradient(1px 1px at 70% 15%, #fff6, transparent),
+      radial-gradient(2px 2px at 45% 70%, #fff5, transparent),
+      radial-gradient(1px 1px at 85% 55%, #fff7, transparent),
+      radial-gradient(1.5px 1.5px at 10% 80%, #fff6, transparent);
+    background-size:480px 480px; }
+  .swoop { position:absolute; width:52px; opacity:0; z-index:5; }
+  .on .swoop  { animation:swoop 5s linear .4s infinite; }
+  .on .swoop.w2 { animation:swoop2 6.5s linear 1.6s infinite; width:42px; }
+  .on .swoop.w3 { animation:swoop 7s linear 2.8s infinite; width:46px; }
+  @keyframes swoop  { 0%{opacity:0; transform:translate(-20vw,-10vh) rotate(10deg)} 8%{opacity:1} 90%{opacity:1} 100%{opacity:0; transform:translate(110vw,30vh) rotate(10deg)} }
+  @keyframes swoop2 { 0%{opacity:0; transform:translate(110vw,-5vh) rotate(-12deg) scaleX(-1)} 8%{opacity:1} 90%{opacity:1} 100%{opacity:0; transform:translate(-30vw,40vh) rotate(-12deg) scaleX(-1)} }
+  .storyline { font-size:15px; line-height:2.1; color:#ffe7b0; max-width:330px; }
+  .storyline b { color:#FF9ECF; }
+
+  /* ============ S3 PORTAL ============ */
+  #s3 { background:linear-gradient(#1a1230, #2d0f2a); }
+  .portal { width:130px; filter:drop-shadow(0 0 30px rgba(255,158,207,0.8)); }
+  .on .portal { animation:portalin 1.2s cubic-bezier(.2,.9,.3,1.3) forwards, breathe 2.4s ease-in-out 1.2s infinite; }
+  @keyframes portalin { from{opacity:0; transform:scale(0) rotate(-180deg)} to{opacity:1; transform:scale(1) rotate(0)} }
+  @keyframes breathe { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+  #s3 .ringwave { position:absolute; left:50%; top:50%; width:130px; height:130px; margin:-65px;
+                  border:2px solid #FF9ECF; border-radius:50%; opacity:0; }
+  .on .ringwave { animation:ring 2.4s ease-out 1.2s infinite; }
+  .ringwave.r2 { animation-delay:2.4s !important; }
+  @keyframes ring { from{opacity:.8; transform:scale(1)} to{opacity:0; transform:scale(3.2)} }
+  .divecta { color:#FF9ECF; font-size:14px; letter-spacing:3px; text-shadow:0 0 12px #ff9ecf88; margin-top:34px; }
+
+  /* ============ S4 POWER UP (flash-in) ============ */
+  #s4 { background:linear-gradient(#2d0f2a, #251536); }
+  .orbitwrap { position:relative; width:230px; height:230px; margin:14px auto; }
+  .orbitwrap .bigcat { position:absolute; left:50%; top:50%; width:96px; transform:translate(-50%,-50%); z-index:2; opacity:0; }
+  .on .bigcat { animation:catpop .55s cubic-bezier(.2,.9,.3,1.4) .2s forwards; }
+  @keyframes catpop { from{opacity:0; transform:translate(-50%,-50%) scale(0)} to{opacity:1; transform:translate(-50%,-50%) scale(1)} }
+  .orb { position:absolute; left:50%; top:50%; width:34px; margin:-17px; opacity:0; }
+  .on .orb { animation:orbpop .6s ease-out forwards, orbit 7s linear infinite; }
+  /* negative orbit delays spread the 7 orbs evenly around the circle (7s / 7 = 1s apart) */
+  .on .o1{animation-delay:.5s,0s}   .on .o2{animation-delay:.65s,-1s} .on .o3{animation-delay:.8s,-2s}
+  .on .o4{animation-delay:.95s,-3s} .on .o5{animation-delay:1.1s,-4s} .on .o6{animation-delay:1.25s,-5s} .on .o7{animation-delay:1.4s,-6s}
+  @keyframes orbpop { from{opacity:0} to{opacity:1} }
+  @keyframes orbit { from{transform:rotate(0) translateX(105px) rotate(0)} to{transform:rotate(360deg) translateX(105px) rotate(-360deg)} }
+
+  /* ============ S5 BOSSES ============ */
+  #s5 { background:linear-gradient(#251536, #160b22); }
+  .bossrow { display:flex; gap:24px; align-items:flex-end; justify-content:center; margin:22px 0; }
+  .bossrow img { filter:drop-shadow(0 0 16px rgba(255,80,80,0.5)); }
+  .bossname { font-size:10px; color:#ff8a8a; letter-spacing:1px; margin-top:8px; }
+
+  /* ============ S6 SCORE ============ */
+  #s6 { background:linear-gradient(#160b22, #101726); }
+  .modes { display:flex; gap:12px; justify-content:center; margin:20px 0; flex-wrap:wrap; }
+  .mode { border:2px solid #555; border-radius:10px; padding:12px 14px; font-size:12px; min-width:92px; background:#0006; }
+  .mode b { display:block; font-size:20px; margin-bottom:6px; }
+  .m1{border-color:#7CFF8A} .m2{border-color:#FFD23F} .m3{border-color:#FF6B6B}
+  .cardmock { background:#1a1028; border:2px solid #FF9ECF; border-radius:12px; width:250px;
+              margin:8px auto; padding:16px 14px; font-size:11px; line-height:1.9; box-shadow:0 0 22px #ff9ecf33; }
+  .cardmock .scr { color:#FFD23F; font-size:20px; font-weight:bold; }
+
+  /* ============ S7 CAFE ============ */
+  #s7 { background:linear-gradient(#101726, #2a1c14 80%); }
+  #s7 .badge { width:120px; border-radius:14px; box-shadow:0 0 26px rgba(255,210,63,0.35); }
+  .cafelinks { display:flex; gap:14px; justify-content:center; margin-top:18px; }
+  .cafelinks a { border:1px solid #FFD23F; color:#FFD23F; font-size:11px; padding:8px 14px; border-radius:99px; text-decoration:none; }
+
+  /* ============ S8 FINAL ============ */
+  #s8 { background:radial-gradient(ellipse at 50% 60%, #3b2a4f 0%, #07050f 75%); }
+  .on .bigplay { animation:pop .55s cubic-bezier(.2,.9,.3,1.4) .5s forwards, pulse 1.6s ease-in-out 1.2s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 24px rgba(255,210,63,.55),0 4px 0 #b8920a} 50%{box-shadow:0 0 44px rgba(255,210,63,.95),0 4px 0 #b8920a} }
+  .qrnote { margin-top:20px; font-size:11px; color:rgba(255,255,255,.55); line-height:1.8; }
+
+  /* accessibility: no animation = everything visible and calm */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation:none !important; }
+    .a, .orb, .bigcat, .herocat, .portal { opacity:1 !important; }
+    .orb { position:static; margin:4px; display:inline-block; }
+    .orbitwrap { width:auto; height:auto; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px; }
+    .orbitwrap .bigcat { position:static; transform:none; }
+    .swoop, .pew, .ringwave { display:none; }
+  }
+</style>
+<noscript><style>.a,.orb,.bigcat,.herocat,.portal{opacity:1 !important}</style></noscript>
+</head>
+<body>
+
+<div id="lang"><span id="lang-en" class="cur">EN</span>|<span id="lang-th">ไทย</span></div>
+<div id="bgm" role="button" aria-label="music on/off">🔇</div>
+<div id="dots"></div>
+
+<div id="player">
+
+  <div class="scene on" id="s1">
+    <img class="logo px a pop d1" src="assets/img/logo.png" alt="Siamese Cat vs Dog 1986">
+    <img class="herocat px" src="assets/img/sprites/cat/fly.png" alt="">
+    <span class="pew" style="margin-left:-10px; bottom:38%"></span>
+    <span class="pew p2" style="margin-left:8px; bottom:38%"></span>
+    <p class="sub a d3" data-i18n="tagline">A retro cat-vs-alien-dog arcade shooter<br>from the Siamese Cat Café, Bangkok</p>
+    <p class="a pop d4" style="margin:24px 0 0"><a class="playbtn gamelink" href="en/" data-i18n="play">▶ PLAY NOW</a></p>
+    <div class="hint" data-i18n="hint1">▲ SWIPE UP — ENTER THE STORY ▲</div>
+  </div>
+
+  <div class="scene" id="s2">
+    <div class="stars"></div>
+    <img class="swoop px" src="assets/img/sprites/enemies/dog-green.png" style="top:14%" alt="" loading="lazy">
+    <img class="swoop w2 px" src="assets/img/sprites/enemies/dog-green.png" style="top:26%" alt="" loading="lazy">
+    <img class="swoop w3 px" src="assets/img/sprites/enemies/mech-monster.png" style="top:8%" alt="" loading="lazy">
+    <p class="storyline a d1" data-i18n="story1">The year is <b>1986</b>.</p>
+    <p class="storyline a d2" style="margin-top:14px" data-i18n="story2">Mutant alien dogs descend<br>from the night sky over Bangkok.</p>
+    <p class="storyline a d4" style="margin-top:14px" data-i18n="story3">One jetpack <b>Siamese cat</b><br>stands between them and the café.</p>
+    <div class="hint" data-i18n="hint">▲ SWIPE ▲</div>
+  </div>
+
+  <div class="scene" id="s3">
+    <span class="ringwave"></span><span class="ringwave r2"></span>
+    <img class="portal px" src="assets/img/sprites/portal/wonderland.png" alt="" loading="lazy">
+    <p class="divecta a d3" data-i18n="portal">A MYSTERIOUS PORTAL OPENS…</p>
+    <div class="hint" style="color:#FF9ECF" data-i18n="hint3">▲ SWIPE UP TO DIVE IN ▲</div>
+  </div>
+
+  <div class="scene flashin" id="s4">
+    <h2 class="a slam d1" style="color:#7CFF8A; letter-spacing:3px">POWER UP</h2>
+    <div class="orbitwrap">
+      <img class="bigcat px" src="assets/img/sprites/banh_mi_cat/player_cat_banh_mi_fly.png" alt="" loading="lazy">
+      <img class="orb o1 px" src="assets/img/sprites/pickups/banh_mi_up.png" alt="" loading="lazy">
+      <img class="orb o2 px" src="assets/img/sprites/pickups/coffee.png" alt="" loading="lazy">
+      <img class="orb o3 px" src="assets/img/sprites/pickups/multi_shot.png" alt="" loading="lazy">
+      <img class="orb o4 px" src="assets/img/sprites/pickups/heart.png" alt="" loading="lazy">
+      <img class="orb o5 px" src="assets/img/sprites/pickups/shield.png" alt="" loading="lazy">
+      <img class="orb o6 px" src="assets/img/sprites/pickups/nuke.png" alt="" loading="lazy">
+      <img class="orb o7 px" src="assets/img/sprites/pickups/tuna.png" alt="" loading="lazy">
+    </div>
+    <p class="sub a d5" data-i18n="power">Coffee frenzy. Bánh mì power. Multishot.<br>Become gloriously overpowered —<br><i>the world rises to meet you.</i></p>
+    <div class="hint" data-i18n="hint">▲ SWIPE ▲</div>
+  </div>
+
+  <div class="scene" id="s5">
+    <div class="shaker" style="width:100%">
+      <h2 class="a slam d1" style="color:#ff8a8a; letter-spacing:3px">FACE THE BOSSES</h2>
+      <div class="bossrow">
+        <div class="a slam d2"><img class="px" src="assets/img/sprites/enemies/boss.png" width="84" alt="" loading="lazy"><div class="bossname">ALPHA DOG</div></div>
+        <div class="a slam d3"><img class="px" src="assets/img/sprites/enemies/boss-mech.png" width="102" alt="" loading="lazy"><div class="bossname">MECH ALPHA-DOG</div></div>
+        <div class="a slam d4"><img class="px" src="assets/img/sprites/wonderland/candy-boss.png" width="94" alt="" loading="lazy"><div class="bossname">CANDY MONSTER</div></div>
+      </div>
+      <p class="sub a d5" data-i18n="bosses">Long, scary, grinding fights.<br>Sweeping lasers. Three-act monsters.<br>Then conquer <b style="color:#FF9ECF">WONDERLAND</b>.</p>
+    </div>
+    <div class="hint" data-i18n="hint">▲ SWIPE ▲</div>
+  </div>
+
+  <div class="scene" id="s6">
+    <h2 class="a slam d1" style="color:#FFD23F; letter-spacing:3px">CHASE THE SCORE</h2>
+    <div class="modes">
+      <div class="mode m1 a pop d2"><b>😺</b>SOFT PAWS<br><span data-i18n="m1">×0.7 score</span></div>
+      <div class="mode m2 a pop d3"><b>😼</b>HOUSE CAT<br><span data-i18n="m2">×1.0 score</span></div>
+      <div class="mode m3 a pop d4"><b>🙀</b>STREET CAT<br><span data-i18n="m3">×1.3 score</span></div>
+    </div>
+    <div class="cardmock a d5">
+      I CONQUERED WONDERLAND 👑<br>
+      <span class="scr">1,234,567</span><br>
+      RANK A · 😼 HOUSE CAT<br>
+      <span style="color:#FF9ECF" data-i18n="beatme">— can you beat me? —</span>
+    </div>
+    <div class="hint" data-i18n="hint">▲ SWIPE ▲</div>
+  </div>
+
+  <div class="scene" id="s7">
+    <img class="badge a pop d1" src="assets/img/cafe_badge.png" alt="Siamese Cat Café" loading="lazy">
+    <p class="sub a d2" style="margin-top:20px" data-i18n="cafe">Made with love and passion by<br><b style="color:#FFD23F">Siamese Cat Café Group</b>, Bangkok.<br><br>Real cats. Real coffee.<br>One very brave pixel cat.</p>
+    <div class="cafelinks a d3">
+      <a href="https://maps.app.goo.gl/6y4P96q45qCTUJZa8" target="_blank" rel="noopener" data-i18n="map">📍 MAP</a>
+      <a href="https://siamesecat.cafe/" target="_blank" rel="noopener" data-i18n="web">🌐 WEBSITE</a>
+      <!-- Instagram chip goes here when the handle is provided -->
+    </div>
+    <div class="hint" data-i18n="hint">▲ SWIPE ▲</div>
+  </div>
+
+  <div class="scene" id="s8">
+    <img class="px a pop d1" src="assets/img/sprites/cat/attack.png" width="90" style="margin-bottom:22px" alt="" loading="lazy">
+    <p><a class="playbtn bigplay a gamelink" href="en/" data-i18n="play2">▶ PLAY NOW — FREE</a></p>
+    <p class="qrnote a d3" data-i18n="qr">Playing at the café?<br>Scan the QR on your table and beat the CAFÉ BEST.</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  /* ---------- config: where the game lives ---------- */
+  var GAME_URL = { en:'/en/', th:'/th/' };
+
+  /* ---------- i18n ---------- */
+  var TH = {
+    tagline:'เกมยิงอาร์เคดย้อนยุค แมวปะทะหมาเอเลี่ยน<br>จาก Siamese Cat Café กรุงเทพฯ',
+    play:'▶ เล่นเลย',
+    play2:'▶ เล่นเลย — ฟรี',
+    hint1:'▲ ปัดขึ้น — เข้าสู่เรื่องราว ▲',
+    hint:'▲ ปัดขึ้น ▲',
+    hint3:'▲ ปัดขึ้นเพื่อดิ่งเข้าไป ▲',
+    story1:'ปีนั้นคือ <b>1986</b>',
+    story2:'ฝูงหมาเอเลี่ยนกลายพันธุ์<br>บุกลงมาจากท้องฟ้ายามค่ำคืนของกรุงเทพฯ',
+    story3:'มีเพียง<b>แมววิเชียรมาศ</b>ติดเจ็ทแพ็คหนึ่งตัว<br>ที่ยืนขวางระหว่างพวกมันกับคาเฟ่',
+    portal:'ประตูมิติลึกลับเปิดออก…',
+    power:'คอฟฟี่เฟรนซี่ พลังบั๋นหมี่ ยิงรัวหลายทิศ<br>อัพพลังจนโกงสุดๆ —<br><i>แล้วโลกจะโหดขึ้นมาท้าทายคุณ</i>',
+    bosses:'บอสไฟต์ยาว โหด และน่ากลัว<br>เลเซอร์กวาดเต็มจอ มอนสเตอร์สามองก์<br>แล้วไปพิชิต <b style="color:#FF9ECF">WONDERLAND</b>',
+    m1:'แต้ม ×0.7 · ง่าย', m2:'แต้ม ×1.0 · ปกติ', m3:'แต้ม ×1.3 · ยาก',
+    beatme:'— มาโค่นแชมป์หน่อย —',
+    cafe:'สร้างด้วยความรักและแพสชั่นโดย<br><b style="color:#FFD23F">Siamese Cat Café Group</b> กรุงเทพฯ<br><br>แมวจริง กาแฟจริง<br>และแมวพิกเซลผู้กล้าหนึ่งตัว',
+    map:'📍 แผนที่', web:'🌐 เว็บไซต์',
+    qr:'เล่นอยู่ที่คาเฟ่?<br>สแกน QR บนโต๊ะ แล้วโค่น CAFÉ BEST'
+  };
+  var EN = {};   // captured from the markup below
+
+  var nodes = document.querySelectorAll('[data-i18n]');
+  nodes.forEach(function(el){ EN[el.getAttribute('data-i18n')] = EN[el.getAttribute('data-i18n')] || el.innerHTML; });
+
+  function setLang(l){
+    var dict = l==='th' ? TH : EN;
+    nodes.forEach(function(el){ var k=el.getAttribute('data-i18n'); if(dict[k]) el.innerHTML=dict[k]; });
+    document.querySelectorAll('.gamelink').forEach(function(a){ a.href = GAME_URL[l]; });
+    document.getElementById('lang-en').classList.toggle('cur', l!=='th');
+    document.getElementById('lang-th').classList.toggle('cur', l==='th');
+    document.documentElement.lang = l;
+    try{ localStorage.setItem('scvd_landing_lang', l); }catch(e){}
+  }
+  document.getElementById('lang-en').onclick = function(){ setLang('en'); };
+  document.getElementById('lang-th').onclick = function(){ setLang('th'); };
+
+  var lang = 'en';
+  try{
+    var q = (location.search.match(/[?&]lang=(en|th)/)||[])[1];
+    lang = q || localStorage.getItem('scvd_landing_lang') ||
+           ((navigator.language||'').toLowerCase().indexOf('th')===0 ? 'th' : 'en');
+  }catch(e){}
+  if (lang==='th') setLang('th');
+
+  /* ---------- bgm: the game's stage theme (mix baked into the file - iOS ignores element volume) ---------- */
+  var bgm = new Audio('https://siamesecatcafe.com/wp-content/uploads/2026/06/soundtrack.mp3'); bgm.loop = true; bgm.preload = 'none';
+  window.addEventListener('load', function(){ bgm.preload = 'auto'; try{ bgm.load(); }catch(e){} });   // fetch after the page is up, never blocking first paint
+  var bgmBtn = document.getElementById('bgm');
+  var bgmOn = true;   // intent; set false only by an explicit mute tap
+  function bgmIcon(){ bgmBtn.textContent = bgm.paused ? '🔇' : '🔊'; }
+  bgm.addEventListener('play', bgmIcon); bgm.addEventListener('pause', bgmIcon);
+  function bgmTry(){ if (bgmOn && bgm.paused) { var p = bgm.play(); if (p && p.catch) p.catch(function(){}); } }
+  bgmBtn.addEventListener('click', function(){ if (bgm.paused) { bgmOn = true; bgmTry(); } else { bgmOn = false; bgm.pause(); } });
+  // autoplay is blocked until a gesture: the first swipe/tap starts the music (skipping taps on the toggle itself)
+  function bgmGesture(ev){ if (bgmBtn.contains(ev.target)) return; bgmTry(); }
+  ['pointerdown','touchend','keydown','mousemove'].forEach(function(t){ window.addEventListener(t, bgmGesture, {passive:true}); });
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) bgm.pause(); else bgmTry(); });
+
+  /* ---------- story player ---------- */
+  var scenes = [].slice.call(document.querySelectorAll('.scene'));
+  var dots = document.getElementById('dots');
+  scenes.forEach(function(){ dots.appendChild(document.createElement('i')); });
+  var dotEls = [].slice.call(dots.children);
+
+  // a scene "performs" each time it takes the stage; leaving resets it so it replays
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var i = scenes.indexOf(e.target);
+      if (e.intersectionRatio >= 0.6) {
+        e.target.classList.add('on');
+        dotEls.forEach(function(d,j){ d.classList.toggle('cur', j===i); });
+      } else if (e.intersectionRatio <= 0.05) {
+        e.target.classList.remove('on');
+      }
+    });
+  }, {threshold:[0.05,0.6]});
+  scenes.forEach(function(s){ io.observe(s); });
+})();
+
+
+</script>
+</body>
+</html>
