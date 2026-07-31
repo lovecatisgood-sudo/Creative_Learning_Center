@@ -17,12 +17,25 @@
 <meta name="twitter:card" content="summary_large_image">
 <script>
 (function () {
-  var desktopDomain = "https://siamesecatcafe.com";
+  // This swipe-story landing page is mobile-only. Desktop visitors go straight
+  // to the playable game in their language. Mirrors the language detection in
+  // the main script below, which runs too late to help here.
   var isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+  if (isMobile) return;
 
-  if (!isMobile) {
-    window.location.replace(desktopDomain + window.location.pathname + window.location.search);
-  }
+  var lang = "en";
+  try {
+    var q = (location.search.match(/[?&]lang=(en|th)/) || [])[1];
+    lang =
+      q ||
+      localStorage.getItem("scvd_landing_lang") ||
+      ((navigator.language || "").toLowerCase().indexOf("th") === 0 ? "th" : "en");
+  } catch (e) {}
+  if (lang !== "th") lang = "en";
+
+  // en/ and th/ carry no such redirect, so this cannot loop.
+  var base = location.pathname.replace(/\/index\.html$/i, "").replace(/\/+$/, "");
+  window.location.replace(base + "/" + lang + "/");
 })();
 </script>
 <style>
