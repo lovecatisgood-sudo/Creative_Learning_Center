@@ -3,7 +3,7 @@
 // present but unreadable by the web server". Delete once /game/cat-vs-dog is
 // confirmed live. Exposes only filenames + permission bits of public assets.
 import { NextResponse } from "next/server";
-import { accessSync, constants, readdirSync, statSync } from "node:fs";
+import { accessSync, constants, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 
 export const dynamic = "force-dynamic";
@@ -42,10 +42,53 @@ function list(rel: string) {
   }
 }
 
-export async function GET() {
+function listAbs(abs: string) {
+  try {
+    return readdirSync(abs).slice(0, 40);
+  } catch (err) {
+    return `ERROR: ${(err as NodeJS.ErrnoException).code}`;
+  }
+}
+
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+
+  // ?serve=<relpath under public/> — stream a file through Node, bypassing
+  // whatever static layer sits in front of the app.
+  const serve = url.searchParams.get("serve");
+  if (serve) {
+    const rel = path.normalize(serve).replace(/^(\.\.[/\\])+/, "");
+    const abs = path.join(process.cwd(), "public", rel);
+    try {
+      const buf = readFileSync(abs);
+      return new NextResponse(new Uint8Array(buf), {
+        headers: {
+          "content-type": rel.endsWith(".html")
+            ? "text/html; charset=utf-8"
+            : rel.endsWith(".png")
+              ? "image/png"
+              : "application/octet-stream",
+          "cache-control": "no-store",
+        },
+      });
+    } catch (err) {
+      return NextResponse.json(
+        { rel, error: (err as NodeJS.ErrnoException).code },
+        { status: 404 },
+      );
+    }
+  }
+
+  // Walk up from the build dir to locate the web server's document root.
+  const domainRoot = "/home/u746771591/domains/creative.siamesecat.cafe";
+
   return NextResponse.json({
     cwd: process.cwd(),
     processUid: typeof process.getuid === "function" ? process.getuid() : null,
+    domainRoot: listAbs(domainRoot),
+    publicHtml: listAbs(path.join(domainRoot, "public_html")),
+    publicHtmlGame: listAbs(path.join(domainRoot, "public_html", "game")),
+    buildsVersions: listAbs(path.join(domainRoot, ".builds", "versions")),
     publicTop: list(""),
     gameDir: list("game"),
     gameInner: list("game/cat-vs-dog"),
