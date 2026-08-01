@@ -15,29 +15,6 @@
 <meta property="og:url" content="https://creative.siamesecat.cafe/game/cat-vs-dog/">
 <meta property="og:image" content="https://creative.siamesecat.cafe/game/cat-vs-dog/assets/img/logo.png">
 <meta name="twitter:card" content="summary_large_image">
-<script>
-(function () {
-  // This swipe-story landing page is mobile-only. Desktop visitors go straight
-  // to the playable game in their language. Mirrors the language detection in
-  // the main script below, which runs too late to help here.
-  var isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
-  if (isMobile) return;
-
-  var lang = "en";
-  try {
-    var q = (location.search.match(/[?&]lang=(en|th)/) || [])[1];
-    lang =
-      q ||
-      localStorage.getItem("scvd_landing_lang") ||
-      ((navigator.language || "").toLowerCase().indexOf("th") === 0 ? "th" : "en");
-  } catch (e) {}
-  if (lang !== "th") lang = "en";
-
-  // en/ and th/ carry no such redirect, so this cannot loop.
-  var base = location.pathname.replace(/\/index\.html$/i, "").replace(/\/+$/, "");
-  window.location.replace(base + "/" + lang + "/");
-})();
-</script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html,body { height:100%; }
@@ -299,7 +276,9 @@
 <script>
 (function(){
   /* ---------- config: where the game lives ---------- */
-  var GAME_URL = { en:'/en/', th:'/th/' };
+  // Relative so they resolve against the page's <base> (/game/cat-vs-dog/).
+  // Absolute "/en/" would point at the site root, not the game.
+  var GAME_URL = { en:'en/', th:'th/' };
 
   /* ---------- i18n ---------- */
   var TH = {
