@@ -118,4 +118,40 @@ if (!middleware.includes('requestHeaders.set("x-sccc-pathname", pathname)')) {
   throw new Error("Middleware is not forwarding the pathname to the analytics guard");
 }
 
+const GAME_ROOT = join(process.cwd(), "game-assets/cat-vs-dog");
+const gamePages = {
+  landing: readFileSync(join(GAME_ROOT, "index.html"), "utf8"),
+  en: readFileSync(join(GAME_ROOT, "en/index.html"), "utf8"),
+  th: readFileSync(join(GAME_ROOT, "th/index.html"), "utf8"),
+};
+const gameUrls = {
+  landing: "https://creative.siamesecat.cafe/game/cat-vs-dog/",
+  en: "https://creative.siamesecat.cafe/game/cat-vs-dog/en/",
+  th: "https://creative.siamesecat.cafe/game/cat-vs-dog/th/",
+};
+
+for (const [name, html] of Object.entries(gamePages)) {
+  if (!html.includes(`<link rel="canonical" href="${gameUrls[name]}">`)) {
+    throw new Error(`Game ${name} page has the wrong canonical URL`);
+  }
+  for (const language of ["en", "th"]) {
+    if (!html.includes(`hreflang="${language}" href="${gameUrls[language]}"`)) {
+      throw new Error(`Game ${name} page is missing its ${language} alternate URL`);
+    }
+  }
+  if (!html.includes(`hreflang="x-default" href="${gameUrls.landing}"`)) {
+    throw new Error(`Game ${name} page is missing its default alternate URL`);
+  }
+  if (html.includes("siamesecatcafe.com") || html.includes("game.siamesecatcafe.com")) {
+    throw new Error(`Game ${name} page still references an obsolete host`);
+  }
+}
+
+if (!gamePages.landing.includes("GAME_URL = { en:'en/', th:'th/' }")) {
+  throw new Error("Game landing page does not use deployment-relative language URLs");
+}
+if (!gamePages.landing.includes("new Audio('assets/audio/default.mp3')")) {
+  throw new Error("Game landing page does not use its bundled soundtrack");
+}
+
 console.log("main-site:shell → shared header, footer, labels and links verified");

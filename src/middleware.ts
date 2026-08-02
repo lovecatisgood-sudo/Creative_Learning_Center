@@ -5,6 +5,11 @@ import type { NextRequest } from "next/server";
 // /api/admin/*. Cryptographic verification happens in route handlers via
 // getSession(); this only bounces obviously-unauthenticated requests early.
 const SESSION_COOKIE = "sccc_admin";
+const CANONICAL_TRAILING_SLASH_PATHS = new Set([
+  "/game/cat-vs-dog/",
+  "/game/cat-vs-dog/en/",
+  "/game/cat-vs-dog/th/",
+]);
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -12,6 +17,19 @@ export function middleware(req: NextRequest) {
   if (pathname === "/en" || pathname.startsWith("/en/")) {
     const url = req.nextUrl.clone();
     url.pathname = `/EN${pathname.slice(3) || "/"}`;
+    return NextResponse.redirect(url, 308);
+  }
+
+  // Next's automatic slash redirect is disabled so the static game can keep
+  // directory-style canonical URLs. Preserve the site's existing no-slash
+  // convention everywhere else.
+  if (
+    pathname !== "/" &&
+    pathname.endsWith("/") &&
+    !CANONICAL_TRAILING_SLASH_PATHS.has(pathname)
+  ) {
+    const url = req.nextUrl.clone();
+    url.pathname = pathname.slice(0, -1);
     return NextResponse.redirect(url, 308);
   }
 

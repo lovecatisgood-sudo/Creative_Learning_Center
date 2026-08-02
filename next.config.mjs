@@ -14,6 +14,9 @@ const mainSiteRoutes = [
 
 const nextConfig = {
   reactStrictMode: true,
+  // Game directories use canonical trailing-slash URLs so their relative
+  // assets and localized links resolve consistently.
+  skipTrailingSlashRedirect: true,
   // Uploaded proof photos are served through an authenticated API route, not the
   // public folder, so no image domains config is required.
   async headers() {

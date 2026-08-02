@@ -7,6 +7,9 @@
 <title>Siamese Cat vs Dog 1986 — free retro arcade game by Siamese Cat Café Bangkok</title>
 <meta name="description" content="A retro cat-vs-alien-dog arcade shooter from the Siamese Cat Café, Bangkok. Jetpack cat. Mutant alien dogs. Conquer Wonderland. Play free in your browser.">
 <link rel="canonical" href="https://creative.siamesecat.cafe/game/cat-vs-dog/">
+<link rel="alternate" hreflang="en" href="https://creative.siamesecat.cafe/game/cat-vs-dog/en/">
+<link rel="alternate" hreflang="th" href="https://creative.siamesecat.cafe/game/cat-vs-dog/th/">
+<link rel="alternate" hreflang="x-default" href="https://creative.siamesecat.cafe/game/cat-vs-dog/">
 <link rel="icon" type="image/png" href="assets/img/cafe_badge.png">
 <!-- social share card -->
 <meta property="og:type" content="website">
@@ -326,7 +329,7 @@
   if (lang==='th') setLang('th');
 
   /* ---------- bgm: the game's stage theme (mix baked into the file - iOS ignores element volume) ---------- */
-  var bgm = new Audio('https://siamesecatcafe.com/wp-content/uploads/2026/06/soundtrack.mp3'); bgm.loop = true; bgm.preload = 'none';
+  var bgm = new Audio('assets/audio/default.mp3'); bgm.loop = true; bgm.preload = 'none';
   window.addEventListener('load', function(){ bgm.preload = 'auto'; try{ bgm.load(); }catch(e){} });   // fetch after the page is up, never blocking first paint
   var bgmBtn = document.getElementById('bgm');
   var bgmOn = true;   // intent; set false only by an explicit mute tap

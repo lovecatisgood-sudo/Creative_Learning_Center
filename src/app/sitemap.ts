@@ -22,6 +22,7 @@ const routes = [
 ] as const;
 
 const LAST_UPDATED = new Date("2026-07-17T00:00:00+07:00");
+const GAME_LAST_UPDATED = new Date("2026-08-02T00:00:00+07:00");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = routes.flatMap(({ path, changeFrequency, priority }) => {
@@ -34,6 +35,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       { url: englishUrl, lastModified: LAST_UPDATED, changeFrequency, priority, alternates },
     ];
   });
+
+  const gameLandingUrl = `${SITE_URL}/game/cat-vs-dog/`;
+  const gameEnglishUrl = `${SITE_URL}/game/cat-vs-dog/en/`;
+  const gameThaiUrl = `${SITE_URL}/game/cat-vs-dog/th/`;
+  const gameAlternates = {
+    languages: {
+      en: gameEnglishUrl,
+      th: gameThaiUrl,
+      "x-default": gameLandingUrl,
+    },
+  };
+  const gameEntries: MetadataRoute.Sitemap = [
+    { url: gameLandingUrl, lastModified: GAME_LAST_UPDATED, changeFrequency: "monthly", priority: 0.8, alternates: gameAlternates },
+    { url: gameEnglishUrl, lastModified: GAME_LAST_UPDATED, changeFrequency: "monthly", priority: 0.8, alternates: gameAlternates },
+    { url: gameThaiUrl, lastModified: GAME_LAST_UPDATED, changeFrequency: "monthly", priority: 0.8, alternates: gameAlternates },
+  ];
 
   const [thaiPosts, englishPosts] = await Promise.all([
     getPublishedBlogPosts("th"),
@@ -56,5 +73,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (versions.en) blogEntries.push({ url: englishUrl, lastModified: versions.en.updatedAt, changeFrequency: "monthly", priority: 0.7, alternates });
   }
 
-  return [...staticEntries, ...blogEntries];
+  return [...staticEntries, ...gameEntries, ...blogEntries];
 }
