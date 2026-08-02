@@ -46,6 +46,9 @@ const NAV_ITEMS: NavItem[] = [
   },
 ];
 
+const PROGRAM_ITEMS = NAV_ITEMS.filter((item) => ["inside", "creative", "little-explorer-program", "membership"].includes(item.key));
+const BLOG_ITEM = NAV_ITEMS.find((item) => item.key === "blog")!;
+
 export function PublicBlogShell({
   language,
   alternateHref,
@@ -109,29 +112,38 @@ export function PublicBlogShell({
               <p style={{ maxWidth: 480, color: "rgba(255,248,237,.76)" }}>{language === "th" ? "สองโปรแกรมกลุ่มเล็กแบบยืดหยุ่นสำหรับเด็ก ทั้งเพลย์กรุ๊ปช่วงกลางวัน และโปรแกรมหลังเลิกเรียน พร้อมการเล่น การบ้าน ความสร้างสรรค์ มื้ออาหาร และการรอรับกลับ" : "Two flexible small-group programs for children: daytime playgroup care and after-school explorer support with play, homework, creativity, meal care and pickup routines."}</p>
               <a className="footer-cafe-link" href="https://siamesecat.cafe/">{language === "th" ? "เยี่ยมชม Siamese Cat Cafe" : "Visit Siamese Cat Cafe"}</a>
             </div>
-            <div>
-              <div className="footer-title">{language === "th" ? "สำรวจ" : "Explore"}</div>
-              <div className="footer-links">
-                {NAV_ITEMS.map((item) => (
-                  <span className="contents" key={item.key}>
-                    <Link href={local(item.href)}>{value(item)}</Link>
-                    {item.children?.map((child) => <Link className="footer-sublink" key={child.key} href={local(child.href)}>{value(child)}</Link>)}
-                  </span>
-                ))}
-                <Link href={local("/contact")}>{language === "th" ? "ติดต่อเรา" : "Contact Us"}</Link>
-                <Link href={local("/first-visit")}>{language === "th" ? "เริ่มครั้งแรก" : "First Session"}</Link>
+            <div className="footer-navigation">
+              <div>
+                <div className="footer-title">{language === "th" ? "โปรแกรม" : "Programs"}</div>
+                <div className="footer-links">
+                  {PROGRAM_ITEMS.map((item) => (
+                    <span className="contents" key={item.key}>
+                      <Link href={local(item.href)}>{value(item)}</Link>
+                      {item.children?.map((child) => <Link className="footer-sublink" key={child.key} href={local(child.href)}>{value(child)}</Link>)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <div className="footer-title">{language === "th" ? "แหล่งข้อมูล" : "Resources"}</div>
+                <div className="footer-links footer-resource-links">
+                  <Link href={local(BLOG_ITEM.href)}>{value(BLOG_ITEM)}</Link>
+                  {BLOG_ITEM.children?.map((child) => <Link className="footer-sublink" key={child.key} href={local(child.href)}>{value(child)}</Link>)}
+                  <Link href={local("/contact")}>{language === "th" ? "ติดต่อเรา" : "Contact Us"}</Link>
+                  <Link href={local("/first-visit")}>{language === "th" ? "เริ่มครั้งแรก" : "First Session"}</Link>
+                </div>
               </div>
             </div>
-            <div>
+            <div className="footer-visit">
               <div className="footer-title">{language === "th" ? "แวะมาหาเรา" : "Visit us"}</div>
-              <div className="footer-links">
+              <address className="footer-links">
                 <span>{language === "th" ? "46/27 ถนนคู่ขนานบางนา-ตราด บางแก้ว" : "46/27 Bang Na-Trat Frontage Road, Bang Kaeo"}</span>
                 <span>{language === "th" ? "หลังเลิกเรียนวันธรรมดา 15:00-20:00" : "Weekdays 3-8 PM for after-school support"}</span>
                 <span>{language === "th" ? "เวลาเพลย์กรุ๊ปตามการจองที่ยืนยันแล้ว" : "Playgroup times by confirmed booking"}</span>
                 <a href="https://maps.app.goo.gl/XpYHkxenRu6gLvnFA" target="_blank" rel="noreferrer">{language === "th" ? "ดูเส้นทาง" : "Get directions"}</a>
                 <a href="mailto:Cafe@siamesecat.cafe">Cafe@siamesecat.cafe</a>
                 <a href="tel:+66804803802">+66 80 480 3802</a>
-              </div>
+              </address>
             </div>
           </div>
           <div className="footer-bottom"><span>© {new Date().getFullYear()} Siamese Cat Creative Club</span><span><Link href={local("/privacy")}>{language === "th" ? "ความเป็นส่วนตัวและ PDPA" : "Privacy & PDPA"}</Link> · <Link href={local("/terms")}>{language === "th" ? "เงื่อนไขบริการ" : "Service terms"}</Link></span></div>

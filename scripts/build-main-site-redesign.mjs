@@ -227,6 +227,8 @@ function header(active, canonicalPath) {
 }
 
 function footer() {
+  const programNav = nav.filter((item) => ["inside", "creative", "little-explorer-program", "membership"].includes(item.key));
+  const blogNav = nav.find((item) => item.key === "blog");
   return `<footer class="site-footer" data-shell-version="${SHELL_VERSION}">
   <div class="container">
     <div class="footer-grid">
@@ -235,17 +237,26 @@ function footer() {
         <p style="max-width:480px;color:rgba(255,248,237,.76)">${text("Two flexible small-group programs for children: daytime playgroup care and after-school explorer support with play, homework, creativity, meal care and pickup routines.", "สองโปรแกรมกลุ่มเล็กแบบยืดหยุ่นสำหรับเด็ก ทั้งเพลย์กรุ๊ปช่วงกลางวัน และโปรแกรมหลังเลิกเรียน พร้อมการเล่น การบ้าน ความสร้างสรรค์ มื้ออาหาร และการรอรับกลับ")}</p>
         <a class="footer-cafe-link" href="${CAFE_URL}">${text("Visit Siamese Cat Cafe", "เยี่ยมชม Siamese Cat Cafe")}</a>
       </div>
-      <div>
-        <div class="footer-title">${text("Explore", "สำรวจ")}</div>
-        <div class="footer-links">
-          ${nav.map((item) => `<a href="${item.href}">${text(item.en, item.th)}</a>${item.children?.map((child) => `<a class="footer-sublink" href="${child.href}">${text(child.en, child.th)}</a>`).join("") ?? ""}`).join("")}
-          <a href="${CONTACT_URL}">${text("Contact Us", "ติดต่อเรา")}</a>
-          <a href="/first-visit">${text("First Session", "เริ่มครั้งแรก")}</a>
+      <div class="footer-navigation">
+        <div>
+          <div class="footer-title">${text("Programs", "โปรแกรม")}</div>
+          <div class="footer-links">
+            ${programNav.map((item) => `<a href="${item.href}">${text(item.en, item.th)}</a>${item.children?.map((child) => `<a class="footer-sublink" href="${child.href}">${text(child.en, child.th)}</a>`).join("") ?? ""}`).join("")}
+          </div>
+        </div>
+        <div>
+          <div class="footer-title">${text("Resources", "แหล่งข้อมูล")}</div>
+          <div class="footer-links footer-resource-links">
+            <a href="${blogNav.href}">${text(blogNav.en, blogNav.th)}</a>
+            ${blogNav.children.map((child) => `<a class="footer-sublink" href="${child.href}">${text(child.en, child.th)}</a>`).join("")}
+            <a href="${CONTACT_URL}">${text("Contact Us", "ติดต่อเรา")}</a>
+            <a href="/first-visit">${text("First Session", "เริ่มครั้งแรก")}</a>
+          </div>
         </div>
       </div>
-      <div>
+      <div class="footer-visit">
         <div class="footer-title">${text("Visit us", "แวะมาหาเรา")}</div>
-        <div class="footer-links"><span>${text("46/27 Bang Na-Trat Frontage Road, Bang Kaeo", "46/27 ถนนคู่ขนานบางนา-ตราด บางแก้ว")}</span><span>${text("Weekdays 3-8 PM for after-school support", "หลังเลิกเรียนวันธรรมดา 15:00-20:00")}</span><span>${text("Playgroup times by confirmed booking", "เวลาเพลย์กรุ๊ปตามการจองที่ยืนยันแล้ว")}</span><a href="${MAP_URL}" target="_blank" rel="noreferrer">${text("Get directions", "ดูเส้นทาง")}</a><a href="mailto:Cafe@siamesecat.cafe">Cafe@siamesecat.cafe</a><a href="tel:+66804803802" data-phone>${text("+66 80 480 3802", "+66 80 480 3802")}</a></div>
+        <address class="footer-links"><span>${text("46/27 Bang Na-Trat Frontage Road, Bang Kaeo", "46/27 ถนนคู่ขนานบางนา-ตราด บางแก้ว")}</span><span>${text("Weekdays 3-8 PM for after-school support", "หลังเลิกเรียนวันธรรมดา 15:00-20:00")}</span><span>${text("Playgroup times by confirmed booking", "เวลาเพลย์กรุ๊ปตามการจองที่ยืนยันแล้ว")}</span><a href="${MAP_URL}" target="_blank" rel="noreferrer">${text("Get directions", "ดูเส้นทาง")}</a><a href="mailto:Cafe@siamesecat.cafe">Cafe@siamesecat.cafe</a><a href="tel:+66804803802" data-phone>${text("+66 80 480 3802", "+66 80 480 3802")}</a></address>
       </div>
     </div>
     <div class="footer-bottom"><span>© <span data-year></span> Siamese Cat Creative Club</span><span><a href="/privacy">${text("Privacy & PDPA", "ความเป็นส่วนตัวและ PDPA")}</a> · <a href="/terms">${text("Service terms", "เงื่อนไขบริการ")}</a></span></div>
