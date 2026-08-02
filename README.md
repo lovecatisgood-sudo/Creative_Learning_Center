@@ -23,7 +23,7 @@ pnpm install
 cp .env.example .env.local          # fill in DATABASE_URL + the rest
 pnpm db:migrate                     # create tables
 pnpm db:seed                        # insert the 11 products
-pnpm create-admin admin@shop.com 'password'   # hash + admin row
+pnpm create-admin manager@shop.com 'strong-password' manager
 pnpm dev                            # http://localhost:3000
 ```
 
@@ -38,7 +38,7 @@ Any standard Postgres works locally (e.g. Docker):
 | `pnpm db:generate` | Regenerate the Drizzle migration from `src/db/schema.ts` |
 | `pnpm db:migrate` | Apply migrations |
 | `pnpm db:seed` | Seed/refresh the 11 products (idempotent) |
-| `pnpm create-admin <email> <password>` | Print the bcrypt hash + upsert the admin |
+| `pnpm create-admin <email> <password> [manager\|staff]` | Print the bcrypt hash + upsert a role-based team account |
 | `pnpm signup-qr <https://domain>` | Write `signup-qr.png` for the entrance |
 
 ## Layout
@@ -51,7 +51,7 @@ src/
   app/
     creative/              previous Creative Club landing page
     signup/                 public parent registration (P1/P2)
-    admin/(app)/            authed shell: sessions · search · sell · overview · child · session · receipt
+    admin/(app)/            role-aware shell: staff operations plus manager reporting/content/team tools
     admin/login/            login (A0)
     api/                    public/signup, admin/* route handlers
   components/               AppBar, BottomNav, sheets, sell/*, Countdown, PackageRow, …

@@ -26,9 +26,13 @@ export async function POST(req: Request) {
 
   let ok = false;
   let adminId: number | undefined;
+  let role: "manager" | "staff" = "manager";
   if (row) {
-    ok = await bcrypt.compare(password, row.passwordHash);
-    adminId = row.id;
+    if (row.active) {
+      ok = await bcrypt.compare(password, row.passwordHash);
+      adminId = row.id;
+      role = row.role;
+    }
   } else if (envEmail && envHash && email.toLowerCase().trim() === envEmail.toLowerCase().trim()) {
     ok = await bcrypt.compare(password, envHash);
   }
@@ -40,7 +44,8 @@ export async function POST(req: Request) {
   const session = await getSession();
   session.adminId = adminId ?? -1; // -1 marks an env-only admin (pre-seed)
   session.email = email.toLowerCase().trim();
+  session.role = role;
   await session.save();
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, role });
 }

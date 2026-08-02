@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { auditLog, blogPosts } from "@/db/schema";
-import { requireAdminId } from "@/lib/auth";
+import { requireManager } from "@/lib/auth";
 import { BlogValidationError, parseBlogPostInput } from "@/lib/blog";
 import { blogApiError } from "@/lib/blog-api";
 
@@ -12,10 +12,15 @@ function postId(value: string): number {
   return id;
 }
 
-export async function GET(_request: Request, { params }: { params: { id: string } }) {
+function requestPostId(request: Request): number {
+  const segments = new URL(request.url).pathname.split("/").filter(Boolean);
+  return postId(segments.at(-1) ?? "");
+}
+
+export async function GET(request: Request) {
   try {
-    await requireAdminId();
-    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, postId(params.id))).limit(1);
+    await requireManager();
+    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, requestPostId(request))).limit(1);
     if (!post) return NextResponse.json({ error: "Post not found" }, { status: 404 });
     return NextResponse.json({ post });
   } catch (error) {
@@ -23,10 +28,10 @@ export async function GET(_request: Request, { params }: { params: { id: string 
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request) {
   try {
-    const adminId = await requireAdminId();
-    const id = postId(params.id);
+    const manager = await requireManager();
+    const id = requestPostId(request);
     const input = parseBlogPostInput(await request.json().catch(() => null));
     const [existing] = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
     if (!existing) return NextResponse.json({ error: "Post not found" }, { status: 404 });
@@ -43,7 +48,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         .where(eq(blogPosts.id, id))
         .returning();
       await tx.insert(auditLog).values({
-        adminId: adminId > 0 ? adminId : null,
+        adminId: manager.id > 0 ? manager.id : null,
         action: "blog_post_updated",
         entity: "blog_post",
         entityId: id,
@@ -62,15 +67,15 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request) {
   try {
-    const adminId = await requireAdminId();
-    const id = postId(params.id);
+    const manager = await requireManager();
+    const id = requestPostId(request);
     const [existing] = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
     if (!existing) return NextResponse.json({ error: "Post not found" }, { status: 404 });
     await db.transaction(async (tx) => {
       await tx.insert(auditLog).values({
-        adminId: adminId > 0 ? adminId : null,
+        adminId: manager.id > 0 ? manager.id : null,
         action: "blog_post_deleted",
         entity: "blog_post",
         entityId: id,

@@ -1,8 +1,10 @@
 import type { SessionOptions } from "iron-session";
+import type { AdminRole } from "@/lib/admin-roles";
 
 export type AdminSession = {
   adminId?: number;
   email?: string;
+  role?: AdminRole;
 };
 
 export const sessionOptions: SessionOptions = {

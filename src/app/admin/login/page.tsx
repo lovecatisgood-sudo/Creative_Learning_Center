@@ -25,7 +25,8 @@ export default function LoginPage() {
     });
     setBusy(false);
     if (res.ok) {
-      router.replace("/admin");
+      const data = (await res.json()) as { role?: "manager" | "staff" };
+      router.replace(data.role === "manager" ? "/admin/manager" : "/admin/sessions");
       router.refresh();
     } else {
       setError(true);

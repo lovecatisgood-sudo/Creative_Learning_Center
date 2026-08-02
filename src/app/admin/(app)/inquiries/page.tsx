@@ -1,6 +1,7 @@
 import { desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { auditLog } from "@/db/schema";
+import { requireManagerPage } from "@/lib/admin-page-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ const serviceLabels: Record<string, string> = {
 };
 
 export default async function InquiriesPage() {
+  await requireManagerPage();
   const inquiries = await db
     .select({ id: auditLog.id, detail: auditLog.detail, createdAt: auditLog.createdAt })
     .from(auditLog)

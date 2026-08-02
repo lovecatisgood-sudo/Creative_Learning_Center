@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { getOverview, type Unit } from "@/lib/overview";
-import { requireAdminId, UnauthorizedError } from "@/lib/auth";
+import { requireManager } from "@/lib/auth";
+import { adminApiError } from "@/lib/admin-api";
 
 export async function GET(req: Request) {
   try {
-    await requireAdminId();
+    await requireManager();
   } catch (e) {
-    if (e instanceof UnauthorizedError) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    throw e;
+    return adminApiError(e, "Unable to load overview");
   }
 
   const url = new URL(req.url);

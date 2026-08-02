@@ -2,13 +2,13 @@ import { desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { auditLog, blogPosts } from "@/db/schema";
-import { requireAdminId } from "@/lib/auth";
+import { requireManager } from "@/lib/auth";
 import { parseBlogPostInput } from "@/lib/blog";
 import { blogApiError } from "@/lib/blog-api";
 
 export async function GET() {
   try {
-    await requireAdminId();
+    await requireManager();
     const posts = await db.select().from(blogPosts).orderBy(desc(blogPosts.updatedAt));
     return NextResponse.json({ posts });
   } catch (error) {
@@ -18,7 +18,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const adminId = await requireAdminId();
+    const manager = await requireManager();
     const input = parseBlogPostInput(await request.json().catch(() => null));
     const now = new Date();
     const [post] = await db.transaction(async (tx) => {
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
         })
         .returning();
       await tx.insert(auditLog).values({
-        adminId: adminId > 0 ? adminId : null,
+        adminId: manager.id > 0 ? manager.id : null,
         action: "blog_post_created",
         entity: "blog_post",
         entityId: created.id,

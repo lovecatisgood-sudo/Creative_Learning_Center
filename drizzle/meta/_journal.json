@@ -15,6 +15,13 @@
       "when": 1784302040019,
       "tag": "0001_sloppy_boomer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785661299718,
+      "tag": "0002_perpetual_quasimodo",
+      "breakpoints": true
     }
   ]
 }

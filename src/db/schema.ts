@@ -50,6 +50,7 @@ export const blogCategoryEnum = pgEnum("blog_category", [
   "club-news-updates",
   "faq",
 ]);
+export const adminRoleEnum = pgEnum("admin_role", ["manager", "staff"]);
 
 // ─── Tables (PRD §5) ────────────────────────────────────────────────────────
 export const parents = pgTable("parents", {
@@ -75,6 +76,9 @@ export const admins = pgTable("admins", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
+  displayName: text("display_name"),
+  role: adminRoleEnum("role").default("staff").notNull(),
+  active: boolean("active").default(true).notNull(),
 });
 
 export const products = pgTable("products", {

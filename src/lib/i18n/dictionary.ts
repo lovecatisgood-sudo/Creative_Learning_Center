@@ -24,12 +24,14 @@ export const dict = {
   navSessions: { th: "เซสชัน", en: "Sessions" },
   navSearch: { th: "ค้นหา", en: "Search" },
   navSell: { th: "ขาย", en: "Sell" },
+  navManager: { th: "ผู้จัดการ", en: "Manager" },
   navOverview: { th: "ภาพรวม", en: "Overview" },
   navInquiries: { th: "คำถาม", en: "Inquiries" },
   navBlog: { th: "บล็อก", en: "Blog" },
+  navTeam: { th: "ทีมงาน", en: "Team" },
 
   // ── Login (A0) ──
-  loginTitle: { th: "เข้าสู่ระบบพนักงาน", en: "Staff login" },
+  loginTitle: { th: "เข้าสู่ระบบทีมงาน", en: "Team login" },
   email: { th: "อีเมล", en: "Email" },
   password: { th: "รหัสผ่าน", en: "Password" },
   logIn: { th: "เข้าสู่ระบบ", en: "Log in" },
