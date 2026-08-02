@@ -16,14 +16,18 @@ export async function GET(req: Request) {
   ]);
 
   if (canonicalDirectory.has(pathname)) {
-    url.pathname = `${pathname}/`;
-    return Response.redirect(url, 308);
+    return new Response(null, {
+      status: 308,
+      headers: { Location: `${pathname}/${url.search}` },
+    });
   }
 
   const indexDirectory = pathname.match(/^(\/game\/cat-vs-dog(?:\/en|\/th)?)\/index\.html$/);
   if (indexDirectory) {
-    url.pathname = `${indexDirectory[1]}/`;
-    return Response.redirect(url, 308);
+    return new Response(null, {
+      status: 308,
+      headers: { Location: `${indexDirectory[1]}/${url.search}` },
+    });
   }
 
   const segments = pathname.split("/").filter(Boolean);
