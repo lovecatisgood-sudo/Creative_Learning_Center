@@ -354,7 +354,7 @@ html[lang="th"] .eyebrow { text-transform: none; }
   display: flex;
   align-items: flex-end;
   color: #fff;
-  background:url("/main-site/assets/environment-creative-room.webp?v=20260717-blog-v7") center 44% / cover no-repeat;
+  background:url("/main-site/assets/environment-creative-room.webp?v=20260802-footer-v1") center 44% / cover no-repeat;
 }
 .blog-hero::before { content:""; position:absolute; inset:0; background:rgba(39,29,26,.72); pointer-events:none; }
 .blog-hero-inner { position:relative; z-index:1; display:flex; align-items:flex-end; justify-content:space-between; gap:40px; width:100%; }
