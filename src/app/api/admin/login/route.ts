@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { getSession } from "@/lib/auth";
 import { db } from "@/db";
 import { admins } from "@/db/schema";
+import { ensureAdminRbacSchema } from "@/db/ensure-admin-rbac";
 import { eq } from "drizzle-orm";
 
 // Single shared admin credential. Env holds the canonical email + bcrypt hash;
@@ -18,6 +19,7 @@ export async function POST(req: Request) {
   const envHash = process.env.ADMIN_PASSWORD_HASH;
 
   // Prefer the DB admin row (has an id); fall back to env-only for first boot.
+  await ensureAdminRbacSchema();
   const [row] = await db
     .select()
     .from(admins)

@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { admins } from "@/db/schema";
+import { ensureAdminRbacSchema } from "@/db/ensure-admin-rbac";
 import type { AdminRole } from "@/lib/admin-roles";
 import { sessionOptions, type AdminSession } from "./session";
 
@@ -31,6 +32,7 @@ export async function getCurrentAdmin(): Promise<CurrentAdmin | null> {
       : null;
   }
 
+  await ensureAdminRbacSchema();
   const [admin] = await db
     .select({
       id: admins.id,
