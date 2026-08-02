@@ -8,6 +8,7 @@ const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const CAFE_URL = "https://siamesecat.cafe/";
 const CONTACT_URL = "/contact";
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
+const GOOGLE_ADSENSE_CLIENT_ID = "ca-pub-3624708289866566";
 const BLOG_CATEGORIES = [
   { key: "parenting-guides", en: "Parenting Guides", th: "คู่มือสำหรับผู้ปกครอง" },
   { key: "kid-learning-material", en: "Kid Learning Materials", th: "สื่อการเรียนรู้สำหรับเด็ก" },
@@ -306,7 +307,7 @@ function layout({ page, titleEn, titleTh, description, descriptionTh, body, acti
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/main-site/assets/styles.css?v=${ASSET_VERSION}">
 ${extraHead}
-<script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}"></script>
+${page === "home" ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_ADSENSE_CLIENT_ID}" crossorigin="anonymous"></script>\n` : ""}<script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
