@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { BLOG_CATEGORY_LABELS, getPublishedBlogPost, getPublishedBlogPosts, localizedPost, renderBlogMarkdown, type BlogLanguage } from "@/lib/blog";
 import { SITE_URL } from "@/lib/landing/site";
 import { PublicBlogShell } from "./PublicBlogShell";
@@ -35,6 +36,7 @@ export async function BlogArticle({ slug, language }: { slug: string; language: 
 
   return (
     <PublicBlogShell language={language} alternateHref={alternateHref}>
+      {post.category !== "club-news-updates" && <AdSenseScript />}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
       <article>
         <header className="section blog-article-header">

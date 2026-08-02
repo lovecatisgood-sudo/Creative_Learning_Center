@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { BLOG_CATEGORIES, BLOG_CATEGORY_LABELS, getPublishedBlogPosts, localizedPost, type BlogCategory, type BlogLanguage } from "@/lib/blog";
 import { PublicBlogShell } from "./PublicBlogShell";
 
@@ -10,6 +11,7 @@ export async function BlogIndex({ language, category }: { language: BlogLanguage
 
   return (
     <PublicBlogShell language={language} alternateHref={`${language === "th" ? "/EN" : ""}/blog${selectedCategory ? `?category=${selectedCategory}` : ""}`}>
+      {selectedCategory !== "club-news-updates" && <AdSenseScript />}
       <section className="section blog-hero">
         <div className="container blog-hero-inner">
           <div>
