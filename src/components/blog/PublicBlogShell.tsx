@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { BlogLanguage } from "@/lib/blog-shared";
+import { BLOG_CATEGORIES, BLOG_CATEGORY_LABELS, type BlogLanguage } from "@/lib/blog-shared";
 
 type NavItem = {
   key: string;
@@ -34,7 +34,15 @@ const NAV_ITEMS: NavItem[] = [
     href: "/blog",
     th: "บล็อก",
     en: "Blog",
-    children: [{ key: "faq", href: "/faq", th: "FAQ", en: "FAQ" }],
+    children: [
+      ...BLOG_CATEGORIES.map((category) => ({
+        key: `blog-${category}`,
+        href: `/blog?category=${category}`,
+        th: BLOG_CATEGORY_LABELS[category].th,
+        en: BLOG_CATEGORY_LABELS[category].en,
+      })),
+      { key: "faq-page", href: "/faq", th: "FAQ หลัก", en: "Main FAQ" },
+    ],
   },
 ];
 

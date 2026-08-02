@@ -8,6 +8,12 @@ const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const CAFE_URL = "https://siamesecat.cafe/";
 const CONTACT_URL = "/contact";
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
+const BLOG_CATEGORIES = [
+  { key: "parenting-guides", en: "Parenting Guides", th: "คู่มือสำหรับผู้ปกครอง" },
+  { key: "kid-learning-material", en: "Kid Learning Materials", th: "สื่อการเรียนรู้สำหรับเด็ก" },
+  { key: "club-news-updates", en: "Club News & Updates", th: "ข่าวสารและอัปเดตจากคลับ" },
+  { key: "faq", en: "FAQ", th: "คำถามที่พบบ่อย" },
+];
 const PUBLIC_ROUTES = new Set([
   "/",
   "/inside",
@@ -173,7 +179,13 @@ const nav = [
     en: "Blog",
     th: "บล็อก",
     children: [
-      { key: "faq", href: "/faq", en: "FAQ", th: "FAQ" },
+      ...BLOG_CATEGORIES.map((category) => ({
+        key: `blog-${category.key}`,
+        href: `/blog?category=${category.key}`,
+        en: category.en,
+        th: category.th,
+      })),
+      { key: "faq-page", href: "/faq", en: "Main FAQ", th: "FAQ หลัก" },
     ],
   },
 ];
@@ -357,6 +369,7 @@ const home = layout({
 <article class="card soft-blue hover"><span class="card-tag blue">${text("After School Explorer", "After School Explorer")}</span><h3>${text("After-school care, homework and pickup support", "ดูแลหลังเลิกเรียน การบ้าน และรอรับกลับ")}</h3><p>${text("For school-age children who need a safe place after school with play, quiet focus, creative time, dinner care and pickup support.", "สำหรับเด็กวัยเรียนที่ต้องการพื้นที่ปลอดภัยหลังเลิกเรียน พร้อมการเล่น มุมโฟกัส กิจกรรมสร้างสรรค์ อาหารเย็น และการรอรับกลับ")}</p>${detailsList([text("1 hour / 199 THB and 2 hours / 300 THB", "1 ชั่วโมง / 199 บาท และ 2 ชั่วโมง / 300 บาท"), text("Weekday after-school half-day / 599 THB", "หลังเลิกเรียนครึ่งวันธรรมดา / 599 บาท"), text("Dinner & pickup support by session", "ดูแลอาหารเย็นและรอรับกลับตามเซสชัน"), text("Meal Care Add-On / 299 THB", "บริการเสริมมื้ออาหาร / 299 บาท")])}<a class="btn btn-primary" href="/creative">${text("See After School Explorer", "ดู After School Explorer")}</a></article>
 </div></div></section>
 <section class="section"><div class="container"><div class="section-head center"><span class="eyebrow">${text("Daily rhythm", "จังหวะประจำวัน")}</span><h2>${text("A calm routine from arrival to pickup", "กิจวัตรอบอุ่นตั้งแต่มาถึงจนรับกลับ")}</h2></div><div class="paw-timeline reveal"><div class="paw-step"><div class="paw-node">1</div><div><h3>${text("Arrive & settle", "มาถึงและปรับตัว")}</h3><p class="small">${text("Wash hands, put bags away and get comfortable.", "ล้างมือ วางกระเป๋า และค่อย ๆ ปรับตัว")}</p></div></div><div class="paw-step"><div class="paw-node">2</div><div><h3>${text("Play or focus", "เล่นหรือโฟกัส")}</h3><p class="small">${text("Playgroup children explore. After-school children may do homework or quiet focus.", "เด็กเพลย์กรุ๊ปได้สำรวจ เด็กหลังเลิกเรียนอาจทำการบ้านหรือกิจกรรมเงียบ")}</p></div></div><div class="paw-step"><div class="paw-node">3</div><div><h3>${text("Create & explore", "สร้างสรรค์และสำรวจ")}</h3><p class="small">${text("Drawing, Lego, clay, reading, soft play, outdoor play or animal visits when available.", "วาดรูป เลโก้ ดินปั้น อ่านหนังสือ เล่นนุ่ม ๆ เล่นกลางแจ้ง หรือพบสัตว์เมื่อพร้อม")}</p></div></div><div class="paw-step"><div class="paw-node">4</div><div><h3>${text("Meal & pickup", "มื้ออาหารและรับกลับ")}</h3><p class="small">${text("Meal care can be arranged for longer sessions or after-school evening pickup.", "สามารถจัดบริการดูแลมื้ออาหารสำหรับเซสชันยาวหรือรอรับช่วงเย็น")}</p></div></div></div></div></section>
+<section class="section paper home-blog" data-home-blog><div class="container"><div class="blog-list-heading"><div><span class="eyebrow">${text("From the club", "บทความจากคลับ")}</span><h2>${text("Latest from our family blog", "บทความล่าสุดจากบล็อกครอบครัว")}</h2><p class="kicker">${text("Parenting guidance, learning materials, club news and practical answers for families.", "คำแนะนำสำหรับผู้ปกครอง สื่อการเรียนรู้ ข่าวสารจากคลับ และคำตอบที่นำไปใช้ได้จริงสำหรับครอบครัว")}</p></div><a class="btn btn-secondary" href="/blog">${text("View all articles", "ดูบทความทั้งหมด")}</a></div><nav class="home-blog-categories" aria-label="${text("Blog categories", "หมวดหมู่บทความ")}"><a href="/blog">${text("All articles", "บทความทั้งหมด")}</a>${BLOG_CATEGORIES.map((category) => `<a href="/blog?category=${category.key}">${text(category.en, category.th)}</a>`).join("")}</nav><div class="blog-grid home-blog-grid" data-home-blog-grid aria-live="polite"><p class="home-blog-status" data-home-blog-status>${text("Loading published articles…", "กำลังโหลดบทความที่เผยแพร่…")}</p></div><noscript><p><a class="text-link" href="/blog">${text("View all published articles", "ดูบทความที่เผยแพร่ทั้งหมด")}</a></p></noscript></div></section>
 <section class="section"><div class="container"><div class="cta-band reveal"><div><span class="eyebrow" style="color:#b8d9c2">${text("Ready to plan?", "พร้อมวางแผน?")}</span><h2>${text("Choose a program, then register once", "เลือกโปรแกรม แล้วลงทะเบียนครั้งเดียว")}</h2><p class="muted">${text("The team can confirm the best session after parent registration.", "ทีมงานจะช่วยยืนยันเซสชันที่เหมาะสมหลังผู้ปกครองลงทะเบียน")}</p></div><div class="cta-actions"><a class="btn btn-light" href="/signup">${text("Parent Signup", "ลงทะเบียนผู้ปกครอง")}</a><a class="btn btn-line" href="tel:+66804803802">${text("Call us", "โทรหาเรา")}</a></div></div></div></section>`
 });
 

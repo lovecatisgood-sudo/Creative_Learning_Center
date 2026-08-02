@@ -4,8 +4,8 @@ import { join } from "node:path";
 const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 const expectedNav = {
-  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "FAQ", "ติดต่อเรา"],
-  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "FAQ", "Contact Us"],
+  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คู่มือสำหรับผู้ปกครอง", "สื่อการเรียนรู้สำหรับเด็ก", "ข่าวสารและอัปเดตจากคลับ", "คำถามที่พบบ่อย", "FAQ หลัก", "ติดต่อเรา"],
+  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "Parenting Guides", "Kid Learning Materials", "Club News & Updates", "FAQ", "Main FAQ", "Contact Us"],
 };
 
 function extract(html, tag) {
@@ -22,7 +22,7 @@ function normalizeHeader(header) {
 
 function labels(header) {
   return [...header.matchAll(/<a[^>]*data-nav="[^"]+"[^>]*>([\s\S]*?)<\/a>/g)]
-    .map(([, value]) => value.replace(/<[^>]+>/g, "").replace("⌄", "").trim());
+    .map(([, value]) => value.replace(/<[^>]+>/g, "").replaceAll("&amp;", "&").replace("⌄", "").trim());
 }
 
 for (const language of ["th", "en"]) {
@@ -91,6 +91,7 @@ for (const language of ["th", "en"]) {
   const playgroup = pages.find(({ file }) => file === "playgroup.html")?.html ?? "";
   const dinner = pages.find(({ file }) => file === "dinner.html")?.html ?? "";
   const contact = pages.find(({ file }) => file === "contact.html")?.html ?? "";
+  const home = pages.find(({ file }) => file === "index.html")?.html ?? "";
   if (!playgroup.includes(`href="${prefix}/membership"`)) {
     throw new Error(`${language}/playgroup.html pass link does not open Membership`);
   }
@@ -99,6 +100,9 @@ for (const language of ["th", "en"]) {
   }
   if (!contact.includes("data-contact-form") || !contact.includes("https://wa.me/66952413028")) {
     throw new Error(`${language}/contact.html is missing its form or WhatsApp contact`);
+  }
+  if (!home.includes("data-home-blog-grid") || !home.includes(`${prefix}/blog?category=parenting-guides`)) {
+    throw new Error(`${language}/index.html is missing the published-blog feed or category links`);
   }
 }
 

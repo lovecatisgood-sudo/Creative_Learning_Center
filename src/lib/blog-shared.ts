@@ -10,7 +10,7 @@ export type BlogLanguage = "th" | "en";
 
 export const BLOG_CATEGORY_LABELS: Record<BlogCategory, { th: string; en: string }> = {
   "parenting-guides": { th: "คู่มือสำหรับผู้ปกครอง", en: "Parenting Guides" },
-  "kid-learning-material": { th: "สื่อการเรียนรู้สำหรับเด็ก", en: "Kid Learning Material" },
+  "kid-learning-material": { th: "สื่อการเรียนรู้สำหรับเด็ก", en: "Kid Learning Materials" },
   "club-news-updates": { th: "ข่าวสารและอัปเดตจากคลับ", en: "Club News & Updates" },
   faq: { th: "คำถามที่พบบ่อย", en: "FAQ" },
 };

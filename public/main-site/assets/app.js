@@ -119,6 +119,80 @@
     obs.observe(timeline);
   });
 
+  // Keep the static homepages in sync with the published blog database.
+  const homeBlogGrid = qs('[data-home-blog-grid]');
+  if (homeBlogGrid) {
+    const prefix = lang === 'en' ? '/EN' : '';
+    const readLabel = lang === 'th' ? 'อ่านบทความ' : 'Read article';
+    const errorLabel = lang === 'th' ? 'ไม่สามารถโหลดบทความได้ในขณะนี้' : 'Articles could not be loaded right now';
+    const dateFormat = new Intl.DateTimeFormat(lang === 'th' ? 'th-TH' : 'en-GB', { dateStyle: 'long', timeZone: 'Asia/Bangkok' });
+
+    function appendText(parent, tag, value, className) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      element.textContent = value;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function blogCard(post) {
+      const article = document.createElement('article');
+      article.className = 'blog-card';
+      if (post.coverImageUrl) {
+        const imageLink = document.createElement('a');
+        imageLink.className = 'blog-card-image';
+        imageLink.href = `${prefix}/blog/${post.slug}`;
+        const image = document.createElement('img');
+        image.src = post.coverImageUrl;
+        image.alt = post.coverImageAlt || '';
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        imageLink.appendChild(image);
+        article.appendChild(imageLink);
+      } else {
+        const placeholder = document.createElement('div');
+        placeholder.className = `blog-card-placeholder category-${post.category}`;
+        placeholder.setAttribute('aria-hidden', 'true');
+        appendText(placeholder, 'span', post.categoryLabel);
+        article.appendChild(placeholder);
+      }
+
+      const content = document.createElement('div');
+      content.className = 'blog-card-content';
+      const meta = document.createElement('div');
+      meta.className = 'blog-card-meta';
+      appendText(meta, 'span', post.categoryLabel);
+      if (post.publishedAt) {
+        const time = appendText(meta, 'time', dateFormat.format(new Date(post.publishedAt)));
+        time.dateTime = post.publishedAt;
+      }
+      content.appendChild(meta);
+      const heading = document.createElement('h3');
+      const titleLink = appendText(heading, 'a', post.title);
+      titleLink.href = `${prefix}/blog/${post.slug}`;
+      content.appendChild(heading);
+      appendText(content, 'p', post.summary);
+      const readLink = appendText(content, 'a', `${readLabel} →`, 'text-link');
+      readLink.href = `${prefix}/blog/${post.slug}`;
+      article.appendChild(content);
+      return article;
+    }
+
+    fetch(`/api/public/blog?language=${lang}`, { headers: { Accept: 'application/json' } })
+      .then(response => {
+        if (!response.ok) throw new Error(`Blog feed returned ${response.status}`);
+        return response.json();
+      })
+      .then(data => {
+        homeBlogGrid.replaceChildren(...data.posts.map(blogCard));
+      })
+      .catch(error => {
+        console.error(error);
+        const status = qs('[data-home-blog-status]', homeBlogGrid);
+        if (status) status.textContent = errorLabel;
+      });
+  }
+
   // Inside story active state
   const storyStages = qsa('.story-stage');
   const sceneLabel = qs('#scene-label');

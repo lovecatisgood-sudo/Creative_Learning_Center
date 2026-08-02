@@ -388,6 +388,11 @@ html[lang="th"] .eyebrow { text-transform: none; }
 .blog-card h3 a:hover { color:var(--blue-deep); }
 .blog-card p { color:var(--seal-soft); }
 .blog-card .text-link { margin-top:auto; padding-top:8px; }
+.home-blog .blog-list-heading .kicker { margin:12px 0 0; }
+.home-blog-categories { display:flex; flex-wrap:wrap; gap:9px; margin:-12px 0 34px; }
+.home-blog-categories a { min-height:42px; display:inline-flex; align-items:center; padding:8px 14px; border:1px solid var(--border); border-radius:999px; background:var(--paper); text-decoration:none; font-size:14px; font-weight:800; }
+.home-blog-categories a:hover, .home-blog-categories a:focus-visible { background:var(--seal); color:#fff; }
+.home-blog-status { grid-column:1 / -1; margin:0; color:var(--seal-soft); }
 .blog-empty { max-width:720px; padding:34px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
 .blog-empty p { color:var(--seal-soft); }
 .blog-article-header { padding-bottom:72px; background:var(--cream-2); }
