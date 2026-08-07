@@ -11,6 +11,24 @@
   const toast = qs('#site-toast');
   const body = document.body;
 
+  function trackEvent(name, parameters = {}) {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', name, { page_language: body.dataset.language || 'th', ...parameters });
+    }
+  }
+
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href') || '';
+    if (href.startsWith('tel:')) trackEvent('phone_click', { link_url: href });
+    else if (href.includes('wa.me/')) trackEvent('whatsapp_click', { link_url: href });
+    else if (href.includes('maps.')) trackEvent('directions_click', { link_url: href });
+    else if (/\/(playgroup|creative|little-explorer-program|membership)(?:$|[?#])/.test(href)) {
+      trackEvent('program_click', { link_url: href, link_text: (link.textContent || '').trim().slice(0, 100) });
+    }
+  });
+
   const storage = {
     get(type, key) {
       try { return window[type].getItem(key); } catch (_) { return null; }
@@ -292,6 +310,7 @@
       link.href = `/signup?plan=${encodeURIComponent(data.id)}`;
     });
     showToast(lang === 'th' ? `เลือก ${selectedName} แล้ว` : `${selectedName} selected`);
+    trackEvent('select_package', { package_id: data.id, package_name: selectedName, value: Number(data.price) || undefined, currency: 'THB' });
   }
 
   planCards.forEach(card => {
@@ -432,6 +451,7 @@
         });
         const result = await response.json().catch(() => ({}));
         if (!response.ok || !result.ok) throw new Error(result.error || 'request_failed');
+        trackEvent('generate_lead', { lead_type: 'contact_inquiry', service: data.service || 'not_sure' });
         form.reset();
         required.forEach(field => field.setAttribute('aria-invalid', 'false'));
         if (status) status.textContent = lang === 'th'

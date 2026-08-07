@@ -3,10 +3,9 @@ import { join } from "node:path";
 
 const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
-const GOOGLE_ADSENSE_CLIENT_ID = "ca-pub-3624708289866566";
 const expectedNav = {
-  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คู่มือสำหรับผู้ปกครอง", "สื่อการเรียนรู้สำหรับเด็ก", "ข่าวสารและอัปเดตจากคลับ", "คำถามที่พบบ่อย", "FAQ หลัก", "ติดต่อเรา"],
-  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "Parenting Guides", "Kid Learning Materials", "Club News & Updates", "FAQ", "Main FAQ", "Contact Us"],
+  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "ติดต่อเรา"],
+  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Contact Us"],
 };
 
 function extract(html, tag) {
@@ -73,16 +72,7 @@ for (const language of ["th", "en"]) {
     if (page.html.split(analyticsLoader).length !== 2) {
       throw new Error(`${language}/${page.file} contains duplicate Google Analytics tags`);
     }
-    const adsenseLoader = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_ADSENSE_CLIENT_ID}`;
-    if (page.file === "index.html" && !page.html.includes(adsenseLoader)) {
-      throw new Error(`${language}/${page.file} is missing AdSense site verification`);
-    }
-    if (page.file !== "index.html" && page.html.includes(adsenseLoader)) {
-      throw new Error(`${language}/${page.file} unexpectedly contains the AdSense loader`);
-    }
-    if (page.html.split(adsenseLoader).length !== (page.file === "index.html" ? 2 : 1)) {
-      throw new Error(`${language}/${page.file} contains duplicate AdSense tags`);
-    }
+    if (page.html.includes("pagead2.googlesyndication.com")) throw new Error(`${language}/${page.file} unexpectedly contains advertising code`);
     if (page.html.includes("logo-circle.png")) {
       throw new Error(`${language}/${page.file} still references the oversized PNG logo`);
     }
@@ -92,7 +82,7 @@ for (const language of ["th", "en"]) {
       }
     }
     const shouldIndex = !["404.html", "thank-you.html"].includes(page.file);
-    const expectedRobots = shouldIndex ? 'content="index,follow,max-image-preview:large"' : 'content="noindex,nofollow"';
+    const expectedRobots = shouldIndex ? 'content="index,follow,max-image-preview:large"' : 'content="noindex,follow"';
     if (!page.html.includes(expectedRobots)) {
       throw new Error(`${language}/${page.file} has the wrong robots policy`);
     }

@@ -14,10 +14,21 @@ const CANONICAL_TRAILING_SLASH_PATHS = new Set([
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname === "/en" || pathname.startsWith("/en/")) {
-    const url = req.nextUrl.clone();
-    url.pathname = `/EN${pathname.slice(3) || "/"}`;
+  const forwardedHost = req.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+  const host = forwardedHost || req.headers.get("host") || req.nextUrl.host;
+  if (host.toLowerCase() === "www.creative.siamesecat.cafe") {
+    const url = new URL(req.url);
+    url.hostname = "creative.siamesecat.cafe";
+    url.port = "";
+    url.protocol = "https:";
     return NextResponse.redirect(url, 308);
+  }
+
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    const url = new URL(req.url);
+    const suffix = pathname.slice(3).replace(/\/$/, "");
+    url.pathname = `/EN${suffix}`;
+    return NextResponse.redirect(url.toString(), 308);
   }
 
   // Next's automatic slash redirect is disabled so the static game can keep
@@ -28,9 +39,9 @@ export function middleware(req: NextRequest) {
     pathname.endsWith("/") &&
     !CANONICAL_TRAILING_SLASH_PATHS.has(pathname)
   ) {
-    const url = req.nextUrl.clone();
+    const url = new URL(req.url);
     url.pathname = pathname.slice(0, -1);
-    return NextResponse.redirect(url, 308);
+    return NextResponse.redirect(url.toString(), 308);
   }
 
   const requestHeaders = new Headers(req.headers);

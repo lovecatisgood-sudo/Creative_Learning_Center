@@ -9,10 +9,10 @@ export type BlogCategory = (typeof BLOG_CATEGORIES)[number];
 export type BlogLanguage = "th" | "en";
 
 export const BLOG_CATEGORY_LABELS: Record<BlogCategory, { th: string; en: string }> = {
-  "parenting-guides": { th: "คู่มือสำหรับผู้ปกครอง", en: "Parenting Guides" },
-  "kid-learning-material": { th: "สื่อการเรียนรู้สำหรับเด็ก", en: "Kid Learning Materials" },
-  "club-news-updates": { th: "ข่าวสารและอัปเดตจากคลับ", en: "Club News & Updates" },
-  faq: { th: "คำถามที่พบบ่อย", en: "FAQ" },
+  "parenting-guides": { th: "คำถามจากพ่อแม่", en: "Parent Questions" },
+  "kid-learning-material": { th: "การเล่นและพัฒนาการ", en: "Play & Development" },
+  "club-news-updates": { th: "เรื่องจากในคลับ", en: "Inside the Club" },
+  faq: { th: "ชีวิตหลังเลิกเรียน", en: "After School" },
 };
 
 export type BlogPostInput = {

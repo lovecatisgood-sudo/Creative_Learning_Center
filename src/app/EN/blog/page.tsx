@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { BlogIndex } from "@/components/blog/BlogIndex";
 import { SITE_URL } from "@/lib/landing/site";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
-const title = "Family Blog | Siamese Cat Creative Club";
-const description = "Parenting guides, kid learning material, club news and frequently asked questions from Siamese Cat Creative Club.";
+const title = "Bangna Family Guide: Play & After School | Siamese Cat";
+const description = "Practical answers about playgroup, after-school routines, play and family activities around Bangna and Mega Bangna from a local children's space.";
 
 export const metadata: Metadata = {
   title,
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title, description, images: ["/landing/og-siamese-cat-creative-club.jpg"] },
 };
 
-export default function EnglishBlogPage({ searchParams }: { searchParams: { category?: string } }) {
-  return <BlogIndex language="en" category={searchParams.category} />;
+export default async function EnglishBlogPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
+  const { category } = await searchParams;
+  return <BlogIndex language="en" category={category} />;
 }

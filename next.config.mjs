@@ -9,6 +9,8 @@ const mainSiteRoutes = [
   "contact",
   "faq",
   "first-visit",
+  "about",
+  "editorial-process",
   "thank-you",
 ];
 
@@ -28,6 +30,14 @@ const nextConfig = {
       {
         source: "/landing/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/:path*",
+        headers: [
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(self)" },
+        ],
       },
       ...["/terms", "/privacy", "/EN/terms", "/EN/privacy"].map((source) => ({
         source,

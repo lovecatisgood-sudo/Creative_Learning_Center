@@ -96,7 +96,8 @@ function SignupPageContent({ language }: { language: Lang }) {
     const raw = params.get("plan") || params.get("program") || "";
     const mapped = PLAN_QUERY_TO_INTEREST[raw] || raw;
     if (INTEREST_OPTIONS.some(([value]) => value === mapped)) setProgramInterest(mapped);
-  }, []);
+    window.gtag?.("event", "signup_start", { page_language: lang, selected_program: mapped || "not_selected" });
+  }, [lang]);
 
   function setKid(i: number, patch: Partial<ChildForm>) {
     setKids((prev) => prev.map((k, idx) => (idx === i ? { ...k, ...patch } : k)));
@@ -138,6 +139,7 @@ function SignupPageContent({ language }: { language: Lang }) {
     setBusy(false);
     if (res.ok) {
       const data = await res.json();
+      window.gtag?.("event", "signup_complete", { page_language: lang, selected_program: programInterest || "not_selected" });
       // Stash the summary for the success screen (no PII in the URL).
       sessionStorage.setItem(
         "sccc_signup_result",

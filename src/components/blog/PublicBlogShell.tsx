@@ -79,7 +79,7 @@ export function PublicBlogShell({
       <header className="site-header">
         <div className="container header-inner">
           <Link className="brand" href={local("/")} aria-label={language === "th" ? "หน้าหลัก Siamese Cat Creative Club" : "Siamese Cat Creative Club home"}>
-            <span className="brand-mark"><img className="brand-logo-img" src="/main-site/assets/logo-circle-96.webp?v=20260802-footer-v1" width="96" height="96" alt={language === "th" ? "โลโก้ Siamese Cat Creative Club" : "Siamese Cat Creative Club logo"} /></span>
+            <span className="brand-mark"><img className="brand-logo-img" src="/main-site/assets/logo-circle-96.webp?v=20260808-seo-v1" width="96" height="96" alt={language === "th" ? "โลโก้ Siamese Cat Creative Club" : "Siamese Cat Creative Club logo"} /></span>
             <span className="brand-text"><strong>Siamese Cat Creative Club</strong><span>{language === "th" ? "ยืดหยุ่น • สร้างสรรค์ • ใส่ใจ" : "Flexible • Creative • Caring"}</span></span>
           </Link>
           <nav className={`main-nav${menuOpen ? " open" : ""}`} aria-label={language === "th" ? "เมนูหลัก" : "Primary navigation"}>
@@ -108,7 +108,7 @@ export function PublicBlogShell({
         <div className="container">
           <div className="footer-grid">
             <div>
-              <div className="brand" style={{ color: "#fff8ed", marginBottom: 18 }}><span className="brand-mark"><img className="brand-logo-img" src="/main-site/assets/logo-circle-96.webp?v=20260802-footer-v1" width="96" height="96" alt={language === "th" ? "โลโก้ Siamese Cat Creative Club" : "Siamese Cat Creative Club logo"} loading="lazy" /></span><span className="brand-text"><strong>Siamese Cat Creative Club</strong><span style={{ color: "rgba(255,248,237,.7)" }}>{language === "th" ? "ใกล้เมกาบางนา" : "Near Mega Bangna"}</span></span></div>
+              <div className="brand" style={{ color: "#fff8ed", marginBottom: 18 }}><span className="brand-mark"><img className="brand-logo-img" src="/main-site/assets/logo-circle-96.webp?v=20260808-seo-v1" width="96" height="96" alt={language === "th" ? "โลโก้ Siamese Cat Creative Club" : "Siamese Cat Creative Club logo"} loading="lazy" /></span><span className="brand-text"><strong>Siamese Cat Creative Club</strong><span style={{ color: "rgba(255,248,237,.7)" }}>{language === "th" ? "ใกล้เมกาบางนา" : "Near Mega Bangna"}</span></span></div>
               <p style={{ maxWidth: 480, color: "rgba(255,248,237,.76)" }}>{language === "th" ? "สองโปรแกรมกลุ่มเล็กแบบยืดหยุ่นสำหรับเด็ก ทั้งเพลย์กรุ๊ปช่วงกลางวัน และโปรแกรมหลังเลิกเรียน พร้อมการเล่น การบ้าน ความสร้างสรรค์ มื้ออาหาร และการรอรับกลับ" : "Two flexible small-group programs for children: daytime playgroup care and after-school explorer support with play, homework, creativity, meal care and pickup routines."}</p>
               <a className="footer-cafe-link" href="https://siamesecat.cafe/">{language === "th" ? "เยี่ยมชม Siamese Cat Cafe" : "Visit Siamese Cat Cafe"}</a>
             </div>
@@ -131,6 +131,8 @@ export function PublicBlogShell({
                   {BLOG_ITEM.children?.map((child) => <Link className="footer-sublink" key={child.key} href={local(child.href)}>{value(child)}</Link>)}
                   <Link href={local("/contact")}>{language === "th" ? "ติดต่อเรา" : "Contact Us"}</Link>
                   <Link href={local("/first-visit")}>{language === "th" ? "เริ่มครั้งแรก" : "First Session"}</Link>
+                  <Link href={local("/about")}>{language === "th" ? "เกี่ยวกับคลับ" : "About the Club"}</Link>
+                  <Link href={local("/editorial-process")}>{language === "th" ? "กระบวนการจัดทำเนื้อหา" : "Editorial Process"}</Link>
                 </div>
               </div>
             </div>

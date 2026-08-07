@@ -16,12 +16,13 @@ const routes = [
   { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
   { path: "/faq", changeFrequency: "monthly", priority: 0.7 },
   { path: "/first-visit", changeFrequency: "monthly", priority: 0.7 },
-  { path: "/signup", changeFrequency: "yearly", priority: 0.5 },
+  { path: "/about", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/editorial-process", changeFrequency: "yearly", priority: 0.4 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
 ] as const;
 
-const LAST_UPDATED = new Date("2026-07-17T00:00:00+07:00");
+const LAST_UPDATED = new Date("2026-08-08T00:00:00+07:00");
 const GAME_LAST_UPDATED = new Date("2026-08-02T00:00:00+07:00");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

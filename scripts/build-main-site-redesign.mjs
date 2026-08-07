@@ -2,18 +2,17 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = join(process.cwd(), "public/main-site");
-const SHELL_VERSION = "20260802-footer-v1";
+const SHELL_VERSION = "20260808-seo-v1";
 const ASSET_VERSION = SHELL_VERSION;
 const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const CAFE_URL = "https://siamesecat.cafe/";
 const CONTACT_URL = "/contact";
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
-const GOOGLE_ADSENSE_CLIENT_ID = "ca-pub-3624708289866566";
 const BLOG_CATEGORIES = [
-  { key: "parenting-guides", en: "Parenting Guides", th: "คู่มือสำหรับผู้ปกครอง" },
-  { key: "kid-learning-material", en: "Kid Learning Materials", th: "สื่อการเรียนรู้สำหรับเด็ก" },
-  { key: "club-news-updates", en: "Club News & Updates", th: "ข่าวสารและอัปเดตจากคลับ" },
-  { key: "faq", en: "FAQ", th: "คำถามที่พบบ่อย" },
+  { key: "parenting-guides", en: "Parent Questions", th: "คำถามจากพ่อแม่" },
+  { key: "kid-learning-material", en: "Play & Development", th: "การเล่นและพัฒนาการ" },
+  { key: "club-news-updates", en: "Inside the Club", th: "เรื่องจากในคลับ" },
+  { key: "faq", en: "After School", th: "ชีวิตหลังเลิกเรียน" },
 ];
 const PUBLIC_ROUTES = new Set([
   "/",
@@ -27,6 +26,8 @@ const PUBLIC_ROUTES = new Set([
   "/blog",
   "/faq",
   "/first-visit",
+  "/about",
+  "/editorial-process",
   "/thank-you",
   "/signup",
   "/signup/success",
@@ -64,7 +65,11 @@ function localizedRoute(href, language = currentLanguage) {
 function localizeDocumentLinks(html, language) {
   return html
     .replace(/href="([^"]+)"/g, (match, href) => `href="${esc(localizedRoute(href, language))}"`)
-    .replaceAll('href="language-switch', 'href="');
+    .replaceAll('href="language-switch', 'href="')
+    .replaceAll("<h3>Two distinct membership paths</h3>", "<h2>Two distinct membership paths</h2>")
+    .replaceAll("<h3>สมาชิกสองรูปแบบที่แยกชัดเจน</h3>", "<h2>สมาชิกสองรูปแบบที่แยกชัดเจน</h2>")
+    .replaceAll("<h3>First visit choices</h3>", "<h2>First visit choices</h2>")
+    .replaceAll("<h3>ตัวเลือกสำหรับครั้งแรก</h3>", "<h2>ตัวเลือกสำหรับครั้งแรก</h2>");
 }
 
 function attrs(attrs) {
@@ -129,6 +134,9 @@ function structuredData({ canonicalUrl, pageTitle, pageDescription }) {
           name: "Siamese Cat Cafe Co., Ltd. (Thailand)",
           url: CAFE_URL,
         },
+        geo: { "@type": "GeoCoordinates", latitude: 13.6427544, longitude: 100.6691261 },
+        hasMap: MAP_URL,
+        areaServed: ["Bang Kaeo", "Bangna", "Bang Phli", "Samut Prakan"],
       },
       {
         "@type": "WebSite",
@@ -252,6 +260,8 @@ function footer() {
             ${blogNav.children.map((child) => `<a class="footer-sublink" href="${child.href}">${text(child.en, child.th)}</a>`).join("")}
             <a href="${CONTACT_URL}">${text("Contact Us", "ติดต่อเรา")}</a>
             <a href="/first-visit">${text("First Session", "เริ่มครั้งแรก")}</a>
+            <a href="/about">${text("About the Club", "เกี่ยวกับคลับ")}</a>
+            <a href="/editorial-process">${text("Editorial Process", "กระบวนการจัดทำเนื้อหา")}</a>
           </div>
         </div>
       </div>
@@ -267,7 +277,7 @@ function footer() {
 <div id="site-toast" class="toast" role="status" aria-live="polite"></div>`;
 }
 
-function layout({ page, titleEn, titleTh, description, descriptionTh, body, active = page, extraHead = "", indexable = true }) {
+function layout({ page, titleEn, titleTh, description, descriptionTh, body, active = page, extraHead = "", indexable = true, follow = true }) {
   const canonicalPath = page === "home" ? "/" : `/${page}`;
   const localizedPath = localizedRoute(canonicalPath);
   const canonicalUrl = `https://creative.siamesecat.cafe${localizedPath}`;
@@ -282,7 +292,7 @@ function layout({ page, titleEn, titleTh, description, descriptionTh, body, acti
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="${esc(pageDescription)}">
 <meta name="theme-color" content="#fff9f0">
-<meta name="robots" content="${indexable ? "index,follow,max-image-preview:large" : "noindex,nofollow"}">
+<meta name="robots" content="${indexable ? "index,follow,max-image-preview:large" : `noindex,${follow ? "follow" : "nofollow"}`}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Siamese Cat Creative Club">
 <meta property="og:locale" content="${currentLanguage === "th" ? "th_TH" : "en_US"}">
@@ -307,7 +317,7 @@ function layout({ page, titleEn, titleTh, description, descriptionTh, body, acti
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/main-site/assets/styles.css?v=${ASSET_VERSION}">
 ${extraHead}
-${page === "home" ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GOOGLE_ADSENSE_CLIENT_ID}" crossorigin="anonymous"></script>\n` : ""}<script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -359,15 +369,15 @@ const sharedDetails = [
 const home = layout({
   page: "home",
   active: "home",
-  titleEn: "Siamese Cat Creative Club | Playgroup & After-School Care Near Mega Bangna",
-  titleTh: "Siamese Cat Creative Club | เพลย์กรุ๊ปและดูแลหลังเลิกเรียนใกล้เมกาบางนา",
+  titleEn: "Playgroup & After-School Care in Bangna | Siamese Cat",
+  titleTh: "เพลย์กรุ๊ปและดูแลหลังเลิกเรียน บางนา | Siamese Cat",
   description: "Flexible small-group playgroup and after-school care programs near Mega Bangna.",
   descriptionTh: "เพลย์กรุ๊ปและโปรแกรมดูแลหลังเลิกเรียนแบบกลุ่มเล็กที่ยืดหยุ่น ใกล้เมกาบางนา",
   body: `<section class="hero">
   <div class="container hero-grid">
     <div class="hero-copy reveal visible">
       <span class="eyebrow">${text("Playgroup • After school • Meal care", "เพลย์กรุ๊ป • หลังเลิกเรียน • มื้ออาหาร")}</span>
-      <h1>${text("Flexible care for curious children and busy families", "การดูแลแบบยืดหยุ่นสำหรับเด็กช่างสำรวจและครอบครัวที่มีตารางแน่น")}</h1>
+      <h1>${text("Playgroup and after-school care near Mega Bangna", "เพลย์กรุ๊ปและดูแลหลังเลิกเรียน ใกล้เมกาบางนา")}</h1>
       <p class="lead">${text("Choose Little Explorer Playgroup for daytime or weekend care, or After School Explorer for play, homework, creative time, dinner and pickup support after school.", "เลือก Little Explorer Playgroup สำหรับช่วงกลางวันหรือวันหยุด หรือ After School Explorer สำหรับการเล่น การบ้าน เวลาสร้างสรรค์ อาหารเย็น และการรอรับกลับหลังเลิกเรียน")}</p>
       <div class="hero-actions"><a class="btn btn-primary" href="/little-explorer-program">${text("View Packages", "ดูแพ็กเกจ")}</a><a class="btn btn-secondary" href="/playgroup">${text("Little Explorer Playgroup", "Little Explorer Playgroup")}</a><a class="btn btn-secondary" href="/creative">${text("Creative Club", "ครีเอทีฟคลับ")}</a></div>
       <p class="small" style="margin-top:14px">${text("Booking is recommended. Access depends on confirmed capacity and child readiness.", "แนะนำให้จองล่วงหน้า การเข้าใช้ขึ้นอยู่กับจำนวนที่นั่งที่ยืนยันและความพร้อมของเด็ก")}</p>
@@ -411,8 +421,8 @@ function sessionMenuCards(program) {
 
 const playgroup = layout({
   page: "playgroup",
-  titleEn: "Little Explorer Playgroup | Siamese Cat Creative Club",
-  titleTh: "Little Explorer Playgroup | Siamese Cat Creative Club",
+  titleEn: "Playgroup in Bangna Near Mega Bangna | Little Explorer",
+  titleTh: "เพลย์กรุ๊ป บางนา ใกล้ Mega Bangna | Little Explorer",
   description: "Flexible playgroup sessions, full-day childcare support and regular passes near Mega Bangna.",
   descriptionTh: "เพลย์กรุ๊ปแบบยืดหยุ่น การดูแลเต็มวัน และบัตรเหมารอบ ใกล้เมกาบางนา",
   body: `<section class="hero"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">${text("Play • Learn • Create • Explore", "เล่น • เรียนรู้ • สร้างสรรค์ • สำรวจ")}</span><h1>${text("Little Explorer Playgroup", "Little Explorer Playgroup")}</h1><p class="lead">${text("A flexible play and care program for children who love indoor play, creative activities, reading, Lego, outdoor play and supervised animal visits when available.", "โปรแกรมเล่นและดูแลแบบยืดหยุ่นสำหรับเด็กที่ชอบเล่นในร่ม กิจกรรมสร้างสรรค์ อ่านหนังสือ เลโก้ เล่นกลางแจ้ง และพบสัตว์แบบมีทีมงานดูแลเมื่อพร้อม")}</p><div class="hero-actions"><a class="btn btn-primary" href="#sessions">${text("View Sessions", "ดูเซสชัน")}</a><a class="btn btn-secondary" href="/membership">${text("View Passes", "ดูบัตรเหมารอบ")}</a></div><p class="small" style="margin-top:14px">${text("This is supervised small-group playgroup care, not one-on-one nanny service.", "เป็นเพลย์กรุ๊ปแบบกลุ่มเล็กที่มีทีมงานดูแล ไม่ใช่บริการพี่เลี้ยงตัวต่อตัว")}</p></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px">${imageTag({ file: "environment-play-area.webp", className: "environment-photo", alt: text("Kids' play area", "โซนเล่นสำหรับเด็ก"), eager: true })}<div class="caption"><strong>${text("Play, create and explore", "เล่น สร้างสรรค์ และสำรวจ")}</strong></div></div></div></div></section>
@@ -426,8 +436,8 @@ const playgroup = layout({
 
 const creative = layout({
   page: "creative",
-  titleEn: "After School Explorer Program | Siamese Cat Creative Club",
-  titleTh: "โปรแกรม After School Explorer | Siamese Cat Creative Club",
+  titleEn: "After-School Care in Bangna Near Mega Bangna | Siamese Cat",
+  titleTh: "ดูแลเด็กหลังเลิกเรียน บางนา ใกล้ Mega Bangna | Siamese Cat",
   description: "After-school care with play, homework support, creative activities, dinner support and pickup routines.",
   descriptionTh: "ดูแลหลังเลิกเรียน พร้อมการเล่น ดูแลการบ้าน กิจกรรมสร้างสรรค์ มื้อเย็น และรอผู้ปกครองมารับ",
   body: `<section class="hero"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">${text("Play • Homework • Create • Dinner • Pickup", "เล่น • การบ้าน • สร้างสรรค์ • อาหารเย็น • รับกลับ")}</span><h1>${text("After School Explorer Program", "โปรแกรม After School Explorer")}</h1><p class="lead">${text("A safe, fun and meaningful place after school. Children can play, finish simple homework, enjoy creative activities, have dinner and wait comfortably for pickup.", "พื้นที่ปลอดภัย สนุก และมีความหมายหลังเลิกเรียน เด็กได้เล่น ทำการบ้านง่าย ๆ ทำกิจกรรมสร้างสรรค์ ทานอาหารเย็น และรอรับกลับอย่างสบายใจ")}</p><div class="hero-actions"><a class="btn btn-primary" href="${CONTACT_URL}">${text("Contact Us", "ติดต่อเรา")}</a></div><p class="small" style="margin-top:14px">${text("This is supervised small-group after-school support, not private one-on-one nanny service.", "เป็นโปรแกรมหลังเลิกเรียนแบบกลุ่มเล็กที่มีทีมงานดูแล ไม่ใช่บริการพี่เลี้ยงส่วนตัวแบบตัวต่อตัว")}</p></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px">${imageTag({ file: "environment-creative-room.webp", className: "environment-photo", alt: text("The Creative Club activity room", "ห้องกิจกรรมครีเอทีฟคลับ"), eager: true })}<div class="caption"><strong>${text("A real space to settle, focus and create", "พื้นที่จริงสำหรับพัก โฟกัส และสร้างสรรค์")}</strong></div></div></div></div></section>
@@ -440,8 +450,8 @@ const creative = layout({
 
 const littleExplorerProgram = layout({
   page: "little-explorer-program",
-  titleEn: "Little Explorer Program | Siamese Cat Creative Club",
-  titleTh: "โปรแกรม Little Explorer | Siamese Cat Creative Club",
+  titleEn: "Little Explorer Sessions & Prices in Bangna | Siamese Cat",
+  titleTh: "รอบและราคา Little Explorer บางนา | Siamese Cat",
   description: "Little Explorer Program sessions for flexible daytime and weekend playgroup care near Mega Bangna.",
   descriptionTh: "เซสชันโปรแกรม Little Explorer สำหรับเพลย์กรุ๊ปช่วงกลางวันและวันหยุดแบบยืดหยุ่น ใกล้เมกาบางนา",
   body: `<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">${text("Play • Learn • Create • Explore", "เล่น • เรียนรู้ • สร้างสรรค์ • สำรวจ")}</span><h1>${text("Little Explorer Program", "โปรแกรม Little Explorer")}</h1><p class="lead">${text("Flexible Little Explorer sessions for short playtime, half-day care, full-day weekday care and weekend care. Children can play, create, read and explore with small-group supervision.", "เซสชัน Little Explorer แบบยืดหยุ่น ทั้งมาเล่นระยะสั้น ครึ่งวัน เต็มวันธรรมดา และวันหยุด เด็กได้เล่น สร้างสรรค์ อ่านหนังสือ และสำรวจโดยมีทีมงานดูแลแบบกลุ่มเล็ก")}</p><div class="hero-actions"><a class="btn btn-primary" href="${CONTACT_URL}">${text("Contact Us", "ติดต่อเรา")}</a><a class="btn btn-secondary" href="/playgroup">${text("Playgroup Details", "รายละเอียดเพลย์กรุ๊ป")}</a></div></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px">${imageTag({ file: "environment-play-area.webp", className: "environment-photo", alt: text("Children's play area", "โซนเล่นสำหรับเด็ก"), eager: true })}<div class="caption"><strong>${text("Little Explorer sessions for every schedule", "เซสชัน Little Explorer สำหรับหลายรูปแบบตารางเวลา")}</strong></div></div></div></div></section>
@@ -473,8 +483,8 @@ const dinner = layout({
 
 const inside = layout({
   page: "inside",
-  titleEn: "Inside the Club | Siamese Cat Creative Club",
-  titleTh: "ภายในคลับ | Siamese Cat Creative Club",
+  titleEn: "Kids Activity Space Near Mega Bangna | Inside the Club",
+  titleTh: "พื้นที่กิจกรรมเด็ก ใกล้ Mega Bangna | ภายในคลับ",
   description: "Spaces, safety routines and activities for children at Siamese Cat Creative Club.",
   descriptionTh: "พื้นที่ กิจวัตรด้านความปลอดภัย และกิจกรรมสำหรับเด็กที่ Siamese Cat Creative Club",
   body: `<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">${text("Inside the Club", "ภายในคลับ")}</span><h1>${text("A real space for play, focus, meals and pickup", "พื้นที่จริงสำหรับเล่น โฟกัส มื้ออาหาร และรอรับกลับ")}</h1><p class="lead">${text("Children are guided through supervised areas based on the service booked: playroom time, creative tables, quiet focus, meal support and animal visits when available.", "เด็กจะใช้พื้นที่ตามบริการที่จอง เช่น โซนเล่น โต๊ะสร้างสรรค์ มุมโฟกัส ดูแลมื้ออาหาร และพบสัตว์เมื่อพร้อมให้บริการ")}</p><div class="hero-actions"><a class="btn btn-primary" href="/playgroup">${text("Playgroup", "เพลย์กรุ๊ป")}</a><a class="btn btn-secondary" href="/creative">${text("Creative Club", "ครีเอทีฟคลับ")}</a></div></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px">${imageTag({ file: "environment-creative-room.webp", className: "environment-photo", alt: text("Creative room", "ห้องกิจกรรมสร้างสรรค์"), eager: true })}<div class="caption"><strong>${text("Creative and calm activity space", "พื้นที่กิจกรรมสร้างสรรค์และสงบ")}</strong></div></div></div></div></section>
@@ -484,8 +494,8 @@ const inside = layout({
 
 const firstVisit = layout({
   page: "first-visit",
-  titleEn: "First Session | Siamese Cat Creative Club",
-  titleTh: "เริ่มครั้งแรก | Siamese Cat Creative Club",
+  titleEn: "First Playgroup Visit in Bangna | What to Expect",
+  titleTh: "มาเพลย์กรุ๊ปครั้งแรก บางนา | เตรียมตัวอย่างไร",
   description: "Choose a first visit for Little Explorer Playgroup or After School Explorer.",
   descriptionTh: "เลือกการมาใช้บริการครั้งแรกสำหรับ Little Explorer Playgroup หรือ After School Explorer",
   body: `<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">${text("Start here", "เริ่มที่นี่")}</span><h1>${text("Plan your child’s first visit", "วางแผนการมาใช้บริการครั้งแรก")}</h1><p class="lead">${text("Choose a Playgroup first visit for daytime care, or choose After School Explorer for after-school care and pickup support.", "เลือกเพลย์กรุ๊ปสำหรับการดูแลช่วงกลางวัน หรือเลือก After School Explorer สำหรับการดูแลหลังเลิกเรียนและรอรับกลับ")}</p><div class="hero-actions"><a class="btn btn-primary" href="/signup">${text("Register first", "ลงทะเบียนก่อน")}</a><a class="btn btn-secondary" href="/little-explorer-program">${text("Compare packages", "เทียบแพ็กเกจ")}</a></div></div><div class="hero-art reveal visible"><div class="card soft-mint"><h3>${text("First visit choices", "ตัวเลือกสำหรับครั้งแรก")}</h3>${detailsList([text("Playgroup: 1 hour / 199 THB or 2 hours / 300 THB.", "เพลย์กรุ๊ป: 1 ชั่วโมง / 199 บาท หรือ 2 ชั่วโมง / 300 บาท"), text("Playgroup weekday half-day: 4 hours / 599 THB.", "เพลย์กรุ๊ปครึ่งวันธรรมดา: 4 ชั่วโมง / 599 บาท"), text("After School Explorer: 1 hour / 199 THB, 2 hours / 300 THB, or 4-hour half-day / 599 THB.", "After School Explorer: 1 ชั่วโมง / 199 บาท, 2 ชั่วโมง / 300 บาท หรือครึ่งวัน 4 ชั่วโมง / 599 บาท")])}</div></div></div></section>`
@@ -493,8 +503,8 @@ const firstVisit = layout({
 
 const contact = layout({
   page: "contact",
-  titleEn: "Contact Us | Siamese Cat Creative Club",
-  titleTh: "ติดต่อเรา | Siamese Cat Creative Club",
+  titleEn: "Contact & Directions Near Mega Bangna | Siamese Cat",
+  titleTh: "ติดต่อและเส้นทาง ใกล้ Mega Bangna | Siamese Cat",
   description: "Contact Siamese Cat Creative Club about Playgroup, Creative Club, Membership or Meal Plans near Mega Bangna.",
   descriptionTh: "ติดต่อ Siamese Cat Creative Club เพื่อสอบถามเพลย์กรุ๊ป ครีเอทีฟคลับ สมาชิก หรือแผนมื้ออาหาร ใกล้เมกาบางนา",
   body: `<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">${text("Contact Us", "ติดต่อเรา")}</span><h1>${text("Tell us how we can help", "บอกเราได้เลยว่าต้องการให้ช่วยเรื่องใด")}</h1><p class="lead">${text("Send your question or tell us which service you are interested in. Our team will reply using the phone number or email you provide.", "ส่งคำถามหรือแจ้งบริการที่สนใจ ทีมงานจะติดต่อกลับทางเบอร์โทรหรืออีเมลที่คุณให้ไว้")}</p><div class="hero-actions"><a class="btn btn-line" href="https://wa.me/66952413028" target="_blank" rel="noopener">${text("WhatsApp Us", "ติดต่อทาง WhatsApp")}</a><a class="btn btn-secondary" href="mailto:Cafe@siamesecat.cafe">Cafe@siamesecat.cafe</a></div></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px">${imageTag({ file: "environment-shop-front.webp", className: "environment-photo", alt: text("Siamese Cat Creative Club entrance", "ทางเข้า Siamese Cat Creative Club"), eager: true })}<div class="caption"><strong>${text("Near Mega Bangna", "ใกล้เมกาบางนา")}</strong></div></div></div></div></section>
@@ -530,6 +540,29 @@ const faq = layout({
 </div></section>`
 });
 
+const about = layout({
+  page: "about",
+  titleEn: "About Siamese Cat Creative Club in Bangna",
+  titleTh: "เกี่ยวกับ Siamese Cat Creative Club บางนา",
+  description: "Meet the team and purpose behind our supervised playgroup and after-school care space in Bang Kaeo near Mega Bangna.",
+  descriptionTh: "รู้จักทีมงานและแนวคิดของพื้นที่เพลย์กรุ๊ปและดูแลหลังเลิกเรียนแบบกลุ่มเล็กที่บางแก้ว ใกล้เมกาบางนา",
+  body: `<section class="hero" style="min-height:560px"><div class="container hero-grid"><div class="hero-copy reveal visible"><span class="eyebrow">${text("About the club", "เกี่ยวกับคลับ")}</span><h1>${text("A practical place between school, work and home", "พื้นที่ที่ช่วยเชื่อมเวลาระหว่างโรงเรียน งาน และบ้าน")}</h1><p class="lead">${text("Siamese Cat Creative Club operates in Bang Kaeo near Mega Bangna. We provide supervised small-group playgroup and after-school sessions for families who need flexible, meaningful time for their children.", "Siamese Cat Creative Club อยู่ที่บางแก้ว ใกล้เมกาบางนา เราให้บริการเพลย์กรุ๊ปและดูแลหลังเลิกเรียนแบบกลุ่มเล็ก สำหรับครอบครัวที่ต้องการเวลายืดหยุ่นและมีความหมายสำหรับลูก")}</p><div class="hero-actions"><a class="btn btn-primary" href="/inside">${text("See the real space", "ดูพื้นที่จริง")}</a><a class="btn btn-secondary" href="/contact">${text("Contact the team", "ติดต่อทีมงาน")}</a></div></div><div class="hero-art reveal visible"><div class="gallery-item environment-card" style="width:min(100%,520px);min-height:520px">${imageTag({ file: "environment-shop-front.webp", className: "environment-photo", alt: text("Entrance to Siamese Cat Creative Club in Bang Kaeo", "ทางเข้า Siamese Cat Creative Club ที่บางแก้ว"), eager: true })}<div class="caption"><strong>${text("46/27 Bang Na-Trat Frontage Road", "46/27 ถนนคู่ขนานบางนา-ตราด")}</strong></div></div></div></div></section>
+<section class="section fawn"><div class="container"><div class="section-head"><span class="eyebrow">${text("What we do", "สิ่งที่เราทำ")}</span><h2>${text("Two programs with different jobs", "สองโปรแกรมที่ตอบโจทย์คนละแบบ")}</h2></div><div class="grid-2"><article class="card soft-mint"><h3>Little Explorer Playgroup</h3><p>${text("Flexible daytime and weekend sessions from one hour to a full day, with supervised play, creative activities, reading and exploration.", "เซสชันกลางวันและวันหยุดแบบยืดหยุ่น ตั้งแต่หนึ่งชั่วโมงถึงเต็มวัน พร้อมการเล่น กิจกรรมสร้างสรรค์ การอ่าน และการสำรวจแบบมีทีมงานดูแล")}</p><a class="text-link" href="/playgroup">${text("Understand the playgroup", "รู้จักเพลย์กรุ๊ป")} →</a></article><article class="card soft-blue"><h3>After School Explorer</h3><p>${text("A weekday routine for school-age children with time to settle, complete simple homework, play, create, eat and wait for pickup.", "กิจวัตรวันธรรมดาสำหรับเด็กวัยเรียน ให้มีเวลาพัก ทำการบ้านง่าย ๆ เล่น สร้างสรรค์ ทานอาหาร และรอรับกลับ")}</p><a class="text-link" href="/creative">${text("See after-school care", "ดูการดูแลหลังเลิกเรียน")} →</a></article></div></div></section>
+<section class="section paper"><div class="narrow"><div class="section-head"><span class="eyebrow">${text("Clear boundaries", "ขอบเขตที่ชัดเจน")}</span><h2>${text("What families should know", "สิ่งที่ครอบครัวควรรู้")}</h2></div>${detailsList(sharedDetails)}<p class="kicker">${text("We publish operational information from our own service and separate it from claims that require an external expert source. Our editorial process explains how content is researched and reviewed.", "เราเผยแพร่ข้อมูลการให้บริการจากการดำเนินงานจริง และแยกออกจากข้อมูลที่ต้องอ้างอิงผู้เชี่ยวชาญภายนอก อ่านวิธีค้นคว้าและตรวจสอบได้ในหน้ากระบวนการจัดทำเนื้อหา")}</p><a class="btn btn-secondary" href="/editorial-process">${text("Read our editorial process", "อ่านกระบวนการจัดทำเนื้อหา")}</a></div></section>`
+});
+
+const editorialProcess = layout({
+  page: "editorial-process",
+  titleEn: "Editorial Process | Siamese Cat Creative Club",
+  titleTh: "กระบวนการจัดทำเนื้อหา | Siamese Cat Creative Club",
+  description: "How Siamese Cat Creative Club researches, checks, updates and publishes practical content for families around Bangna.",
+  descriptionTh: "วิธีที่ Siamese Cat Creative Club ค้นคว้า ตรวจสอบ อัปเดต และเผยแพร่เนื้อหาสำหรับครอบครัวย่านบางนา",
+  body: `<section class="section fawn"><div class="narrow"><span class="eyebrow">${text("Editorial process", "กระบวนการจัดทำเนื้อหา")}</span><h1>${text("How we create and check our family guides", "เราสร้างและตรวจสอบบทความสำหรับครอบครัวอย่างไร")}</h1><p class="kicker">${text("Our goal is practical accuracy, not publishing volume. Each article should answer a real parent question and add something that comes from our location, service or first-hand operations.", "เป้าหมายคือข้อมูลที่ถูกต้องและนำไปใช้ได้ ไม่ใช่จำนวนบทความ ทุกบทความต้องตอบคำถามจริงของผู้ปกครอง และเพิ่มข้อมูลจากพื้นที่ บริการ หรือการดำเนินงานของเรา")}</p>
+<div class="faq-category"><h2>${text("Before publication", "ก่อนเผยแพร่")}</h2>${detailsList([text("We define the reader, search intent and decision the page should support.", "เราระบุผู้อ่าน เจตนาการค้นหา และการตัดสินใจที่หน้าควรช่วย"), text("Operational statements are checked against current program pages, prices and service terms.", "ข้อมูลการให้บริการตรวจสอบกับหน้าโปรแกรม ราคา และเงื่อนไขปัจจุบัน"), text("Health, development, nutrition and safety claims require an appropriate primary or authoritative source.", "ข้ออ้างด้านสุขภาพ พัฒนาการ โภชนาการ และความปลอดภัยต้องมีแหล่งข้อมูลต้นทางหรือแหล่งที่น่าเชื่อถือ"), text("Thai and English versions are localized for natural reading rather than translated word for word.", "ภาษาไทยและอังกฤษปรับให้เป็นธรรมชาติ ไม่แปลแบบคำต่อคำ"), text("A team member reviews facts, links, headings, images, metadata and the call to action before publishing.", "ทีมงานตรวจข้อเท็จจริง ลิงก์ หัวข้อ รูปภาพ เมทาดาทา และคำเชิญชวนก่อนเผยแพร่")])}</div>
+<div class="faq-category"><h2>${text("Use of AI tools", "การใช้เครื่องมือ AI")}</h2><p>${text("AI tools may assist research organization, drafting, translation and editing. We do not publish unreviewed generated text. Service facts, prices and policies must come from verified project data, and unsupported information is removed or held for verification.", "เครื่องมือ AI อาจช่วยจัดระเบียบงานวิจัย ร่าง แปล และแก้ไข แต่เราไม่เผยแพร่ข้อความที่สร้างขึ้นโดยไม่ตรวจสอบ ข้อมูลบริการ ราคา และนโยบายต้องมาจากข้อมูลโครงการที่ยืนยันแล้ว และข้อมูลที่ไม่มีหลักฐานจะถูกตัดออกหรือพักไว้เพื่อตรวจสอบ")}</p></div>
+<div class="faq-category"><h2>${text("Corrections and updates", "การแก้ไขและอัปเดต")}</h2><p>${text("We update articles when packages, prices, policies or reliable external guidance changes. If you find an error, contact the team with the page URL and the detail that needs review.", "เราอัปเดตบทความเมื่อแพ็กเกจ ราคา นโยบาย หรือคำแนะนำจากแหล่งที่น่าเชื่อถือเปลี่ยน หากพบข้อผิดพลาด โปรดส่ง URL ของหน้าและรายละเอียดที่ต้องตรวจสอบให้ทีมงาน")}</p><a class="btn btn-primary" href="/contact">${text("Report a correction", "แจ้งข้อมูลที่ต้องแก้ไข")}</a></div></div></section>`
+});
+
 const thankYou = layout({
   page: "thank-you",
   indexable: false,
@@ -561,6 +594,8 @@ const pages = {
   "first-visit.html": firstVisit,
   "contact.html": contact,
   "faq.html": faq,
+  "about.html": about,
+  "editorial-process.html": editorialProcess,
   "thank-you.html": thankYou,
   "404.html": notFound,
 };
@@ -577,4 +612,4 @@ for (const language of ["th", "en"]) {
   }
 }
 
-console.log("Wrote 24 localized main-site pages.");
+console.log("Wrote 28 localized main-site pages.");

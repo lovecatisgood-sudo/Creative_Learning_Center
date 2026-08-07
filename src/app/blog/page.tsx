@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { BlogIndex } from "@/components/blog/BlogIndex";
 import { SITE_URL } from "@/lib/landing/site";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
-const title = "บล็อกสำหรับครอบครัว | Siamese Cat Creative Club";
-const description = "คู่มือสำหรับผู้ปกครอง สื่อการเรียนรู้สำหรับเด็ก ข่าวสารจากคลับ และคำถามที่พบบ่อยจาก Siamese Cat Creative Club";
+const title = "เรื่องครอบครัวบางนา การเล่น และหลังเลิกเรียน | Siamese Cat";
+const description = "คำตอบจากพื้นที่จริงเรื่องเพลย์กรุ๊ป ชีวิตหลังเลิกเรียน การเล่น และกิจกรรมสำหรับครอบครัวย่านบางนา ใกล้เมกาบางนา";
 
 export const metadata: Metadata = {
   title,
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title, description, images: ["/landing/og-siamese-cat-creative-club.jpg"] },
 };
 
-export default function ThaiBlogPage({ searchParams }: { searchParams: { category?: string } }) {
-  return <BlogIndex language="th" category={searchParams.category} />;
+export default async function ThaiBlogPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
+  const { category } = await searchParams;
+  return <BlogIndex language="th" category={category} />;
 }

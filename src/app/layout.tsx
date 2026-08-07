@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { SITE_URL } from "@/lib/landing/site";
+import { PublicAnalytics } from "@/components/PublicAnalytics";
 
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 
@@ -44,8 +45,8 @@ export const viewport: Viewport = {
   themeColor: "#5F2B00",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const requestHeaders = headers();
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const requestHeaders = await headers();
   const language = requestHeaders.get("x-sccc-language") === "en" ? "en" : "th";
   const pathname = requestHeaders.get("x-sccc-pathname") ?? "";
   const isCustomerPage = !pathname.startsWith("/admin") && !pathname.startsWith("/api");
@@ -67,6 +68,7 @@ gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
       )}
       <body>
         <LanguageProvider>{children}</LanguageProvider>
+        {isCustomerPage && <PublicAnalytics />}
       </body>
     </html>
   );

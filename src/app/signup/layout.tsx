@@ -7,6 +7,7 @@ export const metadata: Metadata = {
     canonical: "/signup",
     languages: { th: "/signup", en: "/EN/signup", "x-default": "/signup" },
   },
+  robots: { index: false, follow: true },
 };
 
 // The public registration flow keeps the phone-width column the whole POS uses.

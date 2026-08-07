@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { BLOG_CATEGORIES, BLOG_CATEGORY_LABELS, getPublishedBlogPosts, localizedPost, type BlogCategory, type BlogLanguage } from "@/lib/blog";
 import { PublicBlogShell } from "./PublicBlogShell";
 
@@ -11,13 +10,12 @@ export async function BlogIndex({ language, category }: { language: BlogLanguage
 
   return (
     <PublicBlogShell language={language} alternateHref={`${language === "th" ? "/EN" : ""}/blog${selectedCategory ? `?category=${selectedCategory}` : ""}`}>
-      {selectedCategory !== "club-news-updates" && <AdSenseScript />}
       <section className="section blog-hero">
         <div className="container blog-hero-inner">
           <div>
             <span className="eyebrow">{language === "th" ? "บทความจากคลับ" : "From the club"}</span>
-            <h1>{language === "th" ? "บล็อกสำหรับครอบครัว" : "The family blog"}</h1>
-            <p className="kicker">{language === "th" ? "คู่มือสำหรับผู้ปกครอง สื่อการเรียนรู้สำหรับเด็ก ข่าวสารจากคลับ และคำตอบที่ช่วยให้ครอบครัววางแผนได้ง่ายขึ้น" : "Parenting guidance, learning materials, club updates and clear answers to help families plan with confidence."}</p>
+            <h1>{language === "th" ? "เรื่องจริงที่ช่วยให้ชีวิตครอบครัวย่านบางนาง่ายขึ้น" : "Practical ideas for families around Bangna"}</h1>
+            <p className="kicker">{language === "th" ? "คำตอบเรื่องเพลย์กรุ๊ป ชีวิตหลังเลิกเรียน การเล่น และกิจกรรมใกล้เมกาบางนา จากทีมที่ทำงานกับเด็กในพื้นที่จริง" : "Answers about playgroup, after-school routines, play and life near Mega Bangna from a team operating a real children's space."}</p>
           </div>
           <div className="blog-hero-note">
             <strong>Siamese Cat Creative Club</strong>
@@ -55,7 +53,7 @@ export async function BlogIndex({ language, category }: { language: BlogLanguage
                 const content = localizedPost(post, language);
                 return (
                   <article className="blog-card" key={post.id}>
-                    {post.coverImageUrl ? <Link className="blog-card-image" href={`${prefix}/blog/${post.slug}`}><img src={post.coverImageUrl} alt={content.coverImageAlt} loading="lazy" decoding="async" /></Link> : <div className={`blog-card-placeholder category-${post.category}`} aria-hidden="true"><span>{BLOG_CATEGORY_LABELS[post.category][language]}</span></div>}
+                    <Link className="blog-card-image" href={`${prefix}/blog/${post.slug}`}><img src={post.coverImageUrl || (post.category === "kid-learning-material" ? "/landing/kids-art-and-crayon-creative-studio-1200.webp" : "/landing/supervised-indoor-childrens-playroom-bangkok-1200.webp")} alt={content.coverImageAlt || (language === "th" ? "พื้นที่กิจกรรมจริงของ Siamese Cat Creative Club" : "Real Siamese Cat Creative Club activity space")} loading="lazy" decoding="async" /></Link>
                     <div className="blog-card-content">
                       <div className="blog-card-meta"><span>{BLOG_CATEGORY_LABELS[post.category][language]}</span>{post.publishedAt && <time dateTime={post.publishedAt.toISOString()}>{dateFormat.format(post.publishedAt)}</time>}</div>
                       <h3><Link href={`${prefix}/blog/${post.slug}`}>{content.title}</Link></h3>
