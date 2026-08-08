@@ -2,13 +2,11 @@ function enabled(name: string) {
   return String(process.env[name] ?? "").trim().toLowerCase() === "true";
 }
 
-export function getRoyaltyFeatureConfig() {
+export function getGameLoginConfig() {
   const googleClientId = String(process.env.GOOGLE_CLIENT_ID ?? "").trim();
-  const campaignUrl = String(process.env.ROYALTY_CAMPAIGN_URL ?? "").trim();
   return {
-    enabled: enabled("ROYALTY_LEADERBOARD_ENABLED") && Boolean(googleClientId) && Boolean(campaignUrl),
+    enabled: enabled("GAME_LOGIN_ENABLED") && Boolean(googleClientId),
     googleClientId,
-    campaignUrl,
   };
 }
 

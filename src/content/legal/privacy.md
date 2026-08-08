@@ -1,9 +1,9 @@
 # Siamese Cat Creative Club - Privacy Policy
 
 **Effective date:** 17 July 2026<br>
-**Last updated:** 17 July 2026
+**Last updated:** 8 August 2026
 
-This Privacy Policy explains how **Siamese Cat Creative Club** ("the Club," "we," "us," or "our") collects, uses, stores, discloses, and protects personal data relating to parents, guardians, children, authorized pickup persons, emergency contacts, website users, and customers.
+This Privacy Policy explains how **Siamese Cat Creative Club** ("the Club," "we," "us," or "our") collects, uses, stores, discloses, and protects personal data relating to parents, guardians, children, authorized pickup persons, emergency contacts, website and game users, and customers.
 
 This policy is intended to support compliance with Thailand's Personal Data Protection Act B.E. 2562 (2019) ("PDPA") and other applicable laws.
 
@@ -24,6 +24,7 @@ This policy applies to personal data relating to:
 - Emergency contacts and authorized pickup persons
 - Customers purchasing sessions, packages, passes, activities, or meal care
 - Website users and visitors to Club premises
+- Players who choose to create an account for a Club game
 - People communicating with the Club
 - People appearing in CCTV, photographs, or videos where applicable
 
@@ -69,7 +70,13 @@ We may collect order details, payment method, amount, receipt records, payment p
 
 Our hosting and security providers may process device, browser, IP address, request, error, and security-log information. We use Google Analytics to understand website visits and usage, which may process device, browser, approximate location, interaction, referral, and identifier information. The website may also store a language preference and temporary form or selected-program information in the browser.
 
-### 2.7 CCTV and Premises Information
+### 2.7 Game Account and Score Information
+
+Playing the Cat vs Dog game does not require an account. If a player chooses to continue with Google, Google provides the account's stable identifier, display name, verified email address, and profile-picture URL. We do not receive or store the player's Google password.
+
+We also store the player's language, account creation and activity dates, acceptance record, completed-game score, mode, stage, result, and duration. A display name and best score may appear on the recreational leaderboard. Google sign-in does not subscribe the player to marketing.
+
+### 2.8 CCTV and Premises Information
 
 CCTV may record images in appropriate common areas for safety, security, access control, and incident review. CCTV is not placed in toilets, private changing areas, or other areas where privacy is reasonably expected.
 
@@ -81,6 +88,7 @@ We may collect information:
 - Through registration, booking, payment, and service forms
 - During check-in, attendance, pickup, activities, meal care, or customer support
 - Through our website, hosting infrastructure, and security systems
+- From Google Identity Services when a player chooses Google sign-in
 - From Club staff or service providers involved in delivering the requested service
 - From CCTV or incident records at the premises
 
@@ -98,6 +106,7 @@ We may use personal data to:
 - Review allergies, health information, emergency needs, and authorized pickup
 - Respond to questions, complaints, incidents, and privacy requests
 - Maintain operational, security, and audit records
+- Create and secure optional game accounts, save scores, operate the recreational leaderboard, and investigate misuse
 - Comply with legal obligations and establish, exercise, or defend legal claims
 - Send marketing only where consent or another lawful basis applies
 
@@ -146,6 +155,7 @@ We may share personal data only where reasonably necessary with:
 
 - Authorized Club and Siamese Cat Cafe staff supporting registration, activities, meal care, payment, safety, or customer service
 - Website, database, cloud-storage, security, email, and communications providers
+- Google as the identity provider when a player chooses Google sign-in
 - Banks, payment processors, accountants, auditors, insurers, and professional advisers
 - Medical or emergency services
 - Government authorities, courts, regulators, or law-enforcement bodies where legally required
@@ -164,6 +174,7 @@ We retain personal data only for as long as reasonably necessary for service del
 Retention depends on the type of record:
 
 - Registration and child profiles are kept while services remain active and for a reasonable period afterward
+- Game profiles and score history are kept while the account is active and for a reasonable period afterward, unless earlier deletion is available and requested
 - Booking, transaction, receipt, and tax records are kept for applicable legal and accounting periods
 - Incident and safety records are kept as reasonably needed for safeguarding, insurance, or claims
 - CCTV is kept for a limited operational period unless footage is needed for an incident, investigation, or legal matter
@@ -212,7 +223,7 @@ Please describe the request and identify the relevant parent, child, registratio
 
 ## 16. Cookies, Local Storage, and Third-Party Links
 
-The website may use necessary browser storage for language preferences, form flow, security, and selected-program information. Hosting providers may use necessary security technologies to protect the site. Google Analytics may use cookies or similar technologies to measure visits, page usage, referral sources, and website performance. Information handled by Google is subject to Google's own privacy terms and controls.
+The website may use necessary browser storage for language preferences, form flow, security, selected-program information, local game progress, and game-ad cooldown. If a player signs in, we use a secure session cookie to keep the player signed in. Hosting providers may use necessary security technologies to protect the site. Google Analytics may use cookies or similar technologies to measure visits, page usage, referral sources, and website performance. Google Identity Services and Google Analytics handle information under Google's own privacy terms and controls.
 
 The website may link to third-party maps, email, telephone, payment, or social services. Those services apply their own privacy policies.
 
@@ -224,6 +235,6 @@ Material changes may be communicated through an appropriate service channel. Whe
 
 ## 18. Acceptance Records
 
-The registration form asks the parent or legal guardian to confirm that they are authorized to register the child and that they acknowledge this Privacy Policy and the Terms of Service.
+The registration form asks the parent or legal guardian to confirm that they are authorized to register the child and that they acknowledge this Privacy Policy and the Terms of Service. The optional game sign-in screen asks the player to acknowledge the same documents before creating or updating a game account.
 
 The Club may retain the accepted document version, date, time, and related registration record to document that acceptance.

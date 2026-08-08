@@ -10,10 +10,9 @@ export const dynamic = "force-dynamic";
 export default async function GameDashboardPage() {
   await requireManagerPage();
 
-  const [[playerTotal], [runTotal], [marketingTotal], [bestScore], players, recentRuns] = await Promise.all([
+  const [[playerTotal], [runTotal], [bestScore], players, recentRuns] = await Promise.all([
     db.select({ value: count() }).from(gamePlayers),
     db.select({ value: count() }).from(gameRuns),
-    db.select({ value: count() }).from(gamePlayers).where(eq(gamePlayers.marketingConsent, true)),
     db.select({ value: max(gameRuns.score) }).from(gameRuns),
     db
       .select({
@@ -21,7 +20,6 @@ export default async function GameDashboardPage() {
         displayName: gamePlayers.displayName,
         email: gamePlayers.email,
         language: gamePlayers.language,
-        marketingConsent: gamePlayers.marketingConsent,
         createdAt: gamePlayers.createdAt,
         updatedAt: gamePlayers.updatedAt,
       })
@@ -60,14 +58,13 @@ export default async function GameDashboardPage() {
         <div className="mx-auto max-w-6xl space-y-5">
           <header className="flex flex-wrap items-start justify-between gap-3">
             <div><h1 className="text-2xl font-extrabold text-ink">Cat vs Dog players</h1>
-            <p className="mt-1 text-sm text-meta">Registration, email collection and recent game runs</p></div>
+            <p className="mt-1 text-sm text-meta">Google player accounts and recreational game runs</p></div>
             <Link href="/admin/game/ads" className="rounded-xl bg-tealdeep px-4 py-2.5 text-sm font-extrabold text-white shadow-sm">Manage game ads</Link>
           </header>
 
-          <section className="grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Game metrics">
+          <section className="grid grid-cols-2 gap-3 lg:grid-cols-3" aria-label="Game metrics">
             <Metric label="Registered players" value={playerTotal.value.toLocaleString()} />
             <Metric label="Recorded runs" value={runTotal.value.toLocaleString()} />
-            <Metric label="Email opt-ins" value={marketingTotal.value.toLocaleString()} />
             <Metric label="Best score" value={Number(bestScore.value ?? 0).toLocaleString()} />
           </section>
 
@@ -79,7 +76,7 @@ export default async function GameDashboardPage() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] text-left text-sm">
                 <thead className="bg-brown/5 text-xs uppercase tracking-wide text-meta">
-                  <tr><th className="px-4 py-3">Player</th><th className="px-4 py-3">Email</th><th className="px-4 py-3">Language</th><th className="px-4 py-3">Marketing</th><th className="px-4 py-3">Registered</th><th className="px-4 py-3">Last activity</th></tr>
+                  <tr><th className="px-4 py-3">Player</th><th className="px-4 py-3">Email</th><th className="px-4 py-3">Language</th><th className="px-4 py-3">Registered</th><th className="px-4 py-3">Last activity</th></tr>
                 </thead>
                 <tbody className="divide-y divide-line">
                   {players.map((player) => (
@@ -87,12 +84,11 @@ export default async function GameDashboardPage() {
                       <td className="px-4 py-3 font-bold text-ink">{player.displayName}</td>
                       <td className="px-4 py-3"><a className="font-semibold text-tealdeep underline" href={`mailto:${player.email}`}>{player.email}</a></td>
                       <td className="px-4 py-3 uppercase text-meta">{player.language}</td>
-                      <td className="px-4 py-3"><Status yes={player.marketingConsent} yesText="Opted in" noText="No" /></td>
                       <td className="px-4 py-3 text-meta">{formatDate.format(player.createdAt)}</td>
                       <td className="px-4 py-3 text-meta">{formatDate.format(player.updatedAt)}</td>
                     </tr>
                   ))}
-                  {players.length === 0 && <tr><td className="px-4 py-8 text-center text-meta" colSpan={6}>No game registrations yet.</td></tr>}
+                  {players.length === 0 && <tr><td className="px-4 py-8 text-center text-meta" colSpan={5}>No game registrations yet.</td></tr>}
                 </tbody>
               </table>
             </div>

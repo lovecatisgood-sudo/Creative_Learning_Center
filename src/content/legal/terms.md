@@ -1,9 +1,9 @@
 # Siamese Cat Creative Club - Terms of Service
 
 **Effective date:** 17 July 2026<br>
-**Last updated:** 17 July 2026
+**Last updated:** 8 August 2026
 
-These Terms of Service ("Terms") apply to parent registration, bookings, sessions, packages, passes, meal care, activities, and related services provided by **Siamese Cat Creative Club** ("the Club," "we," "us," or "our").
+These Terms of Service ("Terms") apply to parent registration, bookings, sessions, packages, passes, meal care, activities, the Cat vs Dog game, optional game accounts, and related services provided by **Siamese Cat Creative Club** ("the Club," "we," "us," or "our").
 
 By registering a child, requesting a booking, purchasing a service, or accepting these Terms, the parent or legal guardian confirms that they have read and agreed to them.
 
@@ -170,6 +170,14 @@ Personal data is handled according to the **Siamese Cat Creative Club Privacy Po
 
 The Club may send necessary service communications by telephone, email, SMS, or another channel the family uses with the Club. Marketing and promotional media consent are optional.
 
+### Game accounts and recreational scores
+
+The Cat vs Dog game is offered to a general audience and can be played without an account. A player may optionally continue with Google to save a profile and completed-game scores. A person who does not have legal capacity to accept these Terms must use the account feature only with any permission required by applicable law.
+
+Players must not impersonate another person, interfere with the service, automate requests, exploit defects, or submit fabricated scores. The leaderboard is recreational. The Club may review, hide, correct, or remove accounts and scores that appear invalid, abusive, duplicated, automated, or technically corrupted.
+
+A leaderboard position does not create a right to a prize, payment, discount, or other reward. Any future promotion will require separate published campaign rules. Google sign-in is also subject to Google's applicable terms and privacy controls and does not subscribe the player to Club marketing.
+
 ## 21. Changes to Services or Terms
 
 The Club may make reasonable changes to schedules, activities, booking procedures, capacity rules, safety policies, prices for future purchases, or these Terms.
@@ -190,6 +198,6 @@ Email: Cafe@siamesecat.cafe
 
 ## 23. Online Acceptance
 
-The registration form asks the parent or legal guardian to confirm that they are authorized to register the child and that they acknowledge these Terms and the Privacy Policy.
+The registration form asks the parent or legal guardian to confirm that they are authorized to register the child and that they acknowledge these Terms and the Privacy Policy. The optional game sign-in screen asks the player to accept these Terms and acknowledge the Privacy Policy before creating or updating a game account.
 
 The Club may retain the accepted document version, date, time, and related registration record to document that acceptance.

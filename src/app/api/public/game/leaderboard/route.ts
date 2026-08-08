@@ -2,11 +2,11 @@ import { sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { gamePlayers, gameRuns } from "@/db/schema";
-import { getRoyaltyFeatureConfig } from "@/lib/game-features";
+import { getGameLoginConfig } from "@/lib/game-features";
 import { getCurrentGamePlayer } from "@/lib/game-session";
 
 export async function GET() {
-  if (!getRoyaltyFeatureConfig().enabled) {
+  if (!getGameLoginConfig().enabled) {
     return NextResponse.json(
       { leaders: [], personal: null, enabled: false },
       { headers: { "cache-control": "no-store" } },

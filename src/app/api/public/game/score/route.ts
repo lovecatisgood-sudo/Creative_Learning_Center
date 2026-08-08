@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { gamePlayers, gameRuns } from "@/db/schema";
-import { getRoyaltyFeatureConfig } from "@/lib/game-features";
+import { getGameLoginConfig } from "@/lib/game-features";
 import { getCurrentGamePlayer } from "@/lib/game-session";
 
 const MODES = new Set(["easy", "normal", "hard"]);
 
 export async function POST(req: Request) {
-  if (!getRoyaltyFeatureConfig().enabled) {
-    return NextResponse.json({ error: "Royalty scores are not available" }, { status: 503 });
+  if (!getGameLoginConfig().enabled) {
+    return NextResponse.json({ error: "Saved game scores are not available" }, { status: 503 });
   }
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Bad request" }, { status: 400 });

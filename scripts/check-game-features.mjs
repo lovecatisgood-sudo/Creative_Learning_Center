@@ -13,7 +13,8 @@ for (const relative of gameFiles) {
   const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map((match) => match[1]);
   assert.ok(scripts.length > 0, `${relative}: expected an inline game script`);
   for (const source of scripts) new Function(source);
-  assert.match(html, /cfg\.royaltyEnabled/, `${relative}: Royalty UI must honor the server feature flag`);
+  assert.match(html, /cfg\.loginEnabled/, `${relative}: game login UI must honor the server feature flag`);
+  assert.doesNotMatch(html, /Royalty|high-score players get rewards|\u0e23\u0e32\u0e07\u0e27\u0e31\u0e25/, `${relative}: prize-oriented login copy remains`);
   assert.match(html, /HOUSE_AD_BROWSER_COOLDOWN=120000/, `${relative}: browser ad cooldown is missing`);
 }
 
@@ -23,7 +24,8 @@ for (const relative of ["public/game-ads/siamese-cat-cafe-en.mp4", "public/game-
 }
 
 const envExample = await readFile(path.join(root, ".env.example"), "utf8");
-assert.match(envExample, /^ROYALTY_LEADERBOARD_ENABLED=false$/m);
+assert.match(envExample, /^GAME_LOGIN_ENABLED=false$/m);
+assert.doesNotMatch(envExample, /^ROYALTY_/m);
 assert.match(envExample, /^HOUSE_ADS_ENABLED=false$/m);
 
 const adMigration = await readFile(path.join(root, "drizzle/0004_massive_scarecrow.sql"), "utf8");
