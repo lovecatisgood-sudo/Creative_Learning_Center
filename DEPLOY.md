@@ -182,10 +182,18 @@ Print `signup-qr.png` and place it at the entrance.
 cd /var/www/sccc
 git pull
 pnpm install --frozen-lockfile
+pnpm security:check
 pnpm db:migrate        # if the schema changed
 pnpm build
 pm2 reload sccc
 ```
+
+If deploying by upload instead of `git pull`, upload only tracked project files
+from a clean checkout. Do not upload local prototype or preview artifacts such
+as `sandbox/`, `dist-landing/`, `landing-preview.html`, `creative-club-landing.zip`,
+or `sccc-app-prototype-v1.html`; those files are not needed by production and
+can trigger hosting malware heuristics because they contain large inline assets
+and prototype-only scripting.
 
 ## Backups & notes
 

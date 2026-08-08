@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { endSession, SessionError } from "@/lib/sessionOps";
 import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   let adminId: number;
   try {
     adminId = await requireAdminId();
@@ -11,7 +11,8 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     throw e;
   }
 
-  const sessionId = Number(params.id);
+  const { id } = await params;
+  const sessionId = Number(id);
   if (!Number.isInteger(sessionId)) return NextResponse.json({ error: "Bad id" }, { status: 400 });
 
   const body = await req.json().catch(() => ({}));

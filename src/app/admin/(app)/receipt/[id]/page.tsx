@@ -8,12 +8,13 @@ export default async function ReceiptPage({
   params,
   searchParams,
 }: {
-  params: { id: string };
-  searchParams: { justPaid?: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ justPaid?: string }>;
 }) {
-  const id = Number(params.id);
+  const [{ id: rawId }, { justPaid }] = await Promise.all([params, searchParams]);
+  const id = Number(rawId);
   if (!Number.isInteger(id)) notFound();
   const data = await getReceipt(id);
   if (!data) notFound();
-  return <ReceiptClient data={data} justPaid={searchParams.justPaid === "1"} />;
+  return <ReceiptClient data={data} justPaid={justPaid === "1"} />;
 }

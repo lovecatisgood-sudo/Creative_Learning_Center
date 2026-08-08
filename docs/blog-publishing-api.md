@@ -44,7 +44,7 @@ The `category` value must be one of these exact lowercase IDs:
 | API value | English label | Thai label |
 |---|---|---|
 | `parenting-guides` | Parenting Guides | คู่มือสำหรับผู้ปกครอง |
-| `kid-learning-material` | Kid Learning Material | สื่อการเรียนรู้สำหรับเด็ก |
+| `kid-learning-material` | Kid Learning Materials | สื่อการเรียนรู้สำหรับเด็ก |
 | `club-news-updates` | Club News & Updates | ข่าวสารและอัปเดตจากคลับ |
 | `faq` | FAQ | คำถามที่พบบ่อย |
 

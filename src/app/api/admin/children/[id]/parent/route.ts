@@ -12,7 +12,7 @@ import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 //   { mode: "link", linkPhone }
 //     → repoints the child to an existing complete parent matched by phone and
 //       removes the now-orphaned stub parent.
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     await requireAdminId();
   } catch (e) {
@@ -20,7 +20,8 @@ export async function POST(req: Request, { params }: { params: { id: string } })
     throw e;
   }
 
-  const childId = Number(params.id);
+  const { id } = await params;
+  const childId = Number(id);
   if (!Number.isInteger(childId)) return NextResponse.json({ error: "Bad id" }, { status: 400 });
 
   const body = await req.json().catch(() => null);

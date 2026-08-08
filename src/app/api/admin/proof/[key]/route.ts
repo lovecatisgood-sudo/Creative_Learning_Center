@@ -6,7 +6,7 @@ import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 // the public folder).
 export const runtime = "nodejs";
 
-export async function GET(_req: Request, { params }: { params: { key: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ key: string }> }) {
   try {
     await requireAdminId();
   } catch (e) {
@@ -15,7 +15,8 @@ export async function GET(_req: Request, { params }: { params: { key: string } }
   }
 
   try {
-    const { bytes, contentType } = await readProofPhoto(params.key);
+    const { key } = await params;
+    const { bytes, contentType } = await readProofPhoto(key);
     return new NextResponse(bytes as unknown as BodyInit, {
       headers: { "Content-Type": contentType, "Cache-Control": "private, max-age=3600" },
     });

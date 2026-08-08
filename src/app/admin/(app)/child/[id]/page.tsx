@@ -6,8 +6,9 @@ import { ChildClient } from "./ChildClient";
 
 // A3 — Child page. Fetches core + packages + active session + history on the
 // server, then hands off to a client shell for sheets and navigation.
-export default async function ChildPage({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export default async function ChildPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: rawId } = await params;
+  const id = Number(rawId);
   if (!Number.isInteger(id)) notFound();
 
   const child = await getChildCore(id);

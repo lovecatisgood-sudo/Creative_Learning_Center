@@ -9,14 +9,15 @@ import { SellClient } from "./SellClient";
 export default async function SellPage({
   searchParams,
 }: {
-  searchParams: { childId?: string; extendSession?: string };
+  searchParams: Promise<{ childId?: string; extendSession?: string }>;
 }) {
+  const query = await searchParams;
   const catalog = await getCatalog();
   const paymentInfo = getPaymentInfo();
 
-  const childId = Number(searchParams.childId);
-  const extendSessionId = Number.isInteger(Number(searchParams.extendSession))
-    ? Number(searchParams.extendSession)
+  const childId = Number(query.childId);
+  const extendSessionId = Number.isInteger(Number(query.extendSession))
+    ? Number(query.extendSession)
     : null;
   let child = null;
   let hasRunningSession = false;

@@ -9,12 +9,13 @@ export default async function SessionPage({
   params,
   searchParams,
 }: {
-  params: { id: string };
-  searchParams: { started?: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ started?: string }>;
 }) {
-  const id = Number(params.id);
+  const [{ id: rawId }, { started }] = await Promise.all([params, searchParams]);
+  const id = Number(rawId);
   if (!Number.isInteger(id)) notFound();
   const detail = await getSessionDetail(id);
   if (!detail) notFound();
-  return <SessionDetailClient detail={detail} justStarted={searchParams.started === "1"} />;
+  return <SessionDetailClient detail={detail} justStarted={started === "1"} />;
 }
