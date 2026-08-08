@@ -10,6 +10,7 @@ export const MANAGER_PATH_PREFIXES = [
   "/admin/manager",
   "/admin/overview",
   "/admin/inquiries",
+  "/admin/game",
   "/admin/blog",
   "/admin/team",
 ] as const;

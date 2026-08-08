@@ -3,24 +3,26 @@ import { count, eq } from "drizzle-orm";
 import { AppBar } from "@/components/AppBar";
 import { LogoutButton } from "@/components/LogoutButton";
 import { db } from "@/db";
-import { admins, auditLog, blogPosts } from "@/db/schema";
+import { admins, auditLog, blogPosts, gamePlayers } from "@/db/schema";
 import { requireManagerPage } from "@/lib/admin-page-auth";
 import { getOverview } from "@/lib/overview";
 
 export const dynamic = "force-dynamic";
 
 export default async function ManagerDashboardPage() {
-  const [today, [team], [inquiries], [posts], admin] = await Promise.all([
+  const [today, [team], [inquiries], [posts], [players], admin] = await Promise.all([
     getOverview("day", 0),
     db.select({ value: count() }).from(admins).where(eq(admins.active, true)),
     db.select({ value: count() }).from(auditLog).where(eq(auditLog.entity, "contact_inquiry")),
     db.select({ value: count() }).from(blogPosts),
+    db.select({ value: count() }).from(gamePlayers),
     requireManagerPage(),
   ]);
 
   const tools = [
     { href: "/admin/overview", icon: "📊", title: "ยอดขายและรายงาน", subtitle: "Sales & reports", value: `${today.totals.grand.toLocaleString()} ฿` },
     { href: "/admin/inquiries", icon: "✉", title: "คำถามจากเว็บไซต์", subtitle: "Website inquiries", value: String(inquiries.value) },
+    { href: "/admin/game", icon: "🎮", title: "ผู้เล่นเกม", subtitle: "Game players & scores", value: String(players.value) },
     { href: "/admin/blog", icon: "✎", title: "จัดการบล็อก", subtitle: "Blog publishing", value: String(posts.value) },
     { href: "/admin/team", icon: "👥", title: "บัญชีทีมงาน", subtitle: "Staff & manager access", value: String(team.value) },
   ];

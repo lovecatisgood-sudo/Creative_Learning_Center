@@ -198,6 +198,60 @@ export const blogPosts = pgTable("blog_posts", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const gamePlayers = pgTable("game_players", {
+  id: serial("id").primaryKey(),
+  publicId: text("public_id").notNull().unique(),
+  googleSub: text("google_sub").unique(),
+  displayName: text("display_name").notNull(),
+  email: text("email").notNull().unique(),
+  avatarUrl: text("avatar_url").default("").notNull(),
+  language: text("language").default("en").notNull(),
+  marketingConsent: boolean("marketing_consent").default(false).notNull(),
+  termsAcceptedAt: timestamp("terms_accepted_at", { withTimezone: true }).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const gameRuns = pgTable("game_runs", {
+  id: serial("id").primaryKey(),
+  playerId: integer("player_id").references(() => gamePlayers.id).notNull(),
+  score: integer("score").notNull(),
+  mode: text("mode").notNull(),
+  stage: integer("stage").notNull(),
+  victory: boolean("victory").default(false).notNull(),
+  language: text("language").default("en").notNull(),
+  durationSeconds: integer("duration_seconds").default(0).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const houseAdCampaigns = pgTable("house_ad_campaigns", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  category: text("category").default("other").notNull(),
+  language: text("language").default("all").notNull(),
+  videoUrl: text("video_url").default("").notNull(),
+  posterUrl: text("poster_url").default("").notNull(),
+  ctaLabel: text("cta_label").default("").notNull(),
+  destinationUrl: text("destination_url").default("").notNull(),
+  active: boolean("active").default(false).notNull(),
+  startsAt: timestamp("starts_at", { withTimezone: true }),
+  endsAt: timestamp("ends_at", { withTimezone: true }),
+  weight: integer("weight").default(100).notNull(),
+  skipAfterSeconds: integer("skip_after_seconds").default(10).notNull(),
+  cooldownSeconds: integer("cooldown_seconds").default(0).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const houseAdEvents = pgTable("house_ad_events", {
+  id: serial("id").primaryKey(),
+  campaignId: integer("campaign_id").references(() => houseAdCampaigns.id).notNull(),
+  playerId: integer("player_id").references(() => gamePlayers.id),
+  eventType: text("event_type").notNull(),
+  placement: text("placement").default("game_over_restart").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 // ─── Shared types ───────────────────────────────────────────────────────────
 export type ProductGrants = {
   hours?: number;
@@ -215,3 +269,7 @@ export type Order = typeof orders.$inferSelect;
 export type PackageInstance = typeof packageInstances.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type BlogPost = typeof blogPosts.$inferSelect;
+export type GamePlayer = typeof gamePlayers.$inferSelect;
+export type GameRun = typeof gameRuns.$inferSelect;
+export type HouseAdCampaign = typeof houseAdCampaigns.$inferSelect;
+export type HouseAdEvent = typeof houseAdEvents.$inferSelect;

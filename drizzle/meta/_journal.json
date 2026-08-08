@@ -22,6 +22,27 @@
       "when": 1785661299718,
       "tag": "0002_perpetual_quasimodo",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1785751967390,
+      "tag": "0003_nervous_hammerhead",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1785753852201,
+      "tag": "0004_massive_scarecrow",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1786128511364,
+      "tag": "0005_natural_mesmero",
+      "breakpoints": true
     }
   ]
 }
