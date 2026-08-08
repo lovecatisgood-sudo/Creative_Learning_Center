@@ -24,7 +24,7 @@ for (const relative of gameFiles) {
   assert.match(html, /HADVIDEO\.currentTime\/HADVIDEO\.duration/, `${relative}: progress bar does not track playback`);
 }
 
-for (const relative of ["public/game-ads/siamese-cat-cafe-en.mp4", "public/game-ads/creative-club-en.mp4"]) {
+for (const relative of ["public/game-ads/siamese-cat-cafe-en.mp4", "public/game-ads/creative-club-en.mp4", "public/game-ads/creative-club-th.mp4"]) {
   const file = await stat(path.join(root, relative));
   assert.ok(file.isFile() && file.size > 0, `${relative}: missing or empty video`);
 }
