@@ -16,6 +16,11 @@ for (const relative of gameFiles) {
   assert.match(html, /cfg\.loginEnabled/, `${relative}: game login UI must honor the server feature flag`);
   assert.doesNotMatch(html, /Royalty|high-score players get rewards|\u0e23\u0e32\u0e07\u0e27\u0e31\u0e25/, `${relative}: prize-oriented login copy remains`);
   assert.match(html, /HOUSE_AD_BROWSER_COOLDOWN=120000/, `${relative}: browser ad cooldown is missing`);
+  assert.match(html, /class="house-ad-label"[^>]*>Ads<\/span>/, `${relative}: visible ad label is missing`);
+  assert.match(html, /id="house-ad-progress-value"/, `${relative}: ad progress bar is missing`);
+  assert.match(html, /HOUSE_AD_SKIP_SECONDS=10/, `${relative}: ad skip must unlock after 10 seconds`);
+  assert.match(html, /HADSKIP\.hidden=false;HADSKIP\.disabled=false/, `${relative}: top-right skip control does not unlock`);
+  assert.match(html, /HADVIDEO\.currentTime\/HADVIDEO\.duration/, `${relative}: progress bar does not track playback`);
 }
 
 for (const relative of ["public/game-ads/siamese-cat-cafe-en.mp4", "public/game-ads/creative-club-en.mp4"]) {
