@@ -4,8 +4,8 @@ import { join } from "node:path";
 const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 const expectedNav = {
-  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "ติดต่อเรา"],
-  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Contact Us"],
+  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "เครื่องมือฟรี", "ติดต่อเรา"],
+  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Free Tools", "Contact Us"],
 };
 
 function extract(html, tag) {
@@ -27,7 +27,9 @@ function labels(header) {
 
 for (const language of ["th", "en"]) {
   const directory = language === "th" ? ROOT : join(ROOT, "EN");
-  const files = readdirSync(directory).filter((file) => file.endsWith(".html"));
+  // The family-tools generator owns tools.html and validates its different,
+  // intentionally compact shell in check-family-tools.mjs.
+  const files = readdirSync(directory).filter((file) => file.endsWith(".html") && file !== "tools.html");
   const pages = files.map((file) => ({ file, html: readFileSync(join(directory, file), "utf8") }));
   const reference = pages.find(({ file }) => file === "membership.html");
   if (!reference) throw new Error(`Missing ${language} membership reference page`);

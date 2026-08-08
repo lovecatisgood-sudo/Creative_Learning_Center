@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/optimize-main-site-images.mjs && node scripts/build-main-site-redesign.mjs && node scripts/check-main-site-shell.mjs && node scripts/build-legal.mjs",
+    "prebuild": "node scripts/optimize-main-site-images.mjs && node scripts/build-main-site-redesign.mjs && node scripts/build-family-tools.mjs && node scripts/check-main-site-shell.mjs && node scripts/check-family-tools.mjs && node scripts/build-legal.mjs",
     "build": "next build",
     "hostinger:build": "pnpm db:migrate && pnpm build",
     "start": "next start",
@@ -20,6 +20,7 @@
     "images:landing": "node scripts/optimize-landing-images.mjs",
     "legal:build": "node scripts/build-legal.mjs",
     "check:main-site-shell": "node scripts/check-main-site-shell.mjs",
+    "check:family-tools": "node scripts/check-family-tools.mjs",
     "check:game-features": "node scripts/check-game-features.mjs",
     "check:deploy-hygiene": "node scripts/check-deploy-hygiene.mjs",
     "qa:layout": "node scripts/qa-layout.mjs",

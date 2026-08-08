@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const mainSiteRoutes = [
+  "tools",
+  "tools/kids-routine-chart",
   "inside",
   "playgroup",
   "creative",
@@ -29,6 +31,10 @@ const nextConfig = {
       },
       {
         source: "/landing/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/tools/kids-routine-chart/assets/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
       },
       {

@@ -33,6 +33,8 @@ const PUBLIC_ROUTES = new Set([
   "/signup/success",
   "/terms",
   "/privacy",
+  "/tools",
+  "/tools/kids-routine-chart",
 ]);
 
 let currentLanguage = "th";
@@ -197,6 +199,7 @@ const nav = [
       { key: "faq-page", href: "/faq", en: "Main FAQ", th: "FAQ หลัก" },
     ],
   },
+  { key: "tools", href: "/tools", en: "Free Tools", th: "เครื่องมือฟรี" },
 ];
 
 function navItem(item, active) {
@@ -258,6 +261,7 @@ function footer() {
           <div class="footer-links footer-resource-links">
             <a href="${blogNav.href}">${text(blogNav.en, blogNav.th)}</a>
             ${blogNav.children.map((child) => `<a class="footer-sublink" href="${child.href}">${text(child.en, child.th)}</a>`).join("")}
+            <a href="/tools">${text("Free Tools", "เครื่องมือฟรี")}</a>
             <a href="${CONTACT_URL}">${text("Contact Us", "ติดต่อเรา")}</a>
             <a href="/first-visit">${text("First Session", "เริ่มครั้งแรก")}</a>
             <a href="/about">${text("About the Club", "เกี่ยวกับคลับ")}</a>
