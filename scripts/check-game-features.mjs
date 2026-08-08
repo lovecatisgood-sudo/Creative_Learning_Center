@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
+import { Script } from "node:vm";
 
 const root = process.cwd();
 const gameFiles = [
@@ -12,7 +13,7 @@ for (const relative of gameFiles) {
   const html = await readFile(path.join(root, relative), "utf8");
   const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map((match) => match[1]);
   assert.ok(scripts.length > 0, `${relative}: expected an inline game script`);
-  for (const source of scripts) new Function(source);
+  for (const source of scripts) new Script(source);
   assert.match(html, /cfg\.loginEnabled/, `${relative}: game login UI must honor the server feature flag`);
   assert.doesNotMatch(html, /Royalty|high-score players get rewards|\u0e23\u0e32\u0e07\u0e27\u0e31\u0e25/, `${relative}: prize-oriented login copy remains`);
   assert.match(html, /HOUSE_AD_BROWSER_COOLDOWN=120000/, `${relative}: browser ad cooldown is missing`);

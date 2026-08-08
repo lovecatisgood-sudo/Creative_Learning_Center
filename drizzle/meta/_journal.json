@@ -43,6 +43,13 @@
       "when": 1786128511364,
       "tag": "0005_natural_mesmero",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786212618460,
+      "tag": "0006_normalize_seeded_house_ads",
+      "breakpoints": true
     }
   ]
 }
