@@ -81,7 +81,7 @@ if (!polaroidScript.includes("tool_image_loaded") || !polaroidScript.includes("t
   throw new Error("Polaroid tool is missing private-use analytics behavior or still contains an unapproved placeholder");
 }
 const passportScript = readFileSync(join(ROOT, "public", "tools", "cat-passport", "assets", "app.js"), "utf8");
-if (!passportScript.includes("toDataURL") || !passportScript.includes("toBlob") || passportScript.includes("fetch(")) throw new Error("Cat passport is missing local-only export behavior");
+if (!passportScript.includes("toDataURL") || !passportScript.includes("toBlob") || !passportScript.includes("drawSquare") || !passportScript.includes("drawStory") || passportScript.includes("fetch(")) throw new Error("Cat passport is missing local-only export behavior or its format-specific layouts");
 const calculatorScript = readFileSync(join(ROOT, "public", "tools", "cat-food-calculator", "assets", "calculator.js"), "utf8");
 if (!calculatorScript.includes("70 * Math.pow(kg, 0.75)") || !calculatorScript.includes("appetiteWarning") || calculatorScript.includes("fetch(")) throw new Error("Cat food calculator is missing its estimate formula or urgent-care safeguard");
 const reshapeScript = readFileSync(join(ROOT, "public", "tools", "skinny-filter", "assets", "app.js"), "utf8");

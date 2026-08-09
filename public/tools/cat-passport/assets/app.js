@@ -1,1 +1,359 @@
-(()=>{const L=document.documentElement.lang.startsWith('th')?'th':'en',$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],c=$('#cardCanvas'),x=c.getContext('2d'),logo=new Image(),sample=new Image();logo.src=(document.body.dataset.base||'')+'assets/siamese-cat-cafe-logo.png';sample.src=(document.body.dataset.base||'')+'assets/charlie-cat.webp';let photo=null,theme='classic',format='landscape';const tr={en:{passport:'CAT PASSPORT',rep:'SIAMESE CAT REPUBLIC',nick:'Nickname',dob:'DOB',sex:'SEX',breed:'BREED / NATIONALITY',title:'OFFICIAL TITLE',id:'MEOW ID',footer:'Made with Siamese Cat Creative Club',hotel:'SIAMESE CAT HOTEL',guest:'GUEST CARD',guestType:'GUEST TYPE',cafe:'SIAMESE CAT CAFÉ',member:'MEMBER CARD',memberStatus:'MEMBER STATUS',thai:'KINGDOM OF SIAMESE CATS',royal:'ROYAL SIAMESE CERTIFICATE',vintage:'VINTAGE 1986 CAT ID'},th:{passport:'พาสปอร์ตแมว',rep:'สาธารณรัฐแมวสยาม',nick:'ชื่อเล่น',dob:'วันเกิด',sex:'เพศ',breed:'สายพันธุ์ / สัญชาติ',title:'ตำแหน่งอย่างเป็นทางการ',id:'รหัสเหมียว',footer:'สร้างด้วย Siamese Cat Creative Club',hotel:'SIAMESE CAT HOTEL',guest:'บัตรแขกกิตติมศักดิ์',guestType:'ประเภทแขก',cafe:'SIAMESE CAT CAFÉ',member:'บัตรสมาชิก',memberStatus:'สถานะสมาชิก',thai:'ราชอาณาจักรแมวสยาม',royal:'ประกาศนียบัตรราชวงศ์แมวสยาม',vintage:'บัตรแมววินเทจ 1986'}}[L],T={classic:{bg:'#f7efdf',top:'#122a47',a:'#c8a15a',ink:'#172c47'},thai:{bg:'#f5ead4',top:'#7d1719',a:'#d8aa4c',ink:'#501819'},vintage:{bg:'#ead8b2',top:'#194f50',a:'#ce7559',ink:'#3a2b22'},royal:{bg:'#21122f',top:'#34104b',a:'#d5ad52',ink:'#f0d987'},hotel:{bg:'#fbf3e5',top:'#0e4e4b',a:'#c79b47',ink:'#174d4a'},cafe:{bg:'#fff4e4',top:'#8b542e',a:'#70c6a9',ink:'#3c2c22'}};function v(i,d=''){return ($('#'+i)?.value||d).trim()}function rr(a,b,w,h,r,f,s,l=2){x.beginPath();x.roundRect(a,b,w,h,r);if(f){x.fillStyle=f;x.fill()}if(s){x.strokeStyle=s;x.lineWidth=l;x.stroke()}}function tx(t,a,b,z,col,w='700',al='left',fa='Georgia'){x.save();x.fillStyle=col;x.font=`${w} ${z}px ${fa}`;x.textAlign=al;x.fillText(t,a,b);x.restore()}function fit(t,a,b,m,z,col,w='700',al='left',fa='Georgia'){x.save();x.font=`${w} ${z}px ${fa}`;while(x.measureText(t).width>m&&z>18){z-=2;x.font=`${w} ${z}px ${fa}`}x.fillStyle=col;x.textAlign=al;x.fillText(t,a,b);x.restore()}function cover(im,a,b,w,h){let iw=im.naturalWidth||im.width,ih=im.naturalHeight||im.height;if(!iw)return;let s=Math.max(w/iw,h/ih),dw=iw*s,dh=ih*s;x.drawImage(im,a+(w-dw)/2,b+(h-dh)/2,dw,dh)}function draw(){let d=format==='story'?[1080,1920]:format==='square'?[1080,1080]:[1536,1024];c.width=d[0];c.height=d[1];let W=c.width,H=c.height,t=T[theme];x.fillStyle=t.bg;x.fillRect(0,0,W,H);let C=format==='story'?{x:44,y:210,w:W-88,h:1450}:{x:46,y:46,w:W-92,h:H-92};rr(C.x,C.y,C.w,C.h,36,t.bg,t.ink,8);rr(C.x+14,C.y+14,C.w-28,C.h-28,26,null,t.a,4);let hh=theme==='cafe'?190:175;rr(C.x+18,C.y+18,C.w-36,hh,18,t.top);let seal=theme==='cafe'?118:94;if(logo.complete)x.drawImage(logo,C.x+45,C.y+37,seal,seal);let head=tr.rep,sub=tr.passport;if(theme==='thai'){head=tr.thai}else if(theme==='vintage')sub=tr.vintage;else if(theme==='royal')sub=tr.royal;else if(theme==='hotel'){head=tr.hotel;sub=tr.guest}else if(theme==='cafe'){head=tr.cafe;sub=tr.member}fit(head,C.x+C.w/2+60,C.y+95,C.w-340,55,t.a,'800','center');fit(sub,C.x+C.w/2+60,C.y+145,C.w-360,26,theme==='royal'?t.ink:'#fff1d8','700','center','Arial');let px=C.x+62,py=C.y+hh+58,pw=Math.min(C.w*.37,500),ph=Math.min(C.h-hh-150,600);rr(px-12,py-12,pw+24,ph+24,28,'#f6ead6',t.a,5);x.save();x.beginPath();x.roundRect(px,py,pw,ph,20);x.clip();cover(photo||sample,px,py,pw,ph);x.restore();let rx=px+pw+62,rw=C.x+C.w-62-rx,top=py+45;fit(v('name',L==='th'?'ชาร์ลี':'CHARLIE').toUpperCase(),rx,top,rw,76,t.ink,'900');tx(`${tr.nick}: ${v('nickname',L==='th'?'จอมป่วน':'Chaos')}`,rx,top+58,28,t.ink,'600','left','Arial');x.strokeStyle=t.a;x.lineWidth=3;x.beginPath();x.moveTo(rx,top+85);x.lineTo(rx+rw,top+85);x.stroke();let ry=top+145;tx(tr.dob,rx,ry,18,t.a,'800','left','Arial');fit(v('birthday',L==='th'?'17 พ.ค.':'17 MAY'),rx,ry+38,rw*.45,32,t.ink,'800','left','Arial');tx(tr.sex,rx+rw*.53,ry,18,t.a,'800','left','Arial');fit(v('sex',L==='th'?'ชาย':'MALE'),rx+rw*.53,ry+38,rw*.47,32,t.ink,'800','left','Arial');tx(tr.breed,rx,ry+105,18,t.a,'800','left','Arial');fit(v('breed',L==='th'?'วิเชียรมาศ':'Siamese'),rx,ry+143,rw,32,t.ink,'800','left','Arial');let lab=theme==='hotel'?tr.guestType:theme==='cafe'?tr.memberStatus:tr.title;tx(lab,rx,ry+218,18,t.a,'800','left','Arial');rr(rx,ry+238,rw,94,18,theme==='royal'?t.top:'rgba(255,255,255,.5)',t.a,3);fit(v('personality',L==='th'?'มืออาชีพด้านความป่วน':'PROFESSIONAL TROUBLEMAKER').toUpperCase(),rx+rw/2,ry+299,rw-32,40,t.ink,'900','center');tx(tr.id,rx,ry+380,17,t.a,'800','left','Arial');fit(v('catid','MEOW-1986-001'),rx,ry+423,rw,38,t.ink,'900');let fy=C.y+C.h-88;rr(C.x+20,fy,C.w-40,58,16,t.top);fit(tr.footer,C.x+C.w/2,fy+38,C.w-140,23,theme==='cafe'?'#fff5e7':t.a,'700','center')}function go(){requestAnimationFrame(draw)}$$('input').forEach(e=>e.addEventListener('input',go));$$('.theme').forEach(b=>b.onclick=()=>{theme=b.dataset.theme;$$('.theme').forEach(z=>z.classList.toggle('active',z===b));go()});$('#photoInput').onchange=e=>{let f=e.target.files[0];if(!f)return;let im=new Image();im.onload=()=>{photo=im;go()};im.src=URL.createObjectURL(f)};$('#randomTitle').onclick=()=>{let a=L==='th'?['ซีอีโอฝ่ายงีบ','หัวหน้าตรวจขนม','ผู้จัดการกล่องประจำบ้าน','ราชาแห่งโต๊ะกาแฟ','ผู้เชี่ยวชาญซูมมี่ตีสาม']:['CEO OF NAPPING','CHIEF SNACK INSPECTOR','REGIONAL BOX MANAGER','COFFEE TABLE KING','3AM ZOOMIES EXPERT'];$('#personality').value=a[Math.floor(Math.random()*a.length)];go()};$('#newId').onclick=()=>{$('#catid').value='MEOW-1986-'+String(Math.floor(1+Math.random()*9999)).padStart(4,'0');go()};$('#format').onchange=e=>{format=e.target.value;go()};$('#download').onclick=()=>{draw();let a=document.createElement('a');a.download=`siamese-cat-${theme}-${format}.png`;a.href=c.toDataURL('image/png',1);a.click()};$('#share').onclick=async()=>{draw();let b=await new Promise(r=>c.toBlob(r,'image/png',.95)),f=new File([b],'my-cat-passport.png',{type:'image/png'});if(navigator.share&&navigator.canShare?.({files:[f]}))navigator.share({files:[f],title:'My Siamese Cat ID'}).catch(()=>{});else $('#download').click()};logo.onload=sample.onload=go;go()})();
+(() => {
+  const language = document.documentElement.lang.startsWith("th") ? "th" : "en";
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => [...document.querySelectorAll(selector)];
+  const canvas = $("#cardCanvas");
+  const context = canvas.getContext("2d");
+  const logo = new Image();
+  const sample = new Image();
+  const base = document.body.dataset.base || "";
+
+  logo.src = `${base}assets/siamese-cat-cafe-logo.png`;
+  sample.src = `${base}assets/charlie-cat.webp`;
+
+  const copy = {
+    en: {
+      passport: "CAT PASSPORT",
+      republic: "SIAMESE CAT REPUBLIC",
+      nickname: "Nickname",
+      birthday: "DOB",
+      sex: "SEX",
+      breed: "BREED / NATIONALITY",
+      title: "OFFICIAL TITLE",
+      id: "MEOW ID",
+      footer: "Made with Siamese Cat Creative Club",
+      hotel: "SIAMESE CAT HOTEL",
+      guest: "GUEST CARD",
+      guestType: "GUEST TYPE",
+      cafe: "SIAMESE CAT CAFÉ",
+      member: "MEMBER CARD",
+      memberStatus: "MEMBER STATUS",
+      thai: "KINGDOM OF SIAMESE CATS",
+      royal: "ROYAL SIAMESE CERTIFICATE",
+      vintage: "VINTAGE 1986 CAT ID",
+    },
+    th: {
+      passport: "พาสปอร์ตแมว",
+      republic: "สาธารณรัฐแมวสยาม",
+      nickname: "ชื่อเล่น",
+      birthday: "วันเกิด",
+      sex: "เพศ",
+      breed: "สายพันธุ์ / สัญชาติ",
+      title: "ตำแหน่งอย่างเป็นทางการ",
+      id: "รหัสเหมียว",
+      footer: "สร้างด้วย Siamese Cat Creative Club",
+      hotel: "SIAMESE CAT HOTEL",
+      guest: "บัตรแขกกิตติมศักดิ์",
+      guestType: "ประเภทแขก",
+      cafe: "SIAMESE CAT CAFÉ",
+      member: "บัตรสมาชิก",
+      memberStatus: "สถานะสมาชิก",
+      thai: "ราชอาณาจักรแมวสยาม",
+      royal: "ประกาศนียบัตรราชวงศ์แมวสยาม",
+      vintage: "บัตรแมววินเทจ 1986",
+    },
+  }[language];
+
+  const themes = {
+    classic: { background: "#f7efdf", header: "#122a47", accent: "#c8a15a", ink: "#172c47" },
+    thai: { background: "#f5ead4", header: "#7d1719", accent: "#d8aa4c", ink: "#501819" },
+    vintage: { background: "#ead8b2", header: "#194f50", accent: "#ce7559", ink: "#3a2b22" },
+    royal: { background: "#21122f", header: "#34104b", accent: "#d5ad52", ink: "#f0d987" },
+    hotel: { background: "#fbf3e5", header: "#0e4e4b", accent: "#c79b47", ink: "#174d4a" },
+    cafe: { background: "#fff4e4", header: "#8b542e", accent: "#70c6a9", ink: "#3c2c22" },
+  };
+
+  const formats = {
+    landscape: { width: 1536, height: 1024, draw: drawLandscape },
+    square: { width: 1080, height: 1080, draw: drawSquare },
+    story: { width: 1080, height: 1920, draw: drawStory },
+  };
+
+  let selectedPhoto = null;
+  let selectedPhotoUrl = null;
+  let selectedTheme = "classic";
+  const requestedFormat = new URLSearchParams(window.location.search).get("format");
+  let selectedFormat = Object.hasOwn(formats, requestedFormat) ? requestedFormat : "landscape";
+
+  function value(id, fallback = "") {
+    return ($(`#${id}`)?.value || fallback).trim();
+  }
+
+  function catDetails() {
+    const thai = language === "th";
+    return {
+      name: value("name", thai ? "ชาร์ลี" : "CHARLIE"),
+      nickname: value("nickname", thai ? "จอมป่วน" : "Chaos"),
+      birthday: value("birthday", thai ? "17 พ.ค." : "17 MAY"),
+      sex: value("sex", thai ? "ชาย" : "MALE"),
+      breed: value("breed", thai ? "วิเชียรมาศ" : "Siamese"),
+      personality: value("personality", thai ? "มืออาชีพด้านความป่วน" : "PROFESSIONAL TROUBLEMAKER"),
+      id: value("catid", "MEOW-1986-001"),
+    };
+  }
+
+  function heading() {
+    if (selectedTheme === "thai") return { main: copy.thai, sub: copy.passport };
+    if (selectedTheme === "vintage") return { main: copy.republic, sub: copy.vintage };
+    if (selectedTheme === "royal") return { main: copy.republic, sub: copy.royal };
+    if (selectedTheme === "hotel") return { main: copy.hotel, sub: copy.guest };
+    if (selectedTheme === "cafe") return { main: copy.cafe, sub: copy.member };
+    return { main: copy.republic, sub: copy.passport };
+  }
+
+  function roundedRect(x, y, width, height, radius, fill, stroke, strokeWidth = 2) {
+    context.beginPath();
+    context.roundRect(x, y, width, height, radius);
+    if (fill) {
+      context.fillStyle = fill;
+      context.fill();
+    }
+    if (stroke) {
+      context.strokeStyle = stroke;
+      context.lineWidth = strokeWidth;
+      context.stroke();
+    }
+  }
+
+  function text(textValue, x, y, size, color, weight = "700", align = "left", family = "Georgia") {
+    context.save();
+    context.fillStyle = color;
+    context.font = `${weight} ${size}px ${family}`;
+    context.textAlign = align;
+    context.fillText(textValue, x, y);
+    context.restore();
+  }
+
+  function fitText(textValue, x, y, maximumWidth, preferredSize, color, weight = "700", align = "left", family = "Georgia", minimumSize = 15) {
+    context.save();
+    let size = preferredSize;
+    context.font = `${weight} ${size}px ${family}`;
+    while (context.measureText(textValue).width > maximumWidth && size > minimumSize) {
+      size -= 1;
+      context.font = `${weight} ${size}px ${family}`;
+    }
+    context.fillStyle = color;
+    context.textAlign = align;
+    context.fillText(textValue, x, y);
+    context.restore();
+  }
+
+  function cover(image, x, y, width, height) {
+    const sourceWidth = image.naturalWidth || image.width;
+    const sourceHeight = image.naturalHeight || image.height;
+    if (!sourceWidth || !sourceHeight) return;
+    const scale = Math.max(width / sourceWidth, height / sourceHeight);
+    const drawWidth = sourceWidth * scale;
+    const drawHeight = sourceHeight * scale;
+    context.drawImage(image, x + (width - drawWidth) / 2, y + (height - drawHeight) / 2, drawWidth, drawHeight);
+  }
+
+  function drawCardBase(card, palette) {
+    context.fillStyle = palette.background;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    roundedRect(card.x, card.y, card.width, card.height, card.radius, palette.background, palette.ink, 8);
+    roundedRect(card.x + 14, card.y + 14, card.width - 28, card.height - 28, Math.max(18, card.radius - 10), null, palette.accent, 4);
+  }
+
+  function drawHeader(card, headerHeight, palette, headingOffset = 0, logoSize = 94) {
+    const headingText = heading();
+    const headerX = card.x + 18;
+    const headerY = card.y + 18;
+    const headerWidth = card.width - 36;
+    roundedRect(headerX, headerY, headerWidth, headerHeight, 18, palette.header);
+    if (logo.complete && logo.naturalWidth) context.drawImage(logo, card.x + 45, card.y + 37, logoSize, logoSize);
+    const center = card.x + card.width / 2 + headingOffset;
+    fitText(headingText.main, center, card.y + Math.min(headerHeight - 78, 95), card.width - 340, 55, palette.accent, "800", "center");
+    fitText(headingText.sub, center, card.y + Math.min(headerHeight - 28, 145), card.width - 360, 26, selectedTheme === "royal" ? palette.ink : "#fff1d8", "700", "center", "Arial");
+  }
+
+  function drawPhotoFrame(photo, palette) {
+    roundedRect(photo.x - 12, photo.y - 12, photo.width + 24, photo.height + 24, 28, "#f6ead6", palette.accent, 5);
+    context.save();
+    context.beginPath();
+    context.roundRect(photo.x, photo.y, photo.width, photo.height, 20);
+    context.clip();
+    cover(selectedPhoto || sample, photo.x, photo.y, photo.width, photo.height);
+    context.restore();
+  }
+
+  function drawDetailsLeftAligned({ x, y, width, palette, scale = 1 }) {
+    const details = catDetails();
+    const s = scale;
+    const nameSize = 76 * s;
+    const labelSize = Math.max(15, 18 * s);
+    const valueSize = Math.max(22, 32 * s);
+    const smallValueSize = Math.max(20, 28 * s);
+    const titleLabel = selectedTheme === "hotel" ? copy.guestType : selectedTheme === "cafe" ? copy.memberStatus : copy.title;
+
+    fitText(details.name.toUpperCase(), x, y, width, nameSize, palette.ink, "900", "left", "Georgia", Math.max(28, 44 * s));
+    text(`${copy.nickname}: ${details.nickname}`, x, y + 58 * s, Math.max(20, 28 * s), palette.ink, "600", "left", "Arial");
+
+    context.strokeStyle = palette.accent;
+    context.lineWidth = Math.max(2, 3 * s);
+    context.beginPath();
+    context.moveTo(x, y + 85 * s);
+    context.lineTo(x + width, y + 85 * s);
+    context.stroke();
+
+    const row = y + 145 * s;
+    text(copy.birthday, x, row, labelSize, palette.accent, "800", "left", "Arial");
+    fitText(details.birthday, x, row + 38 * s, width * 0.45, valueSize, palette.ink, "800", "left", "Georgia", 18);
+    text(copy.sex, x + width * 0.53, row, labelSize, palette.accent, "800", "left", "Arial");
+    fitText(details.sex, x + width * 0.53, row + 38 * s, width * 0.47, valueSize, palette.ink, "800", "left", "Georgia", 18);
+    text(copy.breed, x, row + 105 * s, labelSize, palette.accent, "800", "left", "Arial");
+    fitText(details.breed, x, row + 143 * s, width, smallValueSize, palette.ink, "800", "left", "Georgia", 18);
+    text(titleLabel, x, row + 218 * s, labelSize, palette.accent, "800", "left", "Arial");
+
+    const boxY = row + 238 * s;
+    const boxHeight = 94 * s;
+    roundedRect(x, boxY, width, boxHeight, 18, selectedTheme === "royal" ? palette.header : "rgba(255,255,255,.5)", palette.accent, 3);
+    fitText(details.personality.toUpperCase(), x + width / 2, boxY + boxHeight * 0.64, width - 28, Math.max(23, 40 * s), palette.ink, "900", "center", "Georgia", 17);
+    text(copy.id, x, row + 380 * s, Math.max(14, 17 * s), palette.accent, "800", "left", "Arial");
+    fitText(details.id, x, row + 423 * s, width, Math.max(22, 38 * s), palette.ink, "900", "left", "Georgia", 18);
+  }
+
+  function drawDetailsCentered({ x, y, width, palette }) {
+    const details = catDetails();
+    const center = x + width / 2;
+    const titleLabel = selectedTheme === "hotel" ? copy.guestType : selectedTheme === "cafe" ? copy.memberStatus : copy.title;
+
+    fitText(details.name.toUpperCase(), center, y, width - 70, 70, palette.ink, "900", "center", "Georgia", 32);
+    text(`${copy.nickname}: ${details.nickname}`, center, y + 52, 27, palette.ink, "600", "center", "Arial");
+    context.strokeStyle = palette.accent;
+    context.lineWidth = 3;
+    context.beginPath();
+    context.moveTo(x + 30, y + 78);
+    context.lineTo(x + width - 30, y + 78);
+    context.stroke();
+
+    const firstColumn = x + 42;
+    const secondColumn = x + width * 0.56;
+    text(copy.birthday, firstColumn, y + 128, 18, palette.accent, "800", "left", "Arial");
+    fitText(details.birthday, firstColumn, y + 165, width * 0.38, 32, palette.ink, "800", "left", "Georgia", 18);
+    text(copy.sex, secondColumn, y + 128, 18, palette.accent, "800", "left", "Arial");
+    fitText(details.sex, secondColumn, y + 165, width * 0.34, 32, palette.ink, "800", "left", "Georgia", 18);
+    text(copy.breed, center, y + 230, 18, palette.accent, "800", "center", "Arial");
+    fitText(details.breed, center, y + 267, width - 90, 32, palette.ink, "800", "center", "Georgia", 18);
+    text(titleLabel, center, y + 322, 18, palette.accent, "800", "center", "Arial");
+    roundedRect(x + 34, y + 342, width - 68, 104, 20, selectedTheme === "royal" ? palette.header : "rgba(255,255,255,.5)", palette.accent, 3);
+    fitText(details.personality.toUpperCase(), center, y + 408, width - 110, 39, palette.ink, "900", "center", "Georgia", 18);
+    text(copy.id, center, y + 498, 17, palette.accent, "800", "center", "Arial");
+    fitText(details.id, center, y + 539, width - 90, 38, palette.ink, "900", "center", "Georgia", 18);
+  }
+
+  function drawFooter(card, palette, height = 58) {
+    const footerY = card.y + card.height - height - 30;
+    roundedRect(card.x + 20, footerY, card.width - 40, height, 16, palette.header);
+    fitText(copy.footer, card.x + card.width / 2, footerY + height * 0.66, card.width - 140, 23, selectedTheme === "cafe" ? "#fff5e7" : palette.accent, "700", "center", "Georgia", 14);
+  }
+
+  function drawLandscape(palette) {
+    const card = { x: 46, y: 46, width: canvas.width - 92, height: canvas.height - 92, radius: 36 };
+    drawCardBase(card, palette);
+    drawHeader(card, 175, palette, 60);
+    const photo = { x: card.x + 62, y: card.y + 233, width: Math.min(card.width * 0.37, 500), height: Math.min(card.height - 325, 600) };
+    drawPhotoFrame(photo, palette);
+    const detailsX = photo.x + photo.width + 62;
+    drawDetailsLeftAligned({ x: detailsX, y: photo.y + 45, width: card.x + card.width - 62 - detailsX, palette });
+    drawFooter(card, palette);
+  }
+
+  function drawSquare(palette) {
+    const card = { x: 46, y: 46, width: canvas.width - 92, height: canvas.height - 92, radius: 34 };
+    drawCardBase(card, palette);
+    drawHeader(card, 154, palette, 42, 84);
+    const photo = { x: card.x + 60, y: card.y + 214, width: 350, height: 455 };
+    drawPhotoFrame(photo, palette);
+    const detailsX = photo.x + photo.width + 50;
+    drawDetailsLeftAligned({ x: detailsX, y: card.y + 248, width: card.x + card.width - 58 - detailsX, palette, scale: 0.92 });
+    drawFooter(card, palette, 54);
+  }
+
+  function drawStory(palette) {
+    const card = { x: 44, y: 58, width: canvas.width - 88, height: canvas.height - 116, radius: 38 };
+    drawCardBase(card, palette);
+    drawHeader(card, 178, palette, 56, 108);
+    const photo = { x: card.x + 62, y: card.y + 252, width: card.width - 124, height: 680 };
+    drawPhotoFrame(photo, palette);
+    drawDetailsCentered({ x: card.x + 54, y: photo.y + photo.height + 112, width: card.width - 108, palette });
+    drawFooter(card, palette, 60);
+  }
+
+  function draw() {
+    const format = formats[selectedFormat];
+    canvas.width = format.width;
+    canvas.height = format.height;
+    format.draw(themes[selectedTheme]);
+  }
+
+  function requestDraw() {
+    requestAnimationFrame(draw);
+  }
+
+  $$("input").forEach((input) => input.addEventListener("input", requestDraw));
+  $$(".theme").forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedTheme = button.dataset.theme;
+      $$(".theme").forEach((themeButton) => themeButton.classList.toggle("active", themeButton === button));
+      requestDraw();
+    });
+  });
+
+  $("#photoInput").addEventListener("change", (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (selectedPhotoUrl) URL.revokeObjectURL(selectedPhotoUrl);
+    selectedPhotoUrl = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      selectedPhoto = image;
+      requestDraw();
+    };
+    image.src = selectedPhotoUrl;
+  });
+
+  $("#randomTitle").addEventListener("click", () => {
+    const titles = language === "th"
+      ? ["ซีอีโอฝ่ายงีบ", "หัวหน้าตรวจขนม", "ผู้จัดการกล่องประจำบ้าน", "ราชาแห่งโต๊ะกาแฟ", "ผู้เชี่ยวชาญซูมมี่ตีสาม"]
+      : ["CEO OF NAPPING", "CHIEF SNACK INSPECTOR", "REGIONAL BOX MANAGER", "COFFEE TABLE KING", "3AM ZOOMIES EXPERT"];
+    $("#personality").value = titles[Math.floor(Math.random() * titles.length)];
+    requestDraw();
+  });
+
+  $("#newId").addEventListener("click", () => {
+    $("#catid").value = `MEOW-1986-${String(Math.floor(1 + Math.random() * 9999)).padStart(4, "0")}`;
+    requestDraw();
+  });
+
+  $("#format").addEventListener("change", (event) => {
+    selectedFormat = event.target.value;
+    requestDraw();
+  });
+
+  $("#format").value = selectedFormat;
+
+  $("#download").addEventListener("click", () => {
+    draw();
+    const link = document.createElement("a");
+    link.download = `siamese-cat-${selectedTheme}-${selectedFormat}.png`;
+    link.href = canvas.toDataURL("image/png", 1);
+    link.click();
+  });
+
+  $("#share").addEventListener("click", async () => {
+    draw();
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png", 0.95));
+    if (!blob) return;
+    const file = new File([blob], "my-cat-passport.png", { type: "image/png" });
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      navigator.share({ files: [file], title: "My Siamese Cat ID" }).catch(() => {});
+    } else {
+      $("#download").click();
+    }
+  });
+
+  logo.onload = requestDraw;
+  sample.onload = requestDraw;
+  requestDraw();
+})();
