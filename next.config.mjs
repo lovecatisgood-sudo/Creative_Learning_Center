@@ -3,6 +3,9 @@ const mainSiteRoutes = [
   "tools",
   "tools/kids-routine-chart",
   "tools/polaroid-generator",
+  "tools/cat-passport",
+  "tools/cat-food-calculator",
+  "tools/skinny-filter",
   "inside",
   "playgroup",
   "creative",
@@ -40,6 +43,22 @@ const nextConfig = {
       },
       {
         source: "/tools/polaroid-generator/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/tools/cat-passport/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/tools/cat-food-calculator/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/tools/skinny-filter/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/tools/shared/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
       },
       {

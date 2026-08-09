@@ -36,6 +36,9 @@ const PUBLIC_ROUTES = new Set([
   "/tools",
   "/tools/kids-routine-chart",
   "/tools/polaroid-generator",
+  "/tools/cat-passport",
+  "/tools/cat-food-calculator",
+  "/tools/skinny-filter",
 ]);
 
 let currentLanguage = "th";
