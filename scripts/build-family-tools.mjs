@@ -32,7 +32,10 @@ function normalizeToolUrls(html) {
   for (const path of [ROUTINE_PATH, POLAROID_PATH]) {
     for (const language of ["th", "en"]) {
       const url = pageUrl(language, path);
-      html = html.replace(new RegExp(`${escapeRegExp(url)}/`, "g"), url);
+      // Normalize a trailing slash only when it terminates the tool URL.  A
+      // broader replacement also strips the slash before `/assets/...`, which
+      // breaks the routine chart's Open Graph and Twitter image URLs.
+      html = html.replace(new RegExp(`${escapeRegExp(url)}/(?=[\"'#\\s<])`, "g"), url);
     }
     html = html
       .replaceAll(`href="${path}/"`, `href="${path}"`)

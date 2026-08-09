@@ -5,6 +5,7 @@ const ROOT = process.cwd();
 const SITE = "https://creative.siamesecat.cafe";
 const ROUTINE_PATH = "/tools/kids-routine-chart";
 const POLAROID_PATH = "/tools/polaroid-generator";
+const ROUTINE_OG_IMAGE = `${SITE}${ROUTINE_PATH}/assets/og-kids-routine-chart.png`;
 
 const pages = [
   { language: "th", file: "tools.html", url: `${SITE}/tools`, counterpart: `${SITE}/EN/tools`, defaultUrl: `${SITE}/tools`, heading: "เครื่องมือออนไลน์เล็ก ๆ สำหรับชีวิตครอบครัว" },
@@ -28,6 +29,9 @@ for (const page of pages) {
   if ((html.match(/<h1\b/g) ?? []).length !== 1 || !html.includes(`<h1>${page.heading}</h1>`)) throw new Error(`${page.file} needs one correct H1`);
   if (html.includes("Siamese Cat Dev") || html.includes("skinny-filter") || html.includes("🐾")) throw new Error(`${page.file} contains an excluded, unrelated, or unapproved placeholder asset`);
   if (html.includes("polaroid-og.webp")) throw new Error(`${page.file} contains an unapproved social image`);
+  if (page.file.includes("kids-routine-chart") && (!html.includes(`property="og:image" content="${ROUTINE_OG_IMAGE}"`) || !html.includes(`name="twitter:image" content="${ROUTINE_OG_IMAGE}"`))) {
+    throw new Error(`${page.file} has an invalid routine-chart social image URL`);
+  }
   if (html.includes('/tools/kids-routine-chart/morning/') || html.includes('/tools/kids-routine-chart/after-school/') || html.includes('/tools/kids-routine-chart/bedtime/') || html.includes('/tools/kids-routine-chart/weekend/')) {
     throw new Error(`${page.file} exposes duplicate preset URLs`);
   }
