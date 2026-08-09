@@ -2,6 +2,7 @@
 const mainSiteRoutes = [
   "tools",
   "tools/kids-routine-chart",
+  "tools/polaroid-generator",
   "inside",
   "playgroup",
   "creative",
@@ -35,6 +36,10 @@ const nextConfig = {
       },
       {
         source: "/tools/kids-routine-chart/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
+      },
+      {
+        source: "/tools/polaroid-generator/assets/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=604800, stale-while-revalidate=2592000" }],
       },
       {

@@ -3,12 +3,16 @@ import { join } from "node:path";
 
 const ROOT = process.cwd();
 const SITE = "https://creative.siamesecat.cafe";
-const TOOL_PATH = "/tools/kids-routine-chart";
+const ROUTINE_PATH = "/tools/kids-routine-chart";
+const POLAROID_PATH = "/tools/polaroid-generator";
+
 const pages = [
-  { language: "th", file: "tools.html", url: `${SITE}/tools`, counterpart: `${SITE}/EN/tools`, defaultUrl: `${SITE}/tools`, heading: "เครื่องมือเล็ก ๆ สำหรับกิจวัตรครอบครัว" },
-  { language: "en", file: "EN/tools.html", url: `${SITE}/EN/tools`, counterpart: `${SITE}/tools`, defaultUrl: `${SITE}/tools`, heading: "A practical tool for family routines" },
-  { language: "th", file: "tools/kids-routine-chart.html", url: `${SITE}${TOOL_PATH}`, counterpart: `${SITE}/EN${TOOL_PATH}`, defaultUrl: `${SITE}${TOOL_PATH}`, heading: "ตารางกิจวัตรประจำวันเด็กแบบภาพ" },
-  { language: "en", file: "EN/tools/kids-routine-chart.html", url: `${SITE}/EN${TOOL_PATH}`, counterpart: `${SITE}${TOOL_PATH}`, defaultUrl: `${SITE}${TOOL_PATH}`, heading: "Kids Visual Routine Chart" },
+  { language: "th", file: "tools.html", url: `${SITE}/tools`, counterpart: `${SITE}/EN/tools`, defaultUrl: `${SITE}/tools`, heading: "เครื่องมือออนไลน์เล็ก ๆ สำหรับชีวิตครอบครัว" },
+  { language: "en", file: "EN/tools.html", url: `${SITE}/EN/tools`, counterpart: `${SITE}/tools`, defaultUrl: `${SITE}/tools`, heading: "Practical browser tools for family life" },
+  { language: "th", file: "tools/kids-routine-chart.html", url: `${SITE}${ROUTINE_PATH}`, counterpart: `${SITE}/EN${ROUTINE_PATH}`, defaultUrl: `${SITE}${ROUTINE_PATH}`, heading: "ตารางกิจวัตรประจำวันเด็กแบบภาพ" },
+  { language: "en", file: "EN/tools/kids-routine-chart.html", url: `${SITE}/EN${ROUTINE_PATH}`, counterpart: `${SITE}${ROUTINE_PATH}`, defaultUrl: `${SITE}${ROUTINE_PATH}`, heading: "Kids Visual Routine Chart" },
+  { language: "th", file: "tools/polaroid-generator.html", url: `${SITE}${POLAROID_PATH}`, counterpart: `${SITE}/EN${POLAROID_PATH}`, defaultUrl: `${SITE}${POLAROID_PATH}`, heading: "สร้างรูปโพลารอยด์สวย ๆ ในไม่กี่วินาที" },
+  { language: "en", file: "EN/tools/polaroid-generator.html", url: `${SITE}/EN${POLAROID_PATH}`, counterpart: `${SITE}${POLAROID_PATH}`, defaultUrl: `${SITE}${POLAROID_PATH}`, heading: "Make a beautiful Polaroid photo in seconds" },
 ];
 
 for (const page of pages) {
@@ -22,7 +26,8 @@ for (const page of pages) {
   if (!html.includes(`hreflang="x-default" href="${page.defaultUrl}"`)) throw new Error(`${page.file} is missing its x-default`);
   if (!html.includes('content="index,follow,max-image-preview:large')) throw new Error(`${page.file} has the wrong robots policy`);
   if ((html.match(/<h1\b/g) ?? []).length !== 1 || !html.includes(`<h1>${page.heading}</h1>`)) throw new Error(`${page.file} needs one correct H1`);
-  if (html.includes("Siamese Cat Dev") || html.includes("skinny-filter")) throw new Error(`${page.file} contains an excluded or unrelated tool`);
+  if (html.includes("Siamese Cat Dev") || html.includes("skinny-filter") || html.includes("🐾")) throw new Error(`${page.file} contains an excluded, unrelated, or unapproved placeholder asset`);
+  if (html.includes("polaroid-og.webp")) throw new Error(`${page.file} contains an unapproved social image`);
   if (html.includes('/tools/kids-routine-chart/morning/') || html.includes('/tools/kids-routine-chart/after-school/') || html.includes('/tools/kids-routine-chart/bedtime/') || html.includes('/tools/kids-routine-chart/weekend/')) {
     throw new Error(`${page.file} exposes duplicate preset URLs`);
   }
@@ -38,9 +43,17 @@ for (const page of pages) {
 for (const file of ["app.js", "styles.css", "creative-club-logo.webp", "creative-club-play-area.webp", "siamese-cat-cafe-logo.png", "og-kids-routine-chart.png", "icon-32.png", "icon-192.png"]) {
   if (!existsSync(join(ROOT, "public", "tools", "kids-routine-chart", "assets", file))) throw new Error(`Missing routine-tool asset: ${file}`);
 }
+for (const file of ["app.js", "site.css", "logo-circle.webp"]) {
+  if (!existsSync(join(ROOT, "public", "tools", "polaroid-generator", "assets", file))) throw new Error(`Missing Polaroid-tool asset: ${file}`);
+}
 
-const script = readFileSync(join(ROOT, "public", "tools", "kids-routine-chart", "assets", "app.js"), "utf8");
-if (!script.includes("tool_export_png") || !script.includes("tool_print") || !script.includes("new URLSearchParams")) {
+const routineScript = readFileSync(join(ROOT, "public", "tools", "kids-routine-chart", "assets", "app.js"), "utf8");
+if (!routineScript.includes("tool_export_png") || !routineScript.includes("tool_print") || !routineScript.includes("new URLSearchParams")) {
   throw new Error("Routine tool is missing its export, print, or preset analytics behavior");
 }
-console.log("family-tools → bilingual metadata, assets, preset consolidation, and analytics verified");
+const polaroidScript = readFileSync(join(ROOT, "public", "tools", "polaroid-generator", "assets", "app.js"), "utf8");
+if (!polaroidScript.includes("tool_image_loaded") || !polaroidScript.includes("tool_export_png") || polaroidScript.includes("🐾")) {
+  throw new Error("Polaroid tool is missing private-use analytics behavior or still contains an unapproved placeholder");
+}
+
+console.log("family-tools → bilingual metadata, assets, privacy behavior, and analytics verified");

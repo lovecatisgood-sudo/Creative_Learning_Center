@@ -35,6 +35,7 @@ const PUBLIC_ROUTES = new Set([
   "/privacy",
   "/tools",
   "/tools/kids-routine-chart",
+  "/tools/polaroid-generator",
 ]);
 
 let currentLanguage = "th";

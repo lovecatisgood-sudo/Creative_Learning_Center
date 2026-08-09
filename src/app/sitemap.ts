@@ -8,6 +8,7 @@ const routes = [
   { path: "", changeFrequency: "monthly", priority: 1 },
   { path: "/tools", changeFrequency: "monthly", priority: 0.6 },
   { path: "/tools/kids-routine-chart", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/tools/polaroid-generator", changeFrequency: "monthly", priority: 0.6 },
   { path: "/inside", changeFrequency: "monthly", priority: 0.8 },
   { path: "/playgroup", changeFrequency: "monthly", priority: 0.8 },
   { path: "/creative", changeFrequency: "monthly", priority: 0.8 },
