@@ -93,9 +93,13 @@
     <div class="house-ad-actions"><a id="house-ad-cta" href="#" target="_blank" rel="noopener" hidden>Learn more</a></div>
   </div>
 </div>
+<script src="../assets/js/vendor/gameanalytics-5.0.0.min.js"></script>
+<script src="../assets/js/gameanalytics-config.js"></script>
+<script src="../assets/js/gameanalytics-web.js"></script>
 <script>
 // ============== Siamese Cat vs Dog 1986 — vertical slice v2 ==============
 (function(){
+const AN=window.SCVDAnalytics||{gameStart:function(){},gameOver:function(){},difficultySelected:function(){}};
 const REG=document.getElementById('game-registration'),REGERR=document.getElementById('registration-error'),REGSKIP=document.getElementById('registration-skip'),GAMESCORE=document.getElementById('royalty-score'),GOOGLEBTN=document.getElementById('google-signin-button');
 let PLAYER_SESSION={authenticated:false,player:null},GAME_CONFIG=null,GOOGLE_READY=null;
 const SESSION_READY=fetch('/api/public/game/auth/session',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){PLAYER_SESSION=d||PLAYER_SESSION;if(d&&d.player&&d.player.publicId){try{localStorage.setItem('scvd_pid',d.player.publicId);}catch(e){}}return PLAYER_SESSION;}).catch(function(){return PLAYER_SESSION;});
@@ -372,6 +376,7 @@ function newGame(){
     playerId: G&&G.playerId?G.playerId:lsPid(),
   };
   if(__DEVSPECIAL||__DEVBOSS||__DEVWONDER){ const _pk=__DEVWONDER?'wonder':'mech'; G.special={...PORTALS[_pk],bonus:0,nukesLeft:1,phase:'wave1'}; G.special.nukeTimer=rnd(4,7); G.bombs=5; G.portalsUsed[_pk]=true; if(__DEVBOSS)G._devboss=true; }
+  AN.gameStart(_modeKey||'normal');
 }
 function makeClouds(){const a=[];for(let i=0;i<6;i++)a.push({x:Math.random()*W,y:Math.random()*H,w:60+Math.random()*60,s:6+Math.random()*8,a:0.05+Math.random()*0.06});return a;}
 function makeStars(){const a=[];for(let i=0;i<40;i++)a.push({x:Math.random()*W,y:Math.random()*H*0.55,r:Math.random()<0.8?1:2,tw:Math.random()*Math.PI*2});return a;}
@@ -419,7 +424,7 @@ const MODES={
 };
 let _modeKey=null;
 function MD(){ if(!_modeKey){ try{_modeKey=localStorage.getItem('scvd_mode')||'normal';}catch(e){_modeKey='normal';} if(!MODES[_modeKey])_modeKey='normal'; } return MODES[_modeKey]; }
-function setMode(k){ if(!MODES[k])return; _modeKey=k; try{localStorage.setItem('scvd_mode',k);}catch(e){} }
+function setMode(k){ if(!MODES[k])return; _modeKey=k; try{localStorage.setItem('scvd_mode',k);}catch(e){} AN.difficultySelected(k); }
 const MODEBTN={y:458,w:142,h:62,cx:[88,240,392],keys:['easy','normal','hard']};
 function modeTapKey(lx,ly){ const off=(H-720)/2; if(ly-off<MODEBTN.y-6||ly-off>MODEBTN.y+MODEBTN.h+6)return null; for(let i=0;i<3;i++){ if(Math.abs(lx-MODEBTN.cx[i])<MODEBTN.w/2+6)return MODEBTN.keys[i]; } return null; }
 const CAMP={delay:1.5,max:45}; /* camping fix: each dog leaked while the cat is parked low delays the giant (cap/stage) */
@@ -1121,7 +1126,7 @@ function boom(x,y,scale,col){ scale=scale||1; col=col||'#FFD27A';
   const n=Math.round(7*scale); for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,sp=rnd(70,220)*scale;G.fx.push({type:'spark',x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:rnd(0.2,0.45),max:0.45,col:i%2?'#FF8A1E':'#FFD23F'});} }
 function blockShield(){ const cx=G.cat.x, cy=G.cat.y; G.shake=Math.min(G.shake+6,14); G.fx.push({type:'ring',x:cx,y:cy,r:18,vr:440,life:0.4,max:0.4,col:'#9FE7FF'}); for(let i=0;i<10;i++){const a=Math.random()*Math.PI*2,sp=rnd(120,300);G.fx.push({type:'spark',x:cx,y:cy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:rnd(0.25,0.5),max:0.5,col:'#CFF6FF'});} floatText(cx,cy-30,'BLOCK!','#9FE7FF'); blip(1320,0.10,'triangle',0.05,1760); blip(660,0.10,'square',0.03,990); noise(0.06,0.04); }
 function hurt(dmg){ if(G.iframes>0)return; if(G.shield>0){ G.shield--; G.iframes=0.7; blockShield(); return; } dmg=(dmg||10)*MD().dmg; G.hp=Math.max(0,G.hp-dmg); G.iframes=0.7; G.mercy=3.0; G.combo=Math.floor(G.combo/2);G.mult=clamp(1+Math.floor(G.combo/10)*0.5,1,5);G.comboTimer=G.combo>0?2.0:0;   /* v2: combo BLEEDS (halves) on a hit instead of zeroing */ G.stageHits++; G.shake=Math.min(G.shake+10+dmg*0.4,20); SFX.hurt(); SFX.pain(); G.hurtFlash=0.25; if(G.hp<=0){ if(G.lives>0){ G.lives--; G.hp=G.maxhp; G.iframes=2.0; G.slowT=0; G.ebullets=[]; G.hazards=[]; G.bombFlash=Math.max(G.bombFlash,0.8); G.hitstop=Math.max(G.hitstop,0.3); G.shake=Math.min(G.shake+16,26); floatText(G.cat.x,G.cat.y-30,'EXTRA LIFE!','#FF9ECF'); SFX.levelup(); } else gameOver(); } }
-function gameOver(){ state=STATE.OVER; G_overAt=performance.now(); MUSIC.stop(); SFX.alarmStop(); MUSIC.duck(1); var prev=lsBest(); G.prevBest=prev; G.newBest=G.score>prev; if(G.newBest){G.best=G.score;lsSet('scvd_best',G.score);} G.thanksPage=true;G.runSaved=false;G.royalBest=0;G.royalRank=0; SFX.over(); if(G.newBest){ setTimeout(function(){ try{SFX.cheer('S');}catch(e){} },420); } prepareHouseAd(); console.log('SCORE PAYLOAD',JSON.stringify({player_id:G.playerId,points:G.score})); }
+function gameOver(){ state=STATE.OVER; G_overAt=performance.now(); MUSIC.stop(); SFX.alarmStop(); MUSIC.duck(1); var prev=lsBest(); G.prevBest=prev; G.newBest=G.score>prev; if(G.newBest){G.best=G.score;lsSet('scvd_best',G.score);} G.thanksPage=true;G.runSaved=false;G.royalBest=0;G.royalRank=0; SFX.over(); if(G.newBest){ setTimeout(function(){ try{SFX.cheer('S');}catch(e){} },420); } if(!G._analyticsEnded){ G._analyticsEnded=true; AN.gameOver({mode:_modeKey||'normal',score:G.score,stage:G.stage,victory:!!G.victory}); } prepareHouseAd(); console.log('SCORE PAYLOAD',JSON.stringify({player_id:G.playerId,points:G.score})); }
 
 function enterSpecial(type){ G.special={...PORTALS[type],bonus:0}; G.portalsUsed[type]=true; G.nuke=null; G.bombs=5; G.poison=0; G.poisonPrevShots=0; G.poisonPrevStream=0; G.farts.length=0; G.special.nukesLeft=1; G.special.nukeTimer=rnd(4,7); G.special.phase='wave1'; G.shots=2; G.split=0; G.missile=0; G.boost=0; G.size=1; G.missiles=G.missiles.filter(function(m){return m.stream||m.banh;}); G.returnStage=G.stage+1; G.enemies=[];G.ebullets=[];G.hazards=[];G.minis=[];G.boss=null;G.beam=null;G.wbeams=[]; G.stageStart=G.t; G.giantOut=false; G.approaching=false; G.bossApproach=0; G.stageHits=0; G.stageComboPeak=0; G.campT=0; G.campN=0; G.spawnBudget=6; G.warn=2.0; G.warnText=(G.special.world==='wonder')?'ENTERING WONDERLAND':'ENTERING MECH WORLD'; SFX.bossWarn(); MUSIC.duck(1); }
 // ---- update ----

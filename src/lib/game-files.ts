@@ -9,6 +9,7 @@ import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
 const ROOT = path.join(process.cwd(), "game-assets");
+const GAME_ANALYTICS_CONFIG = "cat-vs-dog/assets/js/gameanalytics-config.js";
 
 const TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -26,6 +27,24 @@ const TYPES: Record<string, string> = {
 };
 
 export function serveGameFile(segments: string[]): Response {
+  if (segments.join("/") === GAME_ANALYTICS_CONFIG) {
+    const gameKey = process.env.GAMEANALYTICS_GAME_KEY?.trim() ?? "";
+    const secretKey = process.env.GAMEANALYTICS_SECRET_KEY?.trim() ?? "";
+    const valid = /^[a-f0-9]{32}$/i.test(gameKey) && /^[a-f0-9]{40}$/i.test(secretKey);
+    const config = valid
+      ? { gameKey, secretKey, build: process.env.GAMEANALYTICS_BUILD?.trim() || "web-1.0.0" }
+      : null;
+    return new Response(
+      `window.SCVD_GAMEANALYTICS_CONFIG = ${JSON.stringify(config)};\n`,
+      {
+        headers: {
+          "content-type": TYPES[".js"],
+          "cache-control": "private, no-store, max-age=0",
+        },
+      },
+    );
+  }
+
   // Resolve inside ROOT only — reject any traversal attempt.
   const target = path.resolve(ROOT, ...segments);
   if (target !== ROOT && !target.startsWith(ROOT + path.sep)) {

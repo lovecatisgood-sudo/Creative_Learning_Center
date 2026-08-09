@@ -22,6 +22,12 @@ for (const relative of gameFiles) {
   assert.match(html, /HOUSE_AD_SKIP_SECONDS=10/, `${relative}: ad skip must unlock after 10 seconds`);
   assert.match(html, /HADSKIP\.hidden=false;HADSKIP\.disabled=false/, `${relative}: top-right skip control does not unlock`);
   assert.match(html, /HADVIDEO\.currentTime\/HADVIDEO\.duration/, `${relative}: progress bar does not track playback`);
+  assert.match(html, /gameanalytics-5\.0\.0\.min\.js/, `${relative}: pinned GameAnalytics SDK is missing`);
+  assert.match(html, /gameanalytics-config\.js/, `${relative}: GameAnalytics runtime config is missing`);
+  assert.match(html, /gameanalytics-web\.js/, `${relative}: GameAnalytics consent adapter is missing`);
+  assert.match(html, /AN\.gameStart\(/, `${relative}: game-start analytics hook is missing`);
+  assert.match(html, /AN\.gameOver\(/, `${relative}: game-over analytics hook is missing`);
+  assert.match(html, /AN\.difficultySelected\(/, `${relative}: difficulty analytics hook is missing`);
 }
 
 for (const relative of ["public/game-ads/siamese-cat-cafe-en.mp4", "public/game-ads/creative-club-en.mp4", "public/game-ads/creative-club-th.mp4"]) {
@@ -33,6 +39,8 @@ const envExample = await readFile(path.join(root, ".env.example"), "utf8");
 assert.match(envExample, /^GAME_LOGIN_ENABLED=false$/m);
 assert.doesNotMatch(envExample, /^ROYALTY_/m);
 assert.match(envExample, /^HOUSE_ADS_ENABLED=false$/m);
+assert.match(envExample, /^GAMEANALYTICS_GAME_KEY=$/m);
+assert.match(envExample, /^GAMEANALYTICS_SECRET_KEY=$/m);
 
 const adMigration = await readFile(path.join(root, "drizzle/0004_massive_scarecrow.sql"), "utf8");
 assert.doesNotMatch(adMigration, /true, 100, 10, 0\)/, "seeded campaigns must not deploy active without cooldown");
