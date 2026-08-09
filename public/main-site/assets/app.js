@@ -2,7 +2,7 @@
   'use strict';
 
   const CONFIG = {
-    phone: '+66804803802',
+    phone: '+66952413028',
     formEndpoint: '',
   };
 
@@ -278,7 +278,7 @@
     link.addEventListener('click', event => {
       if (!CONFIG.phone) {
         event.preventDefault();
-        showToast(lang === 'th' ? 'กรุณาโทรหาเราที่ +66-0804803802' : 'Please call us at +66-0804803802');
+        showToast(lang === 'th' ? 'กรุณาโทรหาเราที่ +66 95 241 3028' : 'Please call us at +66 95 241 3028');
       } else link.href = `tel:${CONFIG.phone}`;
     });
   });

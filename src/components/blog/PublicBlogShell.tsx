@@ -145,7 +145,7 @@ export function PublicBlogShell({
                 <span>{language === "th" ? "เวลาเพลย์กรุ๊ปตามการจองที่ยืนยันแล้ว" : "Playgroup times by confirmed booking"}</span>
                 <a href="https://maps.app.goo.gl/XpYHkxenRu6gLvnFA" target="_blank" rel="noreferrer">{language === "th" ? "ดูเส้นทาง" : "Get directions"}</a>
                 <a href="mailto:Cafe@siamesecat.cafe">Cafe@siamesecat.cafe</a>
-                <a href="tel:+66804803802">+66 80 480 3802</a>
+                <a href="tel:+66952413028">+66 95 241 3028</a>
               </address>
             </div>
           </div>
