@@ -44,6 +44,7 @@ const NAV_ITEMS: NavItem[] = [
       { key: "faq-page", href: "/faq", th: "FAQ หลัก", en: "Main FAQ" },
     ],
   },
+  { key: "tools", href: "/tools", th: "เครื่องมือฟรี", en: "Free Tools" },
 ];
 
 const PROGRAM_ITEMS = NAV_ITEMS.filter((item) => ["inside", "creative", "little-explorer-program", "membership"].includes(item.key));

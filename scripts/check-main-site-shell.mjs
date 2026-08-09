@@ -111,6 +111,7 @@ for (const language of ["th", "en"]) {
 
 const appLayout = readFileSync(join(process.cwd(), "src/app/layout.tsx"), "utf8");
 const middleware = readFileSync(join(process.cwd(), "src/middleware.ts"), "utf8");
+const publicBlogShell = readFileSync(join(process.cwd(), "src/components/blog/PublicBlogShell.tsx"), "utf8");
 if (!appLayout.includes(GOOGLE_ANALYTICS_ID) || !appLayout.includes("isCustomerPage")) {
   throw new Error("Next.js public routes are missing guarded Google Analytics");
 }
@@ -119,6 +120,13 @@ if (!appLayout.includes('pathname.startsWith("/admin")') || !appLayout.includes(
 }
 if (!middleware.includes('requestHeaders.set("x-sccc-pathname", pathname)')) {
   throw new Error("Middleware is not forwarding the pathname to the analytics guard");
+}
+const blogToolsItem = '{ key: "tools", href: "/tools", th: "เครื่องมือฟรี", en: "Free Tools" },';
+if (publicBlogShell.split(blogToolsItem).length !== 2) {
+  throw new Error("Blog header is missing its single localized Free Tools navigation item");
+}
+if (!publicBlogShell.includes('href={local(item.href)}')) {
+  throw new Error("Blog header does not localize navigation links");
 }
 
 const GAME_ROOT = join(process.cwd(), "game-assets/cat-vs-dog");
