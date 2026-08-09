@@ -8,12 +8,12 @@ const POLAROID_PATH = "/tools/polaroid-generator";
 const ROUTINE_OG_IMAGE = `${SITE}${ROUTINE_PATH}/assets/og-kids-routine-chart.png`;
 
 const pages = [
-  { language: "th", file: "tools.html", url: `${SITE}/tools`, counterpart: `${SITE}/EN/tools`, defaultUrl: `${SITE}/tools`, heading: "เครื่องมือออนไลน์เล็ก ๆ สำหรับชีวิตครอบครัว" },
-  { language: "en", file: "EN/tools.html", url: `${SITE}/EN/tools`, counterpart: `${SITE}/tools`, defaultUrl: `${SITE}/tools`, heading: "Practical browser tools for family life" },
-  { language: "th", file: "tools/kids-routine-chart.html", url: `${SITE}${ROUTINE_PATH}`, counterpart: `${SITE}/EN${ROUTINE_PATH}`, defaultUrl: `${SITE}${ROUTINE_PATH}`, heading: "ตารางกิจวัตรประจำวันเด็กแบบภาพ" },
-  { language: "en", file: "EN/tools/kids-routine-chart.html", url: `${SITE}/EN${ROUTINE_PATH}`, counterpart: `${SITE}${ROUTINE_PATH}`, defaultUrl: `${SITE}${ROUTINE_PATH}`, heading: "Kids Visual Routine Chart" },
-  { language: "th", file: "tools/polaroid-generator.html", url: `${SITE}${POLAROID_PATH}`, counterpart: `${SITE}/EN${POLAROID_PATH}`, defaultUrl: `${SITE}${POLAROID_PATH}`, heading: "สร้างรูปโพลารอยด์สวย ๆ ในไม่กี่วินาที" },
-  { language: "en", file: "EN/tools/polaroid-generator.html", url: `${SITE}/EN${POLAROID_PATH}`, counterpart: `${SITE}${POLAROID_PATH}`, defaultUrl: `${SITE}${POLAROID_PATH}`, heading: "Make a beautiful Polaroid photo in seconds" },
+  { language: "th", file: "tools.html", url: `${SITE}/tools`, counterpart: `${SITE}/EN/tools`, defaultUrl: `${SITE}/tools`, heading: "เครื่องมือออนไลน์เล็ก ๆ สำหรับชีวิตครอบครัว", toolHubPath: "/tools" },
+  { language: "en", file: "EN/tools.html", url: `${SITE}/EN/tools`, counterpart: `${SITE}/tools`, defaultUrl: `${SITE}/tools`, heading: "Practical browser tools for family life", toolHubPath: "/EN/tools" },
+  { language: "th", file: "tools/kids-routine-chart.html", url: `${SITE}${ROUTINE_PATH}`, counterpart: `${SITE}/EN${ROUTINE_PATH}`, defaultUrl: `${SITE}${ROUTINE_PATH}`, heading: "ตารางกิจวัตรประจำวันเด็กแบบภาพ", toolHubPath: "/tools" },
+  { language: "en", file: "EN/tools/kids-routine-chart.html", url: `${SITE}/EN${ROUTINE_PATH}`, counterpart: `${SITE}${ROUTINE_PATH}`, defaultUrl: `${SITE}${ROUTINE_PATH}`, heading: "Kids Visual Routine Chart", toolHubPath: "/EN/tools" },
+  { language: "th", file: "tools/polaroid-generator.html", url: `${SITE}${POLAROID_PATH}`, counterpart: `${SITE}/EN${POLAROID_PATH}`, defaultUrl: `${SITE}${POLAROID_PATH}`, heading: "สร้างรูปโพลารอยด์สวย ๆ ในไม่กี่วินาที", toolHubPath: "/tools" },
+  { language: "en", file: "EN/tools/polaroid-generator.html", url: `${SITE}/EN${POLAROID_PATH}`, counterpart: `${SITE}${POLAROID_PATH}`, defaultUrl: `${SITE}${POLAROID_PATH}`, heading: "Make a beautiful Polaroid photo in seconds", toolHubPath: "/EN/tools" },
 ];
 
 for (const page of pages) {
@@ -27,6 +27,8 @@ for (const page of pages) {
   if (!html.includes(`hreflang="x-default" href="${page.defaultUrl}"`)) throw new Error(`${page.file} is missing its x-default`);
   if (!html.includes('content="index,follow,max-image-preview:large')) throw new Error(`${page.file} has the wrong robots policy`);
   if ((html.match(/<h1\b/g) ?? []).length !== 1 || !html.includes(`<h1>${page.heading}</h1>`)) throw new Error(`${page.file} needs one correct H1`);
+  const header = html.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
+  if (!header.includes(`href="${page.toolHubPath}"`) || !header.includes('aria-current="page"')) throw new Error(`${page.file} must visibly link to the active tools hub in its header`);
   if (html.includes("Siamese Cat Dev") || html.includes("skinny-filter") || html.includes("🐾")) throw new Error(`${page.file} contains an excluded, unrelated, or unapproved placeholder asset`);
   if (html.includes("polaroid-og.webp")) throw new Error(`${page.file} contains an unapproved social image`);
   if (page.file.includes("kids-routine-chart") && (!html.includes(`property="og:image" content="${ROUTINE_OG_IMAGE}"`) || !html.includes(`name="twitter:image" content="${ROUTINE_OG_IMAGE}"`))) {
