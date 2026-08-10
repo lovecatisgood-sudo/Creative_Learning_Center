@@ -1,4 +1,8 @@
 import { serveGameFile } from "@/lib/game-files";
+import {
+  canonicalGameDirectoryRedirect,
+  canonicalGameIndexRedirect,
+} from "@/lib/game-routes";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -9,24 +13,20 @@ export const runtime = "nodejs";
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const pathname = url.pathname;
-  const canonicalDirectory = new Set([
-    "/game/cat-vs-dog",
-    "/game/cat-vs-dog/en",
-    "/game/cat-vs-dog/th",
-  ]);
 
-  if (canonicalDirectory.has(pathname)) {
+  const directoryRedirect = canonicalGameDirectoryRedirect(pathname);
+  if (directoryRedirect) {
     return new Response(null, {
       status: 308,
-      headers: { Location: `${pathname}/${url.search}` },
+      headers: { Location: `${directoryRedirect}${url.search}` },
     });
   }
 
-  const indexDirectory = pathname.match(/^(\/game\/cat-vs-dog(?:\/en|\/th)?)\/index\.html$/);
-  if (indexDirectory) {
+  const indexRedirect = canonicalGameIndexRedirect(pathname);
+  if (indexRedirect) {
     return new Response(null, {
       status: 308,
-      headers: { Location: `${indexDirectory[1]}/${url.search}` },
+      headers: { Location: `${indexRedirect}${url.search}` },
     });
   }
 

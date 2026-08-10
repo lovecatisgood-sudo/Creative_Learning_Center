@@ -1,15 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { CANONICAL_GAME_DIRECTORY_PATHS } from "@/lib/game-routes";
 
 // Lightweight edge guard: presence of the session cookie gates /admin/* and
 // /api/admin/*. Cryptographic verification happens in route handlers via
 // getSession(); this only bounces obviously-unauthenticated requests early.
 const SESSION_COOKIE = "sccc_admin";
-const CANONICAL_TRAILING_SLASH_PATHS = new Set([
-  "/game/cat-vs-dog/",
-  "/game/cat-vs-dog/en/",
-  "/game/cat-vs-dog/th/",
-]);
+const CANONICAL_TRAILING_SLASH_PATHS = new Set(CANONICAL_GAME_DIRECTORY_PATHS);
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

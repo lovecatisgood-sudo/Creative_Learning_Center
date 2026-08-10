@@ -1,4 +1,4 @@
-// Serves the Cat vs Dog game from game-assets/ instead of public/.
+// Serves static game builds from game-assets/ instead of public/.
 //
 // Hostinger's static layer intercepts any request whose path exists on disk
 // under the app and then fails to serve it (404), while paths that do not
@@ -9,7 +9,9 @@ import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 
 const ROOT = path.join(process.cwd(), "game-assets");
-const GAME_ANALYTICS_CONFIG = "cat-vs-dog/assets/js/gameanalytics-config.js";
+// Cat vs Dog has a server-generated analytics configuration. Other game
+// directories are served directly and need no game-specific routing branch.
+const CAT_VS_DOG_ANALYTICS_CONFIG = "cat-vs-dog/assets/js/gameanalytics-config.js";
 
 const TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -19,21 +21,46 @@ const TYPES: Record<string, string> = {
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".webp": "image/webp",
+  ".avif": "image/avif",
+  ".gif": "image/gif",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
   ".mp3": "audio/mpeg",
+  ".ogg": "audio/ogg",
+  ".wav": "audio/wav",
   ".woff2": "font/woff2",
+  ".woff": "font/woff",
+  ".wasm": "application/wasm",
+  ".webmanifest": "application/manifest+json",
   ".json": "application/json",
+  ".map": "application/json",
 };
 
 export function serveGameFile(segments: string[]): Response {
-  if (segments.join("/") === GAME_ANALYTICS_CONFIG) {
+  if (segments.join("/") === CAT_VS_DOG_ANALYTICS_CONFIG) {
     const gameKey = process.env.GAMEANALYTICS_GAME_KEY?.trim() ?? "";
     const secretKey = process.env.GAMEANALYTICS_SECRET_KEY?.trim() ?? "";
-    const valid = /^[a-f0-9]{32}$/i.test(gameKey) && /^[a-f0-9]{40}$/i.test(secretKey);
-    const config = valid
-      ? { gameKey, secretKey, build: process.env.GAMEANALYTICS_BUILD?.trim() || "web-1.0.0" }
-      : null;
+    const androidGameKey = process.env.GAMEANALYTICS_ANDROID_GAME_KEY?.trim() ?? "";
+    const androidSecretKey = process.env.GAMEANALYTICS_ANDROID_SECRET_KEY?.trim() ?? "";
+    const iosGameKey = process.env.GAMEANALYTICS_IOS_GAME_KEY?.trim() ?? "";
+    const iosSecretKey = process.env.GAMEANALYTICS_IOS_SECRET_KEY?.trim() ?? "";
+    const validPair = (key: string, secret: string) =>
+      /^[a-f0-9]{32}$/i.test(key) && /^[a-f0-9]{40}$/i.test(secret);
+    const mobileConfig = (key: string, secret: string, build: string) =>
+      validPair(key, secret) ? { gameKey: key, secretKey: secret, build } : null;
+    const config = {
+      web: mobileConfig(gameKey, secretKey, process.env.GAMEANALYTICS_BUILD?.trim() || "web-1.0.0"),
+      android: mobileConfig(
+        androidGameKey,
+        androidSecretKey,
+        process.env.GAMEANALYTICS_ANDROID_BUILD?.trim() || "android-1.0.0",
+      ),
+      ios: mobileConfig(
+        iosGameKey,
+        iosSecretKey,
+        process.env.GAMEANALYTICS_IOS_BUILD?.trim() || "ios-1.0.0",
+      ),
+    };
     return new Response(
       `window.SCVD_GAMEANALYTICS_CONFIG = ${JSON.stringify(config)};\n`,
       {
@@ -71,6 +98,7 @@ export function serveGameFile(segments: string[]): Response {
 
   const ext = path.extname(file).toLowerCase();
   const isHtml = ext === ".html";
+  const isMutableRuntimeFile = isHtml || ["sw.js", "registerSW.js", "manifest.webmanifest"].includes(path.basename(file));
 
   if (isHtml) {
     // The game's markup uses relative asset paths, but Next strips trailing
@@ -88,8 +116,9 @@ export function serveGameFile(segments: string[]): Response {
     headers: {
       "content-type": TYPES[ext] ?? "application/octet-stream",
       // HTML must revalidate so game updates ship; assets are immutable enough
-      // to cache hard.
-      "cache-control": isHtml
+      // to cache hard. PWA entry files must also revalidate, otherwise a new
+      // release can remain pinned behind an old service worker.
+      "cache-control": isMutableRuntimeFile
         ? "public, max-age=0, must-revalidate"
         : "public, max-age=604800",
     },

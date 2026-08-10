@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getPublishedBlogPosts } from "@/lib/blog";
 import { SITE_URL } from "@/lib/landing/site";
+import { gameLocalizedUrls, HOSTED_GAMES } from "@/lib/game-routes";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +30,6 @@ const routes = [
 ] as const;
 
 const LAST_UPDATED = new Date("2026-08-08T00:00:00+07:00");
-const GAME_LAST_UPDATED = new Date("2026-08-02T00:00:00+07:00");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = routes.flatMap(({ path, changeFrequency, priority }) => {
@@ -43,21 +43,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ];
   });
 
-  const gameLandingUrl = `${SITE_URL}/game/cat-vs-dog/`;
-  const gameEnglishUrl = `${SITE_URL}/game/cat-vs-dog/en/`;
-  const gameThaiUrl = `${SITE_URL}/game/cat-vs-dog/th/`;
-  const gameAlternates = {
-    languages: {
-      en: gameEnglishUrl,
-      th: gameThaiUrl,
-      "x-default": gameLandingUrl,
-    },
-  };
-  const gameEntries: MetadataRoute.Sitemap = [
-    { url: gameLandingUrl, lastModified: GAME_LAST_UPDATED, changeFrequency: "monthly", priority: 0.8, alternates: gameAlternates },
-    { url: gameEnglishUrl, lastModified: GAME_LAST_UPDATED, changeFrequency: "monthly", priority: 0.8, alternates: gameAlternates },
-    { url: gameThaiUrl, lastModified: GAME_LAST_UPDATED, changeFrequency: "monthly", priority: 0.8, alternates: gameAlternates },
-  ];
+  const gameEntries: MetadataRoute.Sitemap = HOSTED_GAMES.flatMap((game) => {
+    const urls = gameLocalizedUrls(SITE_URL, game.slug);
+    const alternates = {
+      languages: {
+        en: urls.en,
+        th: urls.th,
+        "x-default": urls.landing,
+      },
+    };
+    const lastModified = new Date(game.lastModified);
+
+    return [
+      { url: urls.landing, lastModified, changeFrequency: game.changeFrequency, priority: game.priority, alternates },
+      { url: urls.en, lastModified, changeFrequency: game.changeFrequency, priority: game.priority, alternates },
+      { url: urls.th, lastModified, changeFrequency: game.changeFrequency, priority: game.priority, alternates },
+    ];
+  });
 
   const [thaiPosts, englishPosts] = await Promise.all([
     getPublishedBlogPosts("th"),

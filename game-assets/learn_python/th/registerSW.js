@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/game/learn_python/th/sw.js', { scope: '/game/learn_python/th/' })})}
