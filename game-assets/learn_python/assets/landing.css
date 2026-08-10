@@ -33,7 +33,10 @@ h1, h2, h3, p { margin-top: 0; }
   width: min(1160px, calc(100% - 2rem)); min-height: 82px; margin: auto;
 }
 .brand { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
-.brand img { filter: drop-shadow(0 4px 5px rgb(18 36 60 / .12)); }
+.brand img {
+  width: 48px; height: 48px; flex: 0 0 48px; object-fit: cover; border: 2px solid #fff;
+  border-radius: 50%; background: #173b58; filter: drop-shadow(0 4px 5px rgb(18 36 60 / .12));
+}
 .brand strong, .brand small { display: block; }
 .brand strong { font-size: .94rem; letter-spacing: -.02em; }
 .brand small { color: var(--ink-soft); font-size: .72rem; font-weight: 700; }
@@ -56,6 +59,10 @@ h1, h2, h3, p { margin-top: 0; }
   border: 1px dashed rgb(39 119 183 / .16); border-radius: 50%; content: "";
 }
 .hero-copy { position: relative; z-index: 1; max-width: 590px; }
+.hero-game-logo {
+  display: block; width: clamp(118px, 17vw, 205px); height: auto; margin: -1rem 0 .95rem -.45rem;
+  object-fit: contain; filter: drop-shadow(0 13px 17px rgb(18 36 60 / .2));
+}
 .eyebrow {
   display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; margin-bottom: 1rem;
   color: #30667a; font-size: .75rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase;
@@ -172,7 +179,7 @@ h1 [lang="en"] { color: var(--blue); }
 .site-footer p { margin: 0; }.site-footer a { font-weight: 850; }
 
 @media (max-width: 780px) {
-  .site-header { min-height: 70px; }.brand small { display: none; }
+  .site-header { min-height: 70px; }.brand small { display: none; }.brand img { width: 42px; height: 42px; flex-basis: 42px; }
   .hero { grid-template-columns: 1fr; padding-top: 3.5rem; }.hero-copy { max-width: 660px; }
   .hero-art { width: 100%; max-width: 550px; height: 440px; margin: auto; }
   .hero-lead [lang="th"], .hero-lead [lang="en"] { display: block; white-space: normal; }.hero-lead span[aria-hidden="true"] { display: none; }
@@ -185,7 +192,7 @@ h1 [lang="en"] { color: var(--blue); }
 }
 
 @media (max-width: 460px) {
-  .site-header { width: calc(100% - 1.2rem); }.brand strong { font-size: .78rem; }.header-actions { gap: .2rem; }.mini-link { padding: .4rem .52rem; }
+  .site-header { width: calc(100% - 1.2rem); }.brand strong { font-size: .78rem; }.brand img { width: 38px; height: 38px; flex-basis: 38px; }.header-actions { gap: .2rem; }.mini-link { padding: .4rem .52rem; }
   .hero { padding-inline: 1rem; }.hero-art { height: 345px; }.hero-proof { gap: .35rem; }.hero-proof > span { font-size: .67rem; }
   .language-section, .how-it-works, .course-section { width: calc(100% - 1.2rem); }
   .world-map ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }.world-landmark { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: .55rem; text-align: left; }.world-thumb { width: 66px; height: 66px; }.world-landmark b { margin-top: 0; }.world-landmark strong { font-size: .8rem; }.world-landmark strong [lang="en"] { font-size: .75rem; }
