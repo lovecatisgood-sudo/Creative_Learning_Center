@@ -1,18 +1,20 @@
 # Siamese Cat Creative Club — Management System
 
-Combined public website, parent signup, and internal point-of-sale/session
-management web app for Siamese Cat Creative Club. The public website is served
-from the domain root, parents self-register at `/signup`, and staff work inside
-the protected `/admin` dashboard.
+Combined public website, Siamese Cat Member signup and portal, and internal
+point-of-sale/session management web app for Siamese Cat Creative Club. The
+public website is served from the domain root, customers create a temporary
+member account at `/signup`, review packages and usage at `/member`, and staff
+work inside the protected `/admin` dashboard.
 
-Built to `sccc-management-system-prd-v1.md` (business rules) and
+Built to `sccc-management-system-prd-v1.md` (original business rules),
+`MEMBER_SYSTEM_PRD_V2.md` (member identity and access), and
 `sccc-uiux-spec-v1.md` (screens). See `DECISIONS.md` for spec interpretations,
 `WALKTHROUGH.md` for the acceptance-criteria map, and `DEPLOY.md` to ship it.
 
 ## Stack
 
-Next.js 14 (App Router, TypeScript) · Tailwind · Neon Postgres via Drizzle ORM ·
-iron-session admin auth · `promptpay-qr` + `qrcode` · `html-to-image` ·
+Next.js 15 (App Router, TypeScript) · Tailwind · Neon Postgres via Drizzle ORM ·
+separate iron-session admin/member auth · `promptpay-qr` + `qrcode` · `html-to-image` ·
 local-disk uploads behind a storage abstraction. Thai-default UI with a per-device
 TH/EN toggle. All times Asia/Bangkok; UTC in the DB.
 
@@ -40,6 +42,9 @@ Any standard Postgres works locally (e.g. Docker):
 | `pnpm db:seed` | Seed/refresh the 11 products (idempotent) |
 | `pnpm create-admin <email> <password> [manager\|staff]` | Print the bcrypt hash + upsert a role-based team account |
 | `pnpm signup-qr <https://domain>` | Write `signup-qr.png` for the entrance |
+| `pnpm check:member-release` | Run static member privacy, ownership, migration, and mobile release gates |
+| `pnpm check:member-system` | Run member integration tests against an explicitly marked test database |
+| `MEMBER_TOKEN_PRUNE=1 pnpm member:prune-tokens` | Remove expired/used token rows beyond the configured retention period |
 
 ## Layout
 
@@ -50,7 +55,8 @@ public/
 src/
   app/
     creative/              previous Creative Club landing page
-    signup/                 public parent registration (P1/P2)
+    signup/                 public Siamese Cat Member registration
+    member/                 customer package, usage, receipt, and profile portal
     admin/(app)/            role-aware shell: staff operations plus manager reporting/content/team tools
     admin/login/            login (A0)
     api/                    public/signup, admin/* route handlers

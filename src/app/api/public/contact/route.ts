@@ -8,7 +8,6 @@ const PHONE_RE = /^[+\d][\d\s()-]{5,28}$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SERVICES = new Set([
   "",
-  "little-explorer-program",
   "playgroup",
   "creative-club",
   "membership",

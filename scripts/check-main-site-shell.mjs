@@ -4,8 +4,8 @@ import { join } from "node:path";
 const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 const expectedNav = {
-  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "เพลย์กรุ๊ป", "โปรแกรม Little Explorer", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "เครื่องมือฟรี", "ติดต่อเรา"],
-  en: ["Inside the Club", "Creative Club", "Playgroup", "Little Explorer Program", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Free Tools", "Contact Us"],
+  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "Kids Playroom", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "เครื่องมือฟรี", "ติดต่อเรา"],
+  en: ["Inside the Club", "Creative Club", "Kids Playroom", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Free Tools", "Contact Us"],
 };
 
 function extract(html, tag) {
@@ -95,8 +95,17 @@ for (const language of ["th", "en"]) {
   const dinner = pages.find(({ file }) => file === "dinner.html")?.html ?? "";
   const contact = pages.find(({ file }) => file === "contact.html")?.html ?? "";
   const home = pages.find(({ file }) => file === "index.html")?.html ?? "";
-  if (!playgroup.includes(`href="${prefix}/membership"`)) {
-    throw new Error(`${language}/playgroup.html pass link does not open Membership`);
+  const expectedPrices = language === "en"
+    ? ["149 THB", "249 THB", "80 THB", "50 THB", "45 THB", "69 THB", "99 THB"]
+    : ["149 บาท", "249 บาท", "80 บาท", "50 บาท", "45 บาท", "69 บาท", "99 บาท"];
+  for (const price of expectedPrices) {
+    if (!playgroup.includes(price)) throw new Error(`${language}/playgroup.html is missing ${price}`);
+  }
+  if (!playgroup.includes(language === "en" ? "must stay on the premises" : "ต้องอยู่ภายในสถานที่")) {
+    throw new Error(`${language}/playgroup.html is missing the parent-on-premises rule`);
+  }
+  for (const retired of ["18,000 THB", "9,200 THB", "1,500 THB", "999 THB", "Meal Care Value — 250 THB"]) {
+    if (playgroup.includes(retired)) throw new Error(`${language}/playgroup.html contains retired offer: ${retired}`);
   }
   if (!dinner.includes('<a class="cafe-logo-panel" href="https://siamesecat.cafe/"')) {
     throw new Error(`${language}/dinner.html café logo is not linked`);

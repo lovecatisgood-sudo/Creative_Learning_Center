@@ -9,7 +9,6 @@ const mainSiteRoutes = [
   "inside",
   "playgroup",
   "creative",
-  "little-explorer-program",
   "membership",
   "dinner",
   "contact",
@@ -80,6 +79,14 @@ const nextConfig = {
           { key: "Cache-Control", value: "private, no-cache, no-store, max-age=0, must-revalidate" },
         ],
       },
+      ...["/member/:path*", "/EN/member/:path*"].map((source) => ({
+        source,
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+          { key: "Cache-Control", value: "private, no-cache, no-store, max-age=0, must-revalidate" },
+          { key: "Referrer-Policy", value: "no-referrer" },
+        ],
+      })),
       {
         source: "/api/:path*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
@@ -90,10 +97,14 @@ const nextConfig = {
     return [
       { source: "/index.html", destination: "/", permanent: true },
       { source: "/EN/index.html", destination: "/EN", permanent: true },
-      { source: "/memberships", destination: "/little-explorer-program", permanent: true },
-      { source: "/memberships.html", destination: "/little-explorer-program", permanent: true },
-      { source: "/EN/memberships", destination: "/EN/little-explorer-program", permanent: true },
-      { source: "/EN/memberships.html", destination: "/EN/little-explorer-program", permanent: true },
+      { source: "/little-explorer-program", destination: "/playgroup", permanent: true },
+      { source: "/little-explorer-program.html", destination: "/playgroup", permanent: true },
+      { source: "/EN/little-explorer-program", destination: "/EN/playgroup", permanent: true },
+      { source: "/EN/little-explorer-program.html", destination: "/EN/playgroup", permanent: true },
+      { source: "/memberships", destination: "/playgroup", permanent: true },
+      { source: "/memberships.html", destination: "/playgroup", permanent: true },
+      { source: "/EN/memberships", destination: "/EN/playgroup", permanent: true },
+      { source: "/EN/memberships.html", destination: "/EN/playgroup", permanent: true },
       ...mainSiteRoutes.map((route) => ({
         source: `/${route}.html`,
         destination: `/${route}`,

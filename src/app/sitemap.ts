@@ -16,7 +16,6 @@ const routes = [
   { path: "/inside", changeFrequency: "monthly", priority: 0.8 },
   { path: "/playgroup", changeFrequency: "monthly", priority: 0.8 },
   { path: "/creative", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/little-explorer-program", changeFrequency: "monthly", priority: 0.8 },
   { path: "/membership", changeFrequency: "monthly", priority: 0.8 },
   { path: "/dinner", changeFrequency: "monthly", priority: 0.7 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
@@ -29,7 +28,7 @@ const routes = [
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
 ] as const;
 
-const LAST_UPDATED = new Date("2026-08-08T00:00:00+07:00");
+const LAST_UPDATED = new Date("2026-08-11T00:00:00+07:00");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = routes.flatMap(({ path, changeFrequency, priority }) => {

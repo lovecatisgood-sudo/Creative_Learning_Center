@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { parents, children, orders, sessions } from "@/db/schema";
+import { parents, children, orders, sessions, memberAccounts } from "@/db/schema";
 import { eq, and, inArray, asc, desc } from "drizzle-orm";
 import { ageFromDob } from "@/lib/children";
 
@@ -26,6 +26,9 @@ export type ParentDetail = {
     phone: string;
     email: string | null;
     profileComplete: boolean;
+    memberAccountId: number | null;
+    memberUid: string | null;
+    memberVerified: boolean;
   };
   children: ParentChild[];
   receipts: ParentReceipt[];
@@ -37,7 +40,22 @@ export type ParentDetail = {
 // receipt-row shape from lib/packages' getChildHistory, extended with which
 // child each receipt belongs to since a parent can have several).
 export async function getParentDetail(id: number): Promise<ParentDetail | null> {
-  const [parentRow] = await db.select().from(parents).where(eq(parents.id, id)).limit(1);
+  const [parentRow] = await db
+    .select({
+      id: parents.id,
+      name: parents.name,
+      phone: parents.phone,
+      email: parents.email,
+      profileComplete: parents.profileComplete,
+      memberAccountId: memberAccounts.id,
+      memberUid: memberAccounts.publicUid,
+      memberEmail: memberAccounts.emailNormalized,
+      memberVerifiedAt: memberAccounts.emailVerifiedAt,
+    })
+    .from(parents)
+    .leftJoin(memberAccounts, eq(memberAccounts.parentId, parents.id))
+    .where(eq(parents.id, id))
+    .limit(1);
   if (!parentRow) return null;
 
   const childRows = await db
@@ -90,6 +108,9 @@ export async function getParentDetail(id: number): Promise<ParentDetail | null> 
       // A stub parent (name blank) is treated as incomplete regardless, same
       // rule as getChildCore in lib/children.ts.
       profileComplete: Boolean(parentRow.profileComplete) && Boolean(parentRow.name?.trim()),
+      memberAccountId: parentRow.memberAccountId,
+      memberUid: parentRow.memberUid,
+      memberVerified: Boolean(parentRow.memberEmail && parentRow.memberVerifiedAt),
     },
     children: childRows.map((c) => ({
       id: c.id,

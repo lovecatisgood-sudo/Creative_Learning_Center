@@ -18,8 +18,9 @@ export function QuickAddSheet({
   const [phone, setPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [duplicate, setDuplicate] = useState(false);
 
-  async function create() {
+  async function create(allowDuplicate = false) {
     if (!childName.trim() || !phone.trim()) {
       setError(t("required"));
       return;
@@ -29,7 +30,7 @@ export function QuickAddSheet({
     const res = await fetch("/api/admin/children/quick", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ childName, phone }),
+      body: JSON.stringify({ childName, phone, allowDuplicate }),
     });
     setBusy(false);
     if (res.ok) {
@@ -37,7 +38,12 @@ export function QuickAddSheet({
       onCreated(data.childId);
     } else {
       const d = await res.json().catch(() => ({}));
-      setError(d.error || t("quickAddFailed"));
+      if (res.status === 409 && d.error === "possible_duplicate") {
+        setDuplicate(true);
+        setError(t("possibleMemberDuplicate"));
+      } else {
+        setError(d.error || t("quickAddFailed"));
+      }
     }
   }
 
@@ -57,8 +63,11 @@ export function QuickAddSheet({
           <input className="field" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
         </div>
         {error && <p className="text-[13px] font-semibold text-danger">{error}</p>}
-        <button className="btn-primary mt-1" onClick={create} disabled={busy}>
-          {busy ? t("loading") : t("createAndOpen")}
+        {duplicate && (
+          <p className="rounded-xl bg-warnbg p-3 text-sm text-warn">{t("searchExistingMemberFirst")}</p>
+        )}
+        <button className="btn-primary mt-1" onClick={() => create(duplicate)} disabled={busy}>
+          {busy ? t("loading") : duplicate ? t("createDuplicateAnyway") : t("createAndOpen")}
         </button>
       </div>
     </Sheet>

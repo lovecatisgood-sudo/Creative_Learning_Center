@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import QRCode from "qrcode";
 import { AppBar } from "@/components/AppBar";
 import { LogoutButton } from "@/components/LogoutButton";
 import { useLang } from "@/lib/i18n/LanguageProvider";
@@ -13,6 +15,18 @@ export function ParentClient({ detail }: { detail: ParentDetail }) {
   const router = useRouter();
   const { parent, children: kids, receipts } = detail;
   const multiChild = kids.length > 1;
+  const [claimQr, setClaimQr] = useState<string | null>(null);
+  const [claimBusy, setClaimBusy] = useState(false);
+
+  async function issueClaim() {
+    if (!parent.memberAccountId) return;
+    setClaimBusy(true);
+    const response = await fetch(`/api/admin/members/${parent.memberAccountId}/claim`, { method: "POST" });
+    const body = await response.json().catch(() => null);
+    setClaimBusy(false);
+    if (!response.ok || !body?.claimUrl) return;
+    setClaimQr(await QRCode.toDataURL(body.claimUrl, { width: 480, margin: 2, errorCorrectionLevel: "M" }));
+  }
 
   return (
     <div className="flex flex-1 flex-col min-h-0">
@@ -34,8 +48,29 @@ export function ParentClient({ detail }: { detail: ParentDetail }) {
               {parent.phone || "—"}
             </a>
             {parent.email && <span className="truncate">{parent.email}</span>}
+            {parent.memberUid && <span className="font-mono font-bold text-brown">{parent.memberUid}</span>}
           </div>
+          {parent.memberAccountId && (
+            <div className="mt-3 flex items-center gap-2">
+              <span className={`chip ${parent.memberVerified ? "bg-okbg text-ok" : "bg-warnbg text-warn"}`}>
+                {parent.memberVerified ? (lang === "th" ? "สมาชิกยืนยันแล้ว" : "VERIFIED MEMBER") : (lang === "th" ? "สมาชิกชั่วคราว" : "TEMPORARY MEMBER")}
+              </span>
+              <button type="button" onClick={issueClaim} disabled={claimBusy} className="rounded-lg border border-line px-3 py-2 text-sm font-bold text-tealdeep">
+                {claimBusy ? t("loading") : (lang === "th" ? "ออก QR เข้าถึงใหม่" : "New access QR")}
+              </button>
+            </div>
+          )}
         </div>
+
+        {claimQr && (
+          <div className="mb-4 rounded-2xl border-2 border-teal bg-tealbg p-4 text-center">
+            <h3 className="font-extrabold">Siamese Cat Member</h3>
+            <p className="mt-1 text-sm text-meta">{lang === "th" ? "ให้ลูกค้าสแกนบนโทรศัพท์ของตน" : "Customer scans this on their own phone"}</p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={claimQr} alt="Member claim QR" className="mx-auto mt-3 w-56 rounded-xl bg-white p-2" />
+            <button type="button" className="mt-2 text-sm font-bold text-tealdeep underline" onClick={() => setClaimQr(null)}>{t("done")}</button>
+          </div>
+        )}
 
         {/* Children */}
         <Section title={t("childrenLabel")}>

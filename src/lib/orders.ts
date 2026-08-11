@@ -8,11 +8,14 @@ import {
   children,
   sessions,
   addonRedemptions,
+  memberAccounts,
+  memberAccessTokens,
   type ProductGrants,
 } from "@/db/schema";
-import { eq, inArray, like } from "drizzle-orm";
+import { and, eq, inArray, like } from "drizzle-orm";
 import { writeAudit } from "@/lib/audit";
 import { bkkDateStamp } from "@/lib/time";
+import { expiresFromNow, generateAccessToken, hashAccessToken } from "@/lib/member-tokens";
 
 const HOUR_MS = 60 * 60 * 1000;
 
@@ -84,6 +87,7 @@ export type CreateOrderResult = {
   receiptNo: string;
   extendRequested: boolean;
   extendApplied: boolean;
+  claimToken: string | null;
 };
 
 // Turns a validated cart into a paid order: order + items + one payment +
@@ -95,8 +99,8 @@ export async function createPaidOrder(opts: {
   lines: CartLine[];
   method: PaymentMethod;
   proofPhotoPath: string;
-  // When set (from the session "+ Add 1 hour" shortcut), each EXTRA_1H bought
-  // is consumed immediately against this running session, extending pickup by 1h.
+  // When set, each Playroom additional hour is consumed immediately against
+  // this running Playroom session, extending pickup by one hour.
   extendSessionId?: number | null;
 }): Promise<CreateOrderResult> {
   const { adminId, childId, lines, method, proofPhotoPath, extendSessionId } = opts;
@@ -109,7 +113,10 @@ export async function createPaidOrder(opts: {
 
   // Load the catalog rows for the requested SKUs.
   const skus = lines.map((l) => l.sku);
-  const catalog = await db.select().from(products).where(inArray(products.sku, skus));
+  const catalog = await db
+    .select()
+    .from(products)
+    .where(and(inArray(products.sku, skus), eq(products.active, true)));
   const bySku = new Map(catalog.map((p) => [p.sku, p]));
   for (const l of lines) {
     if (!bySku.has(l.sku)) throw new OrderError(`Unknown SKU ${l.sku}`);
@@ -118,6 +125,16 @@ export async function createPaidOrder(opts: {
 
   const total = lines.reduce((sum, l) => sum + bySku.get(l.sku)!.priceThb * l.qty, 0);
   const extendRequested = extendSessionId != null;
+  const extensionQty = lines.reduce((sum, line) => {
+    const grants = (bySku.get(line.sku)?.grants ?? {}) as ProductGrants;
+    return sum + (grants.extendOnly ? line.qty : 0);
+  }, 0);
+  if (extensionQty > 0 && !extendSessionId) {
+    throw new OrderError("A Playroom additional hour requires a running Kids Playroom session");
+  }
+  if (extendSessionId && extensionQty === 0) {
+    throw new OrderError("The selected session extension product is missing");
+  }
 
   // Retry the whole transaction if two confirms race to the same receipt number
   // (unique violation, Postgres code 23505). Single-admin makes this rare, but a
@@ -140,6 +157,27 @@ export async function createPaidOrder(opts: {
     const now = new Date();
     const receiptNo = await nextReceiptNo(tx as unknown as typeof db, now);
     let extendApplied = false;
+    let claimToken: string | null = null;
+    let extensionPlannedEnd: Date | null = null;
+
+    if (extendSessionId) {
+      const [eligibleSession] = await tx
+        .select({ plannedEndAt: sessions.plannedEndAt })
+        .from(sessions)
+        .innerJoin(packageInstances, eq(sessions.packageInstanceId, packageInstances.id))
+        .innerJoin(products, eq(packageInstances.productId, products.id))
+        .where(and(
+          eq(sessions.id, extendSessionId),
+          eq(sessions.childId, child.id),
+          eq(sessions.status, "running"),
+          inArray(products.sku, ["PLAYROOM_ENTRY_1H", "PLAYROOM_ENTRY_2H"]),
+        ))
+        .limit(1);
+      if (!eligibleSession) {
+        throw new OrderError("Additional hours apply only to a running Kids Playroom entry");
+      }
+      extensionPlannedEnd = eligibleSession.plannedEndAt;
+    }
 
     const [order] = await tx
       .insert(orders)
@@ -196,33 +234,30 @@ export async function createPaidOrder(opts: {
           detail: { sku: product.sku, orderId: order.id, credits, expiresAt },
         });
 
-        // EXTRA_1H bought from the session screen: consume immediately, extend
-        // the running session's pickup time by 1h in the same transaction.
+        // A Playroom additional hour bought from the session screen is consumed
+        // immediately and extends that Playroom session in the same transaction.
         if (grants.extendOnly && extendSessionId) {
-          const [sess] = await tx.select().from(sessions).where(eq(sessions.id, extendSessionId)).limit(1);
-          if (sess && sess.status === "running" && sess.childId === child.id) {
-            extendApplied = true;
-            const extended = new Date(sess.plannedEndAt.getTime() + HOUR_MS);
-            await tx.update(sessions).set({ plannedEndAt: extended }).where(eq(sessions.id, sess.id));
-            await tx
-              .update(packageInstances)
-              .set({ extraHoursRemaining: 0, status: "consumed" })
-              .where(eq(packageInstances.id, inst.id));
-            await tx.insert(addonRedemptions).values({
-              packageInstanceId: inst.id,
-              childId: child.id,
-              type: "extra_hour",
-              sessionId: sess.id,
-              adminId: adminId > 0 ? adminId : null,
-            });
-            await writeAudit(tx, {
-              adminId,
-              action: "extra_hour_extended",
-              entity: "session",
-              entityId: sess.id,
-              detail: { instanceId: inst.id, newPlannedEnd: extended.toISOString() },
-            });
-          }
+          extendApplied = true;
+          extensionPlannedEnd = new Date((extensionPlannedEnd as Date).getTime() + HOUR_MS);
+          await tx.update(sessions).set({ plannedEndAt: extensionPlannedEnd }).where(eq(sessions.id, extendSessionId));
+          await tx
+            .update(packageInstances)
+            .set({ extraHoursRemaining: 0, status: "consumed" })
+            .where(eq(packageInstances.id, inst.id));
+          await tx.insert(addonRedemptions).values({
+            packageInstanceId: inst.id,
+            childId: child.id,
+            type: "extra_hour",
+            sessionId: extendSessionId,
+            adminId: adminId > 0 ? adminId : null,
+          });
+          await writeAudit(tx, {
+            adminId,
+            action: "extra_hour_extended",
+            entity: "session",
+            entityId: extendSessionId,
+            detail: { instanceId: inst.id, newPlannedEnd: extensionPlannedEnd.toISOString() },
+          });
         }
       }
     }
@@ -247,7 +282,33 @@ export async function createPaidOrder(opts: {
       detail: { receiptNo, method, total, paymentId: payment.id, lines },
     });
 
-    return { orderId: order.id, receiptNo, extendRequested, extendApplied };
+    if (child.parentId) {
+      const [member] = await tx
+        .select({ id: memberAccounts.id })
+        .from(memberAccounts)
+        .where(eq(memberAccounts.parentId, child.parentId))
+        .limit(1);
+      if (member) {
+        claimToken = generateAccessToken();
+        await tx.insert(memberAccessTokens).values({
+          memberAccountId: member.id,
+          orderId: order.id,
+          type: "purchase_claim",
+          tokenHash: hashAccessToken(claimToken),
+          expiresAt: expiresFromNow(24 * 60, now),
+          createdByAdmin: adminId > 0 ? adminId : null,
+        });
+        await writeAudit(tx, {
+          adminId,
+          action: "member_purchase_claim_issued",
+          entity: "member_account",
+          entityId: member.id,
+          detail: { orderId: order.id, expiresAt: expiresFromNow(24 * 60, now).toISOString() },
+        });
+      }
+    }
+
+    return { orderId: order.id, receiptNo, extendRequested, extendApplied, claimToken };
     });
   }
 }

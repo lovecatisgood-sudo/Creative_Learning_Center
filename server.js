@@ -5,9 +5,9 @@
 //
 // Deploy config on Hostinger:
 //   Install command: corepack enable && pnpm install --frozen-lockfile
-//   Build command:   pnpm build
+//   Build command:   pnpm hostinger:build
 //   Entry file:      server.js      (or Start command: node server.js)
-//   Node version:    20.x
+//   Node version:    22.x
 const { createServer } = require("http");
 const next = require("next");
 

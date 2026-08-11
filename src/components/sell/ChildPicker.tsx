@@ -20,6 +20,7 @@ export type PickedChild = {
   name: string;
   parentName: string;
   hasRunningSession: boolean;
+  runningPlayroomSessionId: number | null;
 };
 
 // Inline child search + quick-add for the Sell tab (A4 "Change" / initial pick).
@@ -51,7 +52,8 @@ export function ChildPicker({ onPick }: { onPick: (c: PickedChild) => void }) {
   }, [q]);
 
   async function pickById(childId: number) {
-    // Fetch to confirm the child + its running-session status for EXTRA_1H gating.
+    // Fetch the active product so the Playroom-only extension cannot be offered
+    // during an After School session.
     const res = await fetch(`/api/admin/children/${childId}`);
     const data = res.ok ? await res.json() : null;
     const found = results.find((r) => r.childId === childId);
@@ -60,6 +62,9 @@ export function ChildPicker({ onPick }: { onPick: (c: PickedChild) => void }) {
       name: data?.child?.name ?? found?.childName ?? "",
       parentName: data?.child?.parent?.name ?? found?.parentName ?? "",
       hasRunningSession: found?.hasRunningSession ?? false,
+      runningPlayroomSessionId: data?.activeSession?.productSku?.startsWith("PLAYROOM_ENTRY_")
+        ? data.activeSession.id
+        : null,
     });
   }
 

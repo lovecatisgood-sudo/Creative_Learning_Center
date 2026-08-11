@@ -19,6 +19,9 @@ export function CompleteParentSheet({
   const [tab, setTab] = useState<"complete" | "link">("complete");
   const [parentName, setParentName] = useState("");
   const [email, setEmail] = useState("");
+  const [dob, setDob] = useState("");
+  const [gender, setGender] = useState<"male" | "female" | "">("");
+  const [consentAccepted, setConsentAccepted] = useState(false);
   const [linkPhone, setLinkPhone] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -28,9 +31,9 @@ export function CompleteParentSheet({
     setError("");
     const body =
       tab === "complete"
-        ? { mode: "complete", parentName, email }
+        ? { mode: "complete", parentName, email, dob, gender, consentAccepted }
         : { mode: "link", linkPhone };
-    if (tab === "complete" && !parentName.trim()) {
+    if (tab === "complete" && (!parentName.trim() || !dob || !gender || !consentAccepted)) {
       setError(t("required"));
       setBusy(false);
       return;
@@ -77,6 +80,22 @@ export function CompleteParentSheet({
             <label className="mb-1 block text-[13px] font-semibold text-meta">{t("emailOptional")}</label>
             <input className="field" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
+          <div className="grid grid-cols-1 gap-3 min-[380px]:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-[13px] font-semibold text-meta">{t("dob")} <span className="text-danger">*</span></label>
+              <input className="field" type="date" max={new Date().toISOString().slice(0, 10)} value={dob} onChange={(e) => setDob(e.target.value)} />
+            </div>
+            <div>
+              <label className="mb-1 block text-[13px] font-semibold text-meta">{t("gender")} <span className="text-danger">*</span></label>
+              <select className="field" value={gender} onChange={(e) => setGender(e.target.value as "male" | "female" | "")}>
+                <option value="">—</option><option value="male">{t("male")}</option><option value="female">{t("female")}</option>
+              </select>
+            </div>
+          </div>
+          <label className="flex items-start gap-2 rounded-xl bg-paper p-3 text-sm text-ink">
+            <input type="checkbox" className="mt-0.5 h-5 w-5 accent-teal" checked={consentAccepted} onChange={(e) => setConsentAccepted(e.target.checked)} />
+            <span>{t("staffConsentConfirmed")}</span>
+          </label>
         </div>
       ) : (
         <div>

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { children, parents } from "@/db/schema";
-import { or, ilike, eq, desc } from "drizzle-orm";
+import { children, parents, memberAccounts, memberUidAliases } from "@/db/schema";
+import { or, ilike, eq, desc, sql } from "drizzle-orm";
 import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 import { runningSessionChildIds } from "@/lib/directory";
 
@@ -29,14 +29,21 @@ export async function GET(req: Request) {
       parentName: parents.name,
       phone: parents.phone,
       profileComplete: parents.profileComplete,
+      memberUid: memberAccounts.publicUid,
+      memberVerifiedAt: memberAccounts.emailVerifiedAt,
     })
     .from(children)
     .leftJoin(parents, eq(children.parentId, parents.id))
+    .leftJoin(memberAccounts, eq(memberAccounts.parentId, parents.id))
     .where(
       or(
         ilike(children.name, term),
         ilike(parents.name, term),
-        ilike(parents.phone, term)
+        ilike(parents.phone, term),
+        ilike(parents.email, term),
+        ilike(memberAccounts.publicUid, term),
+        ilike(memberAccounts.emailNormalized, term),
+        sql`exists (select 1 from ${memberUidAliases} mua where mua.member_account_id = ${memberAccounts.id} and mua.public_uid ilike ${term})`
       )
     )
     .orderBy(desc(children.createdAt))

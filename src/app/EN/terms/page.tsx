@@ -5,7 +5,7 @@ import { html } from "@/content/legal/terms.html";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Siamese Cat Creative Club",
-  description: "Terms for Little Explorer Playgroup, After School Explorer, packages, passes, meal care, bookings, safety, and pickup.",
+  description: "Terms for the parent-accompanied Kids Playroom, creative activities, After School Explorer, meal care, bookings, safety, and pickup.",
   alternates: {
     canonical: `${SITE_URL}/EN/terms`,
     languages: { th: `${SITE_URL}/terms`, en: `${SITE_URL}/EN/terms`, "x-default": `${SITE_URL}/terms` },

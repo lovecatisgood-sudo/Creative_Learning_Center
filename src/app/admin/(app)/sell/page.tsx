@@ -4,8 +4,8 @@ import { getActiveSessionForChild } from "@/lib/sessions";
 import { SellClient } from "./SellClient";
 
 // A4/A5 — Sell. Optional ?childId preselects the child (from the Child page or
-// the session "+ Add 1 hour" shortcut). EXTRA_1H is enabled only when the child
-// has a running session.
+// the session "+ Add 1 hour" shortcut). The 80 THB Playroom extension is
+// enabled only for a running Kids Playroom session.
 export default async function SellPage({
   searchParams,
 }: {
@@ -16,14 +16,17 @@ export default async function SellPage({
   const paymentInfo = getPaymentInfo();
 
   const childId = Number(query.childId);
-  const extendSessionId = Number.isInteger(Number(query.extendSession))
+  const requestedExtendSessionId = Number.isInteger(Number(query.extendSession))
     ? Number(query.extendSession)
     : null;
   let child = null;
-  let hasRunningSession = false;
+  let playroomSessionId: number | null = null;
   if (Number.isInteger(childId)) {
     child = await getChildCore(childId);
-    if (child) hasRunningSession = Boolean(await getActiveSessionForChild(childId));
+    if (child) {
+      const activeSession = await getActiveSessionForChild(childId);
+      if (activeSession?.productSku.startsWith("PLAYROOM_ENTRY_")) playroomSessionId = activeSession.id;
+    }
   }
 
   return (
@@ -33,8 +36,8 @@ export default async function SellPage({
       initialChild={
         child ? { id: child.id, name: child.name, parentName: child.parent?.name ?? "" } : null
       }
-      initialHasRunningSession={hasRunningSession}
-      extendSessionId={extendSessionId}
+      initialPlayroomSessionId={playroomSessionId}
+      preloadPlayroomExtension={Boolean(playroomSessionId && requestedExtendSessionId === playroomSessionId)}
     />
   );
 }

@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/landing/site";
 export const revalidate = 300;
 
 const title = "Bangna Family Guide: Play & After School | Siamese Cat";
-const description = "Practical answers about playgroup, after-school routines, play and family activities around Bangna and Mega Bangna from a local children's space.";
+const description = "Practical answers about Kids Playroom visits, after-school routines, play and family activities around Bangna and Mega Bangna.";
 
 export const metadata: Metadata = {
   title,

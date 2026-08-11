@@ -20,6 +20,7 @@ export default async function ManagerDashboardPage() {
   ]);
 
   const tools = [
+    { href: "/admin/members", icon: "🐾", title: "สมาชิก Siamese Cat", subtitle: "Members, verification & packages", value: "เปิด" },
     { href: "/admin/overview", icon: "📊", title: "ยอดขายและรายงาน", subtitle: "Sales & reports", value: `${today.totals.grand.toLocaleString()} ฿` },
     { href: "/admin/inquiries", icon: "✉", title: "คำถามจากเว็บไซต์", subtitle: "Website inquiries", value: String(inquiries.value) },
     { href: "/admin/game", icon: "🎮", title: "ผู้เล่นเกม", subtitle: "Game players & scores", value: String(players.value) },

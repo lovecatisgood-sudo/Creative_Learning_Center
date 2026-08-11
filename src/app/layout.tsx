@@ -10,12 +10,12 @@ const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club",
-  description: "Little Explorer Playgroup และโปรแกรม After School Explorer ใกล้เมกาบางนา พร้อมเซสชันยืดหยุ่น กิจกรรมสร้างสรรค์ ดูแลมื้ออาหาร และรอรับกลับ",
+  description: "Kids Playroom ที่ผู้ปกครองอยู่ด้วยและโปรแกรม After School Explorer ใกล้เมกาบางนา พร้อมกิจกรรมสร้างสรรค์ มื้ออาหาร และรอรับกลับ",
   openGraph: {
     type: "website",
     siteName: "Siamese Cat Creative Club",
     title: "Siamese Cat Creative Club",
-    description: "Little Explorer Playgroup และโปรแกรม After School Explorer ใกล้เมกาบางนา",
+    description: "Kids Playroom และโปรแกรม After School Explorer ใกล้เมกาบางนา",
     url: SITE_URL,
     images: [{
       url: "/landing/og-siamese-cat-creative-club.jpg",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Siamese Cat Creative Club",
-    description: "Little Explorer Playgroup และโปรแกรม After School Explorer ใกล้เมกาบางนา",
+    description: "Kids Playroom และโปรแกรม After School Explorer ใกล้เมกาบางนา",
     images: ["/landing/og-siamese-cat-creative-club.jpg"],
   },
   icons: {
@@ -49,7 +49,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const requestHeaders = await headers();
   const language = requestHeaders.get("x-sccc-language") === "en" ? "en" : "th";
   const pathname = requestHeaders.get("x-sccc-pathname") ?? "";
-  const isCustomerPage = !pathname.startsWith("/admin") && !pathname.startsWith("/api");
+  const isMemberPage = pathname.startsWith("/member") || pathname.startsWith("/EN/member");
+  const isCustomerPage = !pathname.startsWith("/admin") && !pathname.startsWith("/api") && !isMemberPage;
 
   return (
     <html lang={language}>

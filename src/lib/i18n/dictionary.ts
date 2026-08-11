@@ -39,8 +39,8 @@ export const dict = {
   loginError: { th: "อีเมลหรือรหัสผ่านไม่ถูกต้อง", en: "Email or password is incorrect." },
 
   // ── Signup (P1/P2) ──
-  signupTitle: { th: "ลงทะเบียนผู้ปกครอง", en: "Parent signup" },
-  signupSubtitle: { th: "ลงทะเบียนผู้ปกครองและเด็ก", en: "Register a parent and child" },
+  signupTitle: { th: "สมัครสมาชิก Siamese Cat", en: "Become a Siamese Cat Member" },
+  signupSubtitle: { th: "สร้างรหัสสมาชิกสำหรับผู้ปกครองและเด็ก", en: "Create a Member ID for your family" },
   parentSection: { th: "ข้อมูลผู้ปกครอง", en: "Parent details" },
   parentName: { th: "ชื่อผู้ปกครอง", en: "Parent's name" },
   contactNumber: { th: "เบอร์ติดต่อ", en: "Contact number" },
@@ -74,6 +74,7 @@ export const dict = {
   noResults: { th: "ไม่พบข้อมูล", en: "No matches" },
   quickAddChild: { th: "เพิ่มเด็กด่วน", en: "Quick add child" },
   profileIncomplete: { th: "ข้อมูลไม่ครบ", en: "PROFILE INCOMPLETE" },
+  memberVerified: { th: "ยืนยันแล้ว", en: "VERIFIED" },
   inSession: { th: "กำลังเล่น", en: "in session" },
   parentLabel: { th: "ผู้ปกครอง", en: "Parent" },
 
@@ -81,6 +82,9 @@ export const dict = {
   quickAddTitle: { th: "เพิ่มเด็กด่วน", en: "Quick add child" },
   contactPhone: { th: "เบอร์ติดต่อ", en: "Contact phone" },
   createAndOpen: { th: "สร้างและเปิด", en: "Create & open" },
+  possibleMemberDuplicate: { th: "พบสมาชิกที่อาจใช้เบอร์นี้อยู่แล้ว", en: "A member may already use this phone" },
+  searchExistingMemberFirst: { th: "ปิดหน้าต่างนี้และค้นหาเบอร์ก่อน หรือยืนยันสร้างสมาชิกใหม่หากเป็นคนละครอบครัว", en: "Close and search the phone first, or confirm a new member if this is a different family." },
+  createDuplicateAnyway: { th: "ยืนยันสร้างสมาชิกใหม่", en: "Create separate member" },
 
   // ── Child page (A3) ──
   childPageEdit: { th: "แก้ไข", en: "Edit" },
@@ -101,6 +105,7 @@ export const dict = {
   completeProfileTitle: { th: "กรอกข้อมูลผู้ปกครอง", en: "Complete parent details" },
   linkExistingParent: { th: "เชื่อมกับผู้ปกครองเดิม (ค้นจากเบอร์)", en: "Link to existing parent by phone" },
   saveProfile: { th: "บันทึกข้อมูล", en: "Save details" },
+  staffConsentConfirmed: { th: "ผู้ปกครองได้อ่านและยอมรับข้อกำหนดและนโยบายความเป็นส่วนตัวแล้ว", en: "The guardian has read and accepted the Terms and Privacy Policy" },
 
   // ── Status chips ──
   chipAvailable: { th: "พร้อมใช้", en: "AVAILABLE" },
@@ -252,12 +257,12 @@ export const dict = {
   // ── Landing page ──
   landingLogoAlt: { th: "โลโก้ Siamese Cat Creative Club", en: "Siamese Cat Creative Club logo" },
   landingMetaTitle: {
-    th: "Siamese Cat Creative Club — Playgroup และดูแลหลังเลิกเรียนใกล้เมกาบางนา",
-    en: "Siamese Cat Creative Club — Playgroup & After-School Care Near Mega Bangna",
+    th: "Siamese Cat Creative Club — Kids Playroom และดูแลหลังเลิกเรียนใกล้เมกาบางนา",
+    en: "Siamese Cat Creative Club — Kids Playroom & After-School Care Near Mega Bangna",
   },
   landingMetaDescription: {
-    th: "โปรแกรมกลุ่มเล็กที่ปลอดภัยสำหรับเด็ก มี Little Explorer Playgroup, After School Explorer, Meal Care และบัตรเหมารอบสำหรับครอบครัวที่มาเป็นประจำ",
-    en: "Safe small-group care for children with Little Explorer Playgroup, After School Explorer, meal care and regular family passes.",
+    th: "Kids Playroom ที่ผู้ปกครองอยู่ด้วย พร้อมกิจกรรมสร้างสรรค์เสริม และบริการ After School Explorer แยกต่างหาก",
+    en: "A parent-accompanied Kids Playroom with optional creative activities and a separate After School Explorer service.",
   },
 
   // Hero
@@ -278,7 +283,7 @@ export const dict = {
     th: "พื้นที่เดียวที่สว่าง สะอาด และออกแบบมาเพื่อเด็ก ๆ และครอบครัว — โซนเล่น มุมโฟกัส โต๊ะสร้างสรรค์ พื้นที่มื้ออาหาร และขั้นตอนรอรับกลับที่ชัดเจน",
     en: "One bright, clean space designed around children and families: play area, quiet focus corner, creative tables, meal space and a clear pickup routine.",
   },
-  landingGalleryPlayroom: { th: "โซนเล่นที่มีพี่เลี้ยงดูแล", en: "Supervised play area" },
+  landingGalleryPlayroom: { th: "โซนเล่นสำหรับเด็กและผู้ปกครอง", en: "Play area for children and parents" },
   landingGalleryCozy: { th: "มุมพักผ่อนสำหรับผู้ปกครอง", en: "Cozy parent lounge" },
   landingGalleryStudio: { th: "สตูดิโอศิลปะและงานฝีมือ", en: "Art & craft studio" },
   landingGalleryActivity: { th: "ห้องกิจกรรมสร้างสรรค์", en: "Creative activity room" },
@@ -290,17 +295,17 @@ export const dict = {
     th: "มาเล่นได้บ่อยเท่าที่ต้องการ — จ่ายตามครั้งที่มา เพิ่มกิจกรรมสร้างสรรค์ หรือเลือกแพ็กเกจที่รวมทั้งสองอย่างไว้ด้วยกัน",
     en: "Come as often as you like — pay per visit, add a creative activity, or choose a bundle that combines both.",
   },
-  svcPlayTitle: { th: "เข้าเล่นแบบมีพี่เลี้ยงดูแล", en: "Supervised Play" },
+  svcPlayTitle: { th: "Kids Playroom", en: "Kids Playroom" },
   svcPlayBody: {
-    th: "เข้ามาเล่นในสนามเด็กเล่นในร่มที่ปลอดภัยและมีพี่เลี้ยงดูแล ไม่ต้องสมัครสมาชิก จ่ายตามชั่วโมงและอยู่ได้นานตามต้องการ",
-    en: "Drop in to our safe, supervised indoor playroom — no membership needed. Pay by the hour and stay as long as you like.",
+    th: "เข้าเล่นพร้อมผู้ปกครอง ทีมงานช่วยแนะนำกิจกรรม แต่ผู้ปกครองต้องอยู่ภายในสถานที่และยังคงดูแลเด็ก",
+    en: "Visit with a parent or guardian. Staff guide activities, while the accompanying adult stays on the premises and remains responsible for the child.",
   },
   priceHour1Name: { th: "เข้าเล่น 1 ชั่วโมง", en: "1 Hour of Play" },
-  priceHour1Value: { th: "฿199", en: "฿199" },
+  priceHour1Value: { th: "฿149", en: "฿149" },
   priceHour2Name: { th: "เข้าเล่น 2 ชั่วโมง", en: "2 Hours of Play" },
-  priceHour2Value: { th: "฿300", en: "฿300" },
+  priceHour2Value: { th: "฿249", en: "฿249" },
   priceExtraHourName: { th: "เพิ่มเวลา 1 ชั่วโมง", en: "Add an extra hour" },
-  priceExtraHourValue: { th: "฿100", en: "฿100" },
+  priceExtraHourValue: { th: "฿80 หลังซื้อค่าเข้า", en: "฿80 after initial entry" },
   svcCreativeTitle: { th: "After School Explorer", en: "After School Explorer" },
   svcCreativeBody: {
     th: "โปรแกรมหลังเลิกเรียนที่รวมการเล่น การบ้าน กิจกรรมสร้างสรรค์ มื้ออาหาร และการรอรับกลับตามเวลาที่จอง",
@@ -312,39 +317,39 @@ export const dict = {
   actClayName: { th: "Meal Care หลังเลิกเรียน", en: "After-school meal care" },
   actClayValue: { th: "฿299", en: "฿299" },
   actClayDesc: { th: "อาหารเด็ก 1 รายการและเครื่องดื่ม 1 แก้ว พร้อมทีมงานดูแล", en: "One child-friendly food item and one drink with staff support" },
-  bundleTitle: { th: "เซสชัน Playgroup", en: "Playgroup Sessions" },
+  bundleTitle: { th: "เมนู Kids Playroom", en: "Kids Playroom Menu" },
   bundleBody: {
-    th: "ตัวเลือกเพลย์กรุ๊ปตั้งแต่ 1 ชั่วโมง ครึ่งวัน ไปจนถึงเต็มวันธรรมดาและวันหยุด",
-    en: "Playgroup options from 1 hour and half-day through weekday and weekend full-day care.",
+    th: "ค่าเข้าเด็กแต่ละคนรวมผู้ใหญ่ 1 คนและกระดาษระบายสี 1 แผ่น ผู้ปกครองต้องอยู่ภายในสถานที่",
+    en: "Each child entry includes one adult and one coloring sheet. The accompanying adult stays on the premises.",
   },
   bundle1Name: { th: "เข้าเล่น 1 ชั่วโมง", en: "1-Hour Entry" },
-  bundle1Value: { th: "฿199", en: "฿199" },
+  bundle1Value: { th: "฿149", en: "฿149" },
   bundle2Name: { th: "เซสชัน 2 ชั่วโมง", en: "2-Hour Session" },
-  bundle2Value: { th: "฿300", en: "฿300" },
-  bundle3Name: { th: "เต็มวันวันธรรมดา", en: "Weekday Full-Day" },
-  bundle3Value: { th: "฿999", en: "฿999" },
-  bundle4Name: { th: "เต็มวันเสาร์หรืออาทิตย์", en: "Weekend Full-Day" },
-  bundle4Value: { th: "฿1,500", en: "฿1,500" },
+  bundle2Value: { th: "฿249", en: "฿249" },
+  bundle3Name: { th: "ผู้ใหญ่เพิ่มเติม / ชั่วโมง", en: "Additional adult / hour" },
+  bundle3Value: { th: "฿50", en: "฿50" },
+  bundle4Name: { th: "กิจกรรมสีเทียน", en: "Crayon activity" },
+  bundle4Value: { th: "฿45", en: "฿45" },
 
   // Passes & Family Membership
-  landingPassesKicker: { th: "มาเป็นประจำ", en: "For regulars" },
-  landingPassesTitle: { th: "บัตรเหมารอบเพลย์กรุ๊ป", en: "Playgroup Passes" },
+  landingPassesKicker: { th: "กิจกรรมเสริม", en: "Optional activities" },
+  landingPassesTitle: { th: "กิจกรรมดินปั้นนิ่ม", en: "Soft-Clay Activities" },
   landingPassesIntro: {
-    th: "สำหรับครอบครัวที่ต้องการดูแลวันธรรมดาหรือวันหยุดเป็นประจำ พร้อมราคาต่อครั้งที่คุ้มขึ้น",
-    en: "For families who need regular weekday or weekend care with better per-session value.",
+    th: "เลือกฟิกเกอร์ดินปั้นนิ่มขนาดเล็กหรือใหญ่ตามวัสดุและแบบที่พร้อมให้บริการ",
+    en: "Choose a small or large soft-clay figure based on the materials and figures currently available.",
   },
-  pass1Title: { th: "บัตรเต็มวันธรรมดา 20 ครั้ง", en: "20-Session Weekday Full-Day Pass" },
-  pass1Price: { th: "฿18,000", en: "฿18,000" },
+  pass1Title: { th: "ฟิกเกอร์ดินปั้นนิ่มขนาดเล็ก", en: "Small Soft-Clay Figure" },
+  pass1Price: { th: "฿69", en: "฿69" },
   pass1Desc: {
-    th: "เต็มวันธรรมดา 20 ครั้ง เฉลี่ย 900 บาทต่อครั้ง สำหรับครอบครัวที่ต้องการดูแลวันธรรมดาเป็นประจำ",
-    en: "20 weekday full-day sessions at an effective 900 THB per session for regular weekday care.",
+    th: "กิจกรรมฟิกเกอร์ขนาดเล็ก โปรดสอบถามแบบที่พร้อมให้บริการ",
+    en: "A small figure activity; ask staff which figures are currently available.",
   },
-  pass2Tag: { th: "คุ้มค่าที่สุด", en: "Best value" },
-  pass2Title: { th: "บัตรเต็มวันเสาร์หรืออาทิตย์ 8 ครั้ง", en: "8-Session Weekend Full-Day Pass" },
-  pass2Price: { th: "฿9,200", en: "฿9,200" },
+  pass2Tag: { th: "ขนาดใหญ่", en: "Large" },
+  pass2Title: { th: "ฟิกเกอร์ดินปั้นนิ่มขนาดใหญ่", en: "Large Soft-Clay Figure" },
+  pass2Price: { th: "฿99", en: "฿99" },
   pass2Desc: {
-    th: "เต็มวันเสาร์หรืออาทิตย์ 8 ครั้ง เฉลี่ย 1,150 บาทต่อครั้ง สำหรับการดูแลวันหยุดเป็นประจำ",
-    en: "8 Saturday or Sunday full-day sessions at an effective 1,150 THB per session.",
+    th: "กิจกรรมฟิกเกอร์ขนาดใหญ่ โปรดสอบถามแบบที่พร้อมให้บริการ",
+    en: "A large figure activity; ask staff which figures are currently available.",
   },
 
   // Visit us / contact

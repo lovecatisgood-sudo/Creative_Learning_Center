@@ -22,7 +22,7 @@ export function CheckoutView({
   catalog: CatalogProduct[];
   paymentInfo: PaymentInfo;
   extendSessionId?: number | null;
-  onConfirmed: (orderId: number, receiptNo: string) => void;
+  onConfirmed: (orderId: number, receiptNo: string, claimToken: string | null) => void;
 }) {
   const { t, lang } = useLang();
   const bySku = useMemo(() => new Map(catalog.map((p) => [p.sku, p])), [catalog]);
@@ -99,9 +99,9 @@ export function CheckoutView({
       // note a beat on screen before moving on to the receipt.
       if (extendSessionId && data.extendRequested && data.extendApplied === false) {
         setNote(t("extendNotApplied"));
-        setTimeout(() => onConfirmed(data.orderId, data.receiptNo), 1400);
+        setTimeout(() => onConfirmed(data.orderId, data.receiptNo, data.claimToken ?? null), 1400);
       } else {
-        onConfirmed(data.orderId, data.receiptNo);
+        onConfirmed(data.orderId, data.receiptNo, data.claimToken ?? null);
       }
     } else {
       const d = await res.json().catch(() => ({}));

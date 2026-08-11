@@ -19,7 +19,7 @@ export function BottomNav({ role }: { role: AdminRole }) {
     ? [{ href: "/admin/manager", key: "navManager" as DictKey, icon: "▦" }, ...OPERATION_TABS]
     : OPERATION_TABS;
   return (
-    <nav className="sticky bottom-0 z-20 border-t border-brown2 bg-brown">
+    <nav className="sticky bottom-0 z-20 border-t border-brown2 bg-brown safe-bottom">
       {/* Tab row itself is capped and centered so tabs stay thumb-sized instead
           of stretching edge-to-edge on tablet/landscape; the bar background
           (above) still spans the full fluid width. */}

@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/landing/site";
 export const revalidate = 300;
 
 const title = "เรื่องครอบครัวบางนา การเล่น และหลังเลิกเรียน | Siamese Cat";
-const description = "คำตอบจากพื้นที่จริงเรื่องเพลย์กรุ๊ป ชีวิตหลังเลิกเรียน การเล่น และกิจกรรมสำหรับครอบครัวย่านบางนา ใกล้เมกาบางนา";
+const description = "คำตอบจากพื้นที่จริงเรื่อง Kids Playroom ชีวิตหลังเลิกเรียน การเล่น และกิจกรรมสำหรับครอบครัวย่านบางนา ใกล้เมกาบางนา";
 
 export const metadata: Metadata = {
   title,

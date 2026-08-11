@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ลงทะเบียนผู้ปกครอง | Siamese Cat Creative Club",
-  description: "ลงทะเบียนผู้ปกครองและเด็กสำหรับ Little Explorer Playgroup หรือโปรแกรม After School Explorer",
+  title: "สมัครสมาชิก Siamese Cat | Siamese Cat Creative Club",
+  description: "สร้างรหัสสมาชิก Siamese Cat สำหรับดูแพ็กเกจ เซสชัน และประวัติการใช้งาน",
   alternates: {
     canonical: "/signup",
     languages: { th: "/signup", en: "/EN/signup", "x-default": "/signup" },

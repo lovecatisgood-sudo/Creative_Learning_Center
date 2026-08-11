@@ -17,11 +17,10 @@ type InquiryDetail = {
 };
 
 const serviceLabels: Record<string, string> = {
-  "little-explorer-program": "Little Explorer Program",
-  playgroup: "Playgroup",
+  playgroup: "Kids Playroom & Creative Activities",
   "creative-club": "Creative Club / After School Explorer",
-  membership: "Membership",
-  "meal-plans": "Meal Plans",
+  membership: "After School plans",
+  "meal-plans": "After School Meal Care",
 };
 
 export default async function InquiriesPage() {

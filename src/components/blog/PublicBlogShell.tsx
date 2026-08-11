@@ -19,9 +19,8 @@ const NAV_ITEMS: NavItem[] = [
     href: "/creative",
     th: "ครีเอทีฟคลับ",
     en: "Creative Club",
-    children: [{ key: "playgroup", href: "/playgroup", th: "เพลย์กรุ๊ป", en: "Playgroup" }],
+    children: [{ key: "playgroup", href: "/playgroup", th: "Kids Playroom", en: "Kids Playroom" }],
   },
-  { key: "little-explorer-program", href: "/little-explorer-program", th: "โปรแกรม Little Explorer", en: "Little Explorer Program" },
   {
     key: "membership",
     href: "/membership",
@@ -110,7 +109,7 @@ export function PublicBlogShell({
           <div className="footer-grid">
             <div>
               <div className="brand" style={{ color: "#fff8ed", marginBottom: 18 }}><span className="brand-mark"><img className="brand-logo-img" src="/main-site/assets/logo-circle-96.webp?v=20260808-seo-v1" width="96" height="96" alt={language === "th" ? "โลโก้ Siamese Cat Creative Club" : "Siamese Cat Creative Club logo"} loading="lazy" /></span><span className="brand-text"><strong>Siamese Cat Creative Club</strong><span style={{ color: "rgba(255,248,237,.7)" }}>{language === "th" ? "ใกล้เมกาบางนา" : "Near Mega Bangna"}</span></span></div>
-              <p style={{ maxWidth: 480, color: "rgba(255,248,237,.76)" }}>{language === "th" ? "สองโปรแกรมกลุ่มเล็กแบบยืดหยุ่นสำหรับเด็ก ทั้งเพลย์กรุ๊ปช่วงกลางวัน และโปรแกรมหลังเลิกเรียน พร้อมการเล่น การบ้าน ความสร้างสรรค์ มื้ออาหาร และการรอรับกลับ" : "Two flexible small-group programs for children: daytime playgroup care and after-school explorer support with play, homework, creativity, meal care and pickup routines."}</p>
+              <p style={{ maxWidth: 480, color: "rgba(255,248,237,.76)" }}>{language === "th" ? "Kids Playroom ที่ผู้ปกครองอยู่ด้วย พร้อมกิจกรรมสร้างสรรค์เสริม และบริการ After School Explorer แยกต่างหากสำหรับการบ้าน มื้ออาหาร และรอรับกลับ" : "A parent-accompanied Kids Playroom with optional creative activities, plus separate After School Explorer care with homework, meals and pickup support."}</p>
               <a className="footer-cafe-link" href="https://siamesecat.cafe/">{language === "th" ? "เยี่ยมชม Siamese Cat Cafe" : "Visit Siamese Cat Cafe"}</a>
             </div>
             <div className="footer-navigation">
@@ -142,7 +141,7 @@ export function PublicBlogShell({
               <address className="footer-links">
                 <span>{language === "th" ? "46/27 ถนนคู่ขนานบางนา-ตราด บางแก้ว" : "46/27 Bang Na-Trat Frontage Road, Bang Kaeo"}</span>
                 <span>{language === "th" ? "หลังเลิกเรียนวันธรรมดา 15:00-20:00" : "Weekdays 3-8 PM for after-school support"}</span>
-                <span>{language === "th" ? "เวลาเพลย์กรุ๊ปตามการจองที่ยืนยันแล้ว" : "Playgroup times by confirmed booking"}</span>
+                <span>{language === "th" ? "เข้าใช้ Kids Playroom ตามรอบและจำนวนที่ยืนยัน" : "Kids Playroom entry by confirmed availability"}</span>
                 <a href="https://maps.app.goo.gl/XpYHkxenRu6gLvnFA" target="_blank" rel="noreferrer">{language === "th" ? "ดูเส้นทาง" : "Get directions"}</a>
                 <a href="mailto:Cafe@siamesecat.cafe">Cafe@siamesecat.cafe</a>
                 <a href="tel:+66952413028">+66 95 241 3028</a>

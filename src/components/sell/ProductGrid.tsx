@@ -19,7 +19,8 @@ const SECTION_LABEL: Record<CartSection, DictKey> = {
 };
 
 // A4 product grid: 2 columns, grouped by section. Tap a tile to add; the qty
-// badge steps up. EXTRA_1H is disabled unless the child has a running session.
+// badge steps up. The Playroom extension is disabled unless the child has a
+// running Kids Playroom session.
 export function ProductGrid({
   catalog,
   cart,
@@ -53,7 +54,7 @@ export function ProductGrid({
             {items.map((p) => {
               const qty = cart.get(p.sku) ?? 0;
               const caption = addonCaption(p.sku);
-              const disabled = p.sku === "EXTRA_1H" && !extraEnabled;
+              const disabled = p.sku === "PLAYROOM_EXTRA_1H" && !extraEnabled;
               return (
                 <div
                   key={p.sku}

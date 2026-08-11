@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { dict, type DictKey, type Lang } from "@/lib/i18n/dictionary";
 import { PublicLanguageLink } from "@/components/PublicLanguageLink";
 
-type Result = { parentName: string; childNames: string[]; duplicatePhone?: boolean };
+type Result = { parentName: string; memberUid: string; childNames: string[]; duplicatePhone?: boolean };
 
 function SignupSuccessPageContent({ language }: { language: Lang }) {
   const lang = language;
@@ -19,7 +19,7 @@ function SignupSuccessPageContent({ language }: { language: Lang }) {
   }, []);
 
   const label = (th: string, en: string) => (lang === "th" ? th : en);
-  const signupUrl = lang === "en" ? "/EN/signup" : "/signup";
+  const homeUrl = lang === "en" ? "/EN" : "/";
 
   return (
     <div className="flex min-h-screen flex-col bg-paper px-6 pb-10 pt-4">
@@ -30,13 +30,15 @@ function SignupSuccessPageContent({ language }: { language: Lang }) {
         <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-okbg text-4xl text-ok">
           ✓
         </div>
-        <h1 className="text-2xl font-extrabold text-ok">{label("ลงทะเบียนสำเร็จ", "Registration successful")}</h1>
-        <p className="mt-2 text-base text-meta">{label("กรุณาแสดงหน้าจอนี้ให้พนักงาน", "Please show this screen to our staff")}</p>
+        <h1 className="text-2xl font-extrabold text-ok">{label("สร้างสมาชิกแล้ว", "Member created")}</h1>
+        <p className="mt-2 text-base text-meta">{label("แสดงรหัสสมาชิกนี้ให้พนักงาน", "Show this Member ID to our staff")}</p>
 
         {result && (
           <div className="mt-6 w-full rounded-2xl border border-line bg-card p-5">
             <div className="text-[13px] font-semibold text-meta">{t("parentLabel")}</div>
             <div className="text-xl font-bold text-ink">{result.parentName}</div>
+            <div className="mt-4 text-[13px] font-semibold text-meta">Siamese Cat Member ID</div>
+            <div className="mt-1 break-all font-mono text-2xl font-extrabold tracking-wide text-brown">{result.memberUid}</div>
             <div className="mt-3 text-[13px] font-semibold text-meta">{t("childSection")}</div>
             <div className="flex flex-col gap-1">
               {result.childNames.map((n, i) => (
@@ -54,14 +56,20 @@ function SignupSuccessPageContent({ language }: { language: Lang }) {
         )}
       </div>
 
+      {result && (
+        <button onClick={() => router.push(lang === "en" ? "/EN/member" : "/member")} className="btn-primary mt-6">
+          {label("ดูแพ็กเกจของฉัน", "View my packages")}
+        </button>
+      )}
+
       <button
         onClick={() => {
           sessionStorage.removeItem("sccc_signup_result");
-          router.push(signupUrl);
+          router.push(homeUrl);
         }}
         className="btn-ghost mt-6"
       >
-        {t("registerAnother")}
+        {label("กลับไปที่ Creative Club", "Back to Creative Club")}
       </button>
     </div>
   );

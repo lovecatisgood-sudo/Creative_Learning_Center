@@ -13,6 +13,7 @@ export const MANAGER_PATH_PREFIXES = [
   "/admin/game",
   "/admin/blog",
   "/admin/team",
+  "/admin/members",
 ] as const;
 
 export function isManagerPath(pathname: string): boolean {

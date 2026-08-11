@@ -25,9 +25,22 @@ for (const relative of gameFiles) {
   assert.match(html, /gameanalytics-5\.0\.0\.min\.js/, `${relative}: pinned GameAnalytics SDK is missing`);
   assert.match(html, /gameanalytics-config\.js/, `${relative}: GameAnalytics runtime config is missing`);
   assert.match(html, /gameanalytics-web\.js/, `${relative}: GameAnalytics consent adapter is missing`);
+  assert.match(html, /mobile-native-bridge\.js/, `${relative}: native mobile bridge is missing`);
+  assert.match(html, /function showRestartAds\(/, `${relative}: mobile restart-ad sequence is missing`);
+  assert.match(html, /consumeFirstInternalAd\(\)/, `${relative}: first-session internal ad gate is missing`);
+  assert.match(html, /native\.showRestartAd\(\)/, `${relative}: AdMob restart hook is missing`);
   assert.match(html, /AN\.gameStart\(/, `${relative}: game-start analytics hook is missing`);
   assert.match(html, /AN\.gameOver\(/, `${relative}: game-over analytics hook is missing`);
   assert.match(html, /AN\.difficultySelected\(/, `${relative}: difficulty analytics hook is missing`);
+}
+
+for (const relative of [
+  "game-assets/cat-vs-dog/assets/js/mobile-native-bridge.js",
+  "mobile-shell/index.html",
+  "capacitor.config.ts",
+]) {
+  const file = await stat(path.join(root, relative));
+  assert.ok(file.isFile() && file.size > 0, `${relative}: missing or empty mobile app asset`);
 }
 
 for (const relative of ["public/game-ads/siamese-cat-cafe-en.mp4", "public/game-ads/creative-club-en.mp4", "public/game-ads/creative-club-th.mp4"]) {
@@ -41,6 +54,11 @@ assert.doesNotMatch(envExample, /^ROYALTY_/m);
 assert.match(envExample, /^HOUSE_ADS_ENABLED=false$/m);
 assert.match(envExample, /^GAMEANALYTICS_GAME_KEY=$/m);
 assert.match(envExample, /^GAMEANALYTICS_SECRET_KEY=$/m);
+assert.match(envExample, /^GAMEANALYTICS_ANDROID_GAME_KEY=$/m);
+assert.match(envExample, /^GAMEANALYTICS_ANDROID_SECRET_KEY=$/m);
+assert.match(envExample, /^GAMEANALYTICS_IOS_GAME_KEY=$/m);
+assert.match(envExample, /^GAMEANALYTICS_IOS_SECRET_KEY=$/m);
+assert.match(envExample, /^ADMOB_TEST_MODE=true$/m);
 
 const adMigration = await readFile(path.join(root, "drizzle/0004_massive_scarecrow.sql"), "utf8");
 assert.doesNotMatch(adMigration, /true, 100, 10, 0\)/, "seeded campaigns must not deploy active without cooldown");

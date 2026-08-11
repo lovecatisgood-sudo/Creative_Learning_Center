@@ -47,6 +47,28 @@ html[lang="th"] body {
   position: relative;
 }
 
+/* Customer member area: phone-first but comfortable on a small tablet. */
+.member-frame {
+  width: 100%;
+  max-width: 760px;
+  min-height: 100%;
+  margin: 0 auto;
+  background: var(--paper);
+  position: relative;
+}
+
+.safe-top {
+  padding-top: max(0.5rem, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.member-bottom-nav {
+  flex: 0 0 auto;
+}
+
 /* Inputs sized for thumbs (min 48px targets per UI/UX spec §1). */
 .field {
   @apply w-full rounded-xl border border-line bg-card px-4 py-3 text-base text-ink outline-none;

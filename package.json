@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/optimize-main-site-images.mjs && node scripts/build-main-site-redesign.mjs && node scripts/build-family-tools.mjs && node scripts/check-main-site-shell.mjs && node scripts/check-family-tools.mjs && node scripts/build-legal.mjs",
+    "prebuild": "node scripts/build-mobile-bridge.mjs && node scripts/optimize-main-site-images.mjs && node scripts/build-main-site-redesign.mjs && node scripts/build-family-tools.mjs && node scripts/check-main-site-shell.mjs && node scripts/check-family-tools.mjs && pnpm check:playroom-menu && pnpm check:game-routes && node scripts/build-legal.mjs",
     "build": "next build",
     "hostinger:build": "pnpm db:migrate && pnpm build",
     "start": "next start",
@@ -20,13 +20,27 @@
     "images:landing": "node scripts/optimize-landing-images.mjs",
     "legal:build": "node scripts/build-legal.mjs",
     "check:main-site-shell": "node scripts/check-main-site-shell.mjs",
+    "check:playroom-menu": "node scripts/check-playroom-menu.mjs",
+    "check:catalog-system": "tsx scripts/check-catalog-system.ts",
     "check:family-tools": "node scripts/check-family-tools.mjs",
     "check:game-features": "node scripts/check-game-features.mjs",
+    "check:game-routes": "tsx scripts/check-game-routes.ts",
+    "check:member-system": "tsx scripts/check-member-system.ts",
+    "check:member-release": "node scripts/check-member-release.mjs",
+    "member:prune-tokens": "tsx scripts/prune-member-tokens.ts",
     "check:deploy-hygiene": "node scripts/check-deploy-hygiene.mjs",
     "qa:layout": "node scripts/qa-layout.mjs",
-    "security:check": "pnpm audit && pnpm check:deploy-hygiene"
+    "security:check": "pnpm audit && pnpm check:deploy-hygiene",
+    "mobile:bridge": "node scripts/build-mobile-bridge.mjs",
+    "mobile:sync": "pnpm mobile:bridge && cap sync",
+    "mobile:android": "pnpm mobile:sync && cap open android",
+    "mobile:ios": "pnpm mobile:sync && cap open ios"
   },
   "dependencies": {
+    "@capacitor-community/admob": "8.0.0",
+    "@capacitor/android": "8.5.0",
+    "@capacitor/core": "8.5.0",
+    "@capacitor/ios": "8.5.0",
     "@neondatabase/serverless": "^0.10.4",
     "bcryptjs": "^2.4.3",
     "drizzle-orm": "^0.45.2",
@@ -42,6 +56,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.5.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.17.9",
     "@types/nodemailer": "^8.0.1",
@@ -52,6 +67,7 @@
     "autoprefixer": "^10.5.4",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.10",
+    "esbuild": "0.25.10",
     "marked": "12.0.2",
     "postcss": "8.5.26",
     "tailwindcss": "^3.4.16",

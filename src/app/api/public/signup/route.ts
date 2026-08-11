@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { parents, children } from "@/db/schema";
+import { parents, children, memberAccounts, memberConsents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { toBkk } from "@/lib/time";
+import { generateMemberUid, normalizeEmail, normalizePhone } from "@/lib/member-identity";
+import { establishMemberSession } from "@/lib/member-auth";
+import { PROGRAM_INTEREST_VALUES } from "@/lib/program-options";
+import { isTrustedMutationOrigin } from "@/lib/request-security";
 
 // Public (no auth) parent self-registration — PRD §6.1. Creates a full parent
 // record (profile_complete = true) plus one or more children in a transaction.
@@ -26,12 +30,16 @@ function bkkTodayISO(): string {
 }
 
 export async function POST(req: Request) {
+  if (!isTrustedMutationOrigin(req)) return NextResponse.json({ error: "Forbidden origin" }, { status: 403 });
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Bad request" }, { status: 400 });
 
   const parentName = String(body.parentName ?? "").trim();
   const phone = String(body.phone ?? "").trim();
-  const email = String(body.email ?? "").trim() || null;
+  const rawEmail = String(body.email ?? "").trim();
+  const email = rawEmail ? normalizeEmail(rawEmail) : null;
+  const phoneNormalized = normalizePhone(phone);
+  const language = body.language === "en" ? "en" : "th";
   const programInterest = String(body.programInterest ?? "").trim();
   const consent = body.consent === true;
   const kids: ChildInput[] = Array.isArray(body.children) ? body.children : [];
@@ -40,8 +48,14 @@ export async function POST(req: Request) {
   if (!parentName || !phone || !consent || kids.length === 0) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 422 });
   }
-  if (!isPlausiblePhone(phone)) {
+  if (!isPlausiblePhone(phone) || !phoneNormalized) {
     return NextResponse.json({ error: "Invalid phone number" }, { status: 422 });
+  }
+  if (rawEmail && !email) {
+    return NextResponse.json({ error: "Invalid email address" }, { status: 422 });
+  }
+  if (programInterest && !PROGRAM_INTEREST_VALUES.has(programInterest)) {
+    return NextResponse.json({ error: "Invalid program interest" }, { status: 422 });
   }
   const today = bkkTodayISO();
   for (const k of kids) {
@@ -58,16 +72,43 @@ export async function POST(req: Request) {
   // lookup endpoint (avoids phone-number enumeration).
   const existing = await db
     .select({ id: parents.id })
-    .from(parents)
-    .where(eq(parents.phone, phone))
+    .from(memberAccounts)
+    .innerJoin(parents, eq(memberAccounts.parentId, parents.id))
+    .where(eq(memberAccounts.phoneNormalized, phoneNormalized))
     .limit(1);
   const duplicatePhone = existing.length > 0;
 
+  const publicUid = generateMemberUid();
   const result = await db.transaction(async (tx) => {
     const [parent] = await tx
       .insert(parents)
       .values({ name: parentName, phone, email, profileComplete: true })
       .returning();
+
+    const [member] = await tx
+      .insert(memberAccounts)
+      .values({
+        parentId: parent.id,
+        publicUid,
+        phoneNormalized,
+        preferredLanguage: language,
+      })
+      .returning();
+
+    await tx.insert(memberConsents).values([
+      {
+        memberAccountId: member.id,
+        type: "terms",
+        policyVersion: process.env.TERMS_VERSION || "2026-08-11",
+        source: "signup",
+      },
+      {
+        memberAccountId: member.id,
+        type: "privacy",
+        policyVersion: process.env.PRIVACY_VERSION || "2026-08-11",
+        source: "signup",
+      },
+    ]);
 
     const insertedChildren = await tx
       .insert(children)
@@ -82,11 +123,14 @@ export async function POST(req: Request) {
       )
       .returning();
 
-    return { parent, children: insertedChildren };
+    return { parent, member, children: insertedChildren };
   });
+
+  await establishMemberSession(result.member.id, result.member.sessionVersion, "temporary");
 
   return NextResponse.json({
     ok: true,
+    memberUid: result.member.publicUid,
     parentName: result.parent.name,
     childNames: result.children.map((c) => c.name),
     duplicatePhone,

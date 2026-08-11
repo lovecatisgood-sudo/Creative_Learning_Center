@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AppBar } from "@/components/AppBar";
 import { LogoutButton } from "@/components/LogoutButton";
@@ -8,6 +8,7 @@ import { useLang } from "@/lib/i18n/LanguageProvider";
 import type { ReceiptData } from "@/lib/receipt";
 import { toPng } from "html-to-image";
 import { dict } from "@/lib/i18n/dictionary";
+import QRCode from "qrcode";
 
 const SHOP = process.env.NEXT_PUBLIC_SHOP_NAME || "Siamese Cat Creative Club";
 const COMPANY = process.env.NEXT_PUBLIC_COMPANY_NAME || "Siamese Cat Cafe Co., Ltd. (Thailand)";
@@ -23,6 +24,18 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
   const ticketRef = useRef<HTMLDivElement>(null);
   const [showProof, setShowProof] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [claimQr, setClaimQr] = useState<string | null>(null);
+  const [claimUrl, setClaimUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!justPaid) return;
+    const token = sessionStorage.getItem(`sccc_claim_${data.orderId}`);
+    if (!token) return;
+    sessionStorage.removeItem(`sccc_claim_${data.orderId}`);
+    const url = `${window.location.origin}/member/claim#token=${encodeURIComponent(token)}`;
+    setClaimUrl(url);
+    QRCode.toDataURL(url, { width: 480, margin: 2, errorCorrectionLevel: "M" }).then(setClaimQr).catch(() => undefined);
+  }, [data.orderId, justPaid]);
 
   const dt = new Date(data.createdAt).toLocaleString(lang === "th" ? "th-TH" : "en-GB", {
     timeZone: "Asia/Bangkok",
@@ -105,6 +118,20 @@ export function ReceiptClient({ data, justPaid }: { data: ReceiptData; justPaid:
               {t("viewProof")}
             </button>
           </div>
+        )}
+
+        {claimQr && claimUrl && (
+          <section className="no-print mt-4 rounded-2xl border-2 border-teal bg-tealbg p-4 text-center">
+            <h2 className="text-lg font-extrabold text-ink">Siamese Cat Member</h2>
+            <p className="mt-1 text-sm text-meta">
+              {lang === "th" ? "ให้ลูกค้าสแกนบนโทรศัพท์ของตนเพื่อดูแพ็กเกจ" : "Customer scans this on their phone to view the package"}
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={claimQr} alt="Member account claim QR" className="mx-auto mt-3 w-56 rounded-xl bg-white p-2" />
+            <p className="mt-2 text-xs font-semibold text-warn">
+              {lang === "th" ? "ลิงก์ใช้ได้ครั้งเดียวและหมดอายุใน 24 ชั่วโมง" : "Single-use link; expires in 24 hours"}
+            </p>
+          </section>
         )}
       </div>
 

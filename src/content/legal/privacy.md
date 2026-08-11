@@ -99,7 +99,7 @@ We may use personal data to:
 - Register parents and children
 - Review service interest, child readiness, and requested support
 - Confirm bookings, capacity, attendance, check-in, and pickup
-- Deliver Little Explorer Playgroup and After School Explorer services
+- Deliver the parent-accompanied Kids Playroom, creative activities, and After School Explorer services
 - Manage packages, passes, remaining access, activities, and meal care
 - Process payments, issue receipts, prevent misuse, and maintain accounting records
 - Protect children, families, staff, property, and systems

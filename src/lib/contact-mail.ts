@@ -12,11 +12,10 @@ export type ContactInquiryEmail = {
 
 const SERVICE_LABELS: Record<string, string> = {
   "": "General inquiry",
-  "little-explorer-program": "Little Explorer Program",
-  playgroup: "Little Explorer Playgroup",
+  playgroup: "Kids Playroom & Creative Activities",
   "creative-club": "Creative Club / After School Explorer",
-  membership: "Membership",
-  "meal-plans": "Meal Plans",
+  membership: "After School plans",
+  "meal-plans": "After School Meal Care",
 };
 
 function requiredEnv(name: string) {

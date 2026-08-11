@@ -1,7 +1,7 @@
 # Siamese Cat Creative Club - Terms of Service
 
 **Effective date:** 17 July 2026<br>
-**Last updated:** 8 August 2026
+**Last updated:** 11 August 2026
 
 These Terms of Service ("Terms") apply to parent registration, bookings, sessions, packages, passes, meal care, activities, the Cat vs Dog game, optional game accounts, and related services provided by **Siamese Cat Creative Club** ("the Club," "we," "us," or "our").
 
@@ -15,9 +15,9 @@ By registering a child, requesting a booking, purchasing a service, or accepting
 
 ## 1. Our Programs
 
-The Club provides two separate supervised small-group programs:
+The Club provides two separate services with different supervision arrangements:
 
-- **Little Explorer Playgroup:** daytime and weekend playgroup care with indoor play, creative activities, reading, simple learning, outdoor play, and supervised animal visits when available.
+- **Kids Playroom & Creative Activities (formerly Little Explorer Playgroup):** parent-accompanied playroom entry with optional creative activities. Staff may guide activities, but the accompanying parent or guardian remains responsible for the child and must stay on the premises.
 - **After School Explorer Program:** after-school care with play, homework or quiet focus, creative activities, meal support, and pickup routines.
 
 These programs are not private one-to-one nanny care, formal school enrollment, medical care, therapy, or guaranteed private tutoring.
@@ -31,7 +31,8 @@ The person registering a child confirms that they:
 - Are the child's parent, legal guardian, or otherwise authorized to register the child
 - Will provide accurate contact, health, allergy, emergency, and pickup information
 - Will update the Club when important information changes
-- Will remain reachable while the child is attending
+- For Kids Playroom visits, will remain on the premises and supervise the child
+- For After School Explorer, will remain reachable while the child is attending
 - Have authority to accept these Terms for the child
 
 The Club may request identification or evidence of pickup authority when reasonably necessary.
@@ -40,7 +41,7 @@ The Club may request identification or evidence of pickup authority when reasona
 
 Participation depends on the child's comfort, safety, communication needs, and ability to take part in a shared small-group environment.
 
-Children under 3 may require a parent or guardian to remain on site, depending on the child's comfort and safety. A first visit or readiness discussion may be required for any child who needs additional support.
+Every child using the Kids Playroom must be accompanied by a parent or guardian who remains on the premises. A first visit or readiness discussion may be required for After School Explorer or for any child who needs additional support.
 
 The Club may decline, limit, pause, or end participation when a child's needs exceed the staffing, training, facilities, or safety support reasonably available.
 
@@ -58,11 +59,12 @@ The Club may release an unconfirmed request or a confirmed place after a materia
 
 Available products are shown on the Club website or confirmed by staff. They currently include:
 
-- Little Explorer Playgroup short sessions, weekday half-day and full-day sessions, weekend full-day sessions, and regular full-day passes
-- After School Explorer short sessions, weekday half-day care, dinner and pickup support, and regular after-school passes arranged with the team
-- Program-specific meal care options
+- Kids Playroom entry: 1 hour at 149 THB or 2 hours at 249 THB per child; each child entry includes one accompanying adult and one coloring sheet
+- Kids Playroom add-ons: an additional hour after initial entry at 80 THB, each additional adult at 50 THB per hour, a crayon activity at 45 THB, a small soft-clay figure at 69 THB, and a large soft-clay figure at 99 THB
+- After School Explorer: 1 hour at 199 THB, 2 hours at 300 THB, the four-hour weekday option at 599 THB, dinner and pickup support, and regular after-school passes arranged with the team
+- After School Explorer Meal Care Add-On at 299 THB
 
-The description confirmed at booking or purchase controls the included time, activities, meal value, price, validity, and other conditions.
+The description confirmed at booking or purchase controls the included time, activities, price, validity, and other conditions. The additional Playroom hour is available only after an initial entry and remains subject to capacity.
 
 Unless a product states otherwise, a package or pass is registered to one child and may not be transferred, shared, resold, or exchanged for cash. Any expiry date or session limit shown at purchase applies.
 
@@ -70,7 +72,7 @@ Unless a product states otherwise, a package or pass is registered to one child 
 
 Prices are stated in Thai baht. Payment is due before the service begins unless the Club confirms another arrangement.
 
-Where the website shows a saving or "up to" value, the comparison is based on the listed hourly/session price and any stated meal-care value. Actual value depends on attendance, the selected service, and available meal choices.
+Prices are per child unless the product expressly says otherwise. One adult is included with each child Playroom entry; additional adults are charged per person per hour.
 
 Payment methods may include cash, bank transfer, PromptPay, or another method confirmed by the Club. Receipts are issued through the Club's normal process.
 
@@ -86,7 +88,9 @@ Nothing in these Terms limits a consumer right that cannot legally be excluded.
 
 ## 8. Check-In and Pickup
 
-A parent or authorized adult must complete the Club's check-in process before leaving a child in the supervised area.
+For Kids Playroom visits, a parent or guardian must complete check-in, remain on the premises, and remain responsible for the child. Kids Playroom is not a drop-off or childcare service.
+
+For After School Explorer, a parent or authorized adult must complete the Club's check-in process before leaving a child in the supervised care area.
 
 The Club may confirm the child's identity, selected program, expected pickup time, authorized pickup person, meal request, and health or allergy notes.
 
@@ -102,9 +106,9 @@ The Club does not promise private tutoring, subject-specialist teaching, guarant
 
 ## 10. Creative Activities and Play
 
-Activities may include drawing, coloring, clay, crafts, Lego, reading, soft play, indoor play, outdoor garden play, water play, and simple group projects.
+Activities may include drawing, coloring, clay, crafts, Lego, reading, soft play, indoor play, outdoor garden play, water play, and simple group projects. One coloring sheet is included with each child Playroom entry. The separate 45 THB crayon activity uses additional activity materials and is distinct from that included sheet.
 
-Children must follow staff instructions and use materials and equipment safely. Premium materials, take-home projects, or special workshops may be separately priced when clearly offered.
+Small and large soft-clay figure activities are separately priced at 69 THB and 99 THB. Available figures and materials may change; no take-home inclusion should be assumed unless staff confirms it before purchase. Children must follow staff instructions and use materials and equipment safely.
 
 ## 11. Animal Visits
 
@@ -114,7 +118,7 @@ All interaction must be supervised and gentle. Socks are not required in the chi
 
 ## 12. Meal Care and Allergies
 
-Meal care differs by program. Playgroup may include or refer to a stated meal-care value for eligible longer sessions. After School Explorer offers its stated Meal Care Add-On with one child-friendly food item and one drink.
+Kids Playroom entry has no included or stated meal-care value. After School Explorer offers its 299 THB Meal Care Add-On with one child-friendly food item and one drink.
 
 Menus and availability may change. Parents must disclose allergies, intolerances, dietary restrictions, religious requirements, and special eating habits before meal care is confirmed.
 
@@ -160,7 +164,7 @@ Promotional photography or video requires separate optional consent. Declining p
 
 ## 19. Suspension or Ending Access
 
-The Club may suspend or end access for unpaid fees, materially inaccurate information, serious or repeated unsafe behavior, abuse or harassment, unauthorized pickup attempts, repeated late pickup, misuse of a pass, or needs beyond the Club's reasonable capability.
+The Club may suspend or end access for unpaid fees, materially inaccurate information, serious or repeated unsafe behavior, abuse or harassment, failure to follow the Playroom parent-on-premises rule, unauthorized pickup attempts, repeated late pickup, misuse of an After School pass, or needs beyond the Club's reasonable capability.
 
 Where appropriate, the Club will explain the reason and consider whether a safer alternative arrangement is available.
 

@@ -1,7 +1,7 @@
 # Deployment — SCCC Management System
 
 Target: **Hostinger Node.js Web App** or **Hostinger VPS** (Ubuntu 22.04+,
-Node 20). This is one bundled Next.js app for the public website, signup flow,
+Node 22). This is one bundled Next.js app for the public website, signup flow,
 and admin dashboard.
 
 Owner checklist before you start (PRD §9): Neon `DATABASE_URL`, PromptPay ID,
@@ -17,7 +17,8 @@ Route map for `https://creative.siamesecat.cafe`:
 | `/creative` | Previous Creative Club landing page |
 | `/blog`, `/blog/[slug]` | Thai blog index and published articles |
 | `/EN/blog`, `/EN/blog/[slug]` | English blog index and published articles |
-| `/signup` | Parent signup / registration app |
+| `/signup` | Siamese Cat Member signup / registration app |
+| `/member` | Customer package, usage, receipt, and profile portal |
 | `/admin` | Staff admin dashboard |
 | `/terms`, `/privacy` | App legal pages |
 
@@ -36,8 +37,8 @@ Route map for `https://creative.siamesecat.cafe`:
 ```bash
 # as a sudo user on the VPS
 sudo apt update && sudo apt install -y curl git nginx
-# Node 20 (NodeSource)
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+# Node 22 (NodeSource; required by the Capacitor 8 toolchain)
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install -y nodejs
 # pnpm + pm2
 sudo corepack enable && corepack prepare pnpm@latest --activate
@@ -60,12 +61,14 @@ cp .env.example .env
 nano .env
 ```
 
-Fill in every value. Generate the two secrets:
+Fill in every value. Generate separate admin and member session secrets:
 
 ```bash
 # ADMIN_PASSWORD_HASH — bcrypt hash of the admin password
 pnpm create-admin admin@yourshop.com 'your-strong-password'   # prints the hash + upserts the admin row
-# SESSION_SECRET — any long random string
+# SESSION_SECRET — admin session secret
+openssl rand -base64 48
+# MEMBER_SESSION_SECRET — distinct member session secret; never reuse SESSION_SECRET
 openssl rand -base64 48
 ```
 
@@ -76,7 +79,11 @@ Generate a separate key for automated blog publishing and add it as
 openssl rand -hex 32
 ```
 
-Do not reuse the admin password or session secret. The blog API guide is in
+Set `APP_ORIGIN=https://creative.siamesecat.cafe` exactly to the public HTTPS
+origin. Configure SMTP before enabling email binding/sign-in, and set explicit
+`TERMS_VERSION` and `PRIVACY_VERSION` values matching the published policies.
+
+Do not reuse the admin password or either session secret. The blog API guide is in
 `docs/blog-publishing-api.md`.
 
 Set `UPLOAD_DIR=/var/sccc/uploads` and create it:
@@ -183,6 +190,7 @@ cd /var/www/sccc
 git pull
 pnpm install --frozen-lockfile
 pnpm security:check
+pnpm check:member-release
 pnpm db:migrate        # if the schema changed
 pnpm build
 pm2 reload sccc
@@ -201,5 +209,8 @@ and prototype-only scripting.
 - **Proof photos** live on disk at `UPLOAD_DIR` — include `/var/sccc/uploads` in
   your VPS backup/snapshot routine (they are *not* in Neon).
 - **Logs**: `pm2 logs sccc`. **Restart**: `pm2 restart sccc`.
+- **Member access-token retention**: schedule
+  `MEMBER_TOKEN_PRUNE=1 MEMBER_TOKEN_RETENTION_DAYS=30 pnpm member:prune-tokens`
+  daily. Only hashed tokens are stored; audit events remain after token cleanup.
 - Storage is abstracted behind `src/lib/storage.ts`; swap it for S3 later without
   touching callers (the Vercel path would need this since its disk is ephemeral).

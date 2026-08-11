@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getChildCore } from "@/lib/children";
 import { requireAdminId, UnauthorizedError } from "@/lib/auth";
+import { getActiveSessionForChild } from "@/lib/sessions";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -15,5 +16,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const child = await getChildCore(id);
   if (!child) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  return NextResponse.json({ child });
+  const activeSession = await getActiveSessionForChild(id);
+  return NextResponse.json({ child, activeSession });
 }

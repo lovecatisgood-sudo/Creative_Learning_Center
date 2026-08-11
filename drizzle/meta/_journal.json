@@ -50,6 +50,20 @@
       "when": 1786212618460,
       "tag": "0006_normalize_seeded_house_ads",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1786449600000,
+      "tag": "0007_siamese_cat_members",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1786453200000,
+      "tag": "0008_replace_playgroup_with_playroom",
+      "breakpoints": true
     }
   ]
 }

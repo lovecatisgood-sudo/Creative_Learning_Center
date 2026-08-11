@@ -15,7 +15,7 @@ export async function BlogIndex({ language, category }: { language: BlogLanguage
           <div>
             <span className="eyebrow">{language === "th" ? "บทความจากคลับ" : "From the club"}</span>
             <h1>{language === "th" ? "เรื่องจริงที่ช่วยให้ชีวิตครอบครัวย่านบางนาง่ายขึ้น" : "Practical ideas for families around Bangna"}</h1>
-            <p className="kicker">{language === "th" ? "คำตอบเรื่องเพลย์กรุ๊ป ชีวิตหลังเลิกเรียน การเล่น และกิจกรรมใกล้เมกาบางนา จากทีมที่ทำงานกับเด็กในพื้นที่จริง" : "Answers about playgroup, after-school routines, play and life near Mega Bangna from a team operating a real children's space."}</p>
+            <p className="kicker">{language === "th" ? "คำตอบเรื่อง Kids Playroom ชีวิตหลังเลิกเรียน การเล่น และกิจกรรมใกล้เมกาบางนา จากทีมที่ดูแลพื้นที่จริง" : "Answers about Kids Playroom, after-school routines, play and life near Mega Bangna from the team operating the space."}</p>
           </div>
           <div className="blog-hero-note">
             <strong>Siamese Cat Creative Club</strong>

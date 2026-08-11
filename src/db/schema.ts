@@ -51,6 +51,21 @@ export const blogCategoryEnum = pgEnum("blog_category", [
   "faq",
 ]);
 export const adminRoleEnum = pgEnum("admin_role", ["manager", "staff"]);
+export const memberTokenTypeEnum = pgEnum("member_token_type", [
+  "purchase_claim",
+  "email_verify",
+  "email_signin",
+]);
+export const memberConsentTypeEnum = pgEnum("member_consent_type", [
+  "terms",
+  "privacy",
+  "marketing",
+]);
+export const memberConsentSourceEnum = pgEnum("member_consent_source", [
+  "signup",
+  "staff",
+  "email_binding",
+]);
 
 // ─── Tables (PRD §5) ────────────────────────────────────────────────────────
 export const parents = pgTable("parents", {
@@ -81,6 +96,45 @@ export const admins = pgTable("admins", {
   active: boolean("active").default(true).notNull(),
 });
 
+// Public member identity is intentionally separate from the guardian CRM row.
+// publicUid is a lookup reference, never an authentication secret. Email stays
+// nullable until the member chooses to bind it and is not trusted until
+// emailVerifiedAt is set.
+export const memberAccounts = pgTable("member_accounts", {
+  id: serial("id").primaryKey(),
+  parentId: integer("parent_id").references(() => parents.id).notNull().unique(),
+  publicUid: text("public_uid").notNull().unique(),
+  phoneNormalized: text("phone_normalized").notNull(),
+  emailNormalized: text("email_normalized").unique(),
+  emailVerifiedAt: timestamp("email_verified_at", { withTimezone: true }),
+  preferredLanguage: text("preferred_language").default("th").notNull(),
+  sessionVersion: integer("session_version").default(1).notNull(),
+  lastAccessAt: timestamp("last_access_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const memberUidAliases = pgTable("member_uid_aliases", {
+  id: serial("id").primaryKey(),
+  memberAccountId: integer("member_account_id")
+    .references(() => memberAccounts.id)
+    .notNull(),
+  publicUid: text("public_uid").notNull().unique(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const memberConsents = pgTable("member_consents", {
+  id: serial("id").primaryKey(),
+  memberAccountId: integer("member_account_id")
+    .references(() => memberAccounts.id)
+    .notNull(),
+  type: memberConsentTypeEnum("type").notNull(),
+  policyVersion: text("policy_version").notNull(),
+  source: memberConsentSourceEnum("source").notNull(),
+  adminId: integer("admin_id").references(() => admins.id),
+  acceptedAt: timestamp("accepted_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   sku: text("sku").notNull().unique(),
@@ -100,6 +154,21 @@ export const orders = pgTable("orders", {
   status: orderStatusEnum("status").default("draft").notNull(),
   totalThb: integer("total_thb").notNull(),
   receiptNo: text("receipt_no").unique(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const memberAccessTokens = pgTable("member_access_tokens", {
+  id: serial("id").primaryKey(),
+  memberAccountId: integer("member_account_id")
+    .references(() => memberAccounts.id)
+    .notNull(),
+  orderId: integer("order_id").references(() => orders.id),
+  type: memberTokenTypeEnum("type").notNull(),
+  tokenHash: text("token_hash").notNull().unique(),
+  pendingEmail: text("pending_email"),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  usedAt: timestamp("used_at", { withTimezone: true }),
+  createdByAdmin: integer("created_by_admin").references(() => admins.id),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

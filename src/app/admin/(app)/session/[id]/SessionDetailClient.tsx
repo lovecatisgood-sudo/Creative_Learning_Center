@@ -146,12 +146,14 @@ export function SessionDetailClient({ detail, justStarted }: { detail: SessionDe
 
       {/* Actions — last flex child, sits directly above the BottomNav */}
       <div className="no-print flex flex-col gap-2 border-t border-line bg-paper/95 p-4 backdrop-blur">
-        <button
-          className="btn-ghost"
-          onClick={() => router.push(`/admin/sell?childId=${s.childId}&extendSession=${s.id}`)}
-        >
-          ＋ {t("addOneHour")} (100 ฿)
-        </button>
+        {s.productSku.startsWith("PLAYROOM_ENTRY_") && (
+          <button
+            className="btn-ghost"
+            onClick={() => router.push(`/admin/sell?childId=${s.childId}&extendSession=${s.id}`)}
+          >
+            ＋ {t("addOneHour")} (80 ฿)
+          </button>
+        )}
         <button className="btn-primary bg-danger text-white" onClick={() => setShowEnd(true)}>
           {t("endSession")}
         </button>

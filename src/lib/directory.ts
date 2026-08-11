@@ -1,11 +1,11 @@
 import { db } from "@/db";
-import { children, parents, sessions } from "@/db/schema";
+import { children, parents, sessions, memberAccounts, memberUidAliases } from "@/db/schema";
 import { sql, ilike, or, isNull, asc, and, eq, inArray } from "drizzle-orm";
 
 export type DirChild = { id: number; name: string; hasRunningSession: boolean };
 export type DirGroup =
   | { kind: "orphans"; children: DirChild[] }
-  | { kind: "parent"; parentId: number; parentName: string; phone: string; profileComplete: boolean; children: DirChild[] };
+  | { kind: "parent"; parentId: number; parentName: string; phone: string; memberUid: string | null; memberVerified: boolean; profileComplete: boolean; children: DirChild[] };
 export type DirectoryPage = { groups: DirGroup[]; page: number; totalPages: number; totalGroups: number };
 
 // Batched membership check rather than a per-row correlated EXISTS subquery:
@@ -47,13 +47,26 @@ export async function getDirectory({
 
   // 2) Parent ids that match (by parent name/phone OR by a child's name), alphabetical.
   const parentRows = await db
-    .select({ id: parents.id, name: parents.name, phone: parents.phone, profileComplete: parents.profileComplete })
+    .select({
+      id: parents.id,
+      name: parents.name,
+      phone: parents.phone,
+      profileComplete: parents.profileComplete,
+      memberUid: memberAccounts.publicUid,
+      memberEmail: memberAccounts.emailNormalized,
+      memberVerifiedAt: memberAccounts.emailVerifiedAt,
+    })
     .from(parents)
+    .leftJoin(memberAccounts, eq(memberAccounts.parentId, parents.id))
     .where(
       term
         ? or(
             ilike(parents.name, term),
             ilike(parents.phone, term),
+            ilike(parents.email, term),
+            ilike(memberAccounts.publicUid, term),
+            ilike(memberAccounts.emailNormalized, term),
+            sql`exists (select 1 from ${memberUidAliases} mua where mua.member_account_id = ${memberAccounts.id} and mua.public_uid ilike ${term})`,
             sql`exists (select 1 from ${children} c where c.parent_id = ${parents.id} and c.name ilike ${term})`
           )
         : undefined
@@ -66,9 +79,9 @@ export async function getDirectory({
   const safePage = Math.min(Math.max(1, page), totalPages);
 
   // Build the ordered group list, then slice the page.
-  const ordered: (DirGroup | { kind: "parentRef"; id: number; name: string; phone: string; profileComplete: boolean })[] = [];
+  const ordered: (DirGroup | { kind: "parentRef"; id: number; name: string; phone: string; profileComplete: boolean; memberUid: string | null; memberVerified: boolean })[] = [];
   if (orphanGroup) ordered.push(orphanGroup);
-  for (const p of parentRows) ordered.push({ kind: "parentRef", id: p.id, name: p.name, phone: p.phone, profileComplete: p.profileComplete });
+  for (const p of parentRows) ordered.push({ kind: "parentRef", id: p.id, name: p.name, phone: p.phone, profileComplete: p.profileComplete, memberUid: p.memberUid, memberVerified: Boolean(p.memberEmail && p.memberVerifiedAt) });
   const pageSlice = ordered.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   // Fetch children only for the parent groups on THIS page.
@@ -96,6 +109,8 @@ export async function getDirectory({
           parentId: g.id,
           parentName: g.name,
           phone: g.phone,
+          memberUid: g.memberUid,
+          memberVerified: g.memberVerified,
           // A stub parent (name blank) is treated as incomplete regardless, same
           // rule as getChildCore in lib/children.ts and getParent in lib/parents.ts.
           profileComplete: Boolean(g.profileComplete) && Boolean(g.name?.trim()),

@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { products } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import type { CatalogProduct } from "@/lib/product";
+import { CURRENT_PRODUCT_CATALOG } from "@/lib/product-catalog";
 
 // Active catalog for the Sell grid, ordered by price within their natural groups.
 export async function getCatalog(): Promise<CatalogProduct[]> {
@@ -15,7 +16,8 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
     })
     .from(products)
     .where(eq(products.active, true));
-  return rows;
+  const catalogOrder = new Map(CURRENT_PRODUCT_CATALOG.map((product, index) => [product.sku, index]));
+  return rows.sort((a, b) => (catalogOrder.get(a.sku) ?? Number.MAX_SAFE_INTEGER) - (catalogOrder.get(b.sku) ?? Number.MAX_SAFE_INTEGER));
 }
 
 // Bank/PromptPay display info from env (server-only values surfaced to checkout).

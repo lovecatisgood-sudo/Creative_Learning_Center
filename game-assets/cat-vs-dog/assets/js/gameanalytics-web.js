@@ -1,7 +1,15 @@
 (function (global, document) {
   'use strict';
 
-  const config = global.SCVD_GAMEANALYTICS_CONFIG;
+  const allConfig = global.SCVD_GAMEANALYTICS_CONFIG;
+  const capacitor = global.Capacitor;
+  const nativePlatform = capacitor && typeof capacitor.isNativePlatform === 'function' && capacitor.isNativePlatform()
+    ? capacitor.getPlatform()
+    : 'web';
+  const platform = nativePlatform === 'android' || nativePlatform === 'ios' ? nativePlatform : 'web';
+  const config = allConfig && (allConfig.web || allConfig.android || allConfig.ios)
+    ? allConfig[platform]
+    : (platform === 'web' ? allConfig : null);
   const consentKey = 'scvd_gameanalytics_consent_v1';
   const locale = document.documentElement.lang === 'th' ? 'th' : 'en';
   let initialized = false;
@@ -37,7 +45,7 @@
     sdk.setEnabledInfoLog(false);
     sdk.setEnabledVerboseLog(false);
     sdk.configureBuild(config.build || 'web-1.0.0');
-    sdk.setGlobalCustomEventFields({ language: locale, platform: 'web' });
+    sdk.setGlobalCustomEventFields({ language: locale, platform: platform });
     sdk.initialize(config.gameKey, config.secretKey);
     initialized = true;
     return true;

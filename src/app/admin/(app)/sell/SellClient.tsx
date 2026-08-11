@@ -17,24 +17,24 @@ export function SellClient({
   catalog,
   paymentInfo,
   initialChild,
-  initialHasRunningSession,
-  extendSessionId,
+  initialPlayroomSessionId,
+  preloadPlayroomExtension,
 }: {
   catalog: CatalogProduct[];
   paymentInfo: PaymentInfo;
   initialChild: SelectedChild | null;
-  initialHasRunningSession: boolean;
-  extendSessionId: number | null;
+  initialPlayroomSessionId: number | null;
+  preloadPlayroomExtension: boolean;
 }) {
   const { t } = useLang();
   const router = useRouter();
 
   const [child, setChild] = useState<SelectedChild | null>(initialChild);
-  const [hasRunningSession, setHasRunningSession] = useState(initialHasRunningSession);
+  const [playroomSessionId, setPlayroomSessionId] = useState(initialPlayroomSessionId);
   const [changing, setChanging] = useState(!initialChild);
-  // From the session "+ Add 1 hour" shortcut: preload EXTRA_1H.
+  // From a running Playroom session's "+ Add 1 hour" shortcut.
   const [cart, setCart] = useState<Map<string, number>>(
-    () => (extendSessionId ? new Map([["EXTRA_1H", 1]]) : new Map())
+    () => (preloadPlayroomExtension ? new Map([["PLAYROOM_EXTRA_1H", 1]]) : new Map())
   );
   const [step, setStep] = useState<"cart" | "checkout">("cart");
 
@@ -59,14 +59,14 @@ export function SellClient({
 
   function pickChild(c: PickedChild) {
     setChild({ id: c.id, name: c.name, parentName: c.parentName });
-    setHasRunningSession(c.hasRunningSession);
+    setPlayroomSessionId(c.runningPlayroomSessionId);
     setChanging(false);
-    // EXTRA_1H may have become invalid for the new child; drop it if disabled.
-    if (!c.hasRunningSession) {
+    // The Playroom extension may have become invalid for the new child.
+    if (!c.runningPlayroomSessionId) {
       setCart((prev) => {
-        if (!prev.has("EXTRA_1H")) return prev;
+        if (!prev.has("PLAYROOM_EXTRA_1H")) return prev;
         const next = new Map(prev);
-        next.delete("EXTRA_1H");
+        next.delete("PLAYROOM_EXTRA_1H");
         return next;
       });
     }
@@ -102,8 +102,11 @@ export function SellClient({
           cart={cart}
           catalog={catalog}
           paymentInfo={paymentInfo}
-          extendSessionId={extendSessionId}
-          onConfirmed={(orderId) => router.push(`/admin/receipt/${orderId}?justPaid=1`)}
+          extendSessionId={cart.has("PLAYROOM_EXTRA_1H") ? playroomSessionId : null}
+          onConfirmed={(orderId, _receiptNo, claimToken) => {
+            if (claimToken) sessionStorage.setItem(`sccc_claim_${orderId}`, claimToken);
+            router.push(`/admin/receipt/${orderId}?justPaid=1`);
+          }}
         />
       </div>
     );
@@ -132,7 +135,7 @@ export function SellClient({
             cart={cart}
             onAdd={addToCart}
             onStep={stepCart}
-            extraEnabled={hasRunningSession}
+            extraEnabled={Boolean(playroomSessionId)}
           />
         </div>
 

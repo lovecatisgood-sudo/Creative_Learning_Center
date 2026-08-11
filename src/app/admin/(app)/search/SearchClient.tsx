@@ -170,9 +170,13 @@ function ParentGroup({
         <div className="min-w-0 flex-1">
           <div className="truncate text-base font-bold text-ink">{group.parentName}</div>
           <div className="truncate text-[13px] text-meta">{group.phone || "—"}</div>
+          {group.memberUid && <div className="truncate font-mono text-xs text-meta">{group.memberUid}</div>}
         </div>
         {!group.profileComplete && (
           <span className="chip shrink-0 bg-warnbg text-warn">{t("profileIncomplete")}</span>
+        )}
+        {group.memberVerified && (
+          <span className="chip shrink-0 bg-okbg text-ok">{t("memberVerified")}</span>
         )}
         <span className="shrink-0 text-line" aria-hidden>›</span>
       </button>

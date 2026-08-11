@@ -22,7 +22,7 @@ export async function BlogArticle({ slug, language }: { slug: string; language: 
   const coverUrl = post.coverImageUrl || fallbackCover;
   const coverAlt = content.coverImageAlt || (language === "th" ? "พื้นที่กิจกรรมจริงภายใน Siamese Cat Creative Club บางแก้ว" : "Real activity space inside Siamese Cat Creative Club in Bang Kaeo");
   const categoryCta = post.category === "kid-learning-material"
-    ? { path: "/playgroup", thTitle: "อยากให้ลูกมีเวลาเล่นและสร้างสรรค์?", enTitle: "Looking for time to play and create?", thAction: "ดู Little Explorer Playgroup", enAction: "See Little Explorer Playgroup" }
+    ? { path: "/playgroup", thTitle: "อยากเล่นและสร้างสรรค์ไปกับลูก?", enTitle: "Looking for time to play and create together?", thAction: "ดู Kids Playroom", enAction: "See Kids Playroom" }
     : post.category === "faq"
       ? { path: "/creative", thTitle: "ต้องการตัวช่วยช่วงหลังเลิกเรียน?", enTitle: "Need help covering the after-school gap?", thAction: "ดู After School Explorer", enAction: "See After School Explorer" }
       : post.category === "club-news-updates"
