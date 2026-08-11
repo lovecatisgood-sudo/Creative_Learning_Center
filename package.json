@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/build-mobile-bridge.mjs && node scripts/optimize-main-site-images.mjs && node scripts/build-main-site-redesign.mjs && node scripts/build-family-tools.mjs && node scripts/check-main-site-shell.mjs && node scripts/check-family-tools.mjs && pnpm check:playroom-menu && pnpm check:game-routes && node scripts/build-legal.mjs",
+    "prebuild": "node scripts/ensure-esbuild-executable.mjs && node scripts/build-mobile-bridge.mjs && node scripts/optimize-main-site-images.mjs && node scripts/build-main-site-redesign.mjs && node scripts/build-family-tools.mjs && node scripts/check-main-site-shell.mjs && node scripts/check-family-tools.mjs && pnpm check:playroom-menu && pnpm check:game-routes && node scripts/build-legal.mjs",
     "build": "next build",
     "hostinger:build": "pnpm db:migrate && pnpm build",
     "start": "next start",
