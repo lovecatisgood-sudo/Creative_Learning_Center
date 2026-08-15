@@ -3,10 +3,16 @@ import { join } from "node:path";
 
 const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
+const GOOGLE_ADSENSE_SELLER_RECORD = "google.com, pub-3624708289866566, DIRECT, f08c47fec0942fa0\n";
 const expectedNav = {
   th: ["ภายในคลับ", "ครีเอทีฟคลับ", "Kids Playroom", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "เครื่องมือฟรี", "ติดต่อเรา"],
   en: ["Inside the Club", "Creative Club", "Kids Playroom", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Free Tools", "Contact Us"],
 };
+
+const adsTxt = readFileSync(join(process.cwd(), "public/ads.txt"), "utf8");
+if (adsTxt !== GOOGLE_ADSENSE_SELLER_RECORD) {
+  throw new Error("public/ads.txt is missing or does not exactly match the authorized AdSense seller record");
+}
 
 function extract(html, tag) {
   const match = html.match(new RegExp(`<${tag}\\b[\\s\\S]*?</${tag}>`));
