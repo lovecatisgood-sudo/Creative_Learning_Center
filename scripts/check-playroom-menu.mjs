@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import nextConfig from "../next.config.mjs";
 
 const root = process.cwd();
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -7,7 +8,6 @@ const read = (path) => readFileSync(join(root, path), "utf8");
 const catalog = read("src/lib/product-catalog.ts");
 const signup = read("src/lib/program-options.ts");
 const migration = read("drizzle/0008_replace_playgroup_with_playroom.sql");
-const nextConfig = read("next.config.mjs");
 const sitemap = read("src/app/sitemap.ts");
 const terms = `${read("src/content/legal/terms.md")}\n${read("src/content/legal/terms.th.md")}`;
 const sellClient = read("src/app/admin/(app)/sell/SellClient.tsx");
@@ -69,14 +69,21 @@ for (const requirement of [
   if (!terms.includes(requirement)) throw new Error(`Terms are missing: ${requirement}`);
 }
 
-if (!nextConfig.includes('{ source: "/little-explorer-program", destination: "/playgroup", permanent: true }')) {
-  throw new Error("Little Explorer does not permanently redirect to Kids Playroom");
-}
-for (const redirect of [
-  '{ source: "/memberships", destination: "/playgroup", permanent: true }',
-  '{ source: "/EN/memberships", destination: "/EN/playgroup", permanent: true }',
+const configuredRedirects = await nextConfig.redirects();
+for (const [source, destination] of [
+  ["/little-explorer-program", "/playgroup"],
+  ["/little-explorer-program.html", "/playgroup"],
+  ["/EN/little-explorer-program", "/EN/playgroup"],
+  ["/EN/little-explorer-program.html", "/EN/playgroup"],
+  ["/memberships", "/playgroup"],
+  ["/memberships.html", "/playgroup"],
+  ["/EN/memberships", "/EN/playgroup"],
+  ["/EN/memberships.html", "/EN/playgroup"],
 ]) {
-  if (!nextConfig.includes(redirect)) throw new Error(`Retired route does not redirect directly: ${redirect}`);
+  const redirect = configuredRedirects.find((item) => item.source === source);
+  if (redirect?.destination !== destination || redirect?.permanent !== true) {
+    throw new Error(`${source} does not permanently redirect to ${destination}`);
+  }
 }
 if (sitemap.includes('{ path: "/little-explorer-program"')) {
   throw new Error("Retired Little Explorer route remains in the sitemap");
