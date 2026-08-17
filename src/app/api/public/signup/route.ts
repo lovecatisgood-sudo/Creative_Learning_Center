@@ -7,6 +7,7 @@ import { generateMemberUid, normalizeEmail, normalizePhone } from "@/lib/member-
 import { establishMemberSession } from "@/lib/member-auth";
 import { PROGRAM_INTEREST_VALUES } from "@/lib/program-options";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
+import { isMemberSchemaReady } from "@/lib/member-schema";
 
 // Public (no auth) parent self-registration — PRD §6.1. Creates a full parent
 // record (profile_complete = true) plus one or more children in a transaction.
@@ -65,6 +66,32 @@ export async function POST(req: Request) {
     if (k.dob > today) {
       return NextResponse.json({ error: "Date of birth can't be in the future" }, { status: 422 });
     }
+  }
+
+  // Registration is a core business path. If member provisioning is not
+  // available, retain the established parent/child write path so the durable
+  // registration is never lost.
+  if (!isMemberSchemaReady()) {
+    const existing = await db.select({ id: parents.id }).from(parents).where(eq(parents.phone, phone)).limit(1);
+    const result = await db.transaction(async (tx) => {
+      const [parent] = await tx.insert(parents).values({ name: parentName, phone, email, profileComplete: true }).returning();
+      const insertedChildren = await tx.insert(children).values(kids.map((k) => ({
+        parentId: parent.id,
+        name: k.name.trim(),
+        dob: k.dob,
+        gender: k.gender,
+        notes: programInterest ? `Package interest: ${programInterest}` : null,
+      }))).returning();
+      return { parent, children: insertedChildren };
+    });
+    return NextResponse.json({
+      ok: true,
+      memberUid: null,
+      parentName: result.parent.name,
+      childNames: result.children.map((child) => child.name),
+      duplicatePhone: existing.length > 0,
+      memberProvisioningPending: true,
+    });
   }
 
   // Detect (but never block) a duplicate phone — staff resolves later. The flag

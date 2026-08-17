@@ -113,7 +113,7 @@ function SignupPageContent({ language }: { language: Lang }) {
         "sccc_signup_result",
         JSON.stringify({
           parentName: data.parentName,
-          memberUid: data.memberUid,
+          memberUid: data.memberUid || null,
           childNames: data.childNames,
           duplicatePhone: data.duplicatePhone,
         })

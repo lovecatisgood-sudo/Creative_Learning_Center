@@ -16,6 +16,7 @@ import { and, eq, inArray, like } from "drizzle-orm";
 import { writeAudit } from "@/lib/audit";
 import { bkkDateStamp } from "@/lib/time";
 import { expiresFromNow, generateAccessToken, hashAccessToken } from "@/lib/member-tokens";
+import { isMemberSchemaReady } from "@/lib/member-schema";
 
 const HOUR_MS = 60 * 60 * 1000;
 
@@ -282,7 +283,7 @@ export async function createPaidOrder(opts: {
       detail: { receiptNo, method, total, paymentId: payment.id, lines },
     });
 
-    if (child.parentId) {
+    if (isMemberSchemaReady() && child.parentId) {
       const [member] = await tx
         .select({ id: memberAccounts.id })
         .from(memberAccounts)

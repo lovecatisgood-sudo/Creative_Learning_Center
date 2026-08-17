@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { children, parents, sessions, memberAccounts, memberUidAliases } from "@/db/schema";
 import { sql, ilike, or, isNull, asc, and, eq, inArray } from "drizzle-orm";
+import { isMemberSchemaReady } from "@/lib/member-schema";
 
 export type DirChild = { id: number; name: string; hasRunningSession: boolean };
 export type DirGroup =
@@ -46,12 +47,15 @@ export async function getDirectory({
     : null;
 
   // 2) Parent ids that match (by parent name/phone OR by a child's name), alphabetical.
-  const parentRows = await db
+  const baseParentSelection = {
+    id: parents.id,
+    name: parents.name,
+    phone: parents.phone,
+    profileComplete: parents.profileComplete,
+  };
+  const parentRows = isMemberSchemaReady() ? await db
     .select({
-      id: parents.id,
-      name: parents.name,
-      phone: parents.phone,
-      profileComplete: parents.profileComplete,
+      ...baseParentSelection,
       memberUid: memberAccounts.publicUid,
       memberEmail: memberAccounts.emailNormalized,
       memberVerifiedAt: memberAccounts.emailVerifiedAt,
@@ -71,7 +75,21 @@ export async function getDirectory({
           )
         : undefined
     )
-    .orderBy(asc(parents.name));
+    .orderBy(asc(parents.name)) : (await db
+      .select(baseParentSelection)
+      .from(parents)
+      .where(
+        term
+          ? or(
+              ilike(parents.name, term),
+              ilike(parents.phone, term),
+              ilike(parents.email, term),
+              sql`exists (select 1 from ${children} c where c.parent_id = ${parents.id} and c.name ilike ${term})`
+            )
+          : undefined
+      )
+      .orderBy(asc(parents.name)))
+      .map((row) => ({ ...row, memberUid: null, memberEmail: null, memberVerifiedAt: null }));
 
   // All groups in display order: orphans first, then parents.
   const totalGroups = (orphanGroup ? 1 : 0) + parentRows.length;

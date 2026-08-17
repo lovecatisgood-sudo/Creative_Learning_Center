@@ -7,12 +7,14 @@ import { memberVerifyUrl } from "@/lib/member-links";
 import { sendMemberAccessEmail } from "@/lib/member-mail";
 import { expiresFromNow, generateAccessToken, hashAccessToken } from "@/lib/member-tokens";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
+import { isMemberSchemaReady } from "@/lib/member-schema";
 
 export const runtime = "nodejs";
 const GENERIC = { ok: true };
 
 export async function POST(request: Request) {
   if (!isTrustedMutationOrigin(request)) return NextResponse.json({ error: "Forbidden origin" }, { status: 403 });
+  if (!isMemberSchemaReady()) return NextResponse.json({ error: "Member service temporarily unavailable" }, { status: 503 });
   const body = await request.json().catch(() => null);
   const email = normalizeEmail(String(body?.email ?? ""));
   if (!email) return NextResponse.json(GENERIC);

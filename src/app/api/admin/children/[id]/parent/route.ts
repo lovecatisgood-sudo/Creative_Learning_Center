@@ -6,6 +6,7 @@ import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 import { generateMemberUid, normalizeEmail } from "@/lib/member-identity";
 import { toBkk } from "@/lib/time";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
+import { isMemberSchemaReady } from "@/lib/member-schema";
 
 function bkkTodayISO(): string {
   const today = toBkk(new Date());
@@ -66,18 +67,20 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           .where(and(eq(children.parentId, oldStubId), ne(children.id, childId)))
           .limit(1);
         if (others.length === 0) {
-          const [oldMember] = await tx.select({ id: memberAccounts.id, publicUid: memberAccounts.publicUid }).from(memberAccounts).where(eq(memberAccounts.parentId, oldStubId)).limit(1);
-          if (oldMember) {
-            const [targetMember] = await tx.select({ id: memberAccounts.id }).from(memberAccounts).where(eq(memberAccounts.parentId, target.id)).limit(1);
-            if (targetMember) {
-              await tx.update(memberUidAliases).set({ memberAccountId: targetMember.id }).where(eq(memberUidAliases.memberAccountId, oldMember.id));
-              await tx.insert(memberUidAliases).values({ memberAccountId: targetMember.id, publicUid: oldMember.publicUid }).onConflictDoNothing();
-            } else {
-              await tx.delete(memberUidAliases).where(eq(memberUidAliases.memberAccountId, oldMember.id));
+          if (isMemberSchemaReady()) {
+            const [oldMember] = await tx.select({ id: memberAccounts.id, publicUid: memberAccounts.publicUid }).from(memberAccounts).where(eq(memberAccounts.parentId, oldStubId)).limit(1);
+            if (oldMember) {
+              const [targetMember] = await tx.select({ id: memberAccounts.id }).from(memberAccounts).where(eq(memberAccounts.parentId, target.id)).limit(1);
+              if (targetMember) {
+                await tx.update(memberUidAliases).set({ memberAccountId: targetMember.id }).where(eq(memberUidAliases.memberAccountId, oldMember.id));
+                await tx.insert(memberUidAliases).values({ memberAccountId: targetMember.id, publicUid: oldMember.publicUid }).onConflictDoNothing();
+              } else {
+                await tx.delete(memberUidAliases).where(eq(memberUidAliases.memberAccountId, oldMember.id));
+              }
+              await tx.delete(memberAccessTokens).where(eq(memberAccessTokens.memberAccountId, oldMember.id));
+              await tx.delete(memberConsents).where(eq(memberConsents.memberAccountId, oldMember.id));
+              await tx.delete(memberAccounts).where(eq(memberAccounts.id, oldMember.id));
             }
-            await tx.delete(memberAccessTokens).where(eq(memberAccessTokens.memberAccountId, oldMember.id));
-            await tx.delete(memberConsents).where(eq(memberConsents.memberAccountId, oldMember.id));
-            await tx.delete(memberAccounts).where(eq(memberAccounts.id, oldMember.id));
           }
           await tx.delete(parents).where(eq(parents.id, oldStubId));
         }
@@ -113,28 +116,32 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         .update(parents)
         .set({ name: parentName, email, profileComplete: true })
         .where(eq(parents.id, child.parentId));
-      const [member] = await tx.select({ id: memberAccounts.id }).from(memberAccounts).where(eq(memberAccounts.parentId, child.parentId)).limit(1);
-      if (member) {
+      if (isMemberSchemaReady()) {
+        const [member] = await tx.select({ id: memberAccounts.id }).from(memberAccounts).where(eq(memberAccounts.parentId, child.parentId)).limit(1);
+        if (member) {
         await tx.insert(memberConsents).values([
           { memberAccountId: member.id, type: "terms", policyVersion: process.env.TERMS_VERSION || "2026-08-11", source: "staff", adminId: adminId > 0 ? adminId : null },
           { memberAccountId: member.id, type: "privacy", policyVersion: process.env.PRIVACY_VERSION || "2026-08-11", source: "staff", adminId: adminId > 0 ? adminId : null },
         ]);
+        }
       }
     } else {
       const [p] = await tx
         .insert(parents)
         .values({ name: parentName, phone: "", email, profileComplete: true })
         .returning();
-      const [member] = await tx.insert(memberAccounts).values({
-        parentId: p.id,
-        publicUid: generateMemberUid(),
-        phoneNormalized: "",
-        preferredLanguage: "th",
-      }).returning({ id: memberAccounts.id });
-      await tx.insert(memberConsents).values([
-        { memberAccountId: member.id, type: "terms", policyVersion: process.env.TERMS_VERSION || "2026-08-11", source: "staff", adminId: adminId > 0 ? adminId : null },
-        { memberAccountId: member.id, type: "privacy", policyVersion: process.env.PRIVACY_VERSION || "2026-08-11", source: "staff", adminId: adminId > 0 ? adminId : null },
-      ]);
+      if (isMemberSchemaReady()) {
+        const [member] = await tx.insert(memberAccounts).values({
+          parentId: p.id,
+          publicUid: generateMemberUid(),
+          phoneNormalized: "",
+          preferredLanguage: "th",
+        }).returning({ id: memberAccounts.id });
+        await tx.insert(memberConsents).values([
+          { memberAccountId: member.id, type: "terms", policyVersion: process.env.TERMS_VERSION || "2026-08-11", source: "staff", adminId: adminId > 0 ? adminId : null },
+          { memberAccountId: member.id, type: "privacy", policyVersion: process.env.PRIVACY_VERSION || "2026-08-11", source: "staff", adminId: adminId > 0 ? adminId : null },
+        ]);
+      }
       await tx.update(children).set({ parentId: p.id }).where(eq(children.id, childId));
     }
     if (dob !== undefined || gender !== undefined) {

@@ -92,6 +92,7 @@ async function prepareDatabase() {
     console.log(
       `> Database ready: ${afterCounts.parents} parents, ${afterCounts.children} children; member schema verified`
     );
+    process.env.MEMBER_SCHEMA_READY = "1";
   } finally {
     await client.query("select pg_advisory_unlock($1)", [73194421]).catch(() => undefined);
     client.release();
@@ -102,6 +103,10 @@ async function prepareDatabase() {
 prepareRuntimeSecrets();
 
 prepareDatabase()
+  .catch((error) => {
+    process.env.MEMBER_SCHEMA_READY = "0";
+    console.error("> Member schema readiness failed; starting core compatibility mode", error);
+  })
   .then(() => app.prepare())
   .then(() => {
     const server = createServer((req, res) => handle(req, res));

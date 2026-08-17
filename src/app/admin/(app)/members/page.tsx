@@ -5,11 +5,26 @@ import { LogoutButton } from "@/components/LogoutButton";
 import { db } from "@/db";
 import { memberAccessTokens, memberAccounts, packageInstances, parents } from "@/db/schema";
 import { requireManagerPage } from "@/lib/admin-page-auth";
+import { isMemberSchemaReady } from "@/lib/member-schema";
 
 export const dynamic = "force-dynamic";
 
 export default async function MembersPage() {
   await requireManagerPage();
+  if (!isMemberSchemaReady()) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col bg-paper">
+        <AppBar title="Siamese Cat Members" right={<LogoutButton />} />
+        <main className="flex-1 px-4 py-8 sm:px-6">
+          <section className="mx-auto max-w-3xl rounded-2xl border border-warn/30 bg-warnbg p-5">
+            <h1 className="text-xl font-extrabold">Member service is temporarily unavailable</h1>
+            <p className="mt-2 text-sm text-meta">The established parent and child directory remains available while the member database upgrade recovers.</p>
+            <Link href="/admin/search" className="mt-4 inline-block rounded-lg bg-tealdeep px-4 py-2 font-bold text-white">Open parent and child directory</Link>
+          </section>
+        </main>
+      </div>
+    );
+  }
   const now = new Date();
   const inThirtyDays = new Date(now.getTime() + 30 * 24 * 60 * 60_000);
   const [

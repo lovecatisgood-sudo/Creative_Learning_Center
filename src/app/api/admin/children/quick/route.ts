@@ -5,6 +5,7 @@ import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { generateMemberUid, normalizePhone } from "@/lib/member-identity";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
+import { isMemberSchemaReady } from "@/lib/member-schema";
 
 // A2b — quick add child (two fields). Creates a stub parent keyed by phone,
 // flagged profile_complete = false, and links the child to it so the child
@@ -29,11 +30,16 @@ export async function POST(req: Request) {
   }
 
   if (body?.allowDuplicate !== true) {
-    const matches = await db
+    const matches = isMemberSchemaReady() ? await db
       .select({ publicUid: memberAccounts.publicUid, parentId: memberAccounts.parentId })
       .from(memberAccounts)
       .where(eq(memberAccounts.phoneNormalized, phoneNormalized))
-      .limit(5);
+      .limit(5) : (await db
+        .select({ parentId: parents.id })
+        .from(parents)
+        .where(eq(parents.phone, phone))
+        .limit(5))
+        .map((match) => ({ ...match, publicUid: null }));
     if (matches.length > 0) {
       return NextResponse.json({ error: "possible_duplicate", matches }, { status: 409 });
     }
@@ -44,7 +50,7 @@ export async function POST(req: Request) {
       .insert(parents)
       .values({ name: "", phone, email: null, profileComplete: false })
       .returning();
-    const [member] = await tx
+    const [member] = isMemberSchemaReady() ? await tx
       .insert(memberAccounts)
       .values({
         parentId: stubParent.id,
@@ -52,19 +58,19 @@ export async function POST(req: Request) {
         phoneNormalized,
         preferredLanguage: "th",
       })
-      .returning();
+      .returning() : [];
     const [child] = await tx
       .insert(children)
       .values({ parentId: stubParent.id, name: childName })
       .returning();
     await tx.insert(auditLog).values({
       adminId: adminId > 0 ? adminId : null,
-      action: "temporary_member_created",
-      entity: "member_account",
-      entityId: member.id,
+      action: member ? "temporary_member_created" : "temporary_parent_created",
+      entity: member ? "member_account" : "parent",
+      entityId: member?.id ?? stubParent.id,
       detail: { childId: child.id },
     });
-    return { childId: child.id, memberUid: member.publicUid };
+    return { childId: child.id, memberUid: member?.publicUid ?? null };
   });
 
   return NextResponse.json({ ok: true, ...created });
