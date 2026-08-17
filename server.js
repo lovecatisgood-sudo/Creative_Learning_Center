@@ -151,6 +151,7 @@ prepareRuntimeSecrets();
 prepareDatabase()
   .catch((error) => {
     process.env.MEMBER_SCHEMA_READY = "0";
+    process.env.MEMBER_SCHEMA_ERROR_CODE = String(error?.code || error?.name || "unknown").slice(0, 40);
     console.error("> Member schema readiness failed; starting core compatibility mode", error);
   })
   .then(() => app.prepare())
