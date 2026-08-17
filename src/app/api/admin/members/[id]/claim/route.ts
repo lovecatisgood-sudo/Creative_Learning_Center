@@ -6,7 +6,7 @@ import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 import { memberOrigin } from "@/lib/member-links";
 import { expiresFromNow, generateAccessToken, hashAccessToken } from "@/lib/member-tokens";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 export const runtime = "nodejs";
 
@@ -19,7 +19,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     if (error instanceof UnauthorizedError) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     throw error;
   }
-  if (!isMemberSchemaReady()) return NextResponse.json({ error: "Member service temporarily unavailable" }, { status: 503 });
+  if (!await ensureMemberSchemaReady()) return NextResponse.json({ error: "Member service temporarily unavailable" }, { status: 503 });
   const memberId = Number((await params).id);
   if (!Number.isInteger(memberId)) return NextResponse.json({ error: "Bad id" }, { status: 400 });
   const [member] = await db.select({ id: memberAccounts.id }).from(memberAccounts).where(eq(memberAccounts.id, memberId)).limit(1);

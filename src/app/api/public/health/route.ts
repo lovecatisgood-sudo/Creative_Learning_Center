@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -16,7 +16,7 @@ export async function GET() {
     coreDatabaseReady = false;
   }
 
-  const memberSchemaReady = isMemberSchemaReady();
+  const memberSchemaReady = await ensureMemberSchemaReady();
   const startupGuardRan = process.env.MEMBER_SCHEMA_READY === "0" || process.env.MEMBER_SCHEMA_READY === "1";
   const status = coreDatabaseReady && memberSchemaReady ? 200 : 503;
 

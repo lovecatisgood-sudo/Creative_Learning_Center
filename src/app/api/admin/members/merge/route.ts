@@ -15,7 +15,7 @@ import {
 import { ForbiddenError, requireManager, UnauthorizedError } from "@/lib/auth";
 import { normalizeMemberUid } from "@/lib/member-identity";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 async function resolveMember(uid: string) {
   const [direct] = await db.select().from(memberAccounts).where(eq(memberAccounts.publicUid, uid)).limit(1);
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     if (error instanceof ForbiddenError) return NextResponse.json({ error: "Manager access required" }, { status: 403 });
     throw error;
   }
-  if (!isMemberSchemaReady()) return NextResponse.json({ error: "Member service temporarily unavailable" }, { status: 503 });
+  if (!await ensureMemberSchemaReady()) return NextResponse.json({ error: "Member service temporarily unavailable" }, { status: 503 });
   const body = await request.json().catch(() => null);
   const sourceUid = normalizeMemberUid(String(body?.sourceUid ?? ""));
   const targetUid = normalizeMemberUid(String(body?.targetUid ?? ""));

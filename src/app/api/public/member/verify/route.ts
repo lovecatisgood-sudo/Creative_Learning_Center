@@ -5,13 +5,13 @@ import { auditLog, memberAccessTokens, memberAccounts, parents } from "@/db/sche
 import { establishMemberSession } from "@/lib/member-auth";
 import { hashAccessToken } from "@/lib/member-tokens";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   if (!isTrustedMutationOrigin(request)) return NextResponse.json({ error: "Forbidden origin" }, { status: 403 });
-  if (!isMemberSchemaReady()) return NextResponse.json({ error: "Member service temporarily unavailable" }, { status: 503 });
+  if (!await ensureMemberSchemaReady()) return NextResponse.json({ error: "Member service temporarily unavailable" }, { status: 503 });
   const body = await request.json().catch(() => null);
   const token = typeof body?.token === "string" ? body.token : "";
   if (token.length < 40 || token.length > 100) return NextResponse.json({ error: "Invalid link" }, { status: 400 });

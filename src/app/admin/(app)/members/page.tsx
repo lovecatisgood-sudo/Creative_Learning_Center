@@ -5,13 +5,13 @@ import { LogoutButton } from "@/components/LogoutButton";
 import { db } from "@/db";
 import { memberAccessTokens, memberAccounts, packageInstances, parents } from "@/db/schema";
 import { requireManagerPage } from "@/lib/admin-page-auth";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 export const dynamic = "force-dynamic";
 
 export default async function MembersPage() {
   await requireManagerPage();
-  if (!isMemberSchemaReady()) {
+  if (!await ensureMemberSchemaReady()) {
     return (
       <div className="flex min-h-0 flex-1 flex-col bg-paper">
         <AppBar title="Siamese Cat Members" right={<LogoutButton />} />

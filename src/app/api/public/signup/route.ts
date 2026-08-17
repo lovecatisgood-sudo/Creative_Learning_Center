@@ -7,7 +7,7 @@ import { generateMemberUid, normalizeEmail, normalizePhone } from "@/lib/member-
 import { establishMemberSession } from "@/lib/member-auth";
 import { PROGRAM_INTEREST_VALUES } from "@/lib/program-options";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 // Public (no auth) parent self-registration — PRD §6.1. Creates a full parent
 // record (profile_complete = true) plus one or more children in a transaction.
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
   // Registration is a core business path. If member provisioning is not
   // available, retain the established parent/child write path so the durable
   // registration is never lost.
-  if (!isMemberSchemaReady()) {
+  if (!await ensureMemberSchemaReady()) {
     const existing = await db.select({ id: parents.id }).from(parents).where(eq(parents.phone, phone)).limit(1);
     const result = await db.transaction(async (tx) => {
       const [parent] = await tx.insert(parents).values({ name: parentName, phone, email, profileComplete: true }).returning();

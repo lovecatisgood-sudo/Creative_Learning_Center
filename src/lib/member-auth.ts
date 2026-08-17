@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { memberAccounts } from "@/db/schema";
 import { getMemberSessionOptions, type MemberSession } from "@/lib/member-session";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 export type CurrentMember = {
   id: number;
@@ -33,7 +33,7 @@ export async function establishMemberSession(
 }
 
 export async function getCurrentMember(): Promise<CurrentMember | null> {
-  if (!isMemberSchemaReady()) return null;
+  if (!await ensureMemberSchemaReady()) return null;
   const session = await getMemberSession();
   if (!session.memberAccountId || !session.sessionVersion) return null;
 

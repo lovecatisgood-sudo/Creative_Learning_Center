@@ -58,12 +58,16 @@ for (const value of ["member_accounts", "member_access_tokens", "member_consents
 const bootstrap = read("drizzle/member-schema-bootstrap.sql");
 const server = read("server.js");
 const packageJson = JSON.parse(read("package.json"));
+const memberSchema = read("src/lib/member-schema.ts");
+const healthRoute = read("src/app/api/public/health/route.ts");
 for (const value of ["member_accounts", "member_access_tokens", "member_consents", "member_uid_aliases", 'ON CONFLICT ("parent_id") DO NOTHING']) {
   if (!bootstrap.includes(value)) failures.push(`member bootstrap contract missing ${value}`);
 }
 if (/\b(?:drop\s+(?:table|column)|truncate\s+table|delete\s+from)\b/i.test(bootstrap)) failures.push("member bootstrap contains a destructive SQL operation");
 if (!server.includes("member-schema-bootstrap.sql") || !server.includes('process.env.MEMBER_SCHEMA_READY = "1"')) failures.push("production startup does not enforce member schema readiness");
 if (packageJson.scripts?.start !== "node server.js") failures.push("default production start command bypasses schema readiness");
+if (!memberSchema.includes("ensureMemberSchemaReady") || !memberSchema.includes("member-schema-bootstrap.sql")) failures.push("application runtime cannot recover member schema independently of host startup");
+if (!healthRoute.includes("await ensureMemberSchemaReady()")) failures.push("production health endpoint does not enforce member readiness");
 
 const env = read(".env.example");
 for (const variable of ["MEMBER_SESSION_SECRET", "APP_ORIGIN", "TERMS_VERSION", "PRIVACY_VERSION"]) {

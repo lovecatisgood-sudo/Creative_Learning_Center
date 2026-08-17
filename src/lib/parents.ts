@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { parents, children, orders, sessions, memberAccounts } from "@/db/schema";
 import { eq, and, inArray, asc, desc } from "drizzle-orm";
 import { ageFromDob } from "@/lib/children";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 export type ParentChild = {
   id: number;
@@ -41,7 +41,7 @@ export type ParentDetail = {
 // receipt-row shape from lib/packages' getChildHistory, extended with which
 // child each receipt belongs to since a parent can have several).
 export async function getParentDetail(id: number): Promise<ParentDetail | null> {
-  const parentRows = isMemberSchemaReady() ? await db
+  const parentRows = await ensureMemberSchemaReady() ? await db
     .select({
       id: parents.id,
       name: parents.name,

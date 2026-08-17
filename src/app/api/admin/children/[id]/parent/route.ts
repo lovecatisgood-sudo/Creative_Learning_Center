@@ -6,7 +6,7 @@ import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 import { generateMemberUid, normalizeEmail } from "@/lib/member-identity";
 import { toBkk } from "@/lib/time";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 function bkkTodayISO(): string {
   const today = toBkk(new Date());
@@ -40,6 +40,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const [child] = await db.select().from(children).where(eq(children.id, childId)).limit(1);
   if (!child) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  const memberSchemaReady = await ensureMemberSchemaReady();
 
   if (mode === "link") {
     const linkPhone = String(body?.linkPhone ?? "").trim();
@@ -67,7 +68,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           .where(and(eq(children.parentId, oldStubId), ne(children.id, childId)))
           .limit(1);
         if (others.length === 0) {
-          if (isMemberSchemaReady()) {
+          if (memberSchemaReady) {
             const [oldMember] = await tx.select({ id: memberAccounts.id, publicUid: memberAccounts.publicUid }).from(memberAccounts).where(eq(memberAccounts.parentId, oldStubId)).limit(1);
             if (oldMember) {
               const [targetMember] = await tx.select({ id: memberAccounts.id }).from(memberAccounts).where(eq(memberAccounts.parentId, target.id)).limit(1);
@@ -116,7 +117,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         .update(parents)
         .set({ name: parentName, email, profileComplete: true })
         .where(eq(parents.id, child.parentId));
-      if (isMemberSchemaReady()) {
+      if (memberSchemaReady) {
         const [member] = await tx.select({ id: memberAccounts.id }).from(memberAccounts).where(eq(memberAccounts.parentId, child.parentId)).limit(1);
         if (member) {
         await tx.insert(memberConsents).values([
@@ -130,7 +131,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         .insert(parents)
         .values({ name: parentName, phone: "", email, profileComplete: true })
         .returning();
-      if (isMemberSchemaReady()) {
+      if (memberSchemaReady) {
         const [member] = await tx.insert(memberAccounts).values({
           parentId: p.id,
           publicUid: generateMemberUid(),

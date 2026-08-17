@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { children, parents, sessions, memberAccounts, memberUidAliases } from "@/db/schema";
 import { sql, ilike, or, isNull, asc, and, eq, inArray } from "drizzle-orm";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 export type DirChild = { id: number; name: string; hasRunningSession: boolean };
 export type DirGroup =
@@ -53,7 +53,7 @@ export async function getDirectory({
     phone: parents.phone,
     profileComplete: parents.profileComplete,
   };
-  const parentRows = isMemberSchemaReady() ? await db
+  const parentRows = await ensureMemberSchemaReady() ? await db
     .select({
       ...baseParentSelection,
       memberUid: memberAccounts.publicUid,

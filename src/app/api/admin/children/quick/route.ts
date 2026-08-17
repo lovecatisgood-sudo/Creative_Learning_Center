@@ -5,7 +5,7 @@ import { requireAdminId, UnauthorizedError } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { generateMemberUid, normalizePhone } from "@/lib/member-identity";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 // A2b — quick add child (two fields). Creates a stub parent keyed by phone,
 // flagged profile_complete = false, and links the child to it so the child
@@ -28,9 +28,10 @@ export async function POST(req: Request) {
   if (!childName || !phone || !phoneNormalized) {
     return NextResponse.json({ error: "Child name and phone are required" }, { status: 422 });
   }
+  const memberSchemaReady = await ensureMemberSchemaReady();
 
   if (body?.allowDuplicate !== true) {
-    const matches = isMemberSchemaReady() ? await db
+    const matches = memberSchemaReady ? await db
       .select({ publicUid: memberAccounts.publicUid, parentId: memberAccounts.parentId })
       .from(memberAccounts)
       .where(eq(memberAccounts.phoneNormalized, phoneNormalized))
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
       .insert(parents)
       .values({ name: "", phone, email: null, profileComplete: false })
       .returning();
-    const [member] = isMemberSchemaReady() ? await tx
+    const [member] = memberSchemaReady ? await tx
       .insert(memberAccounts)
       .values({
         parentId: stubParent.id,

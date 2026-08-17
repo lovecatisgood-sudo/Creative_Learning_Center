@@ -16,7 +16,7 @@ import { and, eq, inArray, like } from "drizzle-orm";
 import { writeAudit } from "@/lib/audit";
 import { bkkDateStamp } from "@/lib/time";
 import { expiresFromNow, generateAccessToken, hashAccessToken } from "@/lib/member-tokens";
-import { isMemberSchemaReady } from "@/lib/member-schema";
+import { ensureMemberSchemaReady } from "@/lib/member-schema";
 
 const HOUR_MS = 60 * 60 * 1000;
 
@@ -105,6 +105,7 @@ export async function createPaidOrder(opts: {
   extendSessionId?: number | null;
 }): Promise<CreateOrderResult> {
   const { adminId, childId, lines, method, proofPhotoPath, extendSessionId } = opts;
+  const memberSchemaReady = await ensureMemberSchemaReady();
   if (lines.length === 0) throw new OrderError("Empty cart");
   if (!proofPhotoPath) throw new OrderError("Proof photo required");
 
@@ -283,7 +284,7 @@ export async function createPaidOrder(opts: {
       detail: { receiptNo, method, total, paymentId: payment.id, lines },
     });
 
-    if (isMemberSchemaReady() && child.parentId) {
+    if (memberSchemaReady && child.parentId) {
       const [member] = await tx
         .select({ id: memberAccounts.id })
         .from(memberAccounts)
