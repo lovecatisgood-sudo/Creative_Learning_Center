@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 const required = [
   "MEMBER_SYSTEM_PRD_V2.md",
   "drizzle/0007_siamese_cat_members.sql",
+  "drizzle/member-schema-bootstrap.sql",
   "src/app/member/page.tsx",
   "src/app/member/MemberPortalClient.tsx",
   "src/app/api/member/me/route.ts",
@@ -54,6 +55,13 @@ const migration = read("drizzle/0007_siamese_cat_members.sql");
 for (const value of ["member_accounts", "member_access_tokens", "member_consents", "member_uid_aliases", "ON CONFLICT (\"parent_id\") DO NOTHING"]) {
   if (!migration.includes(value)) failures.push(`migration contract missing ${value}`);
 }
+const bootstrap = read("drizzle/member-schema-bootstrap.sql");
+const server = read("server.js");
+for (const value of ["member_accounts", "member_access_tokens", "member_consents", "member_uid_aliases", 'ON CONFLICT ("parent_id") DO NOTHING']) {
+  if (!bootstrap.includes(value)) failures.push(`member bootstrap contract missing ${value}`);
+}
+if (/\b(?:drop\s+(?:table|column)|truncate\s+table|delete\s+from)\b/i.test(bootstrap)) failures.push("member bootstrap contains a destructive SQL operation");
+if (!server.includes("member-schema-bootstrap.sql") || !server.includes('process.env.MEMBER_SCHEMA_READY = "1"')) failures.push("production startup does not enforce member schema readiness");
 
 const env = read(".env.example");
 for (const variable of ["MEMBER_SESSION_SECRET", "APP_ORIGIN", "TERMS_VERSION", "PRIVACY_VERSION"]) {

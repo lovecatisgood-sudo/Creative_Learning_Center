@@ -10,6 +10,7 @@
 //   Node version:    22.x
 const { createServer } = require("http");
 const { createHash } = require("crypto");
+const { readFileSync } = require("fs");
 const path = require("path");
 const next = require("next");
 const { drizzle } = require("drizzle-orm/node-postgres");
@@ -60,9 +61,29 @@ async function prepareDatabase() {
       "select (select count(*)::int from parents) as parents, (select count(*)::int from children) as children"
     );
 
-    await migrate(drizzle(client), {
-      migrationsFolder: path.join(process.cwd(), "drizzle"),
-    });
+    try {
+      await migrate(drizzle(client), {
+        migrationsFolder: path.join(process.cwd(), "drizzle"),
+      });
+    } catch (migrationError) {
+      // Some existing Hostinger databases predate Drizzle's migration journal.
+      // In that case replaying the full history stops on already-existing core
+      // tables. Apply the member expansion independently; it is idempotent and
+      // does not alter or delete established parent/child records.
+      console.warn("> Full migration history could not be replayed; applying additive member schema bootstrap", migrationError);
+      const bootstrapSql = readFileSync(
+        path.join(process.cwd(), "drizzle", "member-schema-bootstrap.sql"),
+        "utf8"
+      );
+      await client.query("begin");
+      try {
+        await client.query(bootstrapSql);
+        await client.query("commit");
+      } catch (bootstrapError) {
+        await client.query("rollback").catch(() => undefined);
+        throw bootstrapError;
+      }
+    }
 
     const requiredTables = await client.query(`
       select table_name
@@ -74,6 +95,21 @@ async function prepareDatabase() {
       const found = requiredTables.rows.map((row) => row.table_name).sort().join(", ");
       throw new Error(`Production schema is incomplete after migration; found: ${found}`);
     }
+
+    // Verify the exact columns used by runtime queries, not only table names.
+    await client.query(`
+      select
+        ma.parent_id, ma.public_uid, ma.phone_normalized, ma.email_normalized,
+        ma.email_verified_at, ma.preferred_language, ma.session_version,
+        mc.member_account_id, mc.policy_version,
+        mua.public_uid as alias_uid,
+        mat.token_hash, mat.expires_at
+      from member_accounts ma
+      left join member_consents mc on false
+      left join member_uid_aliases mua on false
+      left join member_access_tokens mat on false
+      limit 0
+    `);
 
     const after = await client.query(
       "select (select count(*)::int from parents) as parents, (select count(*)::int from children) as children"
