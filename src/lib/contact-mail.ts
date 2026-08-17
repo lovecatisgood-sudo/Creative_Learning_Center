@@ -16,6 +16,8 @@ const SERVICE_LABELS: Record<string, string> = {
   "creative-club": "Creative Club / After School Explorer",
   membership: "After School plans",
   "meal-plans": "After School Meal Care",
+  "coding-ai-en": "Coding with AI course in English",
+  "coding-ai-th": "Coding with AI course in Thai",
 };
 
 function requiredEnv(name: string) {

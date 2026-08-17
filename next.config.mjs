@@ -9,6 +9,7 @@ const mainSiteRoutes = [
   "inside",
   "playgroup",
   "creative",
+  "coding-with-ai",
   "membership",
   "dinner",
   "contact",

@@ -24,8 +24,11 @@
     if (href.startsWith('tel:')) trackEvent('phone_click', { link_url: href });
     else if (href.includes('wa.me/')) trackEvent('whatsapp_click', { link_url: href });
     else if (href.includes('maps.')) trackEvent('directions_click', { link_url: href });
-    else if (/\/(playgroup|creative|little-explorer-program|membership)(?:$|[?#])/.test(href)) {
+    else if (/\/(playgroup|creative|coding-with-ai|little-explorer-program|membership)(?:$|[?#])/.test(href)) {
       trackEvent('program_click', { link_url: href, link_text: (link.textContent || '').trim().slice(0, 100) });
+    }
+    if (link.matches('[data-course-interest]')) {
+      trackEvent('course_interest_click', { course_language: body.dataset.language || 'th', link_url: href });
     }
   });
 
@@ -320,7 +323,9 @@
   // Dynamic booking plan
   const params = new URLSearchParams(location.search);
   const planParam = params.get('plan');
+  const serviceParam = params.get('service');
   const planSelect = qs('#plan-interest');
+  const serviceSelect = qs('#contact-service');
   const selectedSummary = qs('#selected-plan-summary');
   if (planParam && planSelect) {
     const matching = qsa('option', planSelect).find(o => o.value === planParam);
@@ -331,6 +336,10 @@
         selectedSummary.querySelector('[data-summary-plan]').textContent = matching.textContent;
       }
     }
+  }
+  if (serviceParam && serviceSelect) {
+    const matchingService = qsa('option', serviceSelect).find(option => option.value === serviceParam);
+    if (matchingService) serviceSelect.value = serviceParam;
   }
 
   // Legacy standalone form behaviour. Public CTAs now route to /signup.

@@ -5,8 +5,8 @@ const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
 const GOOGLE_ADSENSE_SELLER_RECORD = "google.com, pub-3624708289866566, DIRECT, f08c47fec0942fa0\n";
 const expectedNav = {
-  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "Kids Playroom", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "เครื่องมือฟรี", "ติดต่อเรา"],
-  en: ["Inside the Club", "Creative Club", "Kids Playroom", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Free Tools", "Contact Us"],
+  th: ["ภายในคลับ", "ครีเอทีฟคลับ", "Kids Playroom", "เรียนโค้ดด้วย AI", "สมาชิก", "แผนมื้ออาหาร", "บล็อก", "คำถามจากพ่อแม่", "การเล่นและพัฒนาการ", "เรื่องจากในคลับ", "ชีวิตหลังเลิกเรียน", "FAQ หลัก", "เครื่องมือฟรี", "ติดต่อเรา"],
+  en: ["Inside the Club", "Creative Club", "Kids Playroom", "Coding with AI", "Membership", "Meal Plans", "Blog", "Parent Questions", "Play & Development", "Inside the Club", "After School", "Main FAQ", "Free Tools", "Contact Us"],
 };
 
 const adsTxt = readFileSync(join(process.cwd(), "public/ads.txt"), "utf8");
@@ -100,6 +100,7 @@ for (const language of ["th", "en"]) {
   const playgroup = pages.find(({ file }) => file === "playgroup.html")?.html ?? "";
   const dinner = pages.find(({ file }) => file === "dinner.html")?.html ?? "";
   const contact = pages.find(({ file }) => file === "contact.html")?.html ?? "";
+  const codingCourse = pages.find(({ file }) => file === "coding-with-ai.html")?.html ?? "";
   const home = pages.find(({ file }) => file === "index.html")?.html ?? "";
   const expectedPrices = language === "en"
     ? ["149 THB", "249 THB", "80 THB", "50 THB", "45 THB", "69 THB", "99 THB"]
@@ -118,6 +119,14 @@ for (const language of ["th", "en"]) {
   }
   if (!contact.includes("data-contact-form") || !contact.includes("https://wa.me/66952413028")) {
     throw new Error(`${language}/contact.html is missing its form or WhatsApp contact`);
+  }
+  for (const requiredCourseText of language === "en"
+    ? ["12-lesson package", "20,000 THB", "Save 4,000 THB", "30 minutes free", "Siamese Cat Dev", "Car Maze: Learn Python", "Siamese Cat vs Dog 1986"]
+    : ["แพ็กเกจ 12 บท", "20,000 บาท", "ประหยัด 4,000 บาท", "ฟรี 30 นาที", "Mr. A จาก Djai.academy", "Car Maze: Learn Python", "Siamese Cat vs Dog 1986"]) {
+    if (!codingCourse.includes(requiredCourseText)) throw new Error(`${language}/coding-with-ai.html is missing ${requiredCourseText}`);
+  }
+  if (!codingCourse.includes(`${prefix}/contact?service=coding-ai-${language}`)) {
+    throw new Error(`${language}/coding-with-ai.html is missing its localized course-interest link`);
   }
   if (!home.includes("data-home-blog-grid") || !home.includes(`${prefix}/blog?category=parenting-guides`)) {
     throw new Error(`${language}/index.html is missing the published-blog feed or category links`);

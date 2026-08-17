@@ -12,6 +12,8 @@ const SERVICES = new Set([
   "creative-club",
   "membership",
   "meal-plans",
+  "coding-ai-en",
+  "coding-ai-th",
 ]);
 
 export async function POST(req: Request) {
