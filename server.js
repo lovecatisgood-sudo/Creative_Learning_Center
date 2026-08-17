@@ -17,7 +17,14 @@ const { drizzle } = require("drizzle-orm/node-postgres");
 const { migrate } = require("drizzle-orm/node-postgres/migrator");
 const { Pool } = require("pg");
 
-const port = parseInt(process.env.PORT || "3000", 10);
+// Match Next's local env loading while keeping real process variables highest
+// priority. Production hosts inject these variables directly.
+require("dotenv").config({ path: path.join(__dirname, ".env.local") });
+require("dotenv").config({ path: path.join(__dirname, ".env") });
+
+const portFlagIndex = process.argv.findIndex((arg) => arg === "-p" || arg === "--port");
+const cliPort = portFlagIndex >= 0 ? process.argv[portFlagIndex + 1] : undefined;
+const port = parseInt(process.env.PORT || cliPort || "3000", 10);
 const host = process.env.HOST || "0.0.0.0";
 const app = next({ dev: false });
 const handle = app.getRequestHandler();
@@ -63,7 +70,7 @@ async function prepareDatabase() {
 
     try {
       await migrate(drizzle(client), {
-        migrationsFolder: path.join(process.cwd(), "drizzle"),
+        migrationsFolder: path.join(__dirname, "drizzle"),
       });
     } catch (migrationError) {
       // Some existing Hostinger databases predate Drizzle's migration journal.
@@ -75,7 +82,7 @@ async function prepareDatabase() {
       // client is not left in PostgreSQL's aborted-transaction state.
       await client.query("rollback").catch(() => undefined);
       const bootstrapSql = readFileSync(
-        path.join(process.cwd(), "drizzle", "member-schema-bootstrap.sql"),
+        path.join(__dirname, "drizzle", "member-schema-bootstrap.sql"),
         "utf8"
       );
       await client.query("begin");
