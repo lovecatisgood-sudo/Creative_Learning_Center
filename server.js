@@ -71,6 +71,9 @@ async function prepareDatabase() {
       // tables. Apply the member expansion independently; it is idempotent and
       // does not alter or delete established parent/child records.
       console.warn("> Full migration history could not be replayed; applying additive member schema bootstrap", migrationError);
+      // Safe whether or not the migrator already rolled back; guarantees the
+      // client is not left in PostgreSQL's aborted-transaction state.
+      await client.query("rollback").catch(() => undefined);
       const bootstrapSql = readFileSync(
         path.join(process.cwd(), "drizzle", "member-schema-bootstrap.sql"),
         "utf8"
