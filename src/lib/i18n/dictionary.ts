@@ -246,6 +246,7 @@ export const dict = {
   pageOf: { th: "หน้า {a}/{b}", en: "Page {a}/{b}" },
   directoryTitle: { th: "รายชื่อ", en: "Directory" },
   noParentGroup: { th: "ยังไม่มีผู้ปกครอง", en: "No parent registered yet" },
+  directoryLoadFailed: { th: "ไม่สามารถโหลดข้อมูลผู้ปกครองและเด็กได้ กรุณาลองใหม่หรือติดต่อผู้ดูแลระบบ", en: "Parent and child records could not be loaded. Please retry or contact the system administrator." },
   searchPlaceholder2: { th: "ค้นหาชื่อผู้ปกครอง / บุตร / เบอร์โทร", en: "Search parent / child / phone" },
   emptyDirectory: { th: "ยังไม่มีข้อมูล", en: "No records yet" },
   parentPageTitle: { th: "ข้อมูลผู้ปกครอง", en: "Parent" },

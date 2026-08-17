@@ -18,6 +18,7 @@ export function SearchClient() {
   const [page, setPage] = useState(1);
   const [data, setData] = useState<DirectoryPage | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -31,6 +32,7 @@ export function SearchClient() {
     const delay = page === 1 ? 250 : 0;
     const id = setTimeout(async () => {
       setLoading(true);
+      setLoadError(false);
       try {
         const res = await fetch(
           `/api/admin/directory?q=${encodeURIComponent(q.trim())}&page=${page}`,
@@ -39,9 +41,11 @@ export function SearchClient() {
         if (res.ok) {
           const json: DirectoryPage = await res.json();
           setData(json);
+        } else {
+          setLoadError(true);
         }
       } catch (e) {
-        if ((e as Error).name !== "AbortError") throw e;
+        if ((e as Error).name !== "AbortError") setLoadError(true);
       } finally {
         if (!ctrl.signal.aborted) setLoading(false);
       }
@@ -77,6 +81,11 @@ export function SearchClient() {
       <div className="flex-1 overflow-y-auto min-h-0 px-4 pb-4 sm:px-6 md:px-8">
         {!data && loading && (
           <p className="py-10 text-center text-[13px] text-meta">{t("loading")}</p>
+        )}
+        {loadError && !loading && (
+          <div role="alert" className="my-4 rounded-xl border border-danger/40 bg-dangerbg p-4 text-center text-sm font-bold text-danger">
+            {t("directoryLoadFailed")}
+          </div>
         )}
         {data && data.totalGroups === 0 && (
           <p className="py-10 text-center text-base text-meta">{t("emptyDirectory")}</p>

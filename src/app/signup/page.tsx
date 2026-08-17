@@ -100,6 +100,7 @@ function SignupPageContent({ language }: { language: Lang }) {
       });
     } catch {
       setBusy(false);
+      window.gtag?.("event", "signup_failed", { page_language: lang, failure_type: "network" });
       setErrors((prev) => ({ ...prev, form: t("signupFailed") }));
       return;
     }
@@ -120,6 +121,7 @@ function SignupPageContent({ language }: { language: Lang }) {
       router.push(`${languagePrefix}/signup/success`);
     } else {
       const body = await res.json().catch(() => null);
+      window.gtag?.("event", "signup_failed", { page_language: lang, failure_type: res.status >= 500 ? "server" : "validation" });
       setErrors((prev) => ({ ...prev, form: (body?.error as string) || t("signupFailed") }));
     }
   }
