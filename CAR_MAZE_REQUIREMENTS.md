@@ -24,11 +24,12 @@ Last confirmed: 2026-08-18
 
 ## Authentication availability
 
-- The game sign-in service is currently not configured for production. The current configuration derives availability from `GAME_LOGIN_ENABLED` and `GOOGLE_CLIENT_ID`; both the UI and gating logic must respect that state.
-- An unconfigured sign-in service must never make the initial game experience unusable or show a broken sign-in flow.
-- While sign-in is unavailable, the game must still open in guest mode and keep stages 1–19 playable.
-- If a player reaches the Stage 20 checkpoint while authentication is unavailable, show an explicit, retryable operational message explaining that account sign-in is not currently available. Do not show a misleading working-looking CTA, silently fail, crash, or erase local progress.
-- The Stage 20+ account gate may only be enabled as a working production feature after the provider, redirect URLs, environment configuration, and end-to-end sign-in path have been verified.
+- Production account access uses Google Identity Services and the game backend's `/api/public/game/auth/config`, `/api/public/game/auth/google`, and `/api/public/game/auth/session` routes.
+- The Stage 20 gate may show the Google sign-in control only when the auth-config response reports login and Google enabled and supplies a client ID. The browser must then load the Google client, require Terms and Privacy acceptance, post the returned credential to the backend, and keep the returned session.
+- A backend auth-config response alone does not make the game account flow available. The static game client, provider callback, account provisioning, session cookie, and return-to-game path must all work together.
+- An unconfigured or temporarily unavailable sign-in service must never make the initial game experience unusable or show a misleading working-looking CTA. Stages 1–19 remain playable as a guest, and the Stage 20 message must be explicit and retryable.
+- Successful authentication must preserve `car-maze-progress-v1`, remove only the guest identity marker, and allow the player to continue without restarting the course.
+- A signed-in player must pass the Stage 20 checkpoint on later visits, and signing out must clear the server session before the game returns to guest mode.
 
 ## Acceptance checks before any production deployment
 
@@ -37,6 +38,8 @@ Last confirmed: 2026-08-18
 - The first auth checkpoint occurs at Stage 20, and nowhere earlier.
 - An unconfigured auth service never produces a broken start screen or a false sign-in success.
 - Local guest progress survives the Stage 20 checkpoint and the account handoff.
+- With production auth enabled, a real Google credential creates or updates the game player, establishes the `scvd_player` session, and returns the player to the game.
+- A valid existing `scvd_player` session passes Stage 20 without a second sign-in prompt; logout clears that session.
 - The behavior is identical in the English and Thai builds, with localized copy for the same states.
 - The deployed HTML references the newly built assets, and service-worker caching does not leave users on an older auth flow.
 - Production deployment is not claimed complete until the above checks pass against the built artifacts and the relevant production route.
@@ -47,4 +50,4 @@ Last confirmed: 2026-08-18
 - Do not put “Create an account” or “Sign in” ahead of the first mission.
 - Do not make a failed or missing auth configuration look like an empty game, a generic error, or a successful login.
 - Do not patch only one locale or one duplicate compiled bundle when both language builds are deployed.
-- Do not promote or deploy a build whose sign-in path has not been configured and verified.
+- Do not deploy a build that disables or removes the Stage 20 sign-in path while production auth is enabled.

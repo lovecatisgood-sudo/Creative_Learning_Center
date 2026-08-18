@@ -19,7 +19,10 @@ export async function GET() {
     );
   } catch (error) {
     console.error("Game session lookup failed", error);
-    return NextResponse.json({ authenticated: false, player: null }, { headers: { "cache-control": "no-store" } });
+    return NextResponse.json(
+      { error: "Game session is temporarily unavailable", authenticated: false, player: null },
+      { status: 503, headers: { "cache-control": "no-store" } },
+    );
   }
 }
 

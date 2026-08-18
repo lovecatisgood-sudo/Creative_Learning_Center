@@ -8,20 +8,26 @@ type GameSession = {
   playerPublicId?: string;
 };
 
-const gameSessionOptions: SessionOptions = {
-  password: process.env.SESSION_SECRET || "insecure-dev-secret-change-me-32chars!!",
-  cookieName: "scvd_player",
-  cookieOptions: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 180,
-  },
-};
+function getGameSessionOptions(): SessionOptions {
+  const configured = process.env.SESSION_SECRET?.trim();
+  if (process.env.NODE_ENV === "production" && (!configured || configured.length < 32)) {
+    throw new Error("SESSION_SECRET must be at least 32 characters for game sessions");
+  }
+  return {
+    password: configured || "insecure-dev-secret-change-me-32chars!!",
+    cookieName: "scvd_player",
+    cookieOptions: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 180,
+    },
+  };
+}
 
 export async function getGameSession() {
-  return getIronSession<GameSession>(await cookies(), gameSessionOptions);
+  return getIronSession<GameSession>(await cookies(), getGameSessionOptions());
 }
 
 export async function getCurrentGamePlayer() {

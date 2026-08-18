@@ -14,27 +14,33 @@ export async function POST(request: Request) {
   if (!feature.enabled) {
     return NextResponse.json({ error: "Game sign-in is not available" }, { status: 503 });
   }
+
   const body = await request.json().catch(() => null);
   if (!body || body.acceptTerms !== true) {
     return NextResponse.json({ error: "Terms acceptance is required" }, { status: 422 });
   }
 
   const credential = String(body.credential ?? "").trim();
-  const clientId = feature.googleClientId;
   if (!credential) return NextResponse.json({ error: "Missing Google credential" }, { status: 422 });
 
+  let payload: Awaited<ReturnType<typeof verifyGoogleCredential>>;
   try {
-    const ticket = await googleClient.verifyIdToken({ idToken: credential, audience: clientId });
-    const payload = ticket.getPayload();
-    const googleSub = String(payload?.sub ?? "");
-    const email = String(payload?.email ?? "").trim().toLowerCase();
-    const displayName = String(payload?.name ?? email.split("@")[0] ?? "Player").trim().slice(0, 40);
-    const avatarUrl = String(payload?.picture ?? "").trim().slice(0, 2_000);
-    const language = body.language === "th" ? "th" : "en";
-    if (!googleSub || !email || payload?.email_verified !== true) {
-      return NextResponse.json({ error: "A verified Google email is required" }, { status: 422 });
-    }
+    payload = await verifyGoogleCredential(credential, feature.googleClientId);
+  } catch (error) {
+    console.warn("Google game credential verification failed", error);
+    return NextResponse.json({ error: "Unable to verify Google sign-in" }, { status: 401 });
+  }
 
+  const googleSub = String(payload?.sub ?? "");
+  const email = String(payload?.email ?? "").trim().toLowerCase();
+  const displayName = String(payload?.name ?? email.split("@")[0] ?? "Player").trim().slice(0, 40);
+  const avatarUrl = String(payload?.picture ?? "").trim().slice(0, 2_000);
+  const language = body.language === "th" ? "th" : "en";
+  if (!googleSub || !email || payload?.email_verified !== true) {
+    return NextResponse.json({ error: "A verified Google email is required" }, { status: 422 });
+  }
+
+  try {
     const now = new Date();
     const player = await db.transaction(async (tx) => {
       const [byGoogle] = await tx.select().from(gamePlayers).where(eq(gamePlayers.googleSub, googleSub)).limit(1);
@@ -96,9 +102,14 @@ export async function POST(request: Request) {
     if (error instanceof GoogleAccountConflictError) {
       return NextResponse.json({ error: error.message }, { status: 409 });
     }
-    console.error("Google game sign-in failed", error);
-    return NextResponse.json({ error: "Unable to verify Google sign-in" }, { status: 401 });
+    console.error("Google game sign-in persistence failed", error);
+    return NextResponse.json({ error: "Game sign-in is temporarily unavailable" }, { status: 503 });
   }
+}
+
+async function verifyGoogleCredential(idToken: string, audience: string) {
+  const ticket = await googleClient.verifyIdToken({ idToken, audience });
+  return ticket.getPayload();
 }
 
 class GoogleAccountConflictError extends Error {
