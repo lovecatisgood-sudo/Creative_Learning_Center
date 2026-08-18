@@ -9,6 +9,7 @@ const locales = [
   { code: "th", bundle: "index-CDysuM6h.js", css: "index-BaFdOubp.css" },
 ];
 const performanceRelease = "20260818-perf-v1";
+const fontRelease = "20260819-fonts-v1";
 
 for (const { code, bundle, css } of locales) {
   const base = path.join(root, "game-assets", "learn_python", code);
@@ -22,9 +23,13 @@ for (const { code, bundle, css } of locales) {
   new Script(serviceWorker);
   assert.match(html, new RegExp(`guest-first-entry-v1\\.js\\?release=${performanceRelease}`), `${code}: auth bootstrap cache-buster is missing`);
   assert.ok(html.includes(`${bundle}?release=${performanceRelease}`), `${code}: performance bundle cache-buster is missing`);
+  assert.ok(html.includes(`<link rel="modulepreload" crossorigin href="/game/learn_python/${code}/assets/${bundle}?release=${performanceRelease}"`), `${code}: game shell modulepreload is missing`);
   assert.doesNotMatch(html, /rel="preload"[^>]+as="audio"/i, `${code}: stage music must not block the initial page load`);
-  assert.ok(html.indexOf("guest-first-entry-v1.js") < html.indexOf(`${bundle}`), `${code}: guest bootstrap must load before the game bundle`);
+  assert.ok(html.indexOf(`<script src="/game/learn_python/${code}/assets/guest-first-entry-v1.js`) < html.indexOf(`<script type="module"`), `${code}: guest bootstrap must execute before the game bundle`);
+  assert.ok(html.includes(`${css}?release=${fontRelease}`), `${code}: font-optimized stylesheet cache-buster is missing`);
   assert.match(html, new RegExp(`assets/${css.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`), `${code}: expected current stylesheet reference`);
+  const stylesheet = await readFile(path.join(base, "assets", css), "utf8");
+  assert.match(stylesheet, /NotoSans(?:Thai)?-[^)]+\.woff2\)format\("woff2"\)/, `${code}: compressed Noto Sans webfont is missing`);
   assert.match(html, /accounts\.google\.com/, `${code}: Google auth origin is missing from the page policy`);
   assert.match(guestScript, /car-maze-guest-identity-v1/, `${code}: guest identity key is missing`);
   assert.doesNotMatch(guestScript, /ACCOUNT_FLOW_READY\s*=\s*false/, `${code}: production Google sign-in was disabled in the client`);
@@ -41,6 +46,7 @@ for (const { code, bundle, css } of locales) {
   assert.doesNotMatch(guestScript, /observer\.observe\(document\.documentElement/, `${code}: stage observer still watches the whole document root`);
   assert.match(serviceWorker, new RegExp(`assets/guest-first-entry-v1\\.js\\?release=${performanceRelease}`), `${code}: service worker does not precache the cache-busted guest bootstrap`);
   assert.ok(serviceWorker.includes(`assets/${bundle}?release=${performanceRelease}`), `${code}: service worker does not precache the performance bundle`);
+  assert.ok(serviceWorker.includes(`assets/${css}?release=${fontRelease}`), `${code}: service worker does not precache the font-optimized stylesheet`);
   assert.match(serviceWorker, new RegExp(`assets/execution\\.worker-BEyBRiev\\.js\\?release=${performanceRelease}`), `${code}: service worker does not precache the performance worker`);
   assert.match(compiledBundle, /car-maze-guest-identity-v1/, `${code}: compiled game no longer recognizes guest identities`);
   assert.match(compiledBundle, /ji=15e3/, `${code}: execution timeout budget was not updated`);
