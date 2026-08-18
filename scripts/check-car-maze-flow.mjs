@@ -8,6 +8,7 @@ const locales = [
   { code: "en", bundle: "index-CvTslmIN.js", css: "index-Cknk1RR5.css" },
   { code: "th", bundle: "index-CDysuM6h.js", css: "index-BaFdOubp.css" },
 ];
+const performanceRelease = "20260818-perf-v1";
 
 for (const { code, bundle, css } of locales) {
   const base = path.join(root, "game-assets", "learn_python", code);
@@ -15,10 +16,13 @@ for (const { code, bundle, css } of locales) {
   const guestScript = await readFile(path.join(base, "assets", "guest-first-entry-v1.js"), "utf8");
   const serviceWorker = await readFile(path.join(base, "sw.js"), "utf8");
   const compiledBundle = await readFile(path.join(base, "assets", bundle), "utf8");
+  const executionWorker = await readFile(path.join(base, "assets", "execution.worker-BEyBRiev.js"), "utf8");
 
   new Script(guestScript);
   new Script(serviceWorker);
-  assert.match(html, /guest-first-entry-v1\.js\?release=6eb8204/, `${code}: auth bootstrap cache-buster is missing`);
+  assert.match(html, new RegExp(`guest-first-entry-v1\\.js\\?release=${performanceRelease}`), `${code}: auth bootstrap cache-buster is missing`);
+  assert.ok(html.includes(`${bundle}?release=${performanceRelease}`), `${code}: performance bundle cache-buster is missing`);
+  assert.doesNotMatch(html, /rel="preload"[^>]+as="audio"/i, `${code}: stage music must not block the initial page load`);
   assert.ok(html.indexOf("guest-first-entry-v1.js") < html.indexOf(`${bundle}`), `${code}: guest bootstrap must load before the game bundle`);
   assert.match(html, new RegExp(`assets/${css.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`), `${code}: expected current stylesheet reference`);
   assert.match(html, /accounts\.google\.com/, `${code}: Google auth origin is missing from the page policy`);
@@ -33,8 +37,23 @@ for (const { code, bundle, css } of locales) {
   assert.match(guestScript, /acceptTerms: true/, `${code}: required Terms acceptance is missing`);
   assert.match(guestScript, /credentials: "same-origin"/, `${code}: auth requests must carry the first-party session`);
   assert.match(guestScript, /localStorage\.removeItem\(GUEST_KEY\)/, `${code}: account handoff does not clear guest identity`);
-  assert.match(serviceWorker, /assets\/guest-first-entry-v1\.js\?release=6eb8204/, `${code}: service worker does not precache the cache-busted guest bootstrap`);
+  assert.match(guestScript, /MutationObserver\(scheduleStageCheck\)/, `${code}: stage observer is not throttled`);
+  assert.doesNotMatch(guestScript, /observer\.observe\(document\.documentElement/, `${code}: stage observer still watches the whole document root`);
+  assert.match(serviceWorker, new RegExp(`assets/guest-first-entry-v1\\.js\\?release=${performanceRelease}`), `${code}: service worker does not precache the cache-busted guest bootstrap`);
+  assert.ok(serviceWorker.includes(`assets/${bundle}?release=${performanceRelease}`), `${code}: service worker does not precache the performance bundle`);
+  assert.match(serviceWorker, new RegExp(`assets/execution\\.worker-BEyBRiev\\.js\\?release=${performanceRelease}`), `${code}: service worker does not precache the performance worker`);
   assert.match(compiledBundle, /car-maze-guest-identity-v1/, `${code}: compiled game no longer recognizes guest identities`);
+  assert.match(compiledBundle, /ji=15e3/, `${code}: execution timeout budget was not updated`);
+  assert.match(compiledBundle, /type===`ready`/, `${code}: compiled client does not handle worker readiness`);
+  assert.match(compiledBundle, /worker_start_timeout/, `${code}: worker startup has no distinct failure state`);
+  assert.match(compiledBundle, /The program runner is still starting/, `${code}: worker startup error is not explicit`);
+  assert.match(compiledBundle, /requestIdleCallback/, `${code}: execution worker warmup is missing`);
+  assert.match(compiledBundle, /function po\(\)\{[^}]*;B=!0;let e=/, `${code}: music is still initialized before user interaction`);
+  assert.doesNotMatch(compiledBundle, /;B=!0,_o\(\);/, `${code}: music still initializes eagerly at mount`);
+  assert.match(executionWorker, /postMessage\(\{type:`ready`\}\)/, `${code}: execution worker does not announce readiness`);
+  for (const cap of ["actionCap", "frameCap", "operationCap", "sourceCharacterCap", "worldCallCap"]) {
+    assert.match(executionWorker, new RegExp(`${cap}:Q\\(`), `${code}: ${cap} safety cap is missing`);
+  }
 
   const store = new Map();
   const document = {
@@ -45,7 +64,7 @@ for (const { code, bundle, css } of locales) {
     createElement() { return { dataset: {}, style: {}, setAttribute() {}, addEventListener() {}, appendChild() {}, remove() {} }; },
     addEventListener() {},
   };
-  class Observer { observe() {} }
+  class Observer { observe() {} disconnect() {} }
   const context = createContext({
     document,
     localStorage: {

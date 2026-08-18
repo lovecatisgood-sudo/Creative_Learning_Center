@@ -31,6 +31,13 @@ Last confirmed: 2026-08-18
 - Successful authentication must preserve `car-maze-progress-v1`, remove only the guest identity marker, and allow the player to continue without restarting the course.
 - A signed-in player must pass the Stage 20 checkpoint on later visits, and signing out must clear the server session before the game returns to guest mode.
 
+## Performance requirements
+
+- The first playable guest screen must become interactive without preloading optional media such as the stage music. Music may be loaded lazily after the first user interaction, while the existing sound toggle and playback behavior remain available.
+- The code runner must distinguish worker startup from program execution. A slow worker download or cold start must not be reported as a bad loop or force the player to rewrite a valid program.
+- Execution safety limits remain mandatory: action, replay-frame, interpreter-operation, source-size, and world-call caps must continue to stop runaway programs.
+- Entry-flow code must not perform unthrottled whole-document work on every React render or DOM mutation. Performance changes must preserve the guest-first flow, Stage 20 authentication checkpoint, progress handoff, and both locales.
+
 ## Acceptance checks before any production deployment
 
 - Fresh browser storage/direct load opens the first playable stage without an auth wall.

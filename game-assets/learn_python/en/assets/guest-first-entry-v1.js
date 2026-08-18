@@ -54,6 +54,7 @@
   let googleLoadFailed = false;
   let signInPending = false;
   let pendingStageButton = null;
+  let stageObserver = null;
 
   function readGuest() {
     try {
@@ -440,6 +441,7 @@
     const stage = currentStage();
     if (stage >= 20) {
       if (accountAuthenticated) {
+        stageObserver?.disconnect();
         closeGate();
         return;
       }
@@ -476,7 +478,23 @@
     }
   }, true);
 
-  const observer = new MutationObserver(checkCurrentStage);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
+  let stageCheckScheduled = false;
+  function scheduleStageCheck() {
+    if (stageCheckScheduled) return;
+    stageCheckScheduled = true;
+    const run = () => {
+      stageCheckScheduled = false;
+      checkCurrentStage();
+    };
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(run);
+    } else {
+      window.setTimeout(run, 0);
+    }
+  }
+
+  stageObserver = new MutationObserver(scheduleStageCheck);
+  const observedRoot = document.querySelector("#root") || document.documentElement;
+  stageObserver.observe(observedRoot, { childList: true, subtree: true });
   window.setTimeout(checkCurrentStage, 0);
 })();
