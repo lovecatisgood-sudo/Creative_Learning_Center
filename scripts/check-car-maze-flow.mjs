@@ -9,7 +9,7 @@ const locales = [
   { code: "th", bundle: "index-CDysuM6h.js", css: "index-BaFdOubp.css" },
 ];
 const performanceRelease = "20260818-perf-v1";
-const fontRelease = "20260819-fonts-v1";
+const fontRelease = "20260819-fonts-v2";
 
 for (const { code, bundle, css } of locales) {
   const base = path.join(root, "game-assets", "learn_python", code);
