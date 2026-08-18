@@ -24,6 +24,7 @@
     "check:catalog-system": "tsx scripts/check-catalog-system.ts",
     "check:family-tools": "node scripts/check-family-tools.mjs",
     "check:game-features": "node scripts/check-game-features.mjs",
+    "check:car-maze-flow": "node scripts/check-car-maze-flow.mjs",
     "check:game-routes": "tsx scripts/check-game-routes.ts",
     "check:member-system": "tsx scripts/check-member-system.ts",
     "check:member-release": "node scripts/check-member-release.mjs",
