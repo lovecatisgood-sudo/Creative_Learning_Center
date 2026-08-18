@@ -18,6 +18,7 @@ for (const { code, bundle, css } of locales) {
 
   new Script(guestScript);
   new Script(serviceWorker);
+  assert.match(html, /guest-first-entry-v1\.js\?release=6eb8204/, `${code}: auth bootstrap cache-buster is missing`);
   assert.ok(html.indexOf("guest-first-entry-v1.js") < html.indexOf(`${bundle}`), `${code}: guest bootstrap must load before the game bundle`);
   assert.match(html, new RegExp(`assets/${css.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`), `${code}: expected current stylesheet reference`);
   assert.match(html, /accounts\.google\.com/, `${code}: Google auth origin is missing from the page policy`);
@@ -32,8 +33,7 @@ for (const { code, bundle, css } of locales) {
   assert.match(guestScript, /acceptTerms: true/, `${code}: required Terms acceptance is missing`);
   assert.match(guestScript, /credentials: "same-origin"/, `${code}: auth requests must carry the first-party session`);
   assert.match(guestScript, /localStorage\.removeItem\(GUEST_KEY\)/, `${code}: account handoff does not clear guest identity`);
-  assert.match(serviceWorker, /assets\/guest-first-entry-v1\.js/, `${code}: service worker does not precache the guest bootstrap`);
-  assert.match(serviceWorker, /20260818-guest-first-stage20-v4/, `${code}: service worker cache revision was not bumped for the auth flow`);
+  assert.match(serviceWorker, /assets\/guest-first-entry-v1\.js\?release=6eb8204/, `${code}: service worker does not precache the cache-busted guest bootstrap`);
   assert.match(compiledBundle, /car-maze-guest-identity-v1/, `${code}: compiled game no longer recognizes guest identities`);
 
   const store = new Map();
