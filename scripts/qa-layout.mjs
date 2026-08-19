@@ -5,6 +5,8 @@ const pages = (process.env.QA_PATHS ? process.env.QA_PATHS.split(",") : [
   "/EN",
   "/creative",
   "/EN/creative",
+  "/coding-with-ai",
+  "/EN/coding-with-ai",
   "/faq",
   "/EN/faq",
   "/signup",

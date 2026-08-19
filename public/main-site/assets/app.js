@@ -81,7 +81,15 @@
   // Header reveal / category slot behaviour
   const header = qs('.site-header');
   const mobileCta = qs('.mobile-cta');
-  const mobileCtaPages = new Set(['home', 'little-explorer-program', 'membership', 'inside', 'playgroup', 'creative', 'dinner', 'faq']);
+  const mobileCtaPages = new Set(['home', 'little-explorer-program', 'membership', 'inside', 'playgroup', 'creative', 'coding-with-ai', 'dinner', 'faq']);
+  if (mobileCta && current === 'coding-with-ai') {
+    const mobileCtaLink = qs('a', mobileCta);
+    if (mobileCtaLink) {
+      mobileCtaLink.href = `${lang === 'en' ? '/EN' : ''}/contact?service=${lang === 'en' ? 'coding-ai-en' : 'coding-ai-th'}`;
+      mobileCtaLink.textContent = lang === 'en' ? 'Register interest' : 'ลงทะเบียนความสนใจ';
+      mobileCtaLink.dataset.courseInterest = 'true';
+    }
+  }
   let lastY = window.scrollY;
   let ticking = false;
   window.addEventListener('scroll', () => {
