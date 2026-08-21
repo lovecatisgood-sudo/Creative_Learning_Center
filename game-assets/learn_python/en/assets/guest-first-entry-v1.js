@@ -9,37 +9,45 @@
         checking: "กำลังตรวจสอบการเข้าสู่ระบบ…",
         title: "เริ่มเข้าสู่ระบบเมื่อถึงด่าน 20",
         intro: "คุณเล่นด่าน 1–19 ได้โดยไม่ต้องมีบัญชี",
-        available: "เข้าสู่ระบบด้วย Google เพื่อเล่นต่อจากด่าน 20",
+        available: "ดำเนินการต่อด้วยบัญชีสมาชิก Siamese Cat เพื่อเล่นตั้งแต่ด่าน 20",
         unavailable: "ขณะนี้ระบบเข้าสู่ระบบยังไม่พร้อมใช้งาน กรุณาลองใหม่อีกครั้ง ความคืบหน้าในอุปกรณ์นี้ยังอยู่ครบ และด่าน 1–19 ยังคงเล่นได้",
         termsPrefix: "ฉันเป็นผู้ปกครองและยอมรับ ",
         termsLabel: "ข้อกำหนดการใช้งาน",
         privacyJoin: " และ ",
         privacyLabel: "ประกาศความเป็นส่วนตัว",
         termsRequired: "กรุณายอมรับข้อกำหนดการใช้งานและประกาศความเป็นส่วนตัวก่อนดำเนินการต่อ",
-        loadingGoogle: "กำลังโหลด Google Sign-In…",
-        googleLoadFailed: "โหลด Google Sign-In ไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อแล้วลองใหม่",
-        signingIn: "กำลังสร้างบัญชีผู้เล่น…",
+        continueSiamese: "ดำเนินการต่อด้วย Siamese Cat",
+        opening: "กำลังเปิดหน้าต่างเข้าสู่ระบบ Siamese Cat…",
+        popupBlocked: "กรุณาอนุญาตป๊อปอัป แล้วลองอีกครั้ง",
         signInFailed: "เข้าสู่ระบบไม่สำเร็จ กรุณาลองอีกครั้ง",
         retry: "ลองตรวจสอบอีกครั้ง",
         back: "กลับไปเล่นด่านก่อนหน้า",
+        adLabel: "โฆษณา",
+        adCountdown: "โฆษณา",
+        adSkip: "ข้าม",
+        adLearnMore: "ดูเพิ่มเติม",
       }
     : {
         checking: "Checking account sign-in availability…",
         title: "Sign-in starts at Stage 20",
         intro: "Stages 1–19 are playable without an account.",
-        available: "Sign in with Google to continue from Stage 20.",
+        available: "Continue with your Siamese Cat member account to play from Stage 20.",
         unavailable: "Account sign-in is not available right now. Try again in a moment. Your local progress is safe, and stages 1–19 remain playable.",
         termsPrefix: "I am a parent or guardian and agree to the ",
         termsLabel: "Terms",
         privacyJoin: " and the ",
         privacyLabel: "Privacy Notice",
         termsRequired: "Please accept the Terms and Privacy Notice before continuing.",
-        loadingGoogle: "Loading Google sign-in…",
-        googleLoadFailed: "Google sign-in could not load. Check your connection and try again.",
-        signingIn: "Creating your player account…",
+        continueSiamese: "Continue with Siamese Cat",
+        opening: "Opening Siamese Cat sign-in…",
+        popupBlocked: "Allow the sign-in pop-up, then try again.",
         signInFailed: "Sign-in did not work. Please try again.",
         retry: "Check again",
         back: "Keep playing earlier stages",
+        adLabel: "Advertisement",
+        adCountdown: "Advertisement",
+        adSkip: "Skip",
+        adLearnMore: "Learn more",
       };
 
   let gate = null;
@@ -49,12 +57,13 @@
   let authAvailable = false;
   let authOperationalError = false;
   let accountAuthenticated = false;
-  let googleClientId = "";
-  let googleLoadPromise = null;
-  let googleLoadFailed = false;
   let signInPending = false;
   let pendingStageButton = null;
   let stageObserver = null;
+  let milestoneAdPending = false;
+  const MILESTONE_AD_KEY = "car-maze-house-ad-milestones-v1";
+  const MILESTONE_STAGES = new Set([10, 20, 30, 40, 50]);
+  const handledMilestones = new Set();
 
   function readGuest() {
     try {
@@ -158,7 +167,7 @@
       .car-maze-auth-gate__terms { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 14px; color: #526970; font-size: 13px; }
       .car-maze-auth-gate__terms input { flex: 0 0 auto; width: 18px; height: 18px; margin: 2px 0 0; accent-color: #087fa3; }
       .car-maze-auth-gate__terms a { color: #087fa3; font-weight: 700; }
-      .car-maze-auth-gate__google { min-height: 44px; display: flex; justify-content: center; }
+      .car-maze-auth-gate__siamese { width: 100%; background: #087fa3; color: #fff; }
       .car-maze-auth-gate__status { min-height: 22px; margin: 12px 0 0; color: #526970; font-size: 13px; text-align: center; }
       .car-maze-auth-gate__status[data-error="true"] { color: #b33a2c; font-weight: 700; }
       .car-maze-auth-gate__actions { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -166,6 +175,19 @@
       .car-maze-auth-gate button:disabled { cursor: wait; opacity: .65; }
       .car-maze-auth-gate__primary { background: #087fa3; color: #fff; }
       .car-maze-auth-gate__secondary { background: #e8f1f3; color: #087fa3; }
+      .car-maze-house-ad { position: fixed; inset: 0; z-index: 11000; display: grid; place-items: center; padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)); box-sizing: border-box; background: #070b10; color: #fff; font: 500 14px/1.4 system-ui, sans-serif; }
+      .car-maze-house-ad__card { position: relative; width: min(100%, 430px); height: min(100%, 820px); display: flex; flex-direction: column; gap: 10px; }
+      .car-maze-house-ad__media { position: relative; min-height: 0; flex: 1 1 auto; overflow: hidden; border-radius: 16px; background: #000; box-shadow: 0 14px 50px rgba(0,0,0,.6); }
+      .car-maze-house-ad video { display: block; width: 100%; height: 100%; object-fit: contain; }
+      .car-maze-house-ad__label { position: absolute; z-index: 2; top: 10px; left: 10px; padding: 3px 7px; border: 1px solid rgba(255,255,255,.32); border-radius: 5px; background: rgba(0,0,0,.68); font-size: 10px; font-weight: 800; letter-spacing: .04em; }
+      .car-maze-house-ad__skip { position: absolute; z-index: 2; top: 10px; right: 10px; min-height: 36px !important; padding: 7px 11px !important; border: 1px solid rgba(255,255,255,.42) !important; border-radius: 7px !important; background: rgba(0,0,0,.76) !important; color: #fff; }
+      .car-maze-house-ad__skip[hidden] { display: none; }
+      .car-maze-house-ad__progress { position: absolute; right: 0; bottom: 0; left: 0; height: 3px; overflow: hidden; background: rgba(255,255,255,.24); }
+      .car-maze-house-ad__progress span { display: block; width: 100%; height: 100%; transform: scaleX(0); transform-origin: left center; background: #fff; will-change: transform; }
+      .car-maze-house-ad__meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .car-maze-house-ad__meta strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .car-maze-house-ad__meta span { flex: 0 0 auto; color: #bbcbd0; font-size: 12px; font-weight: 700; }
+      .car-maze-house-ad__cta { display: block; padding: 12px; border-radius: 12px; background: #f0ad22; color: #17202b; text-align: center; text-decoration: none; font-weight: 900; }
     `;
     document.head.appendChild(style);
   }
@@ -192,28 +214,6 @@
     status.dataset.error = error ? "true" : "false";
   }
 
-  function loadGoogleIdentityServices() {
-    if (window.google?.accounts?.id) return Promise.resolve();
-    if (googleLoadPromise) return googleLoadPromise;
-    googleLoadPromise = new Promise((resolve, reject) => {
-      const existing = document.querySelector("script[data-google-identity-services]");
-      if (existing) {
-        existing.addEventListener("load", resolve, { once: true });
-        existing.addEventListener("error", () => reject(new Error(copy.googleLoadFailed)), { once: true });
-        return;
-      }
-      const script = document.createElement("script");
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.dataset.googleIdentityServices = "";
-      script.onload = resolve;
-      script.onerror = () => reject(new Error(copy.googleLoadFailed));
-      document.head.appendChild(script);
-    });
-    return googleLoadPromise;
-  }
-
   function makeLegalLink(label, href) {
     const link = document.createElement("a");
     link.href = href;
@@ -223,7 +223,34 @@
     return link;
   }
 
-  async function handleGoogleCredential(response) {
+  async function refreshPlayerSession() {
+    const response = await fetch("/api/public/game/auth/session", { cache: "no-store", credentials: "same-origin" });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) throw new Error(String(payload?.error || copy.signInFailed));
+    return payload;
+  }
+
+  async function completeSiameseLogin() {
+    const session = await refreshPlayerSession();
+    if (!session?.authenticated || !session.player?.publicId) return false;
+    writeAccount(session.player);
+    accountAuthenticated = true;
+    authOperationalError = false;
+    try {
+      // Keep car-maze-progress-v1 intact; only the temporary guest identity is replaced.
+      localStorage.removeItem(GUEST_KEY);
+    } catch {
+      // The first-party server session remains authoritative.
+    }
+    closeGate();
+    window.dispatchEvent(new CustomEvent("car-maze-authenticated", { detail: session.player }));
+    const pendingButton = pendingStageButton;
+    pendingStageButton = null;
+    if (pendingButton?.isConnected) window.setTimeout(() => pendingButton.click(), 0);
+    return true;
+  }
+
+  async function beginSiameseLogin() {
     if (signInPending) return;
     const checkbox = gate?.querySelector(".car-maze-auth-gate__terms input");
     if (!checkbox?.checked) {
@@ -231,74 +258,35 @@
       checkbox?.focus();
       return;
     }
-    const credential = typeof response?.credential === "string" ? response.credential.trim() : "";
-    if (!credential) {
-      setLoginStatus(copy.signInFailed, true);
-      return;
-    }
-
     signInPending = true;
     checkbox.disabled = true;
-    setLoginStatus(copy.signingIn);
-    try {
-      const response = await fetch("/api/public/game/auth/google", {
-        method: "POST",
-        credentials: "same-origin",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ credential, acceptTerms: true, language: locale }),
-      });
-      const payload = await response.json().catch(() => null);
-      if (!response.ok || !payload?.player) {
-        throw new Error(response.status === 503 ? copy.unavailable : String(payload?.error || copy.signInFailed));
-      }
-
-      writeAccount(payload.player);
-      accountAuthenticated = true;
-      authOperationalError = false;
-      try {
-        // Keep car-maze-progress-v1 intact so the account handoff never loses guest progress.
-        localStorage.removeItem(GUEST_KEY);
-      } catch {
-        // The server session is already established even if storage is unavailable.
-      }
-      closeGate();
-      window.dispatchEvent(new CustomEvent("car-maze-authenticated", { detail: payload.player }));
-      const pendingButton = pendingStageButton;
-      pendingStageButton = null;
-      if (pendingButton?.isConnected) window.setTimeout(() => pendingButton.click(), 0);
-    } catch (error) {
-      checkbox.disabled = false;
-      setLoginStatus(error instanceof Error ? error.message : copy.signInFailed, true);
-    } finally {
+    setLoginStatus(copy.opening);
+    const popup = window.open(`/api/public/game/auth/siamese/start?game=car-maze&language=${locale}`, "car_maze_siamese_auth", "popup,width=520,height=720");
+    if (!popup) {
       signInPending = false;
+      checkbox.disabled = false;
+      setLoginStatus(copy.popupBlocked, true);
+      return;
     }
-  }
-
-  async function mountGoogleButton(slot) {
-    if (!authAvailable || googleLoadFailed || !slot?.isConnected) return;
-    try {
-      setLoginStatus(copy.loadingGoogle);
-      await loadGoogleIdentityServices();
-      if (!gate || !slot.isConnected || !window.google?.accounts?.id) throw new Error(copy.googleLoadFailed);
-      window.google.accounts.id.initialize({
-        client_id: googleClientId,
-        callback: handleGoogleCredential,
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-      window.google.accounts.id.renderButton(slot, {
-        theme: "outline",
-        size: "large",
-        text: "continue_with",
-        shape: "pill",
-        width: Math.min(360, Math.max(240, window.innerWidth - 96)),
-        locale,
-      });
-      setLoginStatus("");
-    } catch {
-      googleLoadFailed = true;
-      setLoginStatus(copy.googleLoadFailed, true);
-    }
+    let attempts = 0;
+    const poll = window.setInterval(async () => {
+      attempts += 1;
+      try {
+        if (await completeSiameseLogin()) {
+          window.clearInterval(poll);
+          signInPending = false;
+          return;
+        }
+      } catch {
+        // Keep polling while the popup transaction is in progress.
+      }
+      if (popup.closed || attempts >= 160) {
+        window.clearInterval(poll);
+        signInPending = false;
+        if (checkbox.isConnected) checkbox.disabled = false;
+        setLoginStatus(copy.signInFailed, true);
+      }
+    }, 750);
   }
 
   function renderGate() {
@@ -325,13 +313,15 @@
       terms.appendChild(document.createTextNode(copy.privacyJoin));
       terms.appendChild(makeLegalLink(copy.privacyLabel, locale === "th" ? "/privacy" : "/EN/privacy"));
 
-      const google = document.createElement("div");
-      google.className = "car-maze-auth-gate__google";
+      const siamese = document.createElement("button");
+      siamese.type = "button";
+      siamese.className = "car-maze-auth-gate__siamese";
+      siamese.textContent = copy.continueSiamese;
+      siamese.addEventListener("click", () => void beginSiameseLogin());
       const status = document.createElement("p");
       status.className = "car-maze-auth-gate__status";
       status.setAttribute("role", "status");
-      auth.append(terms, google, status);
-      void mountGoogleButton(google);
+      auth.append(terms, siamese, status);
     } else if (authOperationalError) {
       const status = document.createElement("p");
       status.className = "car-maze-auth-gate__status";
@@ -350,8 +340,6 @@
         authChecked = false;
         authOperationalError = false;
         authAvailable = false;
-        googleLoadFailed = false;
-        googleLoadPromise = null;
         checkAuthAvailability();
       });
       actions.appendChild(retry);
@@ -395,18 +383,20 @@
     renderGate();
     try {
       const [configResponse, sessionResponse] = await Promise.all([
-        fetch("/api/public/game/auth/config", { cache: "no-store", credentials: "same-origin" }),
+        fetch("/api/public/game/auth/config?game=car-maze", { cache: "no-store", credentials: "same-origin" }),
         fetch("/api/public/game/auth/session", { cache: "no-store", credentials: "same-origin" }),
       ]);
       if (!configResponse.ok || !sessionResponse.ok) throw new Error("auth service unavailable");
       const config = await configResponse.json();
       const session = await sessionResponse.json();
-      googleClientId = typeof config?.googleClientId === "string" ? config.googleClientId.trim() : "";
-      authAvailable = Boolean(config?.loginEnabled && config?.googleEnabled && googleClientId);
+      authAvailable = Boolean(config?.loginEnabled && config?.siameseEnabled);
       accountAuthenticated = Boolean(session?.authenticated && session?.player?.publicId);
       if (accountAuthenticated) {
         writeAccount(session.player);
         closeGate();
+        const pendingButton = pendingStageButton;
+        pendingStageButton = null;
+        if (pendingButton?.isConnected) window.setTimeout(() => pendingButton.click(), 0);
       } else {
         clearAccount();
         ensureGuestIdentity();
@@ -435,6 +425,172 @@
       ensureGuestIdentity();
       window.location.reload();
     }
+  }
+
+  function shownMilestones() {
+    try {
+      const value = JSON.parse(localStorage.getItem(MILESTONE_AD_KEY) || "[]");
+      const stored = Array.isArray(value) ? value.filter((stage) => MILESTONE_STAGES.has(Number(stage))).map(Number) : [];
+      return [...new Set([...stored, ...handledMilestones])];
+    } catch {
+      return [...handledMilestones];
+    }
+  }
+
+  function markMilestoneShown(stage) {
+    handledMilestones.add(stage);
+    try {
+      localStorage.setItem(MILESTONE_AD_KEY, JSON.stringify([...new Set([...shownMilestones(), stage])].sort((left, right) => left - right)));
+    } catch {
+      // The in-memory fallback still prevents an ad loop in this session.
+    }
+  }
+
+  function playerPublicId() {
+    return readAccount()?.id || "";
+  }
+
+  function recordMilestoneAd(campaign, eventType) {
+    try {
+      fetch("/api/public/game/ad/event", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        keepalive: true,
+        body: JSON.stringify({
+          campaignId: campaign.id,
+          playerId: playerPublicId(),
+          eventType,
+          placement: "car_maze_stage_milestone",
+        }),
+      }).catch(() => undefined);
+    } catch {
+      // Analytics failure must never block course progression.
+    }
+  }
+
+  async function showMilestoneAd(stage, continueToNextStep) {
+    if (milestoneAdPending) return;
+    milestoneAdPending = true;
+    // Treat this milestone as handled before campaign selection. If the API has
+    // no eligible campaign (or fails), replaying the original button click must
+    // continue the course instead of entering another ad request loop.
+    markMilestoneShown(stage);
+    let campaign = null;
+    try {
+      const response = await fetch(`/api/public/game/ad?language=${locale}&playerId=${encodeURIComponent(playerPublicId())}`, { cache: "no-store" });
+      if (response.ok) campaign = (await response.json())?.campaign || null;
+    } catch {
+      campaign = null;
+    }
+    if (!campaign?.videoUrl) {
+      milestoneAdPending = false;
+      continueToNextStep();
+      return;
+    }
+
+    addStyles();
+    const overlay = document.createElement("div");
+    overlay.className = "car-maze-house-ad";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", copy.adLabel);
+    const card = document.createElement("section");
+    card.className = "car-maze-house-ad__card";
+    const media = document.createElement("div");
+    media.className = "car-maze-house-ad__media";
+    const video = document.createElement("video");
+    video.playsInline = true;
+    video.preload = "auto";
+    video.src = campaign.videoUrl;
+    if (campaign.posterUrl) video.poster = campaign.posterUrl;
+    const label = document.createElement("span");
+    label.className = "car-maze-house-ad__label";
+    label.textContent = copy.adLabel;
+    const skip = document.createElement("button");
+    skip.type = "button";
+    skip.className = "car-maze-house-ad__skip";
+    skip.textContent = copy.adSkip;
+    skip.hidden = true;
+    skip.disabled = true;
+    const progress = document.createElement("div");
+    progress.className = "car-maze-house-ad__progress";
+    const progressValue = document.createElement("span");
+    progress.appendChild(progressValue);
+    media.append(video, label, skip, progress);
+    const meta = document.createElement("div");
+    meta.className = "car-maze-house-ad__meta";
+    const name = document.createElement("strong");
+    name.textContent = String(campaign.name || "Siamese Cat");
+    const countdown = document.createElement("span");
+    countdown.textContent = copy.adCountdown;
+    meta.append(name, countdown);
+    card.append(media, meta);
+    if (campaign.ctaLabel && campaign.destinationUrl) {
+      const cta = document.createElement("a");
+      cta.className = "car-maze-house-ad__cta";
+      cta.href = campaign.destinationUrl;
+      cta.target = "_blank";
+      cta.rel = "noopener";
+      cta.textContent = String(campaign.ctaLabel || copy.adLearnMore);
+      cta.addEventListener("click", () => recordMilestoneAd(campaign, "click"));
+      card.appendChild(cta);
+    }
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+    recordMilestoneAd(campaign, "impression");
+
+    let finished = false;
+    const skipAfter = Math.max(10, Math.min(300, Number(campaign.skipAfterSeconds) || 10));
+    const startedAt = Date.now();
+    const finish = (eventType) => {
+      if (finished) return;
+      finished = true;
+      if (eventType) recordMilestoneAd(campaign, eventType);
+      window.clearInterval(tick);
+      window.clearTimeout(safety);
+      try {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      } catch {
+        // Best-effort media cleanup.
+      }
+      overlay.remove();
+      milestoneAdPending = false;
+      window.setTimeout(continueToNextStep, 0);
+    };
+    const tick = window.setInterval(() => {
+      const elapsed = (Date.now() - startedAt) / 1000;
+      const unlockIn = Math.max(0, Math.ceil(skipAfter - elapsed));
+      skip.hidden = unlockIn > 0;
+      skip.disabled = unlockIn > 0;
+      const hasDuration = Number.isFinite(video.duration) && video.duration > 0;
+      const fraction = hasDuration ? Math.max(0, Math.min(1, video.currentTime / video.duration)) : 0;
+      const remaining = hasDuration ? Math.max(0, Math.ceil(video.duration - video.currentTime)) : null;
+      progressValue.style.transform = `scaleX(${fraction})`;
+      countdown.textContent = remaining === null ? copy.adCountdown : locale === "th" ? `${remaining} วิ` : `${remaining}s`;
+    }, 250);
+    const safety = window.setTimeout(() => finish("error"), Math.min(360, Math.max(45, skipAfter + 15)) * 1000);
+    skip.addEventListener("click", () => {
+      if (!skip.disabled) finish("skipped");
+    });
+    video.addEventListener("ended", () => finish("completed"));
+    video.addEventListener("error", () => finish("error"));
+    try {
+      await video.play();
+    } catch {
+      video.muted = true;
+      try {
+        await video.play();
+      } catch {
+        finish("error");
+      }
+    }
+  }
+
+  function isMilestoneExitButton(button) {
+    if (!button.closest(".winActions")) return false;
+    return /next stage|stage map|ด่านถัดไป|แผนที่ด่าน/i.test(button.textContent || "");
   }
 
   function checkCurrentStage() {
@@ -469,12 +625,20 @@
       return;
     }
 
-    if (target >= 20 || (current >= 20 && target === 0)) {
-      if (accountAuthenticated) return;
+    if ((target >= 20 || (current >= 20 && target === 0)) && !accountAuthenticated) {
       event.preventDefault();
       event.stopImmediatePropagation();
       pendingStageButton = button;
       showGate(Math.max(20, target || current));
+      return;
+    }
+
+    if (MILESTONE_STAGES.has(current) && isMilestoneExitButton(button) && !shownMilestones().includes(current)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      void showMilestoneAd(current, () => {
+        if (button.isConnected) button.click();
+      });
     }
   }, true);
 

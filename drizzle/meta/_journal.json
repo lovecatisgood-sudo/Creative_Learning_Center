@@ -64,6 +64,13 @@
       "when": 1786453200000,
       "tag": "0008_replace_playgroup_with_playroom",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1787306400000,
+      "tag": "0009_game_siamese_oidc",
+      "breakpoints": true
     }
   ]
 }

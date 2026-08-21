@@ -4,13 +4,13 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { gamePlayers } from "@/db/schema";
-import { getGameLoginConfig } from "@/lib/game-features";
+import { getGoogleGameLoginConfig } from "@/lib/game-features";
 import { getGameSession } from "@/lib/game-session";
 
 const googleClient = new OAuth2Client();
 
 export async function POST(request: Request) {
-  const feature = getGameLoginConfig();
+  const feature = getGoogleGameLoginConfig();
   if (!feature.enabled) {
     return NextResponse.json({ error: "Game sign-in is not available" }, { status: 503 });
   }

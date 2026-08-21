@@ -1,14 +1,34 @@
 import { NextResponse } from "next/server";
-import { getGameLoginConfig } from "@/lib/game-features";
+import { getGoogleGameLoginConfig, getSiameseGameLoginConfig } from "@/lib/game-features";
 
-export async function GET() {
-  const config = getGameLoginConfig();
-  return NextResponse.json(
-    {
-      loginEnabled: config.enabled,
-      googleEnabled: config.enabled,
-      googleClientId: config.enabled ? config.googleClientId : "",
-    },
-    { headers: { "cache-control": "public, max-age=300" } },
-  );
+export async function GET(request: Request) {
+  const game = new URL(request.url).searchParams.get("game");
+  if (game !== "car-maze") {
+    const config = getGoogleGameLoginConfig();
+    return NextResponse.json(
+      {
+        loginEnabled: config.enabled,
+        googleEnabled: config.enabled,
+        googleClientId: config.enabled ? config.googleClientId : "",
+      },
+      { headers: { "cache-control": "public, max-age=300" } },
+    );
+  }
+  try {
+    const config = getSiameseGameLoginConfig("car-maze");
+    return NextResponse.json(
+      {
+        loginEnabled: config.enabled,
+        siameseEnabled: config.enabled,
+        issuer: config.enabled ? config.issuer : "",
+      },
+      { headers: { "cache-control": "no-store" } },
+    );
+  } catch (error) {
+    console.error("Siamese Cat game auth configuration is invalid", error);
+    return NextResponse.json(
+      { error: "Game sign-in configuration is invalid", loginEnabled: false, siameseEnabled: false, issuer: "" },
+      { status: 503, headers: { "cache-control": "no-store" } },
+    );
+  }
 }

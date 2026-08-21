@@ -47,6 +47,41 @@ function prepareRuntimeSecrets() {
   console.warn("> MEMBER_SESSION_SECRET was absent; using a domain-separated key derived from SESSION_SECRET");
 }
 
+async function prepareSiameseGameSchema(client) {
+  try {
+    await client.query("begin");
+    await client.query('alter table "game_players" add column if not exists "siamese_issuer" text');
+    await client.query('alter table "game_players" add column if not exists "siamese_subject" text');
+    await client.query(
+      'create unique index if not exists "game_players_siamese_identity_unique" on "game_players" ("siamese_issuer", "siamese_subject")'
+    );
+    await client.query(`
+      select gp.siamese_issuer, gp.siamese_subject
+      from game_players gp
+      limit 0
+    `);
+    const index = await client.query(`
+      select 1
+      from pg_indexes
+      where schemaname = 'public'
+        and tablename = 'game_players'
+        and indexname = 'game_players_siamese_identity_unique'
+    `);
+    if (index.rowCount !== 1) throw new Error("Siamese game identity index is missing");
+    await client.query("commit");
+    process.env.SIAMESE_GAME_SCHEMA_READY = "1";
+    delete process.env.SIAMESE_GAME_SCHEMA_ERROR_CODE;
+    console.log("> Optional Siamese game identity schema verified");
+  } catch (error) {
+    await client.query("rollback").catch(() => undefined);
+    process.env.SIAMESE_GAME_SCHEMA_READY = "0";
+    process.env.SIAMESE_GAME_SCHEMA_ERROR_CODE = String(error?.code || error?.name || "unknown").slice(0, 40);
+    // Game authentication is optional. Keep registration, checkout, member,
+    // and admin flows online while the auth config route reports unavailable.
+    console.error("> Optional Siamese game identity schema is unavailable; game sign-in disabled", error);
+  }
+}
+
 async function prepareDatabase() {
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is required before the production server can start");
@@ -139,6 +174,7 @@ async function prepareDatabase() {
       `> Database ready: ${afterCounts.parents} parents, ${afterCounts.children} children; member schema verified`
     );
     process.env.MEMBER_SCHEMA_READY = "1";
+    await prepareSiameseGameSchema(client);
   } finally {
     await client.query("select pg_advisory_unlock($1)", [73194421]).catch(() => undefined);
     client.release();
@@ -152,6 +188,8 @@ prepareDatabase()
   .catch((error) => {
     process.env.MEMBER_SCHEMA_READY = "0";
     process.env.MEMBER_SCHEMA_ERROR_CODE = String(error?.code || error?.name || "unknown").slice(0, 40);
+    process.env.SIAMESE_GAME_SCHEMA_READY = "0";
+    process.env.SIAMESE_GAME_SCHEMA_ERROR_CODE = "startup_database_unavailable";
     console.error("> Member schema readiness failed; starting core compatibility mode", error);
   })
   .then(() => app.prepare())

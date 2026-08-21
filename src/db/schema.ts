@@ -8,6 +8,7 @@ import {
   jsonb,
   pgEnum,
   date,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 // ─── Enums ──────────────────────────────────────────────────────────────────
@@ -271,6 +272,8 @@ export const gamePlayers = pgTable("game_players", {
   id: serial("id").primaryKey(),
   publicId: text("public_id").notNull().unique(),
   googleSub: text("google_sub").unique(),
+  siameseIssuer: text("siamese_issuer"),
+  siameseSubject: text("siamese_subject"),
   displayName: text("display_name").notNull(),
   email: text("email").notNull().unique(),
   avatarUrl: text("avatar_url").default("").notNull(),
@@ -279,7 +282,9 @@ export const gamePlayers = pgTable("game_players", {
   termsAcceptedAt: timestamp("terms_accepted_at", { withTimezone: true }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => ({
+  siameseIdentityUnique: uniqueIndex("game_players_siamese_identity_unique").on(table.siameseIssuer, table.siameseSubject),
+}));
 
 export const gameRuns = pgTable("game_runs", {
   id: serial("id").primaryKey(),

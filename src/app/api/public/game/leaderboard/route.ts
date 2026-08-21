@@ -62,6 +62,9 @@ export async function GET() {
     );
   } catch (error) {
     console.error("Game leaderboard failed", error);
-    return NextResponse.json({ leaders: [], personal: null }, { headers: { "cache-control": "no-store" } });
+    return NextResponse.json(
+      { error: "Leaderboard is temporarily unavailable", leaders: null, personal: null },
+      { status: 503, headers: { "cache-control": "no-store" } },
+    );
   }
 }
