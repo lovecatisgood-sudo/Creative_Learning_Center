@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getGoogleGameLoginConfig, getSiameseGameLoginConfig } from "@/lib/game-features";
+import { ensureSiameseGameSchemaReady } from "@/lib/siamese-game-schema";
 
 export async function GET(request: Request) {
   const game = new URL(request.url).searchParams.get("game");
@@ -15,6 +16,12 @@ export async function GET(request: Request) {
     );
   }
   try {
+    if (!(await ensureSiameseGameSchemaReady())) {
+      return NextResponse.json(
+        { error: "Game sign-in is temporarily unavailable", loginEnabled: false, siameseEnabled: false, issuer: "" },
+        { status: 503, headers: { "cache-control": "no-store" } },
+      );
+    }
     const config = getSiameseGameLoginConfig("car-maze");
     return NextResponse.json(
       {

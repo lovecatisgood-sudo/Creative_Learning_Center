@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { getSiameseGameLoginConfig } from "@/lib/game-features";
 import { ensureMemberSchemaReady } from "@/lib/member-schema";
+import { ensureSiameseGameSchemaReady } from "@/lib/siamese-game-schema";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -18,20 +19,7 @@ export async function GET() {
   }
 
   const memberSchemaReady = await ensureMemberSchemaReady();
-  let siameseGameSchemaReady = true;
-  try {
-    await db.execute(sql`select gp.siamese_issuer, gp.siamese_subject from game_players gp limit 0`);
-    const indexResult = await db.execute(sql`
-      select 1
-      from pg_indexes
-      where schemaname = 'public'
-        and tablename = 'game_players'
-        and indexname = 'game_players_siamese_identity_unique'
-    `);
-    siameseGameSchemaReady = indexResult.rows.length === 1;
-  } catch {
-    siameseGameSchemaReady = false;
-  }
+  const siameseGameSchemaReady = await ensureSiameseGameSchemaReady();
   let siameseGameAuthReady = false;
   try {
     siameseGameAuthReady = siameseGameSchemaReady && getSiameseGameLoginConfig("car-maze").enabled;

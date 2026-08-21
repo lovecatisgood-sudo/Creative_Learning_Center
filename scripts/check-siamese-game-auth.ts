@@ -83,6 +83,13 @@ async function main() {
   const healthSource = await readFile(path.join(root, "src/app/api/public/health/route.ts"), "utf8");
   assert.match(healthSource, /siameseGameSchemaReady/);
   assert.match(healthSource, /siameseGameAuthReady/);
+  assert.match(healthSource, /await ensureSiameseGameSchemaReady\(\)/);
+
+  const schemaGuardSource = await readFile(path.join(root, "src/lib/siamese-game-schema.ts"), "utf8");
+  assert.match(schemaGuardSource, /pg_advisory_lock/);
+  assert.match(schemaGuardSource, /add column if not exists "siamese_issuer"/i);
+  assert.match(schemaGuardSource, /create unique index if not exists "game_players_siamese_identity_unique"/i);
+  assert.match(schemaGuardSource, /CORE_CUSTOMER_COUNTS_CHANGED/);
 
   const playerSource = await readFile(path.join(root, "src/lib/siamese-game-player.ts"), "utf8");
   assert.match(playerSource, /siameseIssuer/);
