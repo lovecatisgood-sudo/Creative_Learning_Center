@@ -272,7 +272,7 @@ export function LandingClient({ showChrome = true }: LandingClientProps) {
             <ul className="visit-info">
               <li>
                 <span className="vi-label">{t("visitPhoneLabel")}</span>
-                <a className="vi-value" href="tel:+66952413028">
+                <a className="vi-value" href="tel:+66953455767">
                   {t("visitPhoneValue")}
                 </a>
               </li>

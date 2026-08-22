@@ -36,7 +36,7 @@ export function Jsonld() {
       postalCode: "10540",
       addressCountry: "TH",
     },
-    telephone: "+66952413028",
+    telephone: "+66953455767",
     geo: {
       "@type": "GeoCoordinates",
       latitude: 13.6427544,

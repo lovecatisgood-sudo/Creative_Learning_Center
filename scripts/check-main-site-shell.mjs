@@ -117,7 +117,7 @@ for (const language of ["th", "en"]) {
   if (!dinner.includes('<a class="cafe-logo-panel" href="https://siamesecat.cafe/"')) {
     throw new Error(`${language}/dinner.html café logo is not linked`);
   }
-  if (!contact.includes("data-contact-form") || !contact.includes("https://wa.me/66952413028")) {
+  if (!contact.includes("data-contact-form") || !contact.includes("https://wa.me/66953455767")) {
     throw new Error(`${language}/contact.html is missing its form or WhatsApp contact`);
   }
   for (const requiredCourseText of language === "en"

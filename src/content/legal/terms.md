@@ -10,7 +10,7 @@ By registering a child, requesting a booking, purchasing a service, or accepting
 > **Business details**<br>
 > Legal entity: Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 > Address: 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
-> Telephone: +66 95 241 3028<br>
+> Telephone: +66 95 345 5767<br>
 > Email: Cafe@siamesecat.cafe
 
 ## 1. Our Programs
@@ -197,7 +197,7 @@ Questions, complaints, cancellation requests, and formal notices may be sent to:
 **Siamese Cat Creative Club**<br>
 Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
-Telephone: +66 95 241 3028<br>
+Telephone: +66 95 345 5767<br>
 Email: Cafe@siamesecat.cafe
 
 ## 23. Online Acceptance
