@@ -23,7 +23,8 @@ Last reviewed: 2026-08-17
 - English learners need a reasonable command of English
 - Twelve 90-minute lessons
 - 2,000 THB for one lesson
-- 20,000 THB for the 12-lesson package, saving 4,000 THB
+- 24,000 THB regular value for twelve lessons
+- 18,000 THB discounted 12-lesson package, saving 6,000 THB
 - First 30-minute trial is free and is also used to assess admission readiness
 - English course taught by Siamese Cat Dev
 - Thai course taught by Mr. A from Djai.academy
