@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 const OUT = join(process.cwd(), "public/main-site");
 const SHELL_VERSION = "20260808-seo-v1";
 const ASSET_VERSION = SHELL_VERSION;
-const CODING_CSS_VERSION = "20260823-student-projects-v1";
+const CODING_CSS_VERSION = "20260823-hero-alignment-v2";
 const MAP_URL = "https://maps.app.goo.gl/XpYHkxenRu6gLvnFA";
 const CAFE_URL = "https://siamesecat.cafe/";
 const CONTACT_URL = "/contact";
