@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
+const codingStudentProjectRoutes = [
+  "coding-with-ai/car-maze",
+  "coding-with-ai/cat-vs-dog",
+];
+
 const mainSiteRoutes = [
   "tools",
   "tools/kids-routine-chart",
@@ -10,8 +15,7 @@ const mainSiteRoutes = [
   "playgroup",
   "creative",
   "coding-with-ai",
-  "coding-with-ai/car-maze",
-  "coding-with-ai/cat-vs-dog",
+  ...codingStudentProjectRoutes,
   "membership",
   "dinner",
   "contact",

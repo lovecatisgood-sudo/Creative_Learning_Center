@@ -1,0 +1,26 @@
+# Acceptance gates
+
+- [x] G1 Fresh source consistency
+  - CHECK: clean worktree at current `origin/main`; inspect route config, generated pages, sitemap, and validator.
+  - EXPECT: both project routes exist in every required source.
+  - EVIDENCE: clean detached worktree at `6400a02`; both routes present in generated pages, sitemap and evaluated Next.js rewrites.
+- [x] G2 Exact Hostinger prebuild
+  - CHECK: `node --run prebuild` after `pnpm install --frozen-lockfile` in the clean worktree.
+  - EXPECT: exit 0, including `check-main-site-shell.mjs`.
+  - EVIDENCE: `node --run prebuild` exited 0; all shell, tools, menu, game-route and legal checks passed.
+- [x] G3 Production build
+  - CHECK: `pnpm build` using Hostinger's Node-compatible dependency state.
+  - EXPECT: exit 0 with both routes included.
+  - EVIDENCE: `pnpm build` exited 0; Next 15.5.23 compiled, type-checked and generated 50 pages. Local production server returned 200 for landing and both English project routes with the new wording/style marker.
+- [x] G4 Scoped diff
+  - CHECK: `git diff --check` and review commit file list against exclusions.
+  - EXPECT: no member/auth/POS/database files changed.
+  - EVIDENCE: `git diff --check` passed; implementation changes are limited to `next.config.mjs` and `scripts/check-main-site-shell.mjs`; process records are confined to this docs directory.
+- [ ] G5 Hostinger deployment
+  - CHECK: Hostinger build result for the new `main` commit.
+  - EXPECT: successful production deployment of that exact commit.
+  - EVIDENCE: pending.
+- [ ] G6 Public production
+  - CHECK: uncached HTTP fetches of the Coding landing and both project routes.
+  - EXPECT: all HTTP 200; landing contains `Games built by our students`, excludes `studio-built`, and uses the new stylesheet marker.
+  - EVIDENCE: pending.
