@@ -585,6 +585,7 @@ body.mobile-cta-suppressed .mobile-cta.show { opacity:0; transform:translateY(12
   body[data-page="playgroup"],
   body[data-page="creative"],
   body[data-page="coding-with-ai"],
+  body[data-page^="coding-with-ai/"],
   body[data-page="dinner"],
   body[data-page="faq"] { padding-bottom:82px; }
   body[data-page="book"] .mobile-cta,
