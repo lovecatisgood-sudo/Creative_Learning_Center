@@ -74,22 +74,6 @@ export async function linkCreativeMemberProfile(input: {
       [input.memberAccountId, email],
     );
     await client.query(
-      `insert into member_product_profile_links
-        (member_subject, product_id, profile_reference, linked_source)
-       values ($1::uuid, 'creative-club-production', $2, 'creative_oidc_callback')
-       on conflict (member_subject, product_id) where status = 'active' do update
-       set profile_reference = excluded.profile_reference,
-           linked_source = excluded.linked_source,
-           linked_at = now()`,
-      [input.identity.subject, `member_account:${input.memberAccountId}`],
-    );
-    await client.query(
-      `update member_product_relationships
-       set product_profile_reference = $2, updated_at = now()
-       where member_subject = $1::uuid and product_id = 'creative-club-production'`,
-      [input.identity.subject, `member_account:${input.memberAccountId}`],
-    );
-    await client.query(
       `update creative_member_link_attempts
        set status = 'linked', error_code = null, updated_at = now()
        where correlation_id = $1`,

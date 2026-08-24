@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { createSiameseCatAuth, internalDestination } from "@siamesecat/member-auth";
-import { getSiameseGameLoginConfig } from "../src/lib/game-features";
+import { getGoogleGameLoginConfig, getSiameseGameLoginConfig } from "../src/lib/game-features";
 
 async function main() {
   const root = process.cwd();
@@ -11,11 +11,14 @@ async function main() {
   assert.doesNotThrow(() => createSiameseCatAuth({ clientId: "local-test", clientSecret: "secret", issuer: "http://localhost:3000", allowInsecureLocalIssuer: true }));
   assert.throws(() => createSiameseCatAuth({ clientId: "local-test", clientSecret: "secret", issuer: "http://attacker.example", allowInsecureLocalIssuer: true }), /loopback/);
 
-  const environmentKeys = ["NODE_ENV", "SIAMESE_GAME_AUTH_ENABLED", "SIAMESE_GAME_AUTH_ENV", "SIAMESE_OIDC_ISSUER", "SIAMESE_CAT_VS_DOG_CLIENT_ID", "SIAMESE_CAT_VS_DOG_CLIENT_SECRET", "SIAMESE_CAR_MAZE_CLIENT_ID", "SIAMESE_CAR_MAZE_CLIENT_SECRET", "SIAMESE_GAME_TRANSACTION_SECRET", "SIAMESE_GAME_SCHEMA_READY"] as const;
+  const environmentKeys = ["NODE_ENV", "GAME_LOGIN_ENABLED", "GOOGLE_CLIENT_ID", "SIAMESE_GAME_AUTH_ENABLED", "SIAMESE_GAME_AUTH_ENV", "SIAMESE_OIDC_ISSUER", "SIAMESE_CAT_VS_DOG_CLIENT_ID", "SIAMESE_CAT_VS_DOG_CLIENT_SECRET", "SIAMESE_CAR_MAZE_CLIENT_ID", "SIAMESE_CAR_MAZE_CLIENT_SECRET", "SIAMESE_GAME_TRANSACTION_SECRET", "SIAMESE_GAME_SCHEMA_READY"] as const;
   const mutableEnvironment = process.env as Record<string, string | undefined>;
   const savedEnvironment = Object.fromEntries(environmentKeys.map((key) => [key, process.env[key]]));
   try {
     mutableEnvironment.NODE_ENV = "production";
+    process.env.GAME_LOGIN_ENABLED = "true";
+    process.env.GOOGLE_CLIENT_ID = "legacy-google-client";
+    assert.deepEqual(getGoogleGameLoginConfig(), { enabled: true, googleClientId: "legacy-google-client" });
     process.env.SIAMESE_GAME_AUTH_ENABLED = "true";
     process.env.SIAMESE_GAME_AUTH_ENV = "staging";
     process.env.SIAMESE_OIDC_ISSUER = "https://id-staging.siamesecat.cafe";

@@ -60,21 +60,21 @@ try {
   const linkState = await pool.query<{
     links: string;
     attempts: string;
-    reference: string;
-    relationship_reference: string;
+    provider_links: string;
+    relationship_reference: string | null;
   }>(
     `select
        (select count(*)::text from creative_member_identity_links where member_account_id = $1) as links,
        (select count(*)::text from creative_member_link_attempts where member_account_id = $1 and status = 'linked') as attempts,
-       (select profile_reference from member_product_profile_links where member_subject = $2::uuid and product_id = 'creative-club-production' and status = 'active') as reference,
+       (select count(*)::text from member_product_profile_links where member_subject = $2::uuid and product_id = 'creative-club-production' and status = 'active') as provider_links,
        (select product_profile_reference from member_product_relationships where member_subject = $2::uuid and product_id = 'creative-club-production') as relationship_reference`,
     [memberId, subject],
   );
   assert.deepEqual(linkState.rows[0], {
     links: "1",
     attempts: "1",
-    reference: `member_account:${memberId}`,
-    relationship_reference: `member_account:${memberId}`,
+    provider_links: "0",
+    relationship_reference: null,
   });
   assert.deepEqual(await counts(pool), beforeMigrations, "link-later must not duplicate or reassign existing history");
 
@@ -106,7 +106,7 @@ try {
        (select count(*)::text from game_players where siamese_subject = $1::text and siamese_issuer = 'https://members.test') as subjects`,
     [subject],
   );
-  assert.deepEqual(gameState.rows[0], { players: "1", runs: "1", links: "2", subjects: "1" });
+  assert.deepEqual(gameState.rows[0], { players: "1", runs: "1", links: "0", subjects: "1" });
   assert.deepEqual(await counts(pool), beforeMigrations, "game identity migration must retain the existing player and run");
 
   const conflict = await pool.query<{ id: number }>(

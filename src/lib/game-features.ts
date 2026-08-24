@@ -2,6 +2,17 @@ function enabled(name: string) {
   return String(process.env[name] ?? "").trim().toLowerCase() === "true";
 }
 
+// Compatibility-only configuration for the established direct-Google API.
+// New game UI uses the shared provider, but this remains operational until
+// both production replacements and their rollback journeys have passed.
+export function getGoogleGameLoginConfig() {
+  const googleClientId = String(process.env.GOOGLE_CLIENT_ID ?? "").trim();
+  return {
+    enabled: enabled("GAME_LOGIN_ENABLED") && Boolean(googleClientId),
+    googleClientId,
+  };
+}
+
 export type SiameseGameAuthTarget = "cat-vs-dog" | "car-maze";
 
 export function siameseGameAuthTarget(value: string | null | undefined): SiameseGameAuthTarget {

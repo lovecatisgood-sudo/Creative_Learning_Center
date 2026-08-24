@@ -1,17 +1,16 @@
 import { createSiameseCatAuth } from "@siamesecat/member-auth";
 import { NextResponse } from "next/server";
 import { getCurrentMember } from "@/lib/member-auth";
+import { memberOrigin } from "@/lib/member-links";
 import { recordCreativeLinkAttempt } from "@/lib/siamese-creative-link";
 import { getSiameseCreativeAuthConfig } from "@/lib/siamese-creative-auth";
 import { ensureSiameseMemberLinkSchema } from "@/lib/siamese-member-link-schema";
 import { getMemberLinkTransactionSession } from "@/lib/siamese-member-link-transaction";
 
-export async function GET(request: Request) {
-  const requestUrl = new URL(request.url);
-  const appOrigin = new URL(process.env.APP_ORIGIN?.trim() || requestUrl.origin).origin;
+export async function GET() {
+  const appOrigin = memberOrigin();
   const fallback = new URL("/signup/success?membership=pending", appOrigin);
   try {
-    if (requestUrl.origin !== appOrigin) return NextResponse.json({ error: "Untrusted origin" }, { status: 400 });
     const config = getSiameseCreativeAuthConfig();
     if (!config.enabled) return NextResponse.redirect(fallback, { status: 303 });
     if (!await ensureSiameseMemberLinkSchema()) return NextResponse.redirect(fallback, { status: 303 });

@@ -1,6 +1,7 @@
 import { createSiameseCatAuth } from "@siamesecat/member-auth";
 import { NextResponse } from "next/server";
 import { establishMemberSession } from "@/lib/member-auth";
+import { memberOrigin } from "@/lib/member-links";
 import { failCreativeLinkAttempt, linkCreativeMemberProfile } from "@/lib/siamese-creative-link";
 import { getSiameseCreativeAuthConfig } from "@/lib/siamese-creative-auth";
 import { ensureSiameseMemberLinkSchema } from "@/lib/siamese-member-link-schema";
@@ -11,7 +12,7 @@ import { eq } from "drizzle-orm";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
-  const appOrigin = new URL(process.env.APP_ORIGIN?.trim() || requestUrl.origin).origin;
+  const appOrigin = memberOrigin();
   let correlationId = crypto.randomUUID();
   let returnTo = "/signup/success";
   try {

@@ -22,7 +22,6 @@ export async function findOrCreateSiameseGamePlayer(identity: SiameseCatIdentity
         .set({ email, language, updatedAt: now })
         .where(eq(gamePlayers.id, byIdentity.id))
         .returning();
-      await linkGameProductProfile(tx, identity.subject, updated.id, game);
       return updated;
     }
 
@@ -44,7 +43,6 @@ export async function findOrCreateSiameseGamePlayer(identity: SiameseCatIdentity
           throw new SiameseAccountConflictError();
         }
         const [updated] = await tx.update(gamePlayers).set({ siameseIssuer: identity.issuer, siameseSubject: identity.subject, email, language, updatedAt: now }).where(eq(gamePlayers.id, legacy.id)).returning();
-        await linkGameProductProfile(tx, identity.subject, updated.id, game);
         return updated;
       }
     }
@@ -68,33 +66,8 @@ export async function findOrCreateSiameseGamePlayer(identity: SiameseCatIdentity
         updatedAt: now,
       })
       .returning();
-    await linkGameProductProfile(tx, identity.subject, created.id, game);
     return created;
   });
-}
-
-async function linkGameProductProfile(
-  tx: Parameters<Parameters<typeof db.transaction>[0]>[0],
-  subject: string,
-  playerId: number,
-  game: SiameseGameAuthTarget,
-) {
-  const productId = game === "car-maze" ? "car-maze-production" : "cat-vs-dog-production";
-  const reference = `game_player:${playerId}`;
-  await tx.execute(sql`
-    insert into member_product_profile_links
-      (member_subject, product_id, profile_reference, linked_source)
-    values (${subject}::uuid, ${productId}, ${reference}, 'game_oidc_callback')
-    on conflict (member_subject, product_id) where status = 'active' do update
-    set profile_reference = excluded.profile_reference,
-        linked_source = excluded.linked_source,
-        linked_at = now()
-  `);
-  await tx.execute(sql`
-    update member_product_relationships
-    set product_profile_reference = ${reference}, updated_at = now()
-    where member_subject = ${subject}::uuid and product_id = ${productId}
-  `);
 }
 
 export class SiameseAccountConflictError extends Error {
