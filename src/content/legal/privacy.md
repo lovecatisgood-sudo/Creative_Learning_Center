@@ -10,7 +10,7 @@ This policy is intended to support compliance with Thailand's Personal Data Prot
 > **Data Controller**<br>
 > Legal entity: Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 > Address: 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
-> Telephone: +66 95 345 5767<br>
+> Telephone: +66 095 241 3028<br>
 > Email: Cafe@siamesecat.cafe
 
 By registering a child or using our services, you acknowledge that you have read this Privacy Policy. Where consent is legally required, we request it separately.
@@ -217,7 +217,7 @@ Siamese Cat Creative Club<br>
 Siamese Cat Cafe Co., Ltd. (Thailand)<br>
 46/27 Bang Na-Trat Frontage Road, Bang Kaeo, Samut Prakan 10540<br>
 Email: Cafe@siamesecat.cafe<br>
-Telephone: +66 95 345 5767
+Telephone: +66 095 241 3028
 
 Please describe the request and identify the relevant parent, child, registration, or transaction. We will respond within the period required by applicable law.
 

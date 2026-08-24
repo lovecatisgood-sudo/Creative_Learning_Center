@@ -363,7 +363,7 @@ export const dict = {
   visitPhoneLabel: { th: "โทรศัพท์", en: "Phone" },
   visitEmailLabel: { th: "อีเมล", en: "Email" },
   visitAddressLabel: { th: "ที่อยู่", en: "Address" },
-  visitPhoneValue: { th: "+66 95 345 5767", en: "+66 95 345 5767" },
+  visitPhoneValue: { th: "+66 095 241 3028", en: "+66 095 241 3028" },
   visitEmailValue: { th: "Cafe@siamesecat.cafe", en: "Cafe@siamesecat.cafe" },
   visitAddressValue: {
     th: "46/27, 46/27 ถนนบางนา-ตราด (คู่ขนาน) ต.บางแก้ว อ.บางพลี จ.สมุทรปราการ 10540",

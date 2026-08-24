@@ -2,7 +2,7 @@
   'use strict';
 
   const CONFIG = {
-    phone: '+66953455767',
+    phone: '+66952413028',
     formEndpoint: '',
   };
 
@@ -289,7 +289,7 @@
     link.addEventListener('click', event => {
       if (!CONFIG.phone) {
         event.preventDefault();
-        showToast(lang === 'th' ? 'กรุณาโทรหาเราที่ +66 95 345 5767' : 'Please call us at +66 95 345 5767');
+        showToast(lang === 'th' ? 'กรุณาโทรหาเราที่ +66 095 241 3028' : 'Please call us at +66 095 241 3028');
       } else link.href = `tel:${CONFIG.phone}`;
     });
   });
