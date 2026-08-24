@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import nextConfig from "../next.config.mjs";
 
 const ROOT = join(process.cwd(), "public/main-site");
 const GOOGLE_ANALYTICS_ID = "G-MK27QPPWH5";
@@ -133,8 +134,8 @@ for (const language of ["th", "en"]) {
     throw new Error(`${language}/contact.html is missing its form or WhatsApp contact`);
   }
   for (const requiredCourseText of language === "en"
-    ? ["12-lesson package", "20,000 THB", "Save 4,000 THB", "30 minutes free", "Siamese Cat Dev", "Car Maze: Learn Python", "Siamese Cat vs Dog 1986"]
-    : ["แพ็กเกจ 12 บท", "20,000 บาท", "ประหยัด 4,000 บาท", "ฟรี 30 นาที", "Mr. A จาก Djai.academy", "Car Maze: Learn Python", "Siamese Cat vs Dog 1986"]) {
+    ? ["Single lesson", "2,000 THB", "12-lesson package", "24,000 THB", "18,000 THB", "Save 6,000 THB", "30 minutes free", "Siamese Cat Dev", "Car Maze: Learn Python", "Siamese Cat vs Dog 1986"]
+    : ["เรียนรายครั้ง", "2,000 บาท", "แพ็กเกจ 12 บท", "24,000 บาท", "18,000 บาท", "ประหยัด 6,000 บาท", "ฟรี 30 นาที", "Mr. A จาก Djai.academy", "Car Maze: Learn Python", "Siamese Cat vs Dog 1986"]) {
     if (!codingCourse.includes(requiredCourseText)) throw new Error(`${language}/coding-with-ai.html is missing ${requiredCourseText}`);
   }
   if (!codingCourse.includes(`${prefix}/contact?service=coding-ai-${language}`)) {
@@ -166,7 +167,7 @@ const appLayout = readFileSync(join(process.cwd(), "src/app/layout.tsx"), "utf8"
 const middleware = readFileSync(join(process.cwd(), "src/middleware.ts"), "utf8");
 const publicBlogShell = readFileSync(join(process.cwd(), "src/components/blog/PublicBlogShell.tsx"), "utf8");
 const sitemapSource = readFileSync(join(process.cwd(), "src/app/sitemap.ts"), "utf8");
-const nextConfigSource = readFileSync(join(process.cwd(), "next.config.mjs"), "utf8");
+const configuredRewrites = await nextConfig.rewrites();
 if (!appLayout.includes(GOOGLE_ANALYTICS_ID) || !appLayout.includes("isCustomerPage")) {
   throw new Error("Next.js public routes are missing guarded Google Analytics");
 }
@@ -187,8 +188,12 @@ for (const projectRoute of ["coding-with-ai/car-maze", "coding-with-ai/cat-vs-do
   if (!sitemapSource.includes(`path: "/${projectRoute}"`)) {
     throw new Error(`Sitemap source is missing /${projectRoute}`);
   }
-  if (!nextConfigSource.includes(`"${projectRoute}"`)) {
-    throw new Error(`Next.js route map is missing /${projectRoute}`);
+  for (const languagePrefix of ["", "/EN"]) {
+    const source = `${languagePrefix}/${projectRoute}`;
+    const destination = `/main-site${languagePrefix}/${projectRoute}.html`;
+    if (!configuredRewrites.some((rewrite) => rewrite.source === source && rewrite.destination === destination)) {
+      throw new Error(`Next.js rewrites are missing ${source} -> ${destination}`);
+    }
   }
 }
 

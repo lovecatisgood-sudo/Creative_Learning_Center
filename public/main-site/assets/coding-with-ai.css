@@ -946,6 +946,16 @@
   to { opacity: 1; transform: scale(1); }
 }
 
+@media (min-width: 901px) {
+  .coding-hero__copy {
+    margin-inline-start: clamp(44px, 5vw, 72px);
+  }
+
+  .coding-project-hero__grid > div:first-child {
+    padding-inline-start: clamp(32px, 4vw, 56px);
+  }
+}
+
 @media (max-width: 900px) {
   .coding-hero {
     min-height: auto;
