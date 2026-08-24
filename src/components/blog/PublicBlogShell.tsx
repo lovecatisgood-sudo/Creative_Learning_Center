@@ -144,7 +144,7 @@ export function PublicBlogShell({
                 <span>{language === "th" ? "เข้าใช้ Kids Playroom ตามรอบและจำนวนที่ยืนยัน" : "Kids Playroom entry by confirmed availability"}</span>
                 <a href="https://maps.app.goo.gl/XpYHkxenRu6gLvnFA" target="_blank" rel="noreferrer">{language === "th" ? "ดูเส้นทาง" : "Get directions"}</a>
                 <a href="mailto:Cafe@siamesecat.cafe">Cafe@siamesecat.cafe</a>
-                <a href="tel:+66953455767">+66 95 345 5767</a>
+                <a href="tel:+66952413028">+66 095 241 3028</a>
               </address>
             </div>
           </div>
