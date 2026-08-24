@@ -45,7 +45,8 @@
   .royalty-score{margin:0 0 14px;text-align:center;color:#fff;font:900 28px/1 system-ui,sans-serif;}
   .royalty-reward{margin:0 0 16px;border:1px solid rgba(255,210,122,.25);border-radius:12px;padding:11px;background:rgba(255,210,122,.08);color:#f8edff;font:600 13px/1.45 system-ui,sans-serif;text-align:center;}
   .royalty-reward a,.royalty-legal a{color:#7fe6ff;}
-  #google-signin-button{min-height:44px;display:flex;justify-content:center;margin-top:10px;}
+  #siamese-signin-button{min-height:44px;display:flex;justify-content:center;margin-top:10px;}
+  #siamese-signin-button button{width:100%;border:0;border-radius:12px;padding:13px 16px;background:#ffd27a;color:#211229;font:900 16px system-ui,sans-serif;cursor:pointer;touch-action:manipulation;}
   .royalty-legal{margin:12px 0 0;color:#a99db3;font:11px/1.45 system-ui,sans-serif;text-align:center;}
   #registration-error{min-height:20px;margin:12px 0 0;color:#ff9cbd;font:700 13px/1.4 system-ui,sans-serif;text-align:center;}
   #registration-skip{width:100%;margin-top:10px;border:0;border-radius:12px;padding:13px 16px;background:#31273a;color:#fff;
@@ -73,12 +74,12 @@
   <div class="registration-card">
     <img src="assets/img/logo.png" width="104" height="104" alt="Siamese Cat vs Dog 1986">
     <h1 id="registration-title">Save your score</h1>
-    <p class="registration-intro">Sign in with Google to keep your best score and appear on the recreational leaderboard.</p>
+    <p class="registration-intro">Sign in with Siamese Cat using Google or an email magic link to keep your best score and appear on the recreational leaderboard.</p>
     <p id="royalty-score" class="royalty-score">SCORE 0</p>
-    <div id="google-signin-button" aria-label="Sign in with Google"></div>
+    <div id="siamese-signin-button" aria-label="Sign in with Siamese Cat"></div>
     <p id="registration-error" role="alert" aria-live="polite"></p>
     <button id="registration-skip" type="button">Maybe later — show my score</button>
-    <p class="royalty-legal">By continuing with Google, you agree to our <a href="/EN/terms" target="_blank" rel="noopener">Terms</a> and acknowledge our <a href="/EN/privacy" target="_blank" rel="noopener">Privacy Policy</a>. We store your Google account ID, name, email and profile picture to operate your game account. This does not subscribe you to marketing.</p>
+    <p class="royalty-legal">Siamese Cat sign-in offers Google and email magic link. Membership terms and privacy acceptance are handled by the secure identity service. Marketing remains off unless you choose it separately.</p>
   </div>
 </div>
 <div id="house-ad" role="dialog" aria-modal="true" aria-labelledby="house-ad-name" hidden>
@@ -101,16 +102,16 @@
 // ============== Siamese Cat vs Dog 1986 — vertical slice v2 ==============
 (function(){
 const AN=window.SCVDAnalytics||{gameStart:function(){},gameOver:function(){},difficultySelected:function(){}};
-const REG=document.getElementById('game-registration'),REGERR=document.getElementById('registration-error'),REGSKIP=document.getElementById('registration-skip'),GAMESCORE=document.getElementById('royalty-score'),GOOGLEBTN=document.getElementById('google-signin-button');
-let PLAYER_SESSION={authenticated:false,player:null},GAME_CONFIG=null,GOOGLE_READY=null;
+const REG=document.getElementById('game-registration'),REGERR=document.getElementById('registration-error'),REGSKIP=document.getElementById('registration-skip'),GAMESCORE=document.getElementById('royalty-score'),SIGNINBTN=document.getElementById('siamese-signin-button');
+let PLAYER_SESSION={authenticated:false,player:null},GAME_CONFIG=null,SIAMESE_PENDING=false;
 const SESSION_READY=fetch('/api/public/game/auth/session',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){PLAYER_SESSION=d||PLAYER_SESSION;if(d&&d.player&&d.player.publicId){try{localStorage.setItem('scvd_pid',d.player.publicId);}catch(e){}}return PLAYER_SESSION;}).catch(function(){return PLAYER_SESSION;});
-const CONFIG_READY=fetch('/api/public/game/auth/config').then(function(r){return r.json();}).then(function(d){GAME_CONFIG=d||{};return GAME_CONFIG;}).catch(function(){GAME_CONFIG={};return GAME_CONFIG;});
-function loadGoogle(){if(window.google&&google.accounts&&google.accounts.id)return Promise.resolve();if(GOOGLE_READY)return GOOGLE_READY;GOOGLE_READY=new Promise(function(resolve,reject){const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=resolve;s.onerror=function(){reject(new Error('Google sign-in could not load.'));};document.head.appendChild(s);});return GOOGLE_READY;}
-async function renderGoogleButton(){const cfg=await CONFIG_READY;GOOGLEBTN.textContent='';if(!cfg.loginEnabled||!cfg.googleClientId){REGERR.textContent='Google sign-in is not configured yet. You can continue as a guest.';return;}try{await loadGoogle();google.accounts.id.initialize({client_id:cfg.googleClientId,callback:handleGoogleCredential});google.accounts.id.renderButton(GOOGLEBTN,{theme:'filled_blue',size:'large',shape:'pill',text:'continue_with',width:320});}catch(err){REGERR.textContent=err&&err.message?err.message:'Google sign-in could not load.';}}
-async function handleGoogleCredential(response){REGERR.textContent='Saving your player profile…';try{const res=await fetch('/api/public/game/auth/google',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({credential:response&&response.credential,acceptTerms:true,language:'en'})});const data=await res.json().catch(function(){return {};});if(!res.ok||!data.player)throw new Error(data.error||'Google sign-in failed.');PLAYER_SESSION={authenticated:true,player:data.player};try{localStorage.setItem('scvd_pid',data.player.publicId);localStorage.setItem('scvd_player_name',data.player.displayName||'');}catch(e){}await saveGameRun();showScorePage();}catch(err){REGERR.textContent=err&&err.message?err.message:'Google sign-in failed. Please try again.';}}
+const CONFIG_READY=fetch('/api/public/game/auth/config?game=cat-vs-dog',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){GAME_CONFIG=d||{};return GAME_CONFIG;}).catch(function(){GAME_CONFIG={};return GAME_CONFIG;});
+async function refreshSiameseSession(){const res=await fetch('/api/public/game/auth/session',{cache:'no-store'});const data=await res.json();if(!res.ok||!data.authenticated||!data.player)throw new Error(data.error||'Sign-in is still pending.');PLAYER_SESSION=data;try{localStorage.setItem('scvd_pid',data.player.publicId);localStorage.setItem('scvd_player_name',data.player.displayName||'');}catch(e){}await saveGameRun();showScorePage();return true;}
+async function beginSiameseLogin(){if(SIAMESE_PENDING)return;SIAMESE_PENDING=true;REGERR.textContent='Opening secure Siamese Cat sign-in…';const popup=window.open('/api/public/game/auth/siamese/start?game=cat-vs-dog&language=en','cat_vs_dog_siamese_auth','popup,width=520,height=720');if(!popup){SIAMESE_PENDING=false;REGERR.textContent='Your browser blocked the sign-in window. Allow pop-ups and try again.';return;}let attempts=0;const poll=window.setInterval(async function(){attempts+=1;try{if(await refreshSiameseSession()){window.clearInterval(poll);SIAMESE_PENDING=false;return;}}catch(e){}if(popup.closed||attempts>=160){window.clearInterval(poll);SIAMESE_PENDING=false;REGERR.textContent='Sign-in was not completed. You can retry or continue as a guest.';}},750);}
+async function renderSiameseButton(){const cfg=await CONFIG_READY;SIGNINBTN.textContent='';if(!cfg.loginEnabled||!cfg.siameseEnabled){REGERR.textContent='Siamese Cat sign-in is temporarily unavailable. You can continue as a guest.';return;}const button=document.createElement('button');button.type='button';button.textContent='Continue with Siamese Cat';button.addEventListener('click',beginSiameseLogin);SIGNINBTN.appendChild(button);}
 async function saveGameRun(){if(!G||G.runSaved)return null;try{const res=await fetch('/api/public/game/score',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({score:G.score,mode:_modeKey||'normal',stage:G.stage||1,victory:!!G.victory,language:'en',durationSeconds:Math.round(G.t||0)})});const data=await res.json().catch(function(){return {};});if(!res.ok)return null;G.runSaved=true;G.royalBest=Number(data.personalBest)||G.score;G.royalRank=Number(data.rank)||0;return data;}catch(e){return null;}}
 function showScorePage(){REG.hidden=true;if(G){G.thanksPage=false;G_overAt=performance.now();}}
-async function afterThanks(){if(!G)return;const results=await Promise.all([SESSION_READY,CONFIG_READY]),session=results[0],cfg=results[1]||{};if(!cfg.loginEnabled){showScorePage();return;}if(session&&session.authenticated){await saveGameRun();showScorePage();return;}GAMESCORE.textContent='SCORE '+G.score.toLocaleString();REGERR.textContent='';REG.hidden=false;renderGoogleButton();}
+async function afterThanks(){if(!G)return;const results=await Promise.all([SESSION_READY,CONFIG_READY]),session=results[0],cfg=results[1]||{};if(!cfg.loginEnabled){showScorePage();return;}if(session&&session.authenticated){await saveGameRun();showScorePage();return;}GAMESCORE.textContent='SCORE '+G.score.toLocaleString();REGERR.textContent='';REG.hidden=false;renderSiameseButton();}
 REGSKIP.addEventListener('click',showScorePage);
 const HAD=document.getElementById('house-ad'),HADVIDEO=document.getElementById('house-ad-video'),HADNAME=document.getElementById('house-ad-name'),HADCOUNT=document.getElementById('house-ad-countdown'),HADCTA=document.getElementById('house-ad-cta'),HADSKIP=document.getElementById('house-ad-skip'),HADPROGRESS=document.getElementById('house-ad-progress-value');
 let HOUSE_AD=null,HOUSE_AD_PROMISE=null,HOUSE_AD_PLAYING=false;const HOUSE_AD_BROWSER_COOLDOWN=120000;

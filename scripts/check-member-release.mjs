@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 
 const required = [
   "MEMBER_SYSTEM_PRD_V2.md",
+  "MEMBER_SYSTEM_PRD_V3.md",
   "drizzle/0007_siamese_cat_members.sql",
   "drizzle/member-schema-bootstrap.sql",
   "src/app/member/page.tsx",
@@ -10,6 +11,8 @@ const required = [
   "src/app/api/public/member/claim/route.ts",
   "src/app/api/public/member/verify/route.ts",
   "src/app/api/public/member/signin/route.ts",
+  "src/app/api/public/member/connect/start/route.ts",
+  "src/app/api/public/member/connect/callback/route.ts",
   "src/app/api/admin/members/merge/route.ts",
   "src/lib/member-auth.ts",
   "src/lib/member-data.ts",
@@ -47,9 +50,19 @@ const memberApi = read("src/app/api/member/me/route.ts");
 if (!memberApi.includes('Cache-Control": "private, no-store"')) failures.push("member API is cacheable");
 const css = read("src/app/globals.css");
 const signup = read("src/app/signup/page.tsx");
+const signupRoute = read("src/app/api/public/signup/route.ts");
+const signupSuccess = read("src/app/signup/success/page.tsx");
 const bottomNav = read("src/components/BottomNav.tsx");
 if (!css.includes("env(safe-area-inset-bottom)") || !bottomNav.includes("safe-bottom")) failures.push("safe-area support incomplete");
 if (!signup.includes("min-[380px]:grid-cols-2")) failures.push("narrow signup fields do not stack");
+for (const value of ["membershipChoice", "Continue without membership", "Connect with Google or email"]) {
+  if (!signup.includes(value)) failures.push(`optional Siamese signup choice missing: ${value}`);
+}
+const registrationCommit = signupRoute.indexOf("const result = await db.transaction");
+const optionalLink = signupRoute.indexOf("await prepareMemberLink");
+if (registrationCommit < 0 || optionalLink < registrationCommit) failures.push("optional Siamese connection can run before durable Creative registration");
+if (!signupRoute.includes('membershipConnection: membershipChoice === "connect" ? "pending" : "skipped"')) failures.push("provider-unavailable signup does not return an explicit membership state");
+for (const state of ["linked", "pending", "skipped"]) if (!signupSuccess.includes(state)) failures.push(`signup success state missing: ${state}`);
 
 const migration = read("drizzle/0007_siamese_cat_members.sql");
 for (const value of ["member_accounts", "member_access_tokens", "member_consents", "member_uid_aliases", "ON CONFLICT (\"parent_id\") DO NOTHING"]) {

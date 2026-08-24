@@ -2,14 +2,6 @@ function enabled(name: string) {
   return String(process.env[name] ?? "").trim().toLowerCase() === "true";
 }
 
-export function getGoogleGameLoginConfig() {
-  const googleClientId = String(process.env.GOOGLE_CLIENT_ID ?? "").trim();
-  return {
-    enabled: enabled("GAME_LOGIN_ENABLED") && Boolean(googleClientId),
-    googleClientId,
-  };
-}
-
 export type SiameseGameAuthTarget = "cat-vs-dog" | "car-maze";
 
 export function siameseGameAuthTarget(value: string | null | undefined): SiameseGameAuthTarget {
@@ -25,17 +17,12 @@ export function getSiameseGameTransactionSecret() {
 export function getSiameseGameLoginConfig(target: SiameseGameAuthTarget = "cat-vs-dog") {
   const issuer = String(process.env.SIAMESE_OIDC_ISSUER ?? "https://id.siamesecat.cafe").trim().replace(/\/$/, "");
   const authEnvironment = String(process.env.SIAMESE_GAME_AUTH_ENV ?? "").trim() || (issuer.startsWith("http://") ? "development" : "production");
-  // Games served from the same first-party origin and callback may share the
-  // general production client. A dedicated Car Maze client remains available
-  // as an override when independent credentials or branding are required.
   const clientId = String(
-    (target === "car-maze" ? process.env.SIAMESE_CAR_MAZE_CLIENT_ID : undefined)
-      || process.env.SIAMESE_GAME_CLIENT_ID
+    (target === "car-maze" ? process.env.SIAMESE_CAR_MAZE_CLIENT_ID : process.env.SIAMESE_CAT_VS_DOG_CLIENT_ID)
       || "",
   ).trim();
   const clientSecret = String(
-    (target === "car-maze" ? process.env.SIAMESE_CAR_MAZE_CLIENT_SECRET : undefined)
-      || process.env.SIAMESE_GAME_CLIENT_SECRET
+    (target === "car-maze" ? process.env.SIAMESE_CAR_MAZE_CLIENT_SECRET : process.env.SIAMESE_CAT_VS_DOG_CLIENT_SECRET)
       || "",
   ).trim();
   const transactionSecret = String(process.env.SIAMESE_GAME_TRANSACTION_SECRET ?? "").trim();
@@ -85,7 +72,7 @@ export function getSiameseGameLoginConfig(target: SiameseGameAuthTarget = "cat-v
 
 // Score and leaderboard availability follows the active game identity system.
 export function getGameLoginConfig() {
-  return getGoogleGameLoginConfig();
+  return getSiameseGameLoginConfig("cat-vs-dog");
 }
 
 export function houseAdsEnabled() {

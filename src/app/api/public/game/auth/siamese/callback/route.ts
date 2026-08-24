@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     const config = getSiameseGameLoginConfig(game);
     if (!config.enabled) return siamesePopupResponse(false, "Siamese Cat sign-in is not configured for this game.", 503);
     const { identity } = await createSiameseCatAuth(config).finish(new URL(request.url), transaction);
-    const player = await findOrCreateSiameseGamePlayer(identity, language);
+    const player = await findOrCreateSiameseGamePlayer(identity, language, game);
     const gameSession = await getGameSession();
     gameSession.playerPublicId = player.publicId;
     await gameSession.save();

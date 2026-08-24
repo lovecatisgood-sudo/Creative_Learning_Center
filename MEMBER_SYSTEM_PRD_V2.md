@@ -1,8 +1,14 @@
-# Siamese Cat Member System — PRD V2
+# Siamese Cat Member System — PRD V2 (superseded)
 
-**Status:** implementation source of truth
+**Status:** superseded by [`MEMBER_SYSTEM_PRD_V3.md`](./MEMBER_SYSTEM_PRD_V3.md)
 **Updated:** 2026-08-11
 **Supersedes:** the V1 statements that parents have no account, portal, or email flow.
+
+This document remains the historical specification for the Creative Club
+parent-linked member launch. It is no longer the source of truth for universal
+Siamese identity, cross-product access, or dashboard boundaries. Existing
+Creative Club staff/manager permissions and operational business rules remain
+preserved unless V3 explicitly changes them.
 
 ## 1. Product contract
 

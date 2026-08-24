@@ -17,6 +17,8 @@ const routes = [
   { path: "/playgroup", changeFrequency: "monthly", priority: 0.8 },
   { path: "/creative", changeFrequency: "monthly", priority: 0.8 },
   { path: "/coding-with-ai", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/coding-with-ai/car-maze", changeFrequency: "monthly", priority: 0.6 },
+  { path: "/coding-with-ai/cat-vs-dog", changeFrequency: "monthly", priority: 0.6 },
   { path: "/membership", changeFrequency: "monthly", priority: 0.8 },
   { path: "/dinner", changeFrequency: "monthly", priority: 0.7 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
@@ -30,7 +32,7 @@ const routes = [
 ] as const;
 
 const LAST_UPDATED = new Date("2026-08-11T00:00:00+07:00");
-const CODING_COURSE_UPDATED = new Date("2026-08-17T00:00:00+07:00");
+const CODING_COURSE_UPDATED = new Date("2026-08-23T00:00:00+07:00");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = routes.flatMap(({ path, changeFrequency, priority }) => {
@@ -39,8 +41,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const alternates = { languages: { th: thaiUrl, en: englishUrl, "x-default": thaiUrl } };
 
     return [
-      { url: thaiUrl, lastModified: path === "/coding-with-ai" ? CODING_COURSE_UPDATED : LAST_UPDATED, changeFrequency, priority, alternates },
-      { url: englishUrl, lastModified: path === "/coding-with-ai" ? CODING_COURSE_UPDATED : LAST_UPDATED, changeFrequency, priority, alternates },
+      { url: thaiUrl, lastModified: path.startsWith("/coding-with-ai") ? CODING_COURSE_UPDATED : LAST_UPDATED, changeFrequency, priority, alternates },
+      { url: englishUrl, lastModified: path.startsWith("/coding-with-ai") ? CODING_COURSE_UPDATED : LAST_UPDATED, changeFrequency, priority, alternates },
     ];
   });
 

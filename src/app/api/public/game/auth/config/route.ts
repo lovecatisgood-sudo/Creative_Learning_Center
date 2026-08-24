@@ -1,20 +1,10 @@
 import { NextResponse } from "next/server";
-import { getGoogleGameLoginConfig, getSiameseGameLoginConfig } from "@/lib/game-features";
+import { getSiameseGameLoginConfig, siameseGameAuthTarget } from "@/lib/game-features";
 import { ensureSiameseGameSchemaReady } from "@/lib/siamese-game-schema";
 
 export async function GET(request: Request) {
   const game = new URL(request.url).searchParams.get("game");
-  if (game !== "car-maze") {
-    const config = getGoogleGameLoginConfig();
-    return NextResponse.json(
-      {
-        loginEnabled: config.enabled,
-        googleEnabled: config.enabled,
-        googleClientId: config.enabled ? config.googleClientId : "",
-      },
-      { headers: { "cache-control": "public, max-age=300" } },
-    );
-  }
+  const target = siameseGameAuthTarget(game);
   try {
     if (!(await ensureSiameseGameSchemaReady())) {
       return NextResponse.json(
@@ -22,7 +12,7 @@ export async function GET(request: Request) {
         { status: 503, headers: { "cache-control": "no-store" } },
       );
     }
-    const config = getSiameseGameLoginConfig("car-maze");
+    const config = getSiameseGameLoginConfig(target);
     return NextResponse.json(
       {
         loginEnabled: config.enabled,

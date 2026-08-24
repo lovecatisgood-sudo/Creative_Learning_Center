@@ -47,6 +47,7 @@ function SignupPageContent({ language }: { language: Lang }) {
   const [programInterest, setProgramInterest] = useState("");
   const [kids, setKids] = useState<ChildForm[]>([emptyChild()]);
   const [consent, setConsent] = useState(false);
+  const [membershipChoice, setMembershipChoice] = useState<"connect" | "skip">("connect");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
@@ -96,7 +97,7 @@ function SignupPageContent({ language }: { language: Lang }) {
       res = await fetch("/api/public/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ parentName, phone, email, programInterest, consent, language: lang, children: kids }),
+        body: JSON.stringify({ parentName, phone, email, programInterest, consent, membershipChoice, language: lang, children: kids }),
       });
     } catch {
       setBusy(false);
@@ -116,9 +117,14 @@ function SignupPageContent({ language }: { language: Lang }) {
           memberUid: data.memberUid || null,
           childNames: data.childNames,
           duplicatePhone: data.duplicatePhone,
+          membershipConnection: data.membershipConnection || membershipChoice,
         })
       );
-      router.push(`${languagePrefix}/signup/success`);
+      if (data.membershipStartUrl) {
+        window.location.assign(data.membershipStartUrl);
+      } else {
+        router.push(`${languagePrefix}/signup/success${membershipChoice === "connect" ? "?membership=pending" : "?membership=skipped"}`);
+      }
     } else {
       const body = await res.json().catch(() => null);
       window.gtag?.("event", "signup_failed", { page_language: lang, failure_type: res.status >= 500 ? "server" : "validation" });
@@ -188,6 +194,36 @@ function SignupPageContent({ language }: { language: Lang }) {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Field>
+          </div>
+        </section>
+
+        <section className="rounded-xl border border-teal/30 bg-tealbg p-3">
+          <h2 className="text-[13px] font-extrabold text-tealdeep">
+            {label("เชื่อมต่อ Siamese Cat Member", "Connect your Siamese Cat Member")}
+          </h2>
+          <p className="mt-1 text-[12px] leading-snug text-meta">
+            {label(
+              "ใช้บัญชีเดียวกับเกมและบริการ Siamese Cat ผ่าน Google หรืออีเมล การเชื่อมต่อนี้ไม่สร้างแพ็กเกจหรือสิทธิ์ชำระเงิน",
+              "Use one identity across approved Siamese Cat products through Google or email. Connecting does not create packages or paid access.",
+            )}
+          </p>
+          <div className="mt-2 grid gap-2 min-[380px]:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => setMembershipChoice("connect")}
+              className={`min-h-[48px] rounded-xl border-2 px-3 text-left text-[12px] font-bold ${membershipChoice === "connect" ? "border-teal bg-card text-tealdeep" : "border-line bg-card text-ink"}`}
+            >
+              <span className="block text-[13px]">{label("เชื่อมต่อด้วย Google หรืออีเมล", "Connect with Google or email")}</span>
+              <span className="font-normal text-meta">{label("หลังจากบันทึกแบบฟอร์มนี้", "After this form is safely saved")}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMembershipChoice("skip")}
+              className={`min-h-[48px] rounded-xl border-2 px-3 text-left text-[12px] font-bold ${membershipChoice === "skip" ? "border-teal bg-card text-tealdeep" : "border-line bg-card text-ink"}`}
+            >
+              <span className="block text-[13px]">{label("ดำเนินการต่อโดยไม่เชื่อมต่อ", "Continue without membership")}</span>
+              <span className="font-normal text-meta">{label("เชื่อมต่อภายหลังได้", "You can connect later")}</span>
+            </button>
           </div>
         </section>
 

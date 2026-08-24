@@ -7,6 +7,10 @@ const pages = (process.env.QA_PATHS ? process.env.QA_PATHS.split(",") : [
   "/EN/creative",
   "/coding-with-ai",
   "/EN/coding-with-ai",
+  "/coding-with-ai/car-maze",
+  "/EN/coding-with-ai/car-maze",
+  "/coding-with-ai/cat-vs-dog",
+  "/EN/coding-with-ai/cat-vs-dog",
   "/faq",
   "/EN/faq",
   "/signup",
@@ -16,6 +20,8 @@ const pages = (process.env.QA_PATHS ? process.env.QA_PATHS.split(",") : [
 ]).map((path) => path.trim()).filter(Boolean);
 const sizes = [
   [390, 844],
+  [768, 1024],
+  [901, 1000],
   [1440, 1100],
 ];
 

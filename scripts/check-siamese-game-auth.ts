@@ -11,7 +11,7 @@ async function main() {
   assert.doesNotThrow(() => createSiameseCatAuth({ clientId: "local-test", clientSecret: "secret", issuer: "http://localhost:3000", allowInsecureLocalIssuer: true }));
   assert.throws(() => createSiameseCatAuth({ clientId: "local-test", clientSecret: "secret", issuer: "http://attacker.example", allowInsecureLocalIssuer: true }), /loopback/);
 
-  const environmentKeys = ["NODE_ENV", "SIAMESE_GAME_AUTH_ENABLED", "SIAMESE_GAME_AUTH_ENV", "SIAMESE_OIDC_ISSUER", "SIAMESE_GAME_CLIENT_ID", "SIAMESE_GAME_CLIENT_SECRET", "SIAMESE_CAR_MAZE_CLIENT_ID", "SIAMESE_CAR_MAZE_CLIENT_SECRET", "SIAMESE_GAME_TRANSACTION_SECRET", "SIAMESE_GAME_SCHEMA_READY"] as const;
+  const environmentKeys = ["NODE_ENV", "SIAMESE_GAME_AUTH_ENABLED", "SIAMESE_GAME_AUTH_ENV", "SIAMESE_OIDC_ISSUER", "SIAMESE_CAT_VS_DOG_CLIENT_ID", "SIAMESE_CAT_VS_DOG_CLIENT_SECRET", "SIAMESE_CAR_MAZE_CLIENT_ID", "SIAMESE_CAR_MAZE_CLIENT_SECRET", "SIAMESE_GAME_TRANSACTION_SECRET", "SIAMESE_GAME_SCHEMA_READY"] as const;
   const mutableEnvironment = process.env as Record<string, string | undefined>;
   const savedEnvironment = Object.fromEntries(environmentKeys.map((key) => [key, process.env[key]]));
   try {
@@ -19,19 +19,20 @@ async function main() {
     process.env.SIAMESE_GAME_AUTH_ENABLED = "true";
     process.env.SIAMESE_GAME_AUTH_ENV = "staging";
     process.env.SIAMESE_OIDC_ISSUER = "https://id-staging.siamesecat.cafe";
-    process.env.SIAMESE_GAME_CLIENT_ID = "cat-vs-dog-staging";
-    process.env.SIAMESE_GAME_CLIENT_SECRET = "test-client-secret";
+    process.env.SIAMESE_CAT_VS_DOG_CLIENT_ID = "cat-vs-dog-staging";
+    process.env.SIAMESE_CAT_VS_DOG_CLIENT_SECRET = "test-client-secret";
     process.env.SIAMESE_CAR_MAZE_CLIENT_ID = "car-maze-staging";
     process.env.SIAMESE_CAR_MAZE_CLIENT_SECRET = "car-maze-test-secret";
     process.env.SIAMESE_GAME_TRANSACTION_SECRET = "t".repeat(32);
     process.env.SIAMESE_GAME_SCHEMA_READY = "1";
     assert.equal(getSiameseGameLoginConfig().allowStagingIssuer, true);
+    assert.equal(getSiameseGameLoginConfig().clientId, "cat-vs-dog-staging");
     assert.equal(getSiameseGameLoginConfig("car-maze").clientId, "car-maze-staging");
     assert.equal(getSiameseGameLoginConfig("car-maze").target, "car-maze");
     delete process.env.SIAMESE_CAR_MAZE_CLIENT_ID;
     delete process.env.SIAMESE_CAR_MAZE_CLIENT_SECRET;
-    assert.equal(getSiameseGameLoginConfig("car-maze").clientId, "cat-vs-dog-staging");
-    assert.equal(getSiameseGameLoginConfig("car-maze").enabled, true);
+    assert.equal(getSiameseGameLoginConfig("car-maze").clientId, "");
+    assert.equal(getSiameseGameLoginConfig("car-maze").enabled, false);
     process.env.SIAMESE_GAME_SCHEMA_READY = "0";
     assert.equal(getSiameseGameLoginConfig("car-maze").enabled, false);
     process.env.SIAMESE_GAME_SCHEMA_READY = "1";
@@ -64,12 +65,13 @@ async function main() {
   assert.match(callbackSource, /transactionSession\.game/);
 
   const configRouteSource = await readFile(path.join(root, "src/app/api/public/game/auth/config/route.ts"), "utf8");
-  assert.match(configRouteSource, /game !== "car-maze"/);
-  assert.match(configRouteSource, /getGoogleGameLoginConfig\(\)/);
-  assert.match(configRouteSource, /getSiameseGameLoginConfig\("car-maze"\)/);
+  assert.match(configRouteSource, /siameseGameAuthTarget\(game\)/);
+  assert.match(configRouteSource, /getSiameseGameLoginConfig\(target\)/);
+  assert.doesNotMatch(configRouteSource, /getGoogleGameLoginConfig/);
 
   const featureSource = await readFile(path.join(root, "src/lib/game-features.ts"), "utf8");
-  assert.match(featureSource, /export function getGameLoginConfig\(\)[\s\S]*return getGoogleGameLoginConfig\(\)/);
+  assert.match(featureSource, /export function getGameLoginConfig\(\)[\s\S]*return getSiameseGameLoginConfig\("cat-vs-dog"\)/);
+  assert.doesNotMatch(featureSource, /SIAMESE_GAME_CLIENT_ID/);
 
   const startSource = await readFile(path.join(root, "src/app/api/public/game/auth/siamese/start/route.ts"), "utf8");
   assert.match(startSource, /session\.game = game/);
@@ -96,7 +98,21 @@ async function main() {
   assert.match(playerSource, /siameseSubject/);
   assert.match(playerSource, /if \(emailOwner\) throw new SiameseAccountConflictError\(\)/);
 
-  console.log("game:siamese-auth -> OIDC and post-ad checkpoint contracts are safe");
+  for (const locale of ["en", "th"]) {
+    const html = await readFile(path.join(root, `game-assets/cat-vs-dog/${locale}/index.html`), "utf8");
+    assert.match(html, /auth\/config\?game=cat-vs-dog/);
+    assert.match(html, /auth\/siamese\/start\?game=cat-vs-dog/);
+    assert.match(html, /Google or an email magic link|Google หรือลิงก์วิเศษทางอีเมล/);
+    assert.doesNotMatch(html, /auth\/google|accounts\.google\.com|google\.accounts/);
+    assert.ok(html.indexOf("afterThanks()") < html.lastIndexOf("showRestartAds(startNewRun)"), `${locale}: shared sign-in must remain at the established post-game gate before the next-run ad transition`);
+  }
+
+  const compatibilityGoogleRoute = await readFile(path.join(root, "src/app/api/public/game/auth/google/route.ts"), "utf8");
+  assert.match(compatibilityGoogleRoute, /verifyIdToken/);
+  assert.match(compatibilityGoogleRoute, /gamePlayers/);
+  assert.doesNotMatch(compatibilityGoogleRoute, /status:\s*410/);
+
+  console.log("game:siamese-auth -> OIDC, post-ad checkpoint, and legacy Google compatibility contracts are safe");
 }
 
 main().catch((error) => {

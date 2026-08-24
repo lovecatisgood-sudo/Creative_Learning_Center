@@ -8,6 +8,7 @@ import { establishMemberSession } from "@/lib/member-auth";
 import { PROGRAM_INTEREST_VALUES } from "@/lib/program-options";
 import { isTrustedMutationOrigin } from "@/lib/request-security";
 import { ensureMemberSchemaReady } from "@/lib/member-schema";
+import { prepareMemberLink } from "@/lib/siamese-member-link-transaction";
 
 // Public (no auth) parent self-registration — PRD §6.1. Creates a full parent
 // record (profile_complete = true) plus one or more children in a transaction.
@@ -43,6 +44,7 @@ export async function POST(req: Request) {
   const language = body.language === "en" ? "en" : "th";
   const programInterest = String(body.programInterest ?? "").trim();
   const consent = body.consent === true;
+  const membershipChoice = body.membershipChoice === "connect" ? "connect" : "skip";
   const kids: ChildInput[] = Array.isArray(body.children) ? body.children : [];
 
   // Server-side validation mirrors the required fields; never trust the client.
@@ -91,6 +93,7 @@ export async function POST(req: Request) {
       childNames: result.children.map((child) => child.name),
       duplicatePhone: existing.length > 0,
       memberProvisioningPending: true,
+      membershipConnection: membershipChoice === "connect" ? "pending" : "skipped",
     });
   }
 
@@ -155,11 +158,27 @@ export async function POST(req: Request) {
 
   await establishMemberSession(result.member.id, result.member.sessionVersion, "temporary");
 
+  let membershipStartUrl: string | undefined;
+  let membershipConnection: "pending" | "skipped" = membershipChoice === "connect" ? "pending" : "skipped";
+  if (membershipChoice === "connect") {
+    try {
+      membershipStartUrl = await prepareMemberLink(
+        result.member.id,
+        language,
+        `${language === "en" ? "/EN" : ""}/signup/success`,
+      );
+    } catch (error) {
+      console.error("Creative registration saved but optional Siamese connection could not be prepared", error);
+    }
+  }
+
   return NextResponse.json({
     ok: true,
     memberUid: result.member.publicUid,
     parentName: result.parent.name,
     childNames: result.children.map((c) => c.name),
     duplicatePhone,
+    membershipConnection,
+    ...(membershipStartUrl ? { membershipStartUrl } : {}),
   });
 }

@@ -115,6 +115,30 @@ export const memberAccounts = pgTable("member_accounts", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const creativeMemberIdentityLinks = pgTable("creative_member_identity_links", {
+  id: serial("id").primaryKey(),
+  memberAccountId: integer("member_account_id").references(() => memberAccounts.id).notNull().unique(),
+  issuer: text("issuer").notNull(),
+  subject: text("subject").notNull(),
+  verifiedEmail: text("verified_email").notNull(),
+  status: text("status").default("active").notNull(),
+  linkedSource: text("linked_source").notNull(),
+  linkedAt: timestamp("linked_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => ({
+  identityUnique: uniqueIndex("creative_member_identity_unique").on(table.issuer, table.subject),
+}));
+
+export const creativeMemberLinkAttempts = pgTable("creative_member_link_attempts", {
+  id: serial("id").primaryKey(),
+  memberAccountId: integer("member_account_id").references(() => memberAccounts.id).notNull(),
+  status: text("status").default("pending").notNull(),
+  correlationId: text("correlation_id").notNull().unique(),
+  errorCode: text("error_code"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const memberUidAliases = pgTable("member_uid_aliases", {
   id: serial("id").primaryKey(),
   memberAccountId: integer("member_account_id")

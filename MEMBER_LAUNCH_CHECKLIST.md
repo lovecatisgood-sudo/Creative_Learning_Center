@@ -1,8 +1,11 @@
 # Siamese Cat Member — launch checklist
 
-This is the operational gate for the temporary-UID member system described in
-`MEMBER_SYSTEM_PRD_V2.md`. Code completion alone is not approval to change the
-production database or deploy.
+This remains the operational gate for the already implemented Creative Club
+temporary-UID/member-portal system described historically in
+`MEMBER_SYSTEM_PRD_V2.md`. It is not the execution ledger for the universal
+cross-product V3 platform; that ledger is
+`docs/siamese-member-platform/GATES.md`. Code completion alone is not approval
+to change the production database or deploy.
 
 ## Automated gates
 

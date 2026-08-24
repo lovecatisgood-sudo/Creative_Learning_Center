@@ -31,11 +31,21 @@ function labels(header) {
     .map(([, value]) => value.replace(/<[^>]+>/g, "").replaceAll("&amp;", "&").replace("⌄", "").trim());
 }
 
+function listHtmlFiles(directory, prefix = "") {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const relative = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) return listHtmlFiles(join(directory, entry.name), relative);
+    return entry.isFile() && entry.name.endsWith(".html") && relative !== "tools.html" ? [relative] : [];
+  });
+}
+
 for (const language of ["th", "en"]) {
   const directory = language === "th" ? ROOT : join(ROOT, "EN");
   // The family-tools generator owns tools.html and validates its different,
   // intentionally compact shell in check-family-tools.mjs.
-  const files = readdirSync(directory).filter((file) => file.endsWith(".html") && file !== "tools.html");
+  const files = listHtmlFiles(directory).filter((file) =>
+    !file.startsWith("tools/") && (language !== "th" || !file.startsWith("EN/"))
+  );
   const pages = files.map((file) => ({ file, html: readFileSync(join(directory, file), "utf8") }));
   const reference = pages.find(({ file }) => file === "membership.html");
   if (!reference) throw new Error(`Missing ${language} membership reference page`);
@@ -101,6 +111,8 @@ for (const language of ["th", "en"]) {
   const dinner = pages.find(({ file }) => file === "dinner.html")?.html ?? "";
   const contact = pages.find(({ file }) => file === "contact.html")?.html ?? "";
   const codingCourse = pages.find(({ file }) => file === "coding-with-ai.html")?.html ?? "";
+  const carMazeProject = pages.find(({ file }) => file === "coding-with-ai/car-maze.html")?.html ?? "";
+  const catVsDogProject = pages.find(({ file }) => file === "coding-with-ai/cat-vs-dog.html")?.html ?? "";
   const home = pages.find(({ file }) => file === "index.html")?.html ?? "";
   const expectedPrices = language === "en"
     ? ["149 THB", "249 THB", "80 THB", "50 THB", "45 THB", "69 THB", "99 THB"]
@@ -128,6 +140,23 @@ for (const language of ["th", "en"]) {
   if (!codingCourse.includes(`${prefix}/contact?service=coding-ai-${language}`)) {
     throw new Error(`${language}/coding-with-ai.html is missing its localized course-interest link`);
   }
+  if (codingCourse.includes("studio-built") || codingCourse.includes("สตูดิโอสร้าง")) {
+    throw new Error(`${language}/coding-with-ai.html incorrectly credits the games to the studio`);
+  }
+  for (const requiredStudentText of language === "en"
+    ? ["Games built by our students", "Student project with instructor guidance", "React and JavaScript", "HTML5 Canvas"]
+    : ["เกมที่สร้างโดยนักเรียนของเรา", "โปรเจกต์นักเรียนที่มีผู้สอนแนะนำ", "React และ JavaScript", "HTML5 Canvas"]) {
+    const combinedProjectPages = `${codingCourse}\n${carMazeProject}\n${catVsDogProject}`;
+    if (!combinedProjectPages.includes(requiredStudentText)) {
+      throw new Error(`${language} student-project pages are missing ${requiredStudentText}`);
+    }
+  }
+  for (const [projectFile, projectHtml] of [["car-maze", carMazeProject], ["cat-vs-dog", catVsDogProject]]) {
+    if (!projectHtml) throw new Error(`${language}/coding-with-ai/${projectFile}.html is missing`);
+    if (!projectHtml.includes(`${prefix}/coding-with-ai`) || !projectHtml.includes("data-course-interest")) {
+      throw new Error(`${language}/coding-with-ai/${projectFile}.html is missing its course journey links`);
+    }
+  }
   if (!home.includes("data-home-blog-grid") || !home.includes(`${prefix}/blog?category=parenting-guides`)) {
     throw new Error(`${language}/index.html is missing the published-blog feed or category links`);
   }
@@ -136,6 +165,8 @@ for (const language of ["th", "en"]) {
 const appLayout = readFileSync(join(process.cwd(), "src/app/layout.tsx"), "utf8");
 const middleware = readFileSync(join(process.cwd(), "src/middleware.ts"), "utf8");
 const publicBlogShell = readFileSync(join(process.cwd(), "src/components/blog/PublicBlogShell.tsx"), "utf8");
+const sitemapSource = readFileSync(join(process.cwd(), "src/app/sitemap.ts"), "utf8");
+const nextConfigSource = readFileSync(join(process.cwd(), "next.config.mjs"), "utf8");
 if (!appLayout.includes(GOOGLE_ANALYTICS_ID) || !appLayout.includes("isCustomerPage")) {
   throw new Error("Next.js public routes are missing guarded Google Analytics");
 }
@@ -151,6 +182,14 @@ if (publicBlogShell.split(blogToolsItem).length !== 2) {
 }
 if (!publicBlogShell.includes('href={local(item.href)}')) {
   throw new Error("Blog header does not localize navigation links");
+}
+for (const projectRoute of ["coding-with-ai/car-maze", "coding-with-ai/cat-vs-dog"]) {
+  if (!sitemapSource.includes(`path: "/${projectRoute}"`)) {
+    throw new Error(`Sitemap source is missing /${projectRoute}`);
+  }
+  if (!nextConfigSource.includes(`"${projectRoute}"`)) {
+    throw new Error(`Next.js route map is missing /${projectRoute}`);
+  }
 }
 
 const GAME_ROOT = join(process.cwd(), "game-assets/cat-vs-dog");

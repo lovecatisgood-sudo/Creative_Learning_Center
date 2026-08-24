@@ -49,7 +49,9 @@ for (const relative of ["public/game-ads/siamese-cat-cafe-en.mp4", "public/game-
 }
 
 const envExample = await readFile(path.join(root, ".env.example"), "utf8");
-assert.match(envExample, /^GAME_LOGIN_ENABLED=false$/m);
+assert.match(envExample, /^SIAMESE_GAME_AUTH_ENABLED=false$/m);
+assert.match(envExample, /^SIAMESE_CAT_VS_DOG_CLIENT_ID=cat-vs-dog-production$/m);
+assert.match(envExample, /^SIAMESE_CAR_MAZE_CLIENT_ID=car-maze-production$/m);
 assert.doesNotMatch(envExample, /^ROYALTY_/m);
 assert.match(envExample, /^HOUSE_ADS_ENABLED=false$/m);
 assert.match(envExample, /^GAMEANALYTICS_GAME_KEY=$/m);

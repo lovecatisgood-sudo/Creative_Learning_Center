@@ -6,10 +6,15 @@ public website is served from the domain root, customers create a temporary
 member account at `/signup`, review packages and usage at `/member`, and staff
 work inside the protected `/admin` dashboard.
 
-Built to `sccc-management-system-prd-v1.md` (original business rules),
-`MEMBER_SYSTEM_PRD_V2.md` (member identity and access), and
-`sccc-uiux-spec-v1.md` (screens). See `DECISIONS.md` for spec interpretations,
-`WALKTHROUGH.md` for the acceptance-criteria map, and `DEPLOY.md` to ship it.
+The currently implemented Creative Club behavior was built to
+`sccc-management-system-prd-v1.md`, the historical
+`MEMBER_SYSTEM_PRD_V2.md`, and `sccc-uiux-spec-v1.md`. The authoritative product
+contract for the universal cross-product identity is now
+`MEMBER_SYSTEM_PRD_V3.md`. Its runtime implementation and local verification
+are complete; four staging/production gates remain explicitly open in
+`docs/siamese-member-platform/GATES.md`. See `DECISIONS.md` for earlier
+spec interpretations, `WALKTHROUGH.md` for the existing acceptance-criteria
+map, and `DEPLOY.md` to ship the current application.
 
 ## Stack
 
@@ -44,6 +49,7 @@ Any standard Postgres works locally (e.g. Docker):
 | `pnpm signup-qr <https://domain>` | Write `signup-qr.png` for the entrance |
 | `pnpm check:member-release` | Run static member privacy, ownership, migration, and mobile release gates |
 | `pnpm check:member-system` | Run member integration tests against an explicitly marked test database |
+| `pnpm check:siamese-creative-link` | Run disposable-DB universal-link, preservation, optional-failure, and legacy-game migration checks |
 | `MEMBER_TOKEN_PRUNE=1 pnpm member:prune-tokens` | Remove expired/used token rows beyond the configured retention period |
 
 ## Layout

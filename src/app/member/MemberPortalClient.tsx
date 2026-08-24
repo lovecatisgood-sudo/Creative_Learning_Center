@@ -154,6 +154,17 @@ export function MemberPortalClient({ initial }: { initial: MemberPortalData }) {
                 </a>
               </section>
             )}
+            <section className="mt-4 rounded-2xl border border-teal/30 bg-tealbg p-4">
+              <h2 className="font-extrabold text-tealdeep">{th ? "Siamese Cat Member แบบใช้ร่วมกัน" : "Universal Siamese Cat Member"}</h2>
+              <p className="mt-1 text-sm text-meta">
+                {th
+                  ? "เชื่อมต่อโปรไฟล์ Creative Club นี้กับบัญชีที่ใช้ผ่าน Google หรืออีเมลในเกมและบริการ Siamese Cat อื่น ๆ โดยไม่เปลี่ยนบุตร แพ็กเกจ หรือประวัติเดิม"
+                  : "Connect this Creative Club profile to the Google-or-email identity used across approved Siamese Cat products. Existing children, packages, and history stay unchanged."}
+              </p>
+              <a href="/api/public/member/connect/start" className="btn-primary mt-3">
+                {th ? "เชื่อมต่อหรือยืนยันอีกครั้ง" : "Connect or verify membership"}
+              </a>
+            </section>
             <button type="button" onClick={signOut} className="btn-ghost mt-4">
               {th ? "ออกจากระบบ" : "Sign out"}
             </button>

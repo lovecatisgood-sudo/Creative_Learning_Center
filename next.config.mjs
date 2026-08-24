@@ -10,6 +10,8 @@ const mainSiteRoutes = [
   "playgroup",
   "creative",
   "coding-with-ai",
+  "coding-with-ai/car-maze",
+  "coding-with-ai/cat-vs-dog",
   "membership",
   "dinner",
   "contact",
