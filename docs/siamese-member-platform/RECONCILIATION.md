@@ -77,7 +77,8 @@ authentication journey is not claimed fixed.
   legacy fallback source.
 - No production synthetic parent, child, member, identity, game player, OIDC
   interaction, or email was created for verification. No browser, GUI,
-  authenticated dashboard, inbox, secret file, or secret value was accessed.
+  authenticated dashboard, or inbox was accessed. The ignored local operator
+  credential was classified as a placeholder without printing its value.
 
 ## Deliberately open evidence
 
