@@ -42,16 +42,25 @@
     generated all 47 routes. `git diff --check` passed; exact status/diff review
     found only the intended score implementation, tests, package script, and
     release evidence files. The disposable database was removed.
-- [ ] **G7 — Production promotion is publicly observable without mutations.**
+- [x] **G7 — Production promotion is publicly observable without mutations.**
   - Check: push to `origin/main`, poll public health/source/config/protocol and
-    sanitized auth-start responses.
+    released signup/sign-in pages.
   - Expect: deployed commit source is served, both apps report ready, provider
     advertises Authorization Code + PKCE S256 + `openid email`, and no synthetic
     production data is created.
-  - Evidence: pending.
-- [ ] **G8 — Fresh intent-to-repository reconciliation passes.**
+  - Evidence: runtime commit `613c96a` was pushed to production `main`.
+    Creative and provider readiness returned 200; provider discovery advertised
+    only Authorization Code, PKCE S256, and `openid email`; JWKS, both game auth
+    configs, leaderboard, and all released signup/sign-in/game pages returned
+    200. The deployed EN/TH shells and score-sync asset matched the reviewed
+    automatic-save/retry/member-isolation source. No production write was made.
+- [x] **G8 — Fresh intent-to-repository reconciliation passes.**
   - Check: direct audit of authoritative sources against the exact final tree
     and public deployment after the last material change.
   - Expect: all in-scope outcomes pass; browser-only/authenticated limitations
     remain explicitly bounded rather than inferred.
-  - Evidence: pending.
+  - Evidence: the post-deployment direct audit found every in-scope outcome
+    satisfied. Authenticated browser/account/inbox journeys remain explicitly
+    bounded; the provider source is unchanged from its previously recorded real
+    six-digit email journey, and terminal evidence is not represented as a new
+    real Google journey.

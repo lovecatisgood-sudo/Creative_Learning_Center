@@ -9,10 +9,10 @@
 3. **Pre-deployment gates** — complete
    - Run focused score/game/auth checks, provider verify and PostgreSQL tests,
      Creative signup/member/link database checks, Car Maze flow, and full build.
-4. **Fresh reconciliation and commit** — in progress
+4. **Fresh reconciliation and commit** — complete
    - Compare the final repository directly to `PROJECT_INTENT.md`, inspect the
      exact diff, record evidence, and commit only the reviewed release files.
-5. **Production promotion and terminal verification** — pending
+5. **Production promotion and terminal verification** — complete
    - Push the verified commit to `origin/main`; verify deployed health, provider
-     protocol, both game auth configs, sanitized auth starts, Cat vs Dog source,
-     and score/leaderboard availability without creating production data.
+     protocol, both game auth configs, Cat vs Dog source, released signup/sign-in
+     pages, and score/leaderboard availability without creating production data.

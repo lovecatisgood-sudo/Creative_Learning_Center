@@ -1,10 +1,10 @@
 # Cat vs Dog Member Score Reliability — Reconciliation
 
-**State:** pre-deployment source reconciliation passes; production gate pending
+**State:** runtime commit `613c96a` deployed and publicly reconciled
 
 **Reconciled:** 2026-08-27
 
-**Creative base:** `a2bb8bb` / freshly fetched `origin/main`
+**Creative runtime:** `613c96a` on production `main`
 
 **Provider snapshot:** clean local and recorded `origin/main` at `60bb334`
 
@@ -19,7 +19,7 @@
 | Server stores runs and derives each member's best | The unchanged authenticated score route inserts `game_runs` transactionally and returns `MAX(score)`/dense rank. A disposable migrated PostgreSQL check stored three runs for one player and one for another and returned the hand-checked 800/700 maxima and ranks 1/2. |
 | Car Maze behavior is unchanged | Executed controller checks pass guest play through stage 19, Stage-20 auth before ads, progress retention, callbacks, retries, and milestone ordering in both locales. |
 | No migration or production synthetic data | The release adds no schema file. All mutable tests used disposable local databases that were removed. No production member, identity, family, player, run, email, or interaction was created. |
-| Privacy/cache/protocol boundaries remain | Auth reliability and member-release checks pass. Provider claims/scopes and no-store behavior are unchanged; public production confirmation remains G7. |
+| Privacy/cache/protocol boundaries remain | Auth reliability and member-release checks pass. Public provider readiness, discovery, JWKS, game configs, and the anonymous game session endpoint returned 200; session/config responses retained private no-store policy, and discovery remained Authorization Code + PKCE S256 + `openid email`. |
 
 ## Goal-drift result
 
@@ -28,12 +28,16 @@ OIDC callback shape, membership consent, Cat vs Dog prompt timing, legacy auth,
 Car Maze source, entitlements, or admin authorization. POS Member Hub and Master
 Admin remain deferred exactly as required.
 
-## Remaining gates before a live completion claim
+## Bounded production evidence
 
-- Commit and push the reviewed Creative tree to production `main`.
-- Observe the deployed score-sync asset and EN/TH shell integration publicly.
-- Recheck provider/Creative health, discovery, JWKS, game configs, sanitized
-  auth starts, leaderboard availability, and cache policy without mutations.
+- Runtime commit `613c96a` is on production `main`; after Hostinger's restart,
+  Creative readiness and the new `score-sync.js` returned HTTP 200.
+- The deployed EN/TH Cat vs Dog shells load the new module and call score saving
+  automatically from `gameOver` for an authenticated member.
+- Creative signup/sign-in and Car Maze pages in EN/TH, both game auth configs,
+  provider readiness/discovery/JWKS, and the leaderboard returned HTTP 200.
+- No production member, identity, family, player, score, email, or OIDC
+  interaction was created during verification.
 - Browser/account/inbox journeys are not rerun because this request did not
   authorize Chrome, Google, inbox, Hostinger dashboard, or authenticated GUI
   access. The previously recorded real six-digit email journey remains valid
