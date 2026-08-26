@@ -22,6 +22,7 @@ export function getSiameseCreativeAuthConfig(): SiameseCatClientOptions & { enab
     clientId,
     clientSecret,
     transactionSecret,
+    transactionMaxAgeMs: 20 * 60 * 1000,
     allowInsecureLocalIssuer: loopback && process.env.NODE_ENV !== "production",
     allowStagingIssuer: environment === "staging",
   };

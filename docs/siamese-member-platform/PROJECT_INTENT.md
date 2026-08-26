@@ -1,5 +1,83 @@
 # Siamese Member Platform — Project Intent
 
+## Active production authentication reliability repair — 2026-08-26
+
+### User outcome
+
+Creative Club parents must be able to finish optional Siamese membership
+connection after signup and later from the member portal with either Google or
+verified email. A failure must identify a safe, retryable operational stage;
+it must never be reported as “email sent”, “empty”, or “linked” when that stage
+did not succeed.
+
+### Proven incident causes to remove
+
+- Creative's stateful member-connect start response is currently cacheable by
+  the production CDN. A cached unauthenticated redirect is served even when a
+  valid Creative link cookie is present, so neither provider method is reached.
+- Creative's legacy email endpoint treats an unbound contact email and an SMTP
+  failure as the same successful response, while its client ignores non-2xx
+  status. Existing production registrations therefore see a false success.
+- Provider email links depend on the original OIDC interaction browser. Mail
+  applications commonly open links in a different browser context, leaving no
+  usable completion path in the original interaction.
+- Provider throttling records suppressed requests as fresh requests, extending
+  the suppression window after retries.
+- Provider token lifetime can exceed its owning interaction lifetime.
+- Creative callbacks pass the request's potentially rewritten internal origin
+  to the OIDC client instead of the configured public callback origin.
+- Provider runtime identity resolution still reads Creative operational member
+  tables despite the locked boundary that Creative owns those records and the
+  provider authenticates independently.
+- Current readiness proves configuration presence but not the exact auth
+  release or Creative auth-path readiness, obscuring production drift.
+
+### Repair invariants
+
+- Every auth start, callback, and sensitive auth API response is private and
+  non-cacheable at both application and surrogate/CDN layers; cookie-varying
+  responses explicitly vary on `Cookie`.
+- Creative contact email remains unverified product contact data. It is never
+  silently promoted into login identity merely to make legacy magic link work.
+- Unknown-email responses remain enumeration-safe. A real mail transport
+  failure for an eligible account is a visible retryable error, not false
+  success, and neither server logs nor responses expose the address or token.
+  This deliberately permits a narrow eligibility inference only while the mail
+  service is failing; returning the generic success in that case would recreate
+  the incident's false-delivery claim.
+- The provider continues to offer a single-use email link and also supplies a
+  high-entropy one-time code that can be entered in the original interaction
+  browser when the mail link opens elsewhere. Code and link share expiry,
+  replay protection, attempt limits, and identity-resolution rules.
+- Google remains Authorization Code + PKCE S256, requests only `openid email`,
+  validates immutable Google `sub` before email, and quarantines conflicts.
+- Provider authentication must be ready without `parents`, `children`, or
+  Creative `member_accounts` tables. Historical optional link identifiers may
+  be retained, but runtime sign-in cannot depend on Creative data.
+- The provider owns its verified primary identity email. Creative owns its
+  product-local contact/member email and may use it as local compatibility
+  evidence, but changing Creative contact data must not silently mutate the
+  universal provider identity. A verified Google email update may change the
+  provider-owned email while immutable Google `sub` preserves the subject.
+- Creative registration, directory, checkout, packages, sessions, and guest
+  game progress remain independent of optional provider availability.
+- No browser, browser profile, Hostinger dashboard, Google Console, or
+  authenticated GUI surface is accessed without new action-specific approval.
+- “Fixed” remains reserved for a deployed release plus public verification and
+  controlled real Google and email journeys. Until then the result is labelled
+  local-only or deployed-but-journey-pending precisely.
+
+### Scope boundaries for this repair
+
+In scope: Creative signup/member connection, Creative legacy member email
+sign-in behavior, shared game OIDC handoffs affected by the same response and
+callback helpers, provider email/Google runtime, readiness, schema migration,
+tests, operations evidence, and a reversible release candidate.
+
+Out of scope: Master Admin, POS Member Hub rollout, entitlement changes,
+Creative staff/manager authorization redesign, destructive data repair,
+credential rotation, and any account-dashboard action.
+
 ## Ultimate goal
 
 Make one Siamese Cat Member identity a universal pass for approved public

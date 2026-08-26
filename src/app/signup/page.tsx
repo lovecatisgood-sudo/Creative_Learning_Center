@@ -121,7 +121,7 @@ function SignupPageContent({ language }: { language: Lang }) {
         })
       );
       if (data.membershipStartUrl) {
-        window.location.assign(data.membershipStartUrl);
+        navigateWithPost(data.membershipStartUrl);
       } else {
         router.push(`${languagePrefix}/signup/success${membershipChoice === "connect" ? "?membership=pending" : "?membership=skipped"}`);
       }
@@ -352,6 +352,15 @@ function SignupPageContent({ language }: { language: Lang }) {
       </div>
     </div>
   );
+}
+
+function navigateWithPost(action: string) {
+  const form = document.createElement("form");
+  form.method = "post";
+  form.action = action;
+  form.hidden = true;
+  document.body.append(form);
+  form.submit();
 }
 
 export default function SignupPage() {

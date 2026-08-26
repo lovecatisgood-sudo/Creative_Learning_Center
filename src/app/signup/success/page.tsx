@@ -59,7 +59,7 @@ function SignupSuccessPageContent({ language }: { language: Lang }) {
               </p>
             )}
             {membershipStatus === "linked" && <p className="mt-4 rounded-lg bg-okbg px-3 py-2 text-[13px] font-semibold text-ok">{label("เชื่อมต่อ Siamese Cat Member แล้ว", "Siamese Cat Member connected")}</p>}
-            {membershipStatus === "pending" && <div className="mt-4 rounded-lg bg-warnbg px-3 py-2 text-[13px] font-semibold text-warn"><p>{label("บันทึกการลงทะเบียนแล้ว แต่ยังเชื่อมต่อสมาชิกไม่สำเร็จ", "Registration is saved, but membership is not connected yet.")}</p><a className="mt-2 inline-block underline" href="/api/public/member/connect/start">{label("ลองเชื่อมต่ออีกครั้ง", "Retry connection")}</a></div>}
+            {membershipStatus === "pending" && <div className="mt-4 rounded-lg bg-warnbg px-3 py-2 text-[13px] font-semibold text-warn"><p>{label("บันทึกการลงทะเบียนแล้ว แต่ยังเชื่อมต่อสมาชิกไม่สำเร็จ", "Registration is saved, but membership is not connected yet.")}</p><form method="post" action="/api/public/member/connect/start"><button type="submit" className="mt-2 bg-transparent p-0 font-semibold underline">{label("ลองเชื่อมต่ออีกครั้ง", "Retry connection")}</button></form></div>}
             {membershipStatus === "skipped" && <p className="mt-4 rounded-lg bg-paper px-3 py-2 text-[13px] text-meta">{label("ไม่ได้เชื่อมต่อสมาชิก คุณสามารถเชื่อมต่อภายหลังจากโปรไฟล์", "Membership was skipped. You can connect later from your profile.")}</p>}
           </div>
         )}

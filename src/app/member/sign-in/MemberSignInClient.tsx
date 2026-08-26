@@ -9,17 +9,28 @@ export function MemberSignInClient() {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
-    await fetch("/api/public/member/signin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    }).catch(() => null);
-    setBusy(false);
-    setSent(true);
+    setError("");
+    try {
+      const response = await fetch("/api/public/member/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+        cache: "no-store",
+      });
+      if (!response.ok) throw new Error("MEMBER_SIGNIN_REQUEST_FAILED");
+      setSent(true);
+    } catch {
+      setError(th
+        ? "ยังส่งลิงก์ไม่ได้ในขณะนี้ โปรดลองอีกครั้งในอีกสักครู่"
+        : "We could not send the link right now. Please try again shortly.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -43,6 +54,7 @@ export function MemberSignInClient() {
             <label className="block text-sm font-bold text-meta" htmlFor="member-email">{th ? "อีเมลที่ยืนยันแล้ว" : "Verified email"}</label>
             <input id="member-email" className="field mt-1" type="email" autoComplete="email" inputMode="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
             <button className="btn-primary mt-4" disabled={busy}>{busy ? (th ? "กำลังส่ง…" : "Sending…") : (th ? "ส่งลิงก์เข้าสู่ระบบ" : "Email me a sign-in link")}</button>
+            {error ? <p role="alert" className="mt-3 rounded-xl border border-red-300 bg-red-50 p-3 text-sm font-semibold text-red-800">{error}</p> : null}
           </form>
         )}
         <a href={th ? "/signup" : "/EN/signup"} className="mt-4 text-center text-sm font-bold text-tealdeep underline">{th ? "ยังไม่มีรหัสสมาชิก? สมัครสมาชิก" : "No Member ID yet? Register"}</a>

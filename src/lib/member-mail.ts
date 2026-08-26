@@ -1,5 +1,12 @@
 import nodemailer from "nodemailer";
 
+export class MemberMailDeliveryError extends Error {
+  constructor() {
+    super("MEMBER_MAIL_RECIPIENT_NOT_ACCEPTED");
+    this.name = "MemberMailDeliveryError";
+  }
+}
+
 function requiredEnv(name: string) {
   const value = process.env[name]?.trim();
   if (!value) throw new Error(`${name} is not configured`);
@@ -52,7 +59,7 @@ export async function sendMemberAccessEmail(args: {
   const safeUrl = escapeHtml(args.accessUrl);
   const safeName = escapeHtml(args.memberName);
 
-  return transporter.sendMail({
+  const result = await transporter.sendMail({
     from: { name: "Siamese Cat Member", address: user },
     to: args.to,
     subject: title,
@@ -67,4 +74,8 @@ export async function sendMemberAccessEmail(args: {
       </div>
     `,
   });
+  if (!Array.isArray(result.accepted) || result.accepted.length === 0) {
+    throw new MemberMailDeliveryError();
+  }
+  return { accepted: true as const };
 }

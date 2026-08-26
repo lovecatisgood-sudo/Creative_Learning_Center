@@ -15,7 +15,7 @@ export async function getSiameseTransactionSession() {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/api/public/game/auth/siamese",
-      maxAge: 10 * 60,
+      maxAge: 20 * 60,
     },
   });
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { withPrivateAuthHeaders } from "@/lib/auth-response";
 import { db } from "@/db";
 import { parents, children, memberAccounts, memberConsents } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -32,9 +33,9 @@ function bkkTodayISO(): string {
 }
 
 export async function POST(req: Request) {
-  if (!isTrustedMutationOrigin(req)) return NextResponse.json({ error: "Forbidden origin" }, { status: 403 });
+  if (!isTrustedMutationOrigin(req)) return privateJson({ error: "Forbidden origin" }, { status: 403 });
   const body = await req.json().catch(() => null);
-  if (!body) return NextResponse.json({ error: "Bad request" }, { status: 400 });
+  if (!body) return privateJson({ error: "Bad request" }, { status: 400 });
 
   const parentName = String(body.parentName ?? "").trim();
   const phone = String(body.phone ?? "").trim();
@@ -49,24 +50,24 @@ export async function POST(req: Request) {
 
   // Server-side validation mirrors the required fields; never trust the client.
   if (!parentName || !phone || !consent || kids.length === 0) {
-    return NextResponse.json({ error: "Missing required fields" }, { status: 422 });
+    return privateJson({ error: "Missing required fields" }, { status: 422 });
   }
   if (!isPlausiblePhone(phone) || !phoneNormalized) {
-    return NextResponse.json({ error: "Invalid phone number" }, { status: 422 });
+    return privateJson({ error: "Invalid phone number" }, { status: 422 });
   }
   if (rawEmail && !email) {
-    return NextResponse.json({ error: "Invalid email address" }, { status: 422 });
+    return privateJson({ error: "Invalid email address" }, { status: 422 });
   }
   if (programInterest && !PROGRAM_INTEREST_VALUES.has(programInterest)) {
-    return NextResponse.json({ error: "Invalid program interest" }, { status: 422 });
+    return privateJson({ error: "Invalid program interest" }, { status: 422 });
   }
   const today = bkkTodayISO();
   for (const k of kids) {
     if (!k?.name?.trim() || !k?.dob || (k.gender !== "male" && k.gender !== "female")) {
-      return NextResponse.json({ error: "Invalid child data" }, { status: 422 });
+      return privateJson({ error: "Invalid child data" }, { status: 422 });
     }
     if (k.dob > today) {
-      return NextResponse.json({ error: "Date of birth can't be in the future" }, { status: 422 });
+      return privateJson({ error: "Date of birth can't be in the future" }, { status: 422 });
     }
   }
 
@@ -86,7 +87,7 @@ export async function POST(req: Request) {
       }))).returning();
       return { parent, children: insertedChildren };
     });
-    return NextResponse.json({
+    return privateJson({
       ok: true,
       memberUid: null,
       parentName: result.parent.name,
@@ -167,12 +168,14 @@ export async function POST(req: Request) {
         language,
         `${language === "en" ? "/EN" : ""}/signup/success`,
       );
-    } catch (error) {
-      console.error("Creative registration saved but optional Siamese connection could not be prepared", error);
+    } catch {
+      console.error("Creative registration saved but optional Siamese connection could not be prepared", {
+        code: "CREATIVE_LINK_PREPARATION_FAILED",
+      });
     }
   }
 
-  return NextResponse.json({
+  return privateJson({
     ok: true,
     memberUid: result.member.publicUid,
     parentName: result.parent.name,
@@ -181,4 +184,8 @@ export async function POST(req: Request) {
     membershipConnection,
     ...(membershipStartUrl ? { membershipStartUrl } : {}),
   });
+}
+
+function privateJson(body: object, init?: ResponseInit) {
+  return withPrivateAuthHeaders(NextResponse.json(body, init));
 }

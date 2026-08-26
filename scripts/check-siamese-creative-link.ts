@@ -28,7 +28,7 @@ try {
   await seedBusinessHistory(pool);
   const beforeMigrations = await counts(pool);
   await applyProviderMigrations(pool);
-  await applyProviderMigration(pool, "0004_universal_membership.sql");
+  await applyProviderMigration(pool, "0005_auth_reliability.sql");
   await pool.query(await readFile(path.join(process.cwd(), "drizzle/0010_creative_member_identity_links.sql"), "utf8"));
   const afterMigrations = await counts(pool);
   assert.deepEqual(afterMigrations, beforeMigrations, "additive migrations must preserve every core business and game row");
@@ -42,13 +42,6 @@ try {
   const memberId = linked.rows[0]?.member_id;
   const subject = linked.rows[0]?.subject;
   assert.ok(memberId && subject);
-  await pool.query(
-    `insert into member_product_relationships
-      (member_subject, product_id, first_authenticated_at, last_authenticated_at,
-       successful_login_count, first_source, last_auth_method)
-     values ($1::uuid, 'creative-club-production', now(), now(), 1, 'creative-link-test', 'email')`,
-    [subject],
-  );
   const identity = { issuer: "https://members.test", subject, email: "link-me@example.com", emailVerified: true };
 
   process.env.DATABASE_URL = testUrl.toString();
@@ -57,24 +50,15 @@ try {
   await linkCreativeMemberProfile({ memberAccountId: memberId, identity, correlationId });
   await linkCreativeMemberProfile({ memberAccountId: memberId, identity, correlationId });
 
-  const linkState = await pool.query<{
-    links: string;
-    attempts: string;
-    provider_links: string;
-    relationship_reference: string | null;
-  }>(
+  const linkState = await pool.query<{ links: string; attempts: string }>(
     `select
        (select count(*)::text from creative_member_identity_links where member_account_id = $1) as links,
-       (select count(*)::text from creative_member_link_attempts where member_account_id = $1 and status = 'linked') as attempts,
-       (select count(*)::text from member_product_profile_links where member_subject = $2::uuid and product_id = 'creative-club-production' and status = 'active') as provider_links,
-       (select product_profile_reference from member_product_relationships where member_subject = $2::uuid and product_id = 'creative-club-production') as relationship_reference`,
-    [memberId, subject],
+       (select count(*)::text from creative_member_link_attempts where member_account_id = $1 and status = 'linked') as attempts`,
+    [memberId],
   );
   assert.deepEqual(linkState.rows[0], {
     links: "1",
     attempts: "1",
-    provider_links: "0",
-    relationship_reference: null,
   });
   assert.deepEqual(await counts(pool), beforeMigrations, "link-later must not duplicate or reassign existing history");
 
@@ -85,28 +69,18 @@ try {
      values ($1::uuid, 'google', 'legacy-google-link-test', 'link-me@example.com')`,
     [subject],
   );
-  await pool.query(
-    `insert into member_product_relationships
-      (member_subject, product_id, first_authenticated_at, last_authenticated_at,
-       successful_login_count, first_source, last_auth_method)
-     values
-      ($1::uuid, 'cat-vs-dog-production', now(), now(), 1, 'game-link-test', 'google'),
-      ($1::uuid, 'car-maze-production', now(), now(), 1, 'game-link-test', 'google')`,
-    [subject],
-  );
   const { findOrCreateSiameseGamePlayer } = await import("../src/lib/siamese-game-player");
   const migratedPlayer = await findOrCreateSiameseGamePlayer(identity, "en", "cat-vs-dog");
   const carMazePlayer = await findOrCreateSiameseGamePlayer(identity, "en", "car-maze");
   assert.equal(migratedPlayer.id, carMazePlayer.id);
-  const gameState = await pool.query<{ players: string; runs: string; links: string; subjects: string }>(
+  const gameState = await pool.query<{ players: string; runs: string; subjects: string }>(
     `select
        (select count(*)::text from game_players) as players,
        (select count(*)::text from game_runs) as runs,
-       (select count(*)::text from member_product_profile_links where member_subject = $1::uuid and product_id in ('cat-vs-dog-production', 'car-maze-production') and status = 'active') as links,
        (select count(*)::text from game_players where siamese_subject = $1::text and siamese_issuer = 'https://members.test') as subjects`,
     [subject],
   );
-  assert.deepEqual(gameState.rows[0], { players: "1", runs: "1", links: "0", subjects: "1" });
+  assert.deepEqual(gameState.rows[0], { players: "1", runs: "1", subjects: "1" });
   assert.deepEqual(await counts(pool), beforeMigrations, "game identity migration must retain the existing player and run");
 
   const conflict = await pool.query<{ id: number }>(
@@ -133,12 +107,25 @@ try {
   assert.deepEqual(conflictState.rows[0], { links: "0", verified_email: "creative-conflict@example.com" });
 
   const originalCwd = process.cwd();
+  const originalConsoleError = console.error;
+  const schemaFailureLogs: unknown[][] = [];
   delete process.env.SIAMESE_LINK_SCHEMA_READY;
   const { ensureSiameseMemberLinkSchema } = await import("../src/lib/siamese-member-link-schema");
-  process.chdir("/tmp");
-  const optionalReady = await ensureSiameseMemberLinkSchema();
-  process.chdir(originalCwd);
+  let optionalReady: boolean;
+  try {
+    console.error = (...args: unknown[]) => { schemaFailureLogs.push(args); };
+    process.chdir("/tmp");
+    optionalReady = await ensureSiameseMemberLinkSchema();
+  } finally {
+    process.chdir(originalCwd);
+    console.error = originalConsoleError;
+  }
   assert.equal(optionalReady, false, "an optional membership-schema preparation error must be explicit");
+  assert.equal(process.env.SIAMESE_LINK_SCHEMA_ERROR_CODE, "LINK_SCHEMA_BOOTSTRAP_READ_FAILED");
+  assert.deepEqual(schemaFailureLogs, [[
+    "Siamese member link schema readiness failed",
+    { code: "LINK_SCHEMA_BOOTSTRAP_READ_FAILED" },
+  ]], "auth schema diagnostics must expose only a fixed safe stage code");
   const core = await pool.connect();
   try {
     await core.query("begin");
@@ -187,7 +174,8 @@ async function applyProviderMigrations(database: Pool): Promise<void> {
      on conflict (member_account_id) do nothing`,
   );
   await applyProviderMigration(database, "0003_identity_signup.sql");
-  await applyProviderMigration(database, "0004_universal_membership.sql");
+  await applyProviderMigration(database, "0004_authentication_methods.sql");
+  await applyProviderMigration(database, "0005_auth_reliability.sql");
 }
 
 async function applyProviderMigration(database: Pool, file: string): Promise<void> {

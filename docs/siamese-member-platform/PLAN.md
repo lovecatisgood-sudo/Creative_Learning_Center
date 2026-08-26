@@ -4,6 +4,50 @@
 staging/production cutover pending  
 **Scope owner:** [`MEMBER_SYSTEM_PRD_V3.md`](../../MEMBER_SYSTEM_PRD_V3.md)
 
+## Active authentication reliability repair — 2026-08-26
+
+**Candidate status:** steps 1–10 are implemented and freshly verified. Step 11
+is authorized by the owner and is the active promotion/public-evidence stage;
+real Google and inbox journeys remain a separate user-controlled gate.
+
+1. Freeze the incident contract in `PROJECT_INTENT.md` and this gate ledger;
+   preserve Creative core flows, game checkpoints, legacy compatibility, and
+   the browser/dashboard authorization boundary.
+2. Introduce one tested private/no-store response policy for Creative auth
+   starts, callbacks, and sensitive member APIs. Apply it at route and Next.js
+   header layers, force dynamic execution, and construct callback URLs from the
+   configured public origin.
+3. Correct Creative legacy email semantics: bind eligibility remains verified
+   identity only; unknown email remains generic; schema/mail failures return
+   explicit retryable non-2xx responses; the client checks `response.ok` and
+   never claims delivery after a failed request.
+4. Add Creative readiness/release fields for shared member auth without making
+   optional auth readiness part of core site availability.
+5. Add an additive provider migration for hashed one-time verification codes
+   and bounded failed attempts. Deliver link plus code; accept code only inside
+   the original OIDC interaction with CSRF, expiry, replay, and rate-limit
+   enforcement.
+6. Stop suppressed email retries from extending their own lockout; align token
+   expiry to the shorter of configured login-token and interaction lifetimes;
+   retain the generic public response and safe audit codes.
+7. Remove provider runtime reads of Creative-owned operational tables while
+   preserving stable subjects and legacy optional link identifiers. Prove the
+   provider starts and completes email/Google identity resolution in a database
+   containing provider schema only.
+8. Harden Google callback stage classification and readiness/release output
+   without logging credentials, authorization material, Google bodies, or
+   personal data.
+9. Run focused unit/contract tests, both full builds, additive migrations twice,
+   provider-only and legacy-compatible PostgreSQL integrations, Creative core
+   preservation checks, and exact built-entry startup checks.
+10. Reinspect every changed source file against intent and gates, scan for
+    secret/personal-data leakage, document rollback, and produce a fresh
+    `RECONCILIATION.md` after the last material change.
+11. Promotion is a separate evidence stage: push/deploy only within current
+    production authorization, then verify no-cache public protocol/readiness
+    behavior. Real inbox and Google journeys remain mandatory and cannot be
+    simulated into a passing gate.
+
 ## Phase 0 — Product contract and source reconciliation
 
 **Status:** complete

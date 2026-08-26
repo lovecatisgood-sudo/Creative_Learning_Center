@@ -26,6 +26,16 @@ const mainSiteRoutes = [
   "thank-you",
 ];
 
+const privateAuthHeaders = [
+  { key: "Cache-Control", value: "private, no-cache, no-store, max-age=0, must-revalidate" },
+  { key: "CDN-Cache-Control", value: "no-store" },
+  { key: "Surrogate-Control", value: "no-store" },
+  { key: "Pragma", value: "no-cache" },
+  { key: "Expires", value: "0" },
+  { key: "Vary", value: "Cookie" },
+  { key: "Referrer-Policy", value: "no-referrer" },
+];
+
 const nextConfig = {
   reactStrictMode: true,
   // Game directories use canonical trailing-slash URLs so their relative
@@ -90,9 +100,17 @@ const nextConfig = {
         source,
         headers: [
           { key: "X-Robots-Tag", value: "noindex, nofollow" },
-          { key: "Cache-Control", value: "private, no-cache, no-store, max-age=0, must-revalidate" },
-          { key: "Referrer-Policy", value: "no-referrer" },
+          ...privateAuthHeaders,
         ],
+      })),
+      ...[
+        "/api/public/member/:path*",
+        "/api/member/:path*",
+        "/api/public/game/auth/:path*",
+        "/api/public/signup",
+      ].map((source) => ({
+        source,
+        headers: privateAuthHeaders,
       })),
       {
         source: "/api/:path*",

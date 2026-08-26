@@ -74,6 +74,7 @@ export function getSiameseGameLoginConfig(target: SiameseGameAuthTarget = "cat-v
     clientId,
     clientSecret,
     transactionSecret,
+    transactionMaxAgeMs: 20 * 60 * 1000,
     target,
     authEnvironment,
     allowInsecureLocalIssuer: localIssuer && process.env.NODE_ENV !== "production",

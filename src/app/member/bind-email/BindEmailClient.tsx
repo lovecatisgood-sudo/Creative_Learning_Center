@@ -19,6 +19,7 @@ export function BindEmailClient() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
+      cache: "no-store",
     }).catch(() => null);
     setBusy(false);
     if (!response?.ok) {

@@ -61,8 +61,10 @@ async function main() {
 
   const callbackSource = await readFile(path.join(root, "src/app/api/public/game/auth/siamese/callback/route.ts"), "utf8");
   const destroyAt = callbackSource.indexOf("transactionSession.destroy()");
-  const finishAt = callbackSource.indexOf(".finish(new URL(request.url), transaction)");
-  assert.ok(destroyAt >= 0 && finishAt > destroyAt, "OIDC transaction must be cleared before code exchange");
+  const finishAt = callbackSource.indexOf(".finish(callbackUrl, transaction)");
+  assert.ok(finishAt >= 0 && destroyAt > finishAt, "OIDC transaction must be cleared only after successful code validation");
+  assert.match(callbackSource, /finishValidatedAuthTransaction\(/);
+  assert.match(callbackSource, /canonicalPublicRequestUrl\(request, memberOrigin\(\)\)/);
   assert.match(callbackSource, /gameSession\.playerPublicId = player\.publicId/);
   assert.match(callbackSource, /createSiameseCatAuth\(config\)/);
   assert.match(callbackSource, /transactionSession\.game/);

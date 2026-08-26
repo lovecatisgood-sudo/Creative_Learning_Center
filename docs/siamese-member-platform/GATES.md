@@ -3,6 +3,119 @@
 Evidence remains `pending` until the stated check is actually run. A passing
 build alone does not satisfy integration or reconciliation gates.
 
+## Active authentication reliability gates — 2026-08-26
+
+- [x] **AR0 — Scope and production invariants are frozen before code.**
+  **Check:** reconcile the user request, `MEMORY.md`, PRD V3, provider intent,
+  and current repositories. **Expected:** diagnosed causes, exclusions,
+  deployment language, identity/data boundaries, and real-journey requirement
+  are explicit. **Evidence:** active intent and plan above were written before
+  runtime modification.
+- [x] **AR1 — Stateful Creative auth responses cannot be shared or replayed by
+  the CDN.** **Check:** route contract tests plus built-server requests with and
+  without cookies. **Expected:** auth starts/callbacks are dynamically rendered
+  and return `private, no-store`, surrogate no-store, and `Vary: Cookie`; two
+  callers cannot receive one cached redirect. **Evidence:** the final
+  `check:auth-reliability` contract and production-built route probe pass for
+  POST/GET starts, trusted and hostile origins, cookies, and all application,
+  CDN, surrogate, referrer, and vary headers.
+- [x] **AR2 — Creative callbacks use the registered public URL exactly.**
+  **Check:** simulate a Hostinger/internal request origin and inspect the URL
+  passed to OIDC completion. **Expected:** scheme/host come from configured
+  public origin while path/query are preserved; state/PKCE/replay checks still
+  pass for member and game callbacks. **Evidence:** canonical callback helpers
+  preserve path/query while forcing the configured public origin; member and
+  game contracts prove rejected validation retains the bounded transaction and
+  successful validation consumes it exactly once.
+- [x] **AR3 — Creative legacy email never reports a failed send as success.**
+  **Check:** known verified identity, unknown contact-only email, missing
+  schema, rejected recipient, and SMTP failure tests. **Expected:** unknown is
+  generic; eligible delivery succeeds only with accepted recipient; operational
+  failures are retryable non-2xx; client copy follows actual HTTP outcome.
+  **Evidence:** the auth reliability and member-release contracts prove the
+  verified-email query, enumeration-safe unknown response, accepted-recipient
+  requirement, token cleanup plus retryable 503 on mail/schema failure, safe
+  fixed-stage logging, and client `response.ok` handling. The known-account
+  outage response can reveal eligibility only during an operational failure;
+  that explicit tradeoff is retained to prevent the proven false-success bug.
+- [x] **AR4 — Signup remains complete when optional auth fails.** **Check:**
+  disposable-database registration tests for connect, skip, and provider/error
+  pending paths. **Expected:** exact parent/child/consent counts are retained;
+  no contact email is marked verified; retry/link-later remains visible.
+  **Evidence:** the final production-built `check:signup-auth-isolation` run
+  preserves 2 parents, 3 children, 2 member shells, and 4 consents across
+  connect/skip, creates no verified identity or link attempt, and rejects a
+  hostile origin without writes; optional-schema failure leaves core writes
+  available in the Creative link integration.
+- [x] **AR5 — Provider email supports mail-app/different-browser handoff safely.**
+  **Check:** database-backed OIDC flow requests email, opens the link without
+  interaction cookies, then enters the delivered code in the original
+  interaction; test invalid attempts, expiry, concurrency, and replay.
+  **Expected:** foreign-context link cannot hijack the interaction; original
+  context code completes once; neither code nor token is stored or logged in
+  plaintext. **Evidence:** the final provider PostgreSQL suite completes the
+  foreign-browser link landing and original-interaction code path, then proves
+  shared single use, hashed storage, five-attempt lockout, expiry, and replay
+  rejection.
+- [x] **AR6 — Email throttling and lifetimes recover predictably.** **Check:**
+  accepted request followed by suppressed retries and clock advancement;
+  mismatched configured TTL fixture. **Expected:** suppressed requests do not
+  extend the accepted-request window; effective verifier expiry never exceeds
+  interaction expiry; audit remains enumeration-safe. **Evidence:** unit and
+  database fixtures prove suppressed retries retain the original accepted
+  timestamp, verifier TTL is the minimum of configured and owning interaction
+  lifetimes, and safe audit events contain only hashed/fixed-stage fields.
+- [x] **AR7 — Provider authentication is independent of Creative tables.**
+  **Check:** apply provider migrations into an empty PostgreSQL database with
+  no `parents`, `children`, or Creative `member_accounts`; complete new email,
+  existing email, Google convergence, and conflict fixtures. **Expected:** all
+  pass with stable subjects and no implicit entitlement; legacy provider data
+  remains readable after additive migration. **Evidence:** all 15 disposable
+  PostgreSQL integrations pass, including forced simultaneous first-time
+  email/Google verification converging on one subject. The final exact-entry
+  rehearsal reaches schema 5 with five migration rows, one signing key, and no
+  Creative operational tables.
+- [x] **AR8 — Google failures are safe and stage-specific.** **Check:** token
+  transport, token rejection, JWKS, JWT claims, interaction retrieval,
+  identity conflict, and OIDC completion fixtures. **Expected:** fixed codes
+  distinguish stages; one-time state and PKCE remain enforced; logs contain no
+  email, code, state, token, secret, cookie, or Google response body.
+  **Evidence:** Google unit/integration fixtures cover each stage and safe-code
+  logging; the final built callback probe returns controlled HTTP 400 with
+  private/no-store headers and no authorization material.
+- [ ] **AR9 — Readiness identifies the actual auth release and optional
+  dependencies.** **Check:** local built runtime and public health contracts.
+  **Expected:** provider and Creative expose non-secret release/auth-readiness
+  fields; Creative core health is not failed solely by optional provider
+  unavailability; no field claims actual delivery or Google account success.
+- [x] **AR10 — Full repository and integration gates pass after the last code
+  change.** **Check:** Creative build and release/game/auth scripts; provider
+  typecheck, lint, unit, both builds, disposable PostgreSQL suite, repeated
+  migrations, and exact Hostinger-entry rehearsal. **Expected:** all exit zero
+  with preserved protected-table counts. **Evidence:** Creative's final build
+  renders 47 routes and its auth, game, member-release, signup-isolation,
+  Creative-link, and member-system checks pass. Provider verification passes
+  typecheck, lint, 46 unit tests (27 explicitly database-skipped), both builds,
+  and 15 PostgreSQL integrations. The final `hostinger:build`, idempotent
+  migration reapply, built `node server.js`, readiness, discovery, public JWKS,
+  and controlled callback probe all pass on a disposable provider-only schema.
+- [ ] **AR11 — Public production behavior matches the candidate.** **Check:**
+  after an authorized deployment, no-cache health/discovery/JWKS/auth-start and
+  controlled callback-error probes. **Expected:** exact issuer/callback,
+  Authorization Code only, PKCE S256, `openid email`, new release marker, and
+  non-cacheable Creative redirects. **Evidence:** pending deployment.
+- [ ] **AR12 — Both real methods complete the Creative journey.** **Check:** one
+  controlled real Google login and one controlled real inbox link/code flow
+  from Creative signup/member connection through first-party session/link.
+  **Expected:** both return to Creative, link one profile to the same stable
+  subject when evidence matches, and replay fails. **Evidence:** pending a real
+  account/inbox journey; automated substitutes cannot close this gate.
+- [ ] **AR13 — Final reconciliation is fresh.** **Check:** after the last
+  material source or deployment change, compare final repositories and live
+  evidence directly to `PROJECT_INTENT.md`, PRD V3, and these gates.
+  **Expected:** each item is evidenced, explicitly pending, or excluded; no
+  local-only result is represented as production-fixed.
+
 ## Design gates
 
 - [x] **G0.1 — Universal identity is separated from product profiles and

@@ -60,9 +60,9 @@ export async function POST(request: Request) {
         language: member.preferredLanguage === "en" ? "en" : "th",
         purpose: "verify",
       });
-    } catch (error) {
+    } catch {
       await db.delete(memberAccessTokens).where(eq(memberAccessTokens.id, created.id));
-      console.error("member verification email failed", error);
+      console.error("Member verification email failed", { code: "MEMBER_EMAIL_DELIVERY_FAILED" });
       return NextResponse.json({ error: "Email delivery unavailable" }, { status: 503 });
     }
 
