@@ -6,9 +6,9 @@ staging/production cutover pending
 
 ## Active authentication reliability repair — 2026-08-26
 
-**Candidate status:** steps 1–10 are implemented and freshly verified. Step 11
-is authorized by the owner and is the active promotion/public-evidence stage;
-real Google and inbox journeys remain a separate user-controlled gate.
+**Release status:** steps 1–11 are implemented, freshly verified, promoted, and
+publicly verified through safe terminal checks. Real Google and inbox journeys
+remain a separate user-controlled gate and are not represented as complete.
 
 1. Freeze the incident contract in `PROJECT_INTENT.md` and this gate ledger;
    preserve Creative core flows, game checkpoints, legacy compatibility, and

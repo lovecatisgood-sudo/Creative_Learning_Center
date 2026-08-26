@@ -83,11 +83,17 @@ build alone does not satisfy integration or reconciliation gates.
   **Evidence:** Google unit/integration fixtures cover each stage and safe-code
   logging; the final built callback probe returns controlled HTTP 400 with
   private/no-store headers and no authorization material.
-- [ ] **AR9 — Readiness identifies the actual auth release and optional
+- [x] **AR9 — Readiness identifies the actual auth release and optional
   dependencies.** **Check:** local built runtime and public health contracts.
   **Expected:** provider and Creative expose non-secret release/auth-readiness
   fields; Creative core health is not failed solely by optional provider
   unavailability; no field claims actual delivery or Google account success.
+  **Evidence:** public provider readiness reports release
+  `2026-08-26-auth-reliability`, schema 5, database/mail/Google configuration,
+  600-second effective verifier/interaction lifetimes, verification-code
+  readiness, and no Creative-table dependency. Creative reports the same
+  release with core/member/game/Creative-link readiness true. These are
+  configuration/transport readiness fields, not delivery or account success.
 - [x] **AR10 — Full repository and integration gates pass after the last code
   change.** **Check:** Creative build and release/game/auth scripts; provider
   typecheck, lint, unit, both builds, disposable PostgreSQL suite, repeated
@@ -99,22 +105,32 @@ build alone does not satisfy integration or reconciliation gates.
   and 15 PostgreSQL integrations. The final `hostinger:build`, idempotent
   migration reapply, built `node server.js`, readiness, discovery, public JWKS,
   and controlled callback probe all pass on a disposable provider-only schema.
-- [ ] **AR11 — Public production behavior matches the candidate.** **Check:**
+- [x] **AR11 — Public production behavior matches the candidate.** **Check:**
   after an authorized deployment, no-cache health/discovery/JWKS/auth-start and
   controlled callback-error probes. **Expected:** exact issuer/callback,
   Authorization Code only, PKCE S256, `openid email`, new release marker, and
-  non-cacheable Creative redirects. **Evidence:** pending deployment.
+  non-cacheable Creative redirects. **Evidence:** provider commit `6acaafd` and
+  Creative commit `6aeb362` are on production `main` and both public runtimes
+  expose the new marker. Discovery is exact Authorization Code/S256/`openid
+  email`; JWKS is public RS256 only; the provider callback gives controlled
+  no-store 400. Creative trusted POST and compatibility GET return 303 with
+  private/CDN/surrogate no-store; hostile POST returns 403; repeated identical
+  GETs produced no CDN hit. Public Cat vs Dog and Car Maze auth config is
+  enabled against the exact provider issuer.
 - [ ] **AR12 — Both real methods complete the Creative journey.** **Check:** one
   controlled real Google login and one controlled real inbox link/code flow
   from Creative signup/member connection through first-party session/link.
   **Expected:** both return to Creative, link one profile to the same stable
   subject when evidence matches, and replay fails. **Evidence:** pending a real
   account/inbox journey; automated substitutes cannot close this gate.
-- [ ] **AR13 — Final reconciliation is fresh.** **Check:** after the last
+- [x] **AR13 — Final reconciliation is fresh.** **Check:** after the last
   material source or deployment change, compare final repositories and live
   evidence directly to `PROJECT_INTENT.md`, PRD V3, and these gates.
   **Expected:** each item is evidenced, explicitly pending, or excluded; no
-  local-only result is represented as production-fixed.
+  local-only result is represented as production-fixed. **Evidence:** the
+  2026-08-26 reconciliation was refreshed after both deployments. AR12 remains
+  explicitly open; browser/inbox/account success is not inferred from terminal
+  readiness or disposable integration evidence.
 
 ## Design gates
 
