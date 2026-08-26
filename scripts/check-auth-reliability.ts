@@ -63,6 +63,14 @@ async function main() {
   const cancelledHtml = await cancelledResponse.text();
   assert.match(cancelledHtml, /<h1>Sign-in cancelled<\/h1>/);
   assert.doesNotMatch(cancelledHtml, /Sign-in could not be completed/);
+  const completedResponse = (siamesePopupResponse as unknown as (
+    ok: boolean,
+    message: string,
+  ) => Response)(true, "You are signed in. Return to the game to continue.");
+  const completedHtml = await completedResponse.text();
+  assert.match(completedHtml, /<h1>Sign-in complete<\/h1>/);
+  assert.match(completedHtml, />Close<\/button>/);
+  assert.doesNotMatch(completedHtml, /setTimeout\(function\(\)\{window\.close\(\)\}/, "successful sign-in must remain visible instead of becoming a blank popup");
 
   const memberTransactions = await import("../src/lib/siamese-member-link-transaction");
   const bindCurrentMember = (memberTransactions as unknown as {
