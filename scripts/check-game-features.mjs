@@ -26,6 +26,8 @@ for (const relative of gameFiles) {
   assert.match(html, /gameanalytics-config\.js/, `${relative}: GameAnalytics runtime config is missing`);
   assert.match(html, /gameanalytics-web\.js/, `${relative}: GameAnalytics consent adapter is missing`);
   assert.match(html, /mobile-native-bridge\.js/, `${relative}: native mobile bridge is missing`);
+  assert.match(html, /score-sync\.js/, `${relative}: durable member score persistence is not loaded`);
+  assert.match(html, /Promise\.resolve\(SESSION_READY\)[\s\S]*saveGameRun\(\)/, `${relative}: authenticated game over does not trigger score persistence`);
   assert.match(html, /function showRestartAds\(/, `${relative}: mobile restart-ad sequence is missing`);
   assert.match(html, /consumeFirstInternalAd\(\)/, `${relative}: first-session internal ad gate is missing`);
   assert.match(html, /native\.showRestartAd\(\)/, `${relative}: AdMob restart hook is missing`);
@@ -36,6 +38,7 @@ for (const relative of gameFiles) {
 
 for (const relative of [
   "game-assets/cat-vs-dog/assets/js/mobile-native-bridge.js",
+  "game-assets/cat-vs-dog/assets/js/score-sync.js",
   "mobile-shell/index.html",
   "capacitor.config.ts",
 ]) {

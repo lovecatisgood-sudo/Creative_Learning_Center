@@ -168,6 +168,7 @@ async function main() {
     assert.doesNotMatch(html, /auth\/google|accounts\.google\.com|google\.accounts/);
     assert.match(html, /id="game-session-signout"/);
     assert.match(html, /siamese-session-control\.js/);
+    assert.match(html, /score-sync\.js/);
     assert.match(html, /SCVDSessionControl\.sync/);
     assert.ok(html.indexOf("afterThanks()") < html.lastIndexOf("showRestartAds(startNewRun)"), `${locale}: shared sign-in must remain at the established post-game gate before the next-run ad transition`);
   }
