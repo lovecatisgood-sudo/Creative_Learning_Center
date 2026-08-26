@@ -68,8 +68,11 @@
   .house-ad-actions{width:100%;display:flex;gap:10px;}
   .house-ad-actions a{flex:1;border:0;border-radius:12px;padding:12px 10px;text-align:center;text-decoration:none;font-size:14px;font-weight:900;cursor:pointer;}
   #house-ad-cta{background:#ff8a1e;color:#1b0b02;}
+  #game-session-controls{position:fixed;z-index:20;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));display:flex;align-items:center;gap:8px}
+  #game-session-signout{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:9px 14px;background:rgba(16,8,26,.86);color:#fff;font:800 13px system-ui,sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+  #game-session-signout:disabled{opacity:.65}#game-session-status{max-width:180px;color:#ffb3cc;font:700 12px/1.35 system-ui,sans-serif}
 </style></head>
-<body><div id="wrap"><canvas id="game"></canvas></div>
+<body><div id="game-session-controls"><button id="game-session-signout" type="button" data-idle-label="Sign out" data-busy-label="Signing out…" data-error-label="Sign out failed. Try again." hidden>Sign out</button><span id="game-session-status" role="status" aria-live="polite"></span></div><div id="wrap"><canvas id="game"></canvas></div>
 <div id="game-registration" role="dialog" aria-modal="true" aria-labelledby="registration-title" hidden>
   <div class="registration-card">
     <img src="assets/img/logo.png" width="104" height="104" alt="Siamese Cat vs Dog 1986">
@@ -95,6 +98,7 @@
   </div>
 </div>
 <script defer src="../assets/js/mobile-native-bridge.js"></script>
+<script src="../assets/js/siamese-session-control.js"></script>
 <script src="../assets/js/vendor/gameanalytics-5.0.0.min.js"></script>
 <script src="../assets/js/gameanalytics-config.js"></script>
 <script src="../assets/js/gameanalytics-web.js"></script>
@@ -104,9 +108,10 @@
 const AN=window.SCVDAnalytics||{gameStart:function(){},gameOver:function(){},difficultySelected:function(){}};
 const REG=document.getElementById('game-registration'),REGERR=document.getElementById('registration-error'),REGSKIP=document.getElementById('registration-skip'),GAMESCORE=document.getElementById('royalty-score'),SIGNINBTN=document.getElementById('siamese-signin-button');
 let PLAYER_SESSION={authenticated:false,player:null},GAME_CONFIG=null,SIAMESE_PENDING=false;
-const SESSION_READY=fetch('/api/public/game/auth/session',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){PLAYER_SESSION=d||PLAYER_SESSION;if(d&&d.player&&d.player.publicId){try{localStorage.setItem('scvd_pid',d.player.publicId);}catch(e){}}return PLAYER_SESSION;}).catch(function(){return PLAYER_SESSION;});
+const SESSION_READY=fetch('/api/public/game/auth/session',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){PLAYER_SESSION=d||PLAYER_SESSION;if(window.SCVDSessionControl)window.SCVDSessionControl.sync(PLAYER_SESSION);if(d&&d.player&&d.player.publicId){try{localStorage.setItem('scvd_pid',d.player.publicId);}catch(e){}}return PLAYER_SESSION;}).catch(function(){return PLAYER_SESSION;});
 const CONFIG_READY=fetch('/api/public/game/auth/config?game=cat-vs-dog',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){GAME_CONFIG=d||{};return GAME_CONFIG;}).catch(function(){GAME_CONFIG={};return GAME_CONFIG;});
-async function refreshSiameseSession(){const res=await fetch('/api/public/game/auth/session',{cache:'no-store'});const data=await res.json();if(!res.ok||!data.authenticated||!data.player)throw new Error(data.error||'Sign-in is still pending.');PLAYER_SESSION=data;try{localStorage.setItem('scvd_pid',data.player.publicId);localStorage.setItem('scvd_player_name',data.player.displayName||'');}catch(e){}await saveGameRun();showScorePage();return true;}
+async function refreshSiameseSession(){const res=await fetch('/api/public/game/auth/session',{cache:'no-store'});const data=await res.json();if(!res.ok||!data.authenticated||!data.player)throw new Error(data.error||'Sign-in is still pending.');PLAYER_SESSION=data;if(window.SCVDSessionControl)window.SCVDSessionControl.sync(PLAYER_SESSION);try{localStorage.setItem('scvd_pid',data.player.publicId);localStorage.setItem('scvd_player_name',data.player.displayName||'');}catch(e){}await saveGameRun();showScorePage();return true;}
+window.addEventListener('scvd:session-changed',function(event){PLAYER_SESSION=event.detail||{authenticated:false,player:null};});
 async function beginSiameseLogin(){if(SIAMESE_PENDING)return;SIAMESE_PENDING=true;REGERR.textContent='Opening secure Siamese Cat sign-in…';const popup=window.open('/api/public/game/auth/siamese/start?game=cat-vs-dog&language=en','cat_vs_dog_siamese_auth','popup,width=520,height=720');if(!popup){SIAMESE_PENDING=false;REGERR.textContent='Your browser blocked the sign-in window. Allow pop-ups and try again.';return;}let attempts=0;const poll=window.setInterval(async function(){attempts+=1;try{if(await refreshSiameseSession()){window.clearInterval(poll);SIAMESE_PENDING=false;return;}}catch(e){}if(popup.closed||attempts>=160){window.clearInterval(poll);SIAMESE_PENDING=false;REGERR.textContent='Sign-in was not completed. You can retry or continue as a guest.';}},750);}
 async function renderSiameseButton(){const cfg=await CONFIG_READY;SIGNINBTN.textContent='';if(!cfg.loginEnabled||!cfg.siameseEnabled){REGERR.textContent='Siamese Cat sign-in is temporarily unavailable. You can continue as a guest.';return;}const button=document.createElement('button');button.type='button';button.textContent='Continue with Siamese Cat';button.addEventListener('click',beginSiameseLogin);SIGNINBTN.appendChild(button);}
 async function saveGameRun(){if(!G||G.runSaved)return null;try{const res=await fetch('/api/public/game/score',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({score:G.score,mode:_modeKey||'normal',stage:G.stage||1,victory:!!G.victory,language:'en',durationSeconds:Math.round(G.t||0)})});const data=await res.json().catch(function(){return {};});if(!res.ok)return null;G.runSaved=true;G.royalBest=Number(data.personalBest)||G.score;G.royalRank=Number(data.rank)||0;return data;}catch(e){return null;}}

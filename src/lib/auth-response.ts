@@ -31,6 +31,11 @@ export async function finishValidatedAuthTransaction<T>(
   return result;
 }
 
+export function isExpectedSiameseAuthorizationCancellation(callbackUrl: URL, expectedState: string): boolean {
+  return callbackUrl.searchParams.get("error") === "access_denied"
+    && callbackUrl.searchParams.get("state") === expectedState;
+}
+
 function appendVary(headers: Headers, value: string): void {
   const values = new Set(
     (headers.get("Vary") ?? "")

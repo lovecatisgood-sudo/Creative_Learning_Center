@@ -1,5 +1,5 @@
 import { createSiameseCatAuth } from "@siamesecat/member-auth";
-import { canonicalPublicRequestUrl, finishValidatedAuthTransaction } from "@/lib/auth-response";
+import { canonicalPublicRequestUrl, finishValidatedAuthTransaction, isExpectedSiameseAuthorizationCancellation } from "@/lib/auth-response";
 import { getSiameseGameLoginConfig } from "@/lib/game-features";
 import { getGameSession } from "@/lib/game-session";
 import { memberOrigin } from "@/lib/member-links";
@@ -24,6 +24,10 @@ export async function GET(request: Request) {
     if (!config.enabled) return siamesePopupResponse(false, "Siamese Cat sign-in is not configured for this game.", 503);
     failureCode = "GAME_OIDC_CODE_EXCHANGE_FAILED";
     const callbackUrl = canonicalPublicRequestUrl(request, memberOrigin());
+    if (isExpectedSiameseAuthorizationCancellation(callbackUrl, transaction.state)) {
+      transactionSession.destroy();
+      return siamesePopupResponse(false, "No account access was granted.", 200, "Sign-in cancelled");
+    }
     const { identity } = await finishValidatedAuthTransaction(
       () => createSiameseCatAuth(config).finish(callbackUrl, transaction),
       () => transactionSession.destroy(),

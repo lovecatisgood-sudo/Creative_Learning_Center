@@ -34,6 +34,36 @@ async function main() {
   assert.equal(await finishValidated(() => Promise.resolve("verified"), () => { destroyedTransactions += 1; }), "verified");
   assert.equal(destroyedTransactions, 1, "a validated callback must consume its transaction once");
 
+  const expectedCancellation = (authResponse as unknown as {
+    isExpectedSiameseAuthorizationCancellation?: (callbackUrl: URL, expectedState: string) => boolean;
+  }).isExpectedSiameseAuthorizationCancellation;
+  assert.equal(typeof expectedCancellation, "function", "expected OIDC cancellation must have an explicit state-validated branch");
+  if (!expectedCancellation) throw new Error("isExpectedSiameseAuthorizationCancellation unavailable");
+  assert.equal(expectedCancellation(
+    new URL("https://creative.siamesecat.cafe/api/public/game/auth/siamese/callback?error=access_denied&state=expected-state"),
+    "expected-state",
+  ), true);
+  assert.equal(expectedCancellation(
+    new URL("https://creative.siamesecat.cafe/api/public/game/auth/siamese/callback?error=access_denied&state=wrong-state"),
+    "expected-state",
+  ), false, "a forged cancellation must not consume the transaction");
+  assert.equal(expectedCancellation(
+    new URL("https://creative.siamesecat.cafe/api/public/game/auth/siamese/callback?error=server_error&state=expected-state"),
+    "expected-state",
+  ), false, "provider failures must not be mislabeled as user cancellation");
+
+  const { siamesePopupResponse } = await import("../src/lib/siamese-popup-response");
+  const cancelledResponse = (siamesePopupResponse as unknown as (
+    ok: boolean,
+    message: string,
+    status: number,
+    title: string,
+  ) => Response)(false, "No account access was granted.", 200, "Sign-in cancelled");
+  assert.equal(cancelledResponse.status, 200);
+  const cancelledHtml = await cancelledResponse.text();
+  assert.match(cancelledHtml, /<h1>Sign-in cancelled<\/h1>/);
+  assert.doesNotMatch(cancelledHtml, /Sign-in could not be completed/);
+
   const memberTransactions = await import("../src/lib/siamese-member-link-transaction");
   const bindCurrentMember = (memberTransactions as unknown as {
     bindMemberLinkToCurrentMember?: (
@@ -87,6 +117,7 @@ async function main() {
   assert.match(gameStart, /withPrivateAuthHeaders/);
   assert.match(gameCallback, /canonicalPublicRequestUrl\(request, memberOrigin\(\)\)/);
   assert.match(gameCallback, /finishValidatedAuthTransaction/);
+  assert.match(gameCallback, /isExpectedSiameseAuthorizationCancellation/);
   assert.doesNotMatch(memberCallback, /finish\(requestUrl,/);
   assert.doesNotMatch(gameCallback, /finish\(new URL\(request\.url\),/);
 

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { runInNewContext } from "node:vm";
 import { createSiameseCatAuth, internalDestination } from "@siamesecat/member-auth";
 import { getGoogleGameLoginConfig, getSiameseGameLoginConfig } from "../src/lib/game-features";
 
@@ -60,7 +61,7 @@ async function main() {
   }
 
   const callbackSource = await readFile(path.join(root, "src/app/api/public/game/auth/siamese/callback/route.ts"), "utf8");
-  const destroyAt = callbackSource.indexOf("transactionSession.destroy()");
+  const destroyAt = callbackSource.lastIndexOf("transactionSession.destroy()");
   const finishAt = callbackSource.indexOf(".finish(callbackUrl, transaction)");
   assert.ok(finishAt >= 0 && destroyAt > finishAt, "OIDC transaction must be cleared only after successful code validation");
   assert.match(callbackSource, /finishValidatedAuthTransaction\(/);
@@ -103,12 +104,71 @@ async function main() {
   assert.match(playerSource, /siameseSubject/);
   assert.match(playerSource, /if \(emailOwner\) throw new SiameseAccountConflictError\(\)/);
 
+  const sessionControlSource = await readFile(
+    path.join(root, "game-assets/cat-vs-dog/assets/js/siamese-session-control.js"),
+    "utf8",
+  ).catch(() => "");
+  assert.ok(sessionControlSource, "the authenticated game must ship a browser-visible session control");
+  let logoutHandler: (() => Promise<void>) | undefined;
+  const removedKeys: string[] = [];
+  const requests: Array<{ url: string; method?: string }> = [];
+  const dispatched: Array<{ type: string; detail: unknown }> = [];
+  const button = {
+    hidden: true,
+    disabled: false,
+    textContent: "Sign out",
+    dataset: { idleLabel: "Sign out", busyLabel: "Signing out…" },
+    addEventListener(type: string, handler: () => Promise<void>) {
+      if (type === "click") logoutHandler = handler;
+    },
+  };
+  const status = { textContent: "" };
+  const sandboxWindow: Record<string, unknown> = {
+    dispatchEvent(event: { type: string; detail: unknown }) { dispatched.push(event); },
+  };
+  runInNewContext(sessionControlSource, {
+    window: sandboxWindow,
+    document: {
+      getElementById(id: string) {
+        if (id === "game-session-signout") return button;
+        if (id === "game-session-status") return status;
+        return null;
+      },
+    },
+    fetch: async (url: string, init?: { method?: string }) => {
+      requests.push({ url, method: init?.method });
+      return { ok: true, status: 200, json: async () => ({ ok: true }) };
+    },
+    localStorage: { removeItem(key: string) { removedKeys.push(key); } },
+    CustomEvent: class {
+      type: string;
+      detail: unknown;
+      constructor(type: string, init: { detail: unknown }) { this.type = type; this.detail = init.detail; }
+    },
+  });
+  const sessionControl = sandboxWindow.SCVDSessionControl as { sync(session: { authenticated: boolean; player: unknown }): void } | undefined;
+  assert.ok(sessionControl, "the session control must expose the real sync boundary used by the game");
+  sessionControl.sync({ authenticated: true, player: { publicId: "PLAYER-E2E" } });
+  assert.equal(button.hidden, false, "authenticated players must see Sign out");
+  assert.ok(logoutHandler, "the Sign out control must be interactive");
+  await logoutHandler();
+  assert.deepEqual(requests, [{ url: "/api/public/game/auth/session", method: "DELETE" }]);
+  assert.deepEqual(removedKeys.sort(), ["scvd_pid", "scvd_player_name"]);
+  assert.equal(button.hidden, true, "successful logout must visibly return to signed-out state");
+  assert.equal(dispatched.length, 1);
+  assert.equal(dispatched[0]?.type, "scvd:session-changed");
+  assert.equal((dispatched[0]?.detail as { authenticated?: boolean })?.authenticated, false);
+  assert.equal((dispatched[0]?.detail as { player?: unknown })?.player, null);
+
   for (const locale of ["en", "th"]) {
     const html = await readFile(path.join(root, `game-assets/cat-vs-dog/${locale}/index.html`), "utf8");
     assert.match(html, /auth\/config\?game=cat-vs-dog/);
     assert.match(html, /auth\/siamese\/start\?game=cat-vs-dog/);
     assert.match(html, /Google or an email magic link|Google หรือลิงก์วิเศษทางอีเมล/);
     assert.doesNotMatch(html, /auth\/google|accounts\.google\.com|google\.accounts/);
+    assert.match(html, /id="game-session-signout"/);
+    assert.match(html, /siamese-session-control\.js/);
+    assert.match(html, /SCVDSessionControl\.sync/);
     assert.ok(html.indexOf("afterThanks()") < html.lastIndexOf("showRestartAds(startNewRun)"), `${locale}: shared sign-in must remain at the established post-game gate before the next-run ad transition`);
   }
 
