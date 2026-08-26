@@ -59,10 +59,13 @@ function toolNavigation(language, path) {
 
 function removeDevLinks(html) {
   return html
+    .replace(/<article class="brand-card">[\s\S]*?<\/article>/g, (card) => (
+      card.includes("Siamese Cat Dev") || card.includes("djai.academy") ? "" : card
+    ))
     .replace(/<a\b[^>]*href="https:\/\/www\.djai\.academy\/siamese_cat\/dev(?:\/en)?\/"[^>]*>[\s\S]*?<\/a>/g, "")
     .replaceAll("Siamese Cat Dev", "")
     .replace(/เชื่อมผู้ใช้ไปยัง Siamese Cat Cafe\s+และพัฒนาโดย\s*<\/p>/g, "เชื่อมผู้ใช้ไปยัง Siamese Cat Cafe.</p>")
-    .replace(/connects visitors with Siamese Cat Cafe,\s+and is built by\s*<\/p>/g, "connects visitors with Siamese Cat Cafe.</p>")
+    .replace(/connects visitors with Siamese Cat Cafe,\s+and is built by\s*\.?\s*<\/p>/g, "connects visitors with Siamese Cat Cafe.</p>")
     .replace(/[ \t]+\n/g, "\n");
 }
 

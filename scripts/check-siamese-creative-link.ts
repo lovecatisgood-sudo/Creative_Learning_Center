@@ -83,6 +83,17 @@ try {
   assert.deepEqual(gameState.rows[0], { players: "1", runs: "1", subjects: "1" });
   assert.deepEqual(await counts(pool), beforeMigrations, "game identity migration must retain the existing player and run");
 
+  await pool.query("drop table member_auth_identities");
+  const emailOnlyIdentity = {
+    issuer: "https://members.test",
+    subject: randomUUID(),
+    email: "email-only-player@example.com",
+    emailVerified: true,
+  };
+  const emailOnlyPlayer = await findOrCreateSiameseGamePlayer(emailOnlyIdentity, "en", "cat-vs-dog");
+  assert.equal(emailOnlyPlayer.email, emailOnlyIdentity.email);
+  assert.equal(emailOnlyPlayer.siameseSubject, emailOnlyIdentity.subject);
+
   const conflict = await pool.query<{ id: number }>(
     `with parent as (
        insert into parents (name, phone, email) values ('Conflict Parent', '0899999999', 'creative-conflict@example.com') returning id

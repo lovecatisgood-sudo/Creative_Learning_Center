@@ -28,13 +28,18 @@ export async function findOrCreateSiameseGamePlayer(identity: SiameseCatIdentity
     // Legacy Google players migrate only by the provider's immutable Google
     // subject. The value is read server-side from the provider identity table;
     // it is never added to OIDC claims or trusted from the browser.
-    const googleIdentity = await tx.execute(sql<{ provider_subject: string }>`
-      select provider_subject
-      from member_auth_identities
-      where member_subject = ${identity.subject}::uuid
-        and provider = 'google' and status = 'active'
-      limit 1
-    `).catch(() => ({ rows: [] as Array<{ provider_subject: string }> }));
+    const identityTable = await tx.execute(sql<{ table_name: string | null }>`
+      select to_regclass('public.member_auth_identities')::text as table_name
+    `);
+    const googleIdentity = identityTable.rows[0]?.table_name
+      ? await tx.execute(sql<{ provider_subject: string }>`
+          select provider_subject
+          from member_auth_identities
+          where member_subject = ${identity.subject}::uuid
+            and provider = 'google' and status = 'active'
+          limit 1
+        `)
+      : { rows: [] as Array<{ provider_subject: string }> };
     const googleSubject = String(googleIdentity.rows[0]?.provider_subject ?? "");
     if (googleSubject) {
       const [legacy] = await tx.select().from(gamePlayers).where(eq(gamePlayers.googleSub, googleSubject)).limit(1);

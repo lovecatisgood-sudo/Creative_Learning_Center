@@ -39,6 +39,7 @@ for (const page of pages) {
   const header = html.match(/<header\b[\s\S]*?<\/header>/)?.[0] ?? "";
   if (!header.includes(`href="${page.toolHubPath}"`) || !header.includes('aria-current="page"')) throw new Error(`${page.file} must visibly link to the active tools hub in its header`);
   if (html.includes("Siamese Cat Dev") || html.includes("Siamese Cat Creative Tools") || html.includes("djai.academy") || html.includes("🐾")) throw new Error(`${page.file} contains an excluded, unrelated, or unapproved placeholder asset`);
+  if (/\bbuilt by\s*\./i.test(html) || /พัฒนาโดย\s*\./.test(html)) throw new Error(`${page.file} contains malformed attribution copy`);
   if (html.includes("polaroid-og.webp")) throw new Error(`${page.file} contains an unapproved social image`);
   if (page.file.includes("kids-routine-chart") && (!html.includes(`property="og:image" content="${ROUTINE_OG_IMAGE}"`) || !html.includes(`name="twitter:image" content="${ROUTINE_OG_IMAGE}"`))) {
     throw new Error(`${page.file} has an invalid routine-chart social image URL`);
@@ -52,6 +53,12 @@ for (const page of pages) {
   for (const [, block] of jsonLd) JSON.parse(block);
   for (const [, image] of html.matchAll(/(<img\b[^>]*>)/g)) {
     if (!/\bwidth="\d+"/.test(image) || !/\bheight="\d+"/.test(image)) throw new Error(`${page.file} contains an image without intrinsic dimensions`);
+    const source = image.match(/\bsrc="(\/tools\/[^"?#]+)"/)?.[1];
+    if (source && !existsSync(join(ROOT, "public", source))) throw new Error(`${page.file} references a missing local image: ${source}`);
+    if (/\balt="\s*"/.test(image)) throw new Error(`${page.file} contains an image with empty alternative text`);
+  }
+  for (const [, heading] of html.matchAll(/<h3\b[^>]*>([\s\S]*?)<\/h3>/g)) {
+    if (!heading.replace(/<[^>]+>/g, "").trim()) throw new Error(`${page.file} contains an empty card heading`);
   }
 }
 
