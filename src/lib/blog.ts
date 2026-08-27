@@ -2,6 +2,7 @@ import { and, desc, eq } from "drizzle-orm";
 import { marked } from "marked";
 import { db } from "@/db";
 import { blogPosts, type BlogPost } from "@/db/schema";
+import { publishedBlogVisibilityFilter } from "@/lib/blog-publication";
 import {
   BLOG_CATEGORIES,
   normalizeBlogSlug,
@@ -100,9 +101,10 @@ export class BlogValidationError extends Error {
 
 export async function getPublishedBlogPosts(language: BlogLanguage, category?: BlogCategory) {
   const publishedColumn = language === "th" ? blogPosts.publishedTh : blogPosts.publishedEn;
+  const visibilityFilter = publishedBlogVisibilityFilter(publishedColumn);
   const filters = category
-    ? and(eq(publishedColumn, true), eq(blogPosts.category, category))
-    : eq(publishedColumn, true);
+    ? and(visibilityFilter, eq(blogPosts.category, category))
+    : visibilityFilter;
   return db.select().from(blogPosts).where(filters).orderBy(desc(blogPosts.publishedAt), desc(blogPosts.updatedAt));
 }
 
@@ -111,7 +113,7 @@ export async function getPublishedBlogPost(slug: string, language: BlogLanguage)
   const [post] = await db
     .select()
     .from(blogPosts)
-    .where(and(eq(blogPosts.slug, slug), eq(publishedColumn, true)))
+    .where(and(eq(blogPosts.slug, slug), publishedBlogVisibilityFilter(publishedColumn)))
     .limit(1);
   return post ?? null;
 }

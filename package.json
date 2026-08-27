@@ -32,6 +32,8 @@
     "check:signup-auth-isolation": "tsx scripts/check-signup-auth-isolation.ts",
     "check:siamese-creative-link": "tsx scripts/check-siamese-creative-link.ts",
     "check:auth-reliability": "tsx scripts/check-auth-reliability.ts",
+    "check:blog-scheduling": "tsx scripts/check-blog-scheduling.ts",
+    "blog:series": "tsx scripts/schedule-blog-series.ts",
     "check:member-release": "node scripts/check-member-release.mjs",
     "member:prune-tokens": "tsx scripts/prune-member-tokens.ts",
     "check:deploy-hygiene": "node scripts/check-deploy-hygiene.mjs",
