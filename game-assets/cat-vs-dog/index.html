@@ -26,6 +26,8 @@
   body { background:#07050f; color:#fff; font-family:'Courier New','NotoThai',monospace; overflow:hidden; }
   img.px { image-rendering:pixelated; }
   a { -webkit-tap-highlight-color:transparent; }
+  .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+             clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
   /* ===== story player: one swipe = one scene ===== */
   #player { height:100vh; height:100dvh; overflow-y:scroll; scroll-snap-type:y mandatory;
@@ -185,6 +187,7 @@
 <div id="player">
 
   <div class="scene on" id="s1">
+    <h1 class="sr-only">Siamese Cat vs Dog 1986</h1>
     <img class="logo px a pop d1" src="assets/img/logo.png" alt="Siamese Cat vs Dog 1986">
     <img class="herocat px" src="assets/img/sprites/cat/fly.png" alt="">
     <span class="pew" style="margin-left:-10px; bottom:38%"></span>
