@@ -11,7 +11,7 @@ import { ensureSiameseMemberLinkSchema } from "@/lib/siamese-member-link-schema"
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const RELEASE = "2026-08-26-auth-reliability";
+const RELEASE = "2026-08-27-blog-scheduling";
 
 export async function GET() {
   let coreDatabaseReady = true;
